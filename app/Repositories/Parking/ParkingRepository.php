@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Repositories\Parking;
+
+use App\Helpers\QueryParamsHelper;
+use App\Models\Parking;
+use App\Repositories\BaseRepository;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+
+class ParkingRepository extends BaseRepository implements ParkingRepositoryInterface
+{
+    public function __construct(Parking $parking)
+    {
+        parent::__construct($parking);
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function all(Request $request): Collection
+    {
+        $query = $this->model->query();
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $result = Datatables::customizable($query)->response();
+
+            return collect($result);
+        }
+
+        return $query->get();
+    }
+
+    public function create(array $params): Model
+    {
+        $params['capacity'] = (($params['end_row'] - $params['start_row']) + 1) * 8;
+        $params['capacitymm'] = $params['capacity'] * 4800;
+
+        return $this->model->create($params);
+    }
+
+    public function update(array $params, int $id): ?int
+    {
+        return $this->model->where('id', $id)->update($params);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Seleccionar todas las filas asociadas al parking para borrarlas junto con sus slots
+            $rows = $this->model->find($id)->rows;
+
+            foreach ($rows as $row) {
+                $slots = $row->slots;
+                foreach ($slots as $slot) {
+                    $slot->delete();
+                }
+                $row->delete();
+            }
+
+            $this->model->destroy($id);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+        return true;
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function restore(int $id): ?bool
+    {
+        DB::beginTransaction();
+
+        try {
+            // Seleccionar todas las filas asociadas al parking para restaurarlas junto con sus slots
+            $rows = $this->model->withTrashed()->findOrFail($id)->rows()->withTrashed()->get();
+
+            foreach ($rows as $row) {
+                $slots = $row->slots()->withTrashed()->get();
+                foreach ($slots as $slot) {
+                    $slot->restore();
+                }
+                $row->restore();
+            }
+
+            $this->model->withTrashed()->findOrFail($id)->restore();
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
+
+        return true;
+    }
+}
