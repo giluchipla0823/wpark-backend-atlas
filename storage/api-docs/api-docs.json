@@ -3575,6 +3575,16 @@
                 "summary": "Generate Username",
                 "description": "Generate Username",
                 "operationId": "generateUsernameUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserGenerateUsernameRequest"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Get username value"
@@ -7472,6 +7482,30 @@
                 "type": "object",
                 "xml": {
                     "name": "StageUpdateRequest"
+                }
+            },
+            "UserGenerateUsernameRequest": {
+                "title": "User Generate Username Request",
+                "description": "User Generate Username request body data",
+                "required": [
+                    "name",
+                    "surname"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del usuario",
+                        "type": "string",
+                        "example": "Javier"
+                    },
+                    "surname": {
+                        "description": "Apellidos del usuario",
+                        "type": "string",
+                        "example": "Valera"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "UserGenerateUsernameRequest"
                 }
             },
             "UserStoreRequest": {

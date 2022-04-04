@@ -231,6 +231,10 @@ class UserController extends ApiController
      *     description="Generate Username",
      *     security={{"sanctum": {}}},
      *     operationId="generateUsernameUser",
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/UserGenerateUsernameRequest")
+     *     ),
      *     @OA\Response(response=200, description="Get username value"),
      *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
