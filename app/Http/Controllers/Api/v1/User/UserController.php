@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\User;
 
+use App\Http\Requests\User\UserGenerateUsernameRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -237,10 +238,10 @@ class UserController extends ApiController
      *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
      * )
      *
-     * @param Request $request
+     * @param UserGenerateUsernameRequest $request
      * @return JsonResponse
      */
-    public function generateUsername(Request $request): JsonResponse
+    public function generateUsername(UserGenerateUsernameRequest $request): JsonResponse
     {
         $username = $this->userService->generateUsername(
             $request->get('name'),
