@@ -14,25 +14,25 @@ class CreateVehicles extends Migration
     public function up()
     {
         Schema::create('vehicles', function (Blueprint $table) {
-            $table->id(); // Viendo la tarea del servicio del detalle del vehículo faltaría por mostrar marca, dtGate, categoría e info
-            $table->string('vin', 17)->unique(); // Definir tamaño 17¿?
-            $table->string('vin_short', 10); // Definir tamaño 7¿?
+            $table->id();
+            $table->string('vin', 17)->unique();
+            $table->string('vin_short', 7);
             $table->foreignId('design_id')->constrained('designs');
-            $table->foreignId('color_id')->nullable()->constrained('colors');
+            $table->foreignId('color_id')->constrained('colors');
             $table->foreignId('country_id')->constrained('countries');
-            $table->foreignId('destination_code_id')->nullable()->constrained('destination_codes');
-            $table->foreignId('slot_id')->constrained('slots')->nullable();
-            $table->foreignId('last_slot_id')->constrained('slots')->nullable();
-            $table->foreignId('compound_id')->constrained('compounds');
+            $table->foreignId('destination_code_id')->constrained('destination_codes');
+            $table->foreignId('load_id')->nullable()->constrained('loads');
+            $table->foreignId('slot_id')->nullable()->constrained('slots');
+            $table->foreignId('last_slot_id')->nullable()->constrained('slots');
+            $table->foreignId('compound_id')->nullable()->constrained('compounds');
             $table->string('eoc')->unique();
-            $table->foreignId('last_rule_id')->constrained('rules');
-            $table->foreignId('shipping_rule_id')->constrained('rules');
-            $table->string('route_to', 100)->nullable()->default('NULL');
+            $table->foreignId('last_rule_id')->nullable()->constrained('rules');
+            $table->foreignId('shipping_rule_id')->nullable()->constrained('rules');
+            $table->string('info', 100)->nullable()->default('NULL');
             //$table->datetime('dt_onterminal')->nullable();
             //$table->datetime('dt_left')->nullable();
-            $table->foreignId('load_id')->nullable()->constrained('loads');
             //$table->boolean('on_route')->default('0');
-            $table->boolean('hybrid')->default('0'); // Preguntar sobre este campo como se maneja
+            $table->boolean('hybrid')->default('0');
             $table->softDeletes();
             $table->timestamps();
         });

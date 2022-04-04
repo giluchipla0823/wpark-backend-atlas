@@ -16,7 +16,6 @@ class CreateCarriers extends Migration
         Schema::create('carriers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('short_name');
             $table->string('code', 25)->unique();
             $table->boolean('is_train')->default('0'); // Cambiar por active o añadir?
             $table->softDeletes();

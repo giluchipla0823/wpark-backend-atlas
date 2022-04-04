@@ -47,6 +47,6 @@ class Block extends Model
 
     public function rules()
     {
-        return $this->belongsToMany(Rule::class, 'rules_blocks', 'rule_id', 'block_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Rule::class, 'rules_blocks', 'rule_id', 'block_id')->withTimestamps();
     }
 }

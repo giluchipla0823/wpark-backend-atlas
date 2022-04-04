@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
 
-class ParkingTypeRepository extends BaseRepository implements parkingTypeRepositoryInterface
+class ParkingTypeRepository extends BaseRepository implements ParkingTypeRepositoryInterface
 {
-    public function __construct(parkingType $parkingType)
+    public function __construct(ParkingType $parkingType)
     {
         parent::__construct($parkingType);
     }

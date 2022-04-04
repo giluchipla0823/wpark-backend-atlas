@@ -17,9 +17,9 @@ class CreateHolds extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
-            //$table->integer('count')->unsigned();
             $table->integer('priority')->unsigned();
             $table->boolean('active')->default('1');
+            $table->integer('count')->nullable()->unsigned();
             $table->softDeletes();
             $table->timestamps();
         });

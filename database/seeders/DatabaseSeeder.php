@@ -16,7 +16,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CompoundSeeder::class,
             BrandSeeder::class,
-            Design::class,
+            DesignSeeder::class,
+            CountrySeeder::class,
+            CarrierSeeder::class,
+            DealerSeeder::class,
+            RouteSeeder::class,
+            DestinationCodeSeeder::class,
+            ModelConditionSeeder::class,
+            ConditionSeeder::class,
+            HoldSeeder::class,
             BlockSeeder::class,
             ZoneSeeder::class,
             AreaSeeder::class,
@@ -24,7 +32,9 @@ class DatabaseSeeder extends Seeder
             ParkingSeeder::class,
             ColorSeeder::class,
             UserSeeder::class,
-            PermissionSeeder::class
+            PermissionSeeder::class,
+            StageSeeder::class,
+            VehicleSeeder::class
         ]);
     }
 }

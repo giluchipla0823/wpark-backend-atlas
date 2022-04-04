@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Xml(name="Route"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre de la ruta", example="ANTWERP CHINA"),
- * @OA\Property(property="code", type="string", maxLength=25, description="Código de la ruta", example="ANTC1"),
+ * @OA\Property(property="code", type="string", maxLength=5, description="Código de la ruta", example="ANTC1"),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="Indica la empresa de transporte que hace la ruta", example="1"),
  * @OA\Property(property="origin_compound_id", type="integer", maxLength=20, description="Indica la campa de origen", example="1"),
  * @OA\Property(property="destination_compound_id", type="integer", maxLength=20, description="Indica la campa de destino", example="2"),

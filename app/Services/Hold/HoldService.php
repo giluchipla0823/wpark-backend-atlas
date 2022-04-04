@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Services\Hold;
+
+use App\Models\Hold;
+use App\Repositories\Hold\HoldRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use App\Helpers\QueryParamsHelper;
+use App\Http\Resources\Hold\HoldResource;
+
+class HoldService
+{
+    /**
+     * @var HoldRepositoryInterface
+     */
+    private $repository;
+
+    public function __construct(HoldRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    public function all(Request $request): Collection
+    {
+        $results = $this->repository->all($request);
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $data = collect($results->get('data'));
+
+            $resource = HoldResource::collection($data);
+
+            $results->put('data', $resource->toArray($request));
+
+            return $results;
+        }
+
+        return HoldResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Hold $hold
+     * @return HoldResource
+     */
+    public function show(Hold $hold): HoldResource
+    {
+        return new HoldResource($hold);
+    }
+
+    /**
+     * @param array $params
+     * @return Hold
+     */
+    public function create(array $params): Hold
+    {
+        return $this->repository->create($params);
+    }
+
+    /**
+     * @param array $params
+     * @param int $id
+     * @return void
+     */
+    public function update(array $params, int $id): void
+    {
+        $this->repository->update($params, $id);
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $this->repository->delete($id);
+    }
+
+    public function restore(int $id): void
+    {
+        $this->repository->restore($id);
+    }
+}

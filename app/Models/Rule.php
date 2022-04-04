@@ -83,12 +83,12 @@ class Rule extends Model
 
     public function blocks()
     {
-        return $this->belongsToMany(Block::class, 'rules_blocks', 'rule_id', 'block_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Block::class, 'rules_blocks', 'rule_id', 'block_id')->withTimestamps();
     }
 
     public function conditions()
     {
-        return $this->morphToMany(Condition::class, 'rules_conditions')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->morphToMany(Condition::class, 'rules_conditions')->withTimestamps();
     }
 
     public function loads()

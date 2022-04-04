@@ -1289,6 +1289,454 @@
                 ]
             }
         },
+        "/api/v1/conditions": {
+            "get": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Conditions List",
+                "description": "List of conditions",
+                "operationId": "indexConditions",
+                "responses": {
+                    "200": {
+                        "description": "Condition list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Create New Condition",
+                "description": "Create New Condition",
+                "operationId": "storeCondition",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConditionStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Condition"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/conditions/{id}": {
+            "get": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Show Condition Details",
+                "description": "Show Condition Details",
+                "operationId": "showCondition",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Condition Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Update Condition",
+                "description": "Update Condition",
+                "operationId": "updateCondition",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ConditionUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Condition"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Delete Condition",
+                "description": "Delete Condition",
+                "operationId": "destroyCondition",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Condition successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Restore Condition",
+                "description": "Restore Condition",
+                "operationId": "restoreCondition",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Condition restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/countries": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Countries List",
+                "description": "List of countries",
+                "operationId": "indexCountries",
+                "responses": {
+                    "200": {
+                        "description": "Country list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Create New Country",
+                "description": "Create New Country",
+                "operationId": "storeCountry",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CountryStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Country"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/countries/{id}": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Show Country Details",
+                "description": "Show Country Details",
+                "operationId": "showCountry",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Country Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Update Country",
+                "description": "Update Country",
+                "operationId": "updateCountry",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CountryUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Country"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Delete Country",
+                "description": "Delete Country",
+                "operationId": "destroyCountry",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Country successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Restore Country",
+                "description": "Restore Country",
+                "operationId": "restoreCountry",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Country restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/designs": {
             "get": {
                 "tags": [
@@ -1492,6 +1940,454 @@
                 "responses": {
                     "204": {
                         "description": "Design restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/destination-codes": {
+            "get": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "DestinationCodes List",
+                "description": "List of destinationCodes",
+                "operationId": "indexDestinationCodes",
+                "responses": {
+                    "200": {
+                        "description": "DestinationCode list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "Create New DestinationCode",
+                "description": "Create New DestinationCode",
+                "operationId": "storeDestinationCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DestinationCodeStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New DestinationCode"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/destination-codes/{id}": {
+            "get": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "Show DestinationCode Details",
+                "description": "Show DestinationCode Details",
+                "operationId": "showDestinationCode",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show DestinationCode Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "Update DestinationCode",
+                "description": "Update DestinationCode",
+                "operationId": "updateDestinationCode",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DestinationCodeUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update DestinationCode"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "Delete DestinationCode",
+                "description": "Delete DestinationCode",
+                "operationId": "destroyDestinationCode",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete DestinationCode successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "Restore DestinationCode",
+                "description": "Restore DestinationCode",
+                "operationId": "restoreDestinationCode",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "DestinationCode restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/holds": {
+            "get": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Holds List",
+                "description": "List of holds",
+                "operationId": "indexHolds",
+                "responses": {
+                    "200": {
+                        "description": "Hold list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Create New Hold",
+                "description": "Create New Hold",
+                "operationId": "storeHold",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HoldStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Hold"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/holds/{id}": {
+            "get": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Show Hold Details",
+                "description": "Show Hold Details",
+                "operationId": "showHold",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Hold Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Update Hold",
+                "description": "Update Hold",
+                "operationId": "updateHold",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HoldUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Hold"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Delete Hold",
+                "description": "Delete Hold",
+                "operationId": "destroyHold",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Hold successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Restore Hold",
+                "description": "Restore Hold",
+                "operationId": "restoreHold",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Hold restored successfully"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
@@ -1942,6 +2838,230 @@
                 "responses": {
                     "204": {
                         "description": "ParkingType restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/routes": {
+            "get": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Routes List",
+                "description": "List of routes",
+                "operationId": "indexRoutes",
+                "responses": {
+                    "200": {
+                        "description": "Route list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Create New Route",
+                "description": "Create New Route",
+                "operationId": "storeRoute",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RouteStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Route"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/routes/{id}": {
+            "get": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Show Route Details",
+                "description": "Show Route Details",
+                "operationId": "showRoute",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Route Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Update Route",
+                "description": "Update Route",
+                "operationId": "updateRoute",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RouteUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Route"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Delete Route",
+                "description": "Delete Route",
+                "operationId": "destroyRoute",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Route successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Routes"
+                ],
+                "summary": "Restore Route",
+                "description": "Restore Route",
+                "operationId": "restoreRoute",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Route restored successfully"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
@@ -2447,6 +3567,398 @@
                 ]
             }
         },
+        "/api/v1/users/generate-username": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Generate Username",
+                "description": "Generate Username",
+                "operationId": "generateUsernameUser",
+                "responses": {
+                    "200": {
+                        "description": "Get username value"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/stages": {
+            "get": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Stages List",
+                "description": "List of stages",
+                "operationId": "indexStages",
+                "responses": {
+                    "200": {
+                        "description": "Stage list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Create New Stage",
+                "description": "Create New Stage",
+                "operationId": "storeStage",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StageStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Stage"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/stages/{id}": {
+            "get": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Show Stage Details",
+                "description": "Show Stage Details",
+                "operationId": "showStage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Stage Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Update Stage",
+                "description": "Update Stage",
+                "operationId": "updateStage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StageUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Stage"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Delete Stage",
+                "description": "Delete Stage",
+                "operationId": "destroyStage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Stage successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "Restore Stage",
+                "description": "Restore Stage",
+                "operationId": "restoreStage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Stage restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vehicles": {
+            "get": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Vehicles List",
+                "description": "List of vehicles",
+                "operationId": "indexVehicles",
+                "responses": {
+                    "200": {
+                        "description": "Vehicle list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vehicles/{id}": {
+            "get": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Show Vehicle Details",
+                "description": "Show Vehicle Details",
+                "operationId": "showVehicle",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Vehicle Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Delete Vehicle",
+                "description": "Delete Vehicle",
+                "operationId": "destroyVehicle",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Vehicle successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Restore Vehicle",
+                "description": "Restore Vehicle",
+                "operationId": "restoreVehicle",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Vehicle restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/zones": {
             "get": {
                 "tags": [
@@ -2866,17 +4378,11 @@
                         "maxLength": 255,
                         "example": "SINTAX LOGISTICA SA"
                     },
-                    "short_name": {
-                        "description": "Nombre corto de la empresa de transporte",
-                        "type": "string",
-                        "maxLength": 255,
-                        "example": "SINTAX"
-                    },
                     "code": {
                         "description": "Código de la empresa de transporte",
                         "type": "string",
                         "maxLength": 25,
-                        "example": "BKT9A"
+                        "example": "SINTAX"
                     },
                     "is_train": {
                         "description": "Indica si el medio de transporte es en tren (0: No es en tren, 1: Es en tren)",
@@ -3040,12 +4546,6 @@
                     },
                     "required": {
                         "description": "Indica si la condición es obligatoria (0: No es obligatoria, 1: Es obligatoria)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
-                    },
-                    "active": {
-                        "description": "Indica si la condición está activa (0: No está activa, 1: Está activa",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
@@ -3532,8 +5032,8 @@
                     },
                     "priority": {
                         "description": "Indica el orden de prioridad del bloqueo",
-                        "type": "boolean",
-                        "maxLength": 1,
+                        "type": "integer",
+                        "maxLength": 10,
                         "example": "1"
                     },
                     "active": {
@@ -3541,6 +5041,12 @@
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
+                    },
+                    "count": {
+                        "description": "Máximo de bloqueos por fila",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "5"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -4003,7 +5509,7 @@
                     "code": {
                         "description": "Código de la ruta",
                         "type": "string",
-                        "maxLength": 25,
+                        "maxLength": 5,
                         "example": "ANTC1"
                     },
                     "carrier_id": {
@@ -4321,6 +5827,60 @@
                     "name": "Slot"
                 }
             },
+            "Stage": {
+                "required": [
+                    "name",
+                    "short_name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "maxLength": 20,
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Nombre de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STAGE 3"
+                    },
+                    "short_name": {
+                        "description": "Nombre corto de la etapa",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "ST3"
+                    },
+                    "description": {
+                        "description": "Descripción de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Etapa de creación del vehículo"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha y hora del borrado temporal",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-12-09 11:20:01"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de la creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-07 09:41:35"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última modificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-09 11:20:01"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Stage"
+                }
+            },
             "State": {
                 "required": [
                     "name",
@@ -4486,11 +6046,10 @@
                     "vin",
                     "vin_shor",
                     "design_id",
+                    "color_id",
                     "country_id",
-                    "compound_id",
+                    "destination_code",
                     "eoc",
-                    "last_rule_id",
-                    "shipping_rule_id",
                     "hybrid"
                 ],
                 "properties": {
@@ -4536,6 +6095,12 @@
                         "maxLength": 20,
                         "example": "1"
                     },
+                    "load_id": {
+                        "description": "",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": ""
+                    },
                     "slot_id": {
                         "description": "Indica la posición dentro de la campa del vehículo",
                         "type": "integer",
@@ -4572,17 +6137,11 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "route_to": {
-                        "description": "",
+                    "info": {
+                        "description": "Información adicional del vehículo",
                         "type": "string",
                         "maxLength": 100,
-                        "example": ""
-                    },
-                    "load_id": {
-                        "description": "",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": ""
+                        "example": "Pendiente de revisión"
                     },
                     "hybrid": {
                         "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
@@ -5112,6 +6671,136 @@
                     "name": "CompoundUpdateRequest"
                 }
             },
+            "ConditionStoreRequest": {
+                "title": "Condition Store Request",
+                "description": "Condition Store request body data",
+                "required": [
+                    "name",
+                    "model_condition_id",
+                    "required"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la condición",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "CÓDIGO DESTINO"
+                    },
+                    "description": {
+                        "description": "Descripción de la condición",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Condición por códigos de destino"
+                    },
+                    "model_condition_id": {
+                        "description": "Indica si la condición será para un hold o para una regla",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "required": {
+                        "description": "Indica si la condición es obligatoria (0: No es obligatoria, 1: Es obligatoria)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ConditionStoreRequest"
+                }
+            },
+            "ConditionUpdateRequest": {
+                "title": "Condition Update Request",
+                "description": "Condition Update request body data",
+                "required": [
+                    "name",
+                    "model_condition_id",
+                    "required"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la condición",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "CÓDIGO DESTINO"
+                    },
+                    "description": {
+                        "description": "Descripción de la condición",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Condición por códigos de destino"
+                    },
+                    "model_condition_id": {
+                        "description": "Indica si la condición será para un hold o para una regla",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "required": {
+                        "description": "Indica si la condición es obligatoria (0: No es obligatoria, 1: Es obligatoria)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ConditionUpdateRequest"
+                }
+            },
+            "CountryStoreRequest": {
+                "title": "Country Store Request",
+                "description": "Country Store request body data",
+                "required": [
+                    "name",
+                    "code"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del país",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "GERMANY"
+                    },
+                    "code": {
+                        "description": "Código del país",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "GK"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CountryStoreRequest"
+                }
+            },
+            "CountryUpdateRequest": {
+                "title": "Country Update Request",
+                "description": "Country Update request body data",
+                "required": [
+                    "name",
+                    "code"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del país",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "GERMANY"
+                    },
+                    "code": {
+                        "description": "Código del país",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "GK"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CountryUpdateRequest"
+                }
+            },
             "DesignStoreRequest": {
                 "title": "Design Store Request",
                 "description": "Design Store request body data",
@@ -5284,6 +6973,187 @@
                     "name": "DesignUpdateRequest"
                 }
             },
+            "DestinationCodeStoreRequest": {
+                "title": "Destination Code Store Request",
+                "description": "Destination Code Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "route_id",
+                    "country_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del código de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ANTWERP_CHINA"
+                    },
+                    "code": {
+                        "description": "Código del código de destino",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "AC"
+                    },
+                    "route_id": {
+                        "description": "Indica la ruta del código de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "country_id": {
+                        "description": "Indica el país del código de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DestinationCodeStoreRequest"
+                }
+            },
+            "DestinationCodeUpdateRequest": {
+                "title": "Destination Code Update Request",
+                "description": "Destination Code Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "route_id",
+                    "country_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del código de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ANTWERP_CHINA"
+                    },
+                    "code": {
+                        "description": "Código del código de destino",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "AC"
+                    },
+                    "route_id": {
+                        "description": "Indica la ruta del código de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "country_id": {
+                        "description": "Indica el país del código de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DestinationCodeUpdateRequest"
+                }
+            },
+            "HoldStoreRequest": {
+                "title": "Hold Store Request",
+                "description": "Hold Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "priority",
+                    "conditions"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del bloqueo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STOLEN"
+                    },
+                    "code": {
+                        "description": "Código del bloqueo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AZ"
+                    },
+                    "priority": {
+                        "description": "Indica el orden de prioridad del bloqueo",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "1"
+                    },
+                    "count": {
+                        "description": "Máximo de bloqueos por fila",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "5"
+                    },
+                    "conditions": {
+                        "description": "Id´s de las condiciones que irán asociadas al bloqueo",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "HoldStoreRequest"
+                }
+            },
+            "HoldUpdateRequest": {
+                "title": "Hold Update Request",
+                "description": "Hold Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "priority",
+                    "active",
+                    "conditions"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del bloqueo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STOLEN"
+                    },
+                    "code": {
+                        "description": "Código del bloqueo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AZ"
+                    },
+                    "priority": {
+                        "description": "Indica el orden de prioridad del bloqueo",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "1"
+                    },
+                    "active": {
+                        "description": "Indica si el bloqueo está activo (0: No está activo, 1: Está activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
+                    "count": {
+                        "description": "Máximo de bloqueos por fila",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "5"
+                    },
+                    "conditions": {
+                        "description": "Id´s de las condiciones que irán asociadas al bloqueo",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "HoldUpdateRequest"
+                }
+            },
             "ParkingDesignStoreRequest": {
                 "title": "Parking Design Store Request",
                 "description": "Parking Design Store request body data",
@@ -5405,6 +7275,96 @@
                     "name": "ParkingUpdateRequest"
                 }
             },
+            "RouteStoreRequest": {
+                "title": "Route Store Request",
+                "description": "Route Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "origin_compound_id",
+                    "destination_compound_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la ruta",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ANTWERP CHINA"
+                    },
+                    "code": {
+                        "description": "Código de la ruta",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "ANTC1"
+                    },
+                    "origin_compound_id": {
+                        "description": "Indica la campa de origen",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_compound_id": {
+                        "description": "Indica la campa de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
+                    },
+                    "comments": {
+                        "description": "Comentarios sobre la ruta",
+                        "type": "string",
+                        "example": "Esta ruta actualmente tiene un desvío"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RouteStoreRequest"
+                }
+            },
+            "RouteUpdateRequest": {
+                "title": "Route Update Request",
+                "description": "Route Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "origin_compound_id",
+                    "destination_compound_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la ruta",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "ANTWERP CHINA"
+                    },
+                    "code": {
+                        "description": "Código de la ruta",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "ANTC1"
+                    },
+                    "origin_compound_id": {
+                        "description": "Indica la campa de origen",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_compound_id": {
+                        "description": "Indica la campa de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
+                    },
+                    "comments": {
+                        "description": "Comentarios sobre la ruta",
+                        "type": "string",
+                        "example": "Esta ruta actualmente tiene un desvío"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RouteUpdateRequest"
+                }
+            },
             "RowUpdateRequest": {
                 "title": "Row Update Request",
                 "description": "Row Update request body data",
@@ -5448,6 +7408,70 @@
                 "type": "object",
                 "xml": {
                     "name": "SlotUpdateRequest"
+                }
+            },
+            "StageStoreRequest": {
+                "title": "Stage Store Request",
+                "description": "Stage Store request body data",
+                "required": [
+                    "name",
+                    "short_name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STAGE 3"
+                    },
+                    "short_name": {
+                        "description": "Nombre corto de la etapa",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "ST3"
+                    },
+                    "description": {
+                        "description": "Descripción de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Etapa de creación del vehículo"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StageStoreRequest"
+                }
+            },
+            "StageUpdateRequest": {
+                "title": "Stage Update Request",
+                "description": "Stage Update request body data",
+                "required": [
+                    "name",
+                    "short_name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STAGE 3"
+                    },
+                    "short_name": {
+                        "description": "Nombre corto de la etapa",
+                        "type": "string",
+                        "maxLength": 5,
+                        "example": "ST3"
+                    },
+                    "description": {
+                        "description": "Descripción de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Etapa de creación del vehículo"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StageUpdateRequest"
                 }
             },
             "UserStoreRequest": {
@@ -5533,6 +7557,46 @@
                 "type": "object",
                 "xml": {
                     "name": "UserUpdateRequest"
+                }
+            },
+            "VehicleStageRequest": {
+                "title": "Vehicle Stage Request",
+                "description": "Vehicle Stage request body data",
+                "required": [
+                    "stage",
+                    "vin",
+                    "eoc",
+                    "hybrid"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la etapa",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STAGE 3"
+                    },
+                    "vin": {
+                        "description": "Número de bastidor del vehículo",
+                        "type": "string",
+                        "maxLength": 17,
+                        "example": "WF0FXXWPMFKY73028"
+                    },
+                    "eoc": {
+                        "description": "Identificador único de ford",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "5S8DQ87FZAFF090N6   WPMFKY73028  YSC B3EB  CPGD5EZJN A337C7B A6E 63  1765  MH 15"
+                    },
+                    "hybrid": {
+                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "VehicleStageRequest"
                 }
             },
             "ZoneStoreRequest": {

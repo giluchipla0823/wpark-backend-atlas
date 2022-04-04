@@ -48,6 +48,6 @@ class Device extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'users_devices', 'user_id', 'device_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(User::class, 'users_devices', 'user_id', 'device_id')->withTimestamps();
     }
 }

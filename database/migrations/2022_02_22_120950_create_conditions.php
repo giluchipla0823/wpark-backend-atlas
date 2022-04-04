@@ -16,10 +16,9 @@ class CreateConditions extends Migration
         Schema::create('conditions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->foreignId('model_condition_id')->constrained('models_conditions');
+            $table->string('description')->nullable()->default('NULL');
+            $table->foreignId('model_condition_id')->constrained('model_conditions');
             $table->boolean('required')->default('0');
-            $table->boolean('active')->default('1');
             $table->softDeletes();
             $table->timestamps();
         });

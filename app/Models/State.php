@@ -49,7 +49,7 @@ class State extends Model
 
     public function rows()
     {
-        return $this->belongsToMany(Row::class, 'rows_states', 'row_id', 'state_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Row::class, 'rows_states', 'row_id', 'state_id')->withTimestamps();
     }
 
     public function rules()
@@ -59,6 +59,6 @@ class State extends Model
 
     public function vehicles()
     {
-        return $this->belongsToMany(Vehicle::class, 'vehicles_states', 'vehicle_id', 'state_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Vehicle::class, 'vehicles_states', 'vehicle_id', 'state_id')->withTimestamps();
     }
 }

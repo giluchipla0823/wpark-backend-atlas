@@ -8,14 +8,22 @@ use App\Http\Controllers\Api\v1\User\UserController;
 use App\Http\Controllers\Api\v1\Compound\CompoundController;
 use App\Http\Controllers\Api\v1\Brand\BrandController;
 use App\Http\Controllers\Api\v1\Design\DesignController;
+use App\Http\Controllers\Api\v1\Country\CountryController;
+use App\Http\Controllers\Api\v1\Route\RouteController;
+use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
+use App\Http\Controllers\Api\v1\Condition\ConditionController;
+use App\Http\Controllers\Api\v1\Hold\HoldController;
 use App\Http\Controllers\Api\v1\Zone\ZoneController;
 use App\Http\Controllers\Api\v1\Area\AreaController;
 use App\Http\Controllers\Api\v1\Parking\ParkingTypeController;
 use App\Http\Controllers\Api\v1\Parking\ParkingController;
-use App\Http\Controllers\Api\v1\Block\BlockController;
 use App\Http\Controllers\Api\v1\Parking\ParkingDesignController;
+use App\Http\Controllers\Api\v1\Block\BlockController;
 use App\Http\Controllers\Api\v1\Row\RowController;
 use App\Http\Controllers\Api\v1\Slot\SlotController;
+use App\Http\Controllers\Api\v1\Vehicle\StageController;
+use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
+use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +74,26 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/designs/{id}', [DesignController::class, 'restore'])->name('designs.restore');
     Route::resource('designs', DesignController::class, ['except' =>['create', 'edit']]);
 
+    // Countries
+    Route::patch('/countries/{id}', [CountryController::class, 'restore'])->name('countries.restore');
+    Route::resource('countries', CountryController::class, ['except' =>['create', 'edit']]);
+
+    // Routes
+    Route::patch('/routes/{id}', [RouteController::class, 'restore'])->name('routes.restore');
+    Route::resource('routes', RouteController::class, ['except' =>['create', 'edit']]);
+
+    // Destination Codes
+    Route::patch('/destination-codes/{id}', [DestinationCodeController::class, 'restore'])->name('destination-codes.restore');
+    Route::resource('destination-codes', DestinationCodeController::class, ['except' =>['create', 'edit']]);
+
+    // Conditions
+    Route::patch('/conditions/{id}', [ConditionController::class, 'restore'])->name('conditions.restore');
+    Route::resource('conditions', ConditionController::class, ['except' =>['create', 'edit']]);
+
+    // Holds
+    Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
+    Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
+
     // Zones
     Route::patch('/zones/{id}', [ZoneController::class, 'restore'])->name('zones.restore');
     Route::resource('zones', ZoneController::class, ['except' =>['create', 'edit']]);
@@ -92,4 +120,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Slots
     Route::resource('slots', SlotController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
+
+    // Stages
+    Route::patch('/stages/{id}', [StageController::class, 'restore'])->name('stages.restore');
+    Route::resource('stages', StageController::class, ['except' =>['create', 'edit']]);
+
+    // Vehicles
+    Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
+    //Route::post('/vehicle-stage', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage'); // TODO: Cambiar vehicle-stage por las rutas store y update
+    Route::resource('vehicles', VehicleController::class, ['except' =>['create', 'edit']]);
 });

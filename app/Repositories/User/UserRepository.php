@@ -36,6 +36,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $query->get();
     }
 
+    // TODO: Añadir relaciones many to many con campas y dispositivos como en holds
     /**
      * Crear usuario.
      *

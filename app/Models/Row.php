@@ -66,7 +66,7 @@ class Row extends Model
 
     public function states()
     {
-        return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->withTimestamps();
     }
 
     public function slots()

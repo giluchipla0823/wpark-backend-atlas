@@ -27,6 +27,20 @@ use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Design\DesignRepository;
 use App\Repositories\Design\DesignRepositoryInterface;
+use App\Repositories\Country\CountryRepository;
+use App\Repositories\Country\CountryRepositoryInterface;
+use App\Repositories\Route\RouteRepository;
+use App\Repositories\Route\RouteRepositoryInterface;
+use App\Repositories\DestinationCode\DestinationCodeRepository;
+use App\Repositories\DestinationCode\DestinationCodeRepositoryInterface;
+use App\Repositories\Condition\ConditionRepository;
+use App\Repositories\Condition\ConditionRepositoryInterface;
+use App\Repositories\Hold\HoldRepository;
+use App\Repositories\Hold\HoldRepositoryInterface;
+use App\Repositories\Vehicle\StageRepository;
+use App\Repositories\Vehicle\StageRepositoryInterface;
+use App\Repositories\Vehicle\VehicleRepository;
+use App\Repositories\Vehicle\VehicleRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -100,6 +114,41 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             DesignRepositoryInterface::class,
             DesignRepository::class
+        );
+
+        $this->app->bind(
+            CountryRepositoryInterface::class,
+            CountryRepository::class
+        );
+
+        $this->app->bind(
+            RouteRepositoryInterface::class,
+            RouteRepository::class
+        );
+
+        $this->app->bind(
+            DestinationCodeRepositoryInterface::class,
+            DestinationCodeRepository::class
+        );
+
+        $this->app->bind(
+            ConditionRepositoryInterface::class,
+            ConditionRepository::class
+        );
+
+        $this->app->bind(
+            HoldRepositoryInterface::class,
+            HoldRepository::class
+        );
+
+        $this->app->bind(
+            StageRepositoryInterface::class,
+            StageRepository::class
+        );
+
+        $this->app->bind(
+            VehicleRepositoryInterface::class,
+            VehicleRepository::class
         );
     }
 }

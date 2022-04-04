@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre del bloqueo", example="STOLEN"),
  * @OA\Property(property="code", type="string", maxLength=25, description="Código del bloqueo", example="AZ"),
- * @OA\Property(property="priority", type="boolean", maxLength=1, description="Indica el orden de prioridad del bloqueo", example="1"),
+ * @OA\Property(property="priority", type="integer", maxLength=10, description="Indica el orden de prioridad del bloqueo", example="1"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si el bloqueo está activo (0: No está activo, 1: Está activo)", example="1"),
+ * @OA\Property(property="count", type="integer", maxLength=10, description="Máximo de bloqueos por fila", example="5"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),
  * @OA\Property(property="updated_at", type="string", format="date-time", description="Fecha y hora de la última modificación", example="2021-09-09 11:20:01")
@@ -39,6 +40,7 @@ class Hold extends Model
         'code',
         'priority',
         'active',
+        'count',
         'deleted_at',
         'created_at',
         'updated_at',
@@ -46,11 +48,11 @@ class Hold extends Model
 
     public function conditions()
     {
-        return $this->belongsToMany(Condition::class, 'holds_conditions', 'hold_id', 'condition_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Condition::class, 'holds_conditions', 'hold_id', 'condition_id')->withTimestamps();
     }
 
     public function vehicles()
     {
-        return $this->belongsToMany(Vehicle::class, 'holds_vehicles', 'vehicle_id', 'hold_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Vehicle::class, 'holds_vehicles', 'vehicle_id', 'hold_id')->withTimestamps();
     }
 }

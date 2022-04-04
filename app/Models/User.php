@@ -74,12 +74,12 @@ class User extends Authenticatable
 
     public function compounds()
     {
-        return $this->belongsToMany(Compound::class, 'users_compounds', 'user_id', 'compound_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Compound::class, 'users_compounds', 'user_id', 'compound_id')->withTimestamps();
     }
 
     public function devices()
     {
-        return $this->belongsToMany(Device::class, 'users_devices', 'user_id', 'device_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(Device::class, 'users_devices', 'user_id', 'device_id')->withTimestamps();
     }
 
     public function movements()

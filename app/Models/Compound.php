@@ -40,7 +40,7 @@ class Compound extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'users_compounds', 'user_id', 'compound_id')->wherePivotNull('deleted_at')->withTimestamps();
+        return $this->belongsToMany(User::class, 'users_compounds', 'user_id', 'compound_id')->withTimestamps();
     }
 
     public function routesOriginCompounds()

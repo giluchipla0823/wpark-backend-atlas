@@ -18,7 +18,7 @@ class CreateStates extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->foreignId('model_state_id')->constrained('models_states');
+            $table->foreignId('model_state_id')->constrained('model_states');
             //$table->boolean('driveable');
             $table->softDeletes();
             $table->timestamps();
