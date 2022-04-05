@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CarrierSeeder::class,
             DealerSeeder::class,
+            DeviceTypeSeeder::class,
+            DeviceSeeder::class,
             RouteSeeder::class,
             DestinationCodeSeeder::class,
             ModelConditionSeeder::class,
