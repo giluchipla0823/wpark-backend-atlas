@@ -69,6 +69,11 @@ class Row extends Model
         return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->withTimestamps();
     }
 
+    public function latestState()
+    {
+        return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->withTimestamps()->orderByPivot('created_at', 'desc')->take(1);
+    }
+
     public function slots()
     {
         return $this->hasMany(Slot::class, 'row_id');

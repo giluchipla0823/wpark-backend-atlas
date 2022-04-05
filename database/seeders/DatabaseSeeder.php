@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             DestinationCodeSeeder::class,
             ModelConditionSeeder::class,
             ConditionSeeder::class,
+            ModelStateSeeder::class,
+            StateSeeder::class,
             HoldSeeder::class,
             BlockSeeder::class,
             ZoneSeeder::class,

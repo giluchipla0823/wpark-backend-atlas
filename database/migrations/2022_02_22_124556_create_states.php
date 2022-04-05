@@ -17,7 +17,7 @@ class CreateStates extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable()->default('NULL');
             $table->foreignId('model_state_id')->constrained('model_states');
             //$table->boolean('driveable');
             $table->softDeletes();

@@ -200,5 +200,35 @@ class HoldController extends ApiController
         return $this->showMessage('Hold restored successfully.', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/holds/{id}/toggle-active",
+     *     tags={"Holds"},
+     *     summary="Toggle Active Hold",
+     *     description="Toggle Active Hold",
+     *     security={{"sanctum": {}}},
+     *     operationId="toggleActiveHold",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=204, description="Hold toggle active successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Toggle active the specified resource from storage.
+     *
+     * @param Hold $hold
+     * @return JsonResponse
+     */
+    public function toggleActive(Hold $hold): JsonResponse
+    {
+        $active = $this->holdService->toggleActive($hold);
+
+        $message = $active === 0 ? 'El hold se desactivó correctamente' : 'El hold se activó correctamente';
+
+        return $this->showMessage($message);
+    }
+
 
 }

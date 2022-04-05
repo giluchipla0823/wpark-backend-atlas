@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\v1\Country\CountryController;
 use App\Http\Controllers\Api\v1\Route\RouteController;
 use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
 use App\Http\Controllers\Api\v1\Condition\ConditionController;
+use App\Http\Controllers\Api\v1\State\StateController;
 use App\Http\Controllers\Api\v1\Hold\HoldController;
 use App\Http\Controllers\Api\v1\Zone\ZoneController;
 use App\Http\Controllers\Api\v1\Area\AreaController;
@@ -90,8 +91,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/conditions/{id}', [ConditionController::class, 'restore'])->name('conditions.restore');
     Route::resource('conditions', ConditionController::class, ['except' =>['create', 'edit']]);
 
+    // States
+    Route::patch('/states/{id}', [StateController::class, 'restore'])->name('states.restore');
+    Route::resource('states', StateController::class, ['except' =>['create', 'edit']]);
+
     // Holds
     Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
+    Route::patch('/holds/{hold}/toggle-active', [HoldController::class, 'toggleActive'])->name('holds.toggle-active');
     Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
 
     // Zones

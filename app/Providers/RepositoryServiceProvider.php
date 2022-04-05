@@ -41,6 +41,8 @@ use App\Repositories\Vehicle\StageRepository;
 use App\Repositories\Vehicle\StageRepositoryInterface;
 use App\Repositories\Vehicle\VehicleRepository;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
+use App\Repositories\State\StateRepository;
+use App\Repositories\State\StateRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -149,6 +151,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             VehicleRepositoryInterface::class,
             VehicleRepository::class
+        );
+
+        $this->app->bind(
+            StateRepositoryInterface::class,
+            StateRepository::class
         );
     }
 }

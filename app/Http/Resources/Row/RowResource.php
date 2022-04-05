@@ -4,6 +4,7 @@ namespace App\Http\Resources\Row;
 
 use App\Http\Resources\Block\BlockResource;
 use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\State\StateResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RowResource extends JsonResource
@@ -27,6 +28,7 @@ class RowResource extends JsonResource
             'fillmm' => $this->fillmm,
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
+            'state' => StateResource::collection($this->latestState),
         ];
     }
 }

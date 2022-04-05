@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Services\Hold;
+namespace App\Services\State;
 
-use App\Models\Hold;
-use App\Repositories\Hold\HoldRepositoryInterface;
+use App\Models\State;
+use App\Repositories\State\StateRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Helpers\QueryParamsHelper;
-use App\Http\Resources\Hold\HoldResource;
+use App\Http\Resources\State\StateResource;
 
-class HoldService
+class StateService
 {
     /**
-     * @var HoldRepositoryInterface
+     * @var StateRepositoryInterface
      */
     private $repository;
 
-    public function __construct(HoldRepositoryInterface $repository)
+    public function __construct(StateRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -28,30 +28,30 @@ class HoldService
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $data = collect($results->get('data'));
 
-            $resource = HoldResource::collection($data);
+            $resource = StateResource::collection($data);
 
             $results->put('data', $resource->toArray($request));
 
             return $results;
         }
 
-        return HoldResource::collection($results)->collection;
+        return StateResource::collection($results)->collection;
     }
 
     /**
-     * @param Hold $hold
-     * @return HoldResource
+     * @param State $state
+     * @return StateResource
      */
-    public function show(Hold $hold): HoldResource
+    public function show(State $state): StateResource
     {
-        return new HoldResource($hold);
+        return new StateResource($state);
     }
 
     /**
      * @param array $params
-     * @return Hold
+     * @return State
      */
-    public function create(array $params): Hold
+    public function create(array $params): State
     {
         return $this->repository->create($params);
     }
@@ -78,17 +78,5 @@ class HoldService
     public function restore(int $id): void
     {
         $this->repository->restore($id);
-    }
-
-    /**
-     * @param Hold $hold
-     * @return int
-     */
-    public function toggleActive(Hold $hold): int {
-        $active = $hold->active ? 0 : 1;
-
-        $this->update(['active' => $active], $hold->id);
-
-        return $active;
     }
 }

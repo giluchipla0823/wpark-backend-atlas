@@ -76,7 +76,10 @@ class HoldRepository extends BaseRepository implements HoldRepositoryInterface
             // Actualización del Hold y relación many to many con condiciones
             $hold = $this->model->find($id);
             $hold->update($params);
-            $hold->conditions()->sync($params['conditions']);
+
+            if (array_key_exists('conditions', $params) && is_array($params['conditions'])) {
+                $hold->conditions()->sync($params['conditions']);
+            }
 
             DB::commit();
         }catch(Exception $e){

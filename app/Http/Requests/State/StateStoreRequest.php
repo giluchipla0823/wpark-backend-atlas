@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserStoreRequest extends FormRequest
+class StateStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:75',
-            'email' => 'required|email|max:255|unique:users,email',
-            'username' => 'required|max:255|unique:users,username',
-            'password' => 'required|max:100',
-            'password_confirmation' => 'required|max:100|same:password',
+            'name' => 'required|max:255',
+            'description' =>'nullable|max:255',
+            'model_state_id' => 'required|exists:model_states,id'
         ];
     }
 }

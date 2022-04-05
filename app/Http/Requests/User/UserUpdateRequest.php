@@ -30,7 +30,7 @@ class UserUpdateRequest extends FormRequest
             'surname' => 'max:255',
             'email' => "required|email|max:255|unique:users,email,{$id},id",
             'username' => "required|max:255|unique:users,username,{$id},id",
-            'admin_pin' => 'integer|digits_between:4,10'
+            // 'admin_pin' => 'integer|digits_between:4,10' TODO: ¿Porqué este campo?
         ];
     }
 }

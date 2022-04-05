@@ -117,6 +117,11 @@ class Vehicle extends Model
         return $this->belongsToMany(State::class, 'vehicles_states', 'vehicle_id', 'state_id')->withTimestamps();
     }
 
+    public function latestState()
+    {
+        return $this->belongsToMany(State::class, 'vehicles_states', 'vehicle_id', 'state_id')->take(1)->withTimestamps();
+    }
+
     public function holds()
     {
         return $this->belongsToMany(Hold::class, 'holds_vehicles', 'vehicle_id', 'hold_id')->withTimestamps();
@@ -130,5 +135,10 @@ class Vehicle extends Model
     public function stages()
     {
         return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')->withTimestamps();
+    }
+
+    public function latestStage()
+    {
+        return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')->withTimestamps()->orderByPivot('created_at', 'desc')->take(1);
     }
 }

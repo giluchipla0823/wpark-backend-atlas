@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\User;
  *      @OA\Xml(
  *         name="UserStoreRequest"
  *      ),
- *      required={"name", "email", "username", "password"}
+ *      required={"name", "email", "username", "password", "password_confirmation"}
  * )
  */
 class UserStoreRequest
@@ -58,4 +58,15 @@ class UserStoreRequest
      * )
      */
     public $password;
+
+    /**
+     * @OA\Property(
+     *     property="password_confirmation",
+     *     type="string",
+     *     maxLength=100,
+     *     description="Contraseña de confirmación del usuario",
+     *     example="jgbTest6;"
+     * )
+     */
+    public $password_confirmation;
 }

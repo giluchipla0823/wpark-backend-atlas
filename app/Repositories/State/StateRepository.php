@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Repositories\Condition;
+namespace App\Repositories\State;
 
 use App\Helpers\QueryParamsHelper;
-use App\Models\Condition;
+use App\Models\State;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
 
-class ConditionRepository extends BaseRepository implements ConditionRepositoryInterface
+class StateRepository extends BaseRepository implements StateRepositoryInterface
 {
-    public function __construct(Condition $condition)
+    public function __construct(State $state)
     {
-        parent::__construct($condition);
+        parent::__construct($state);
     }
 
     /**

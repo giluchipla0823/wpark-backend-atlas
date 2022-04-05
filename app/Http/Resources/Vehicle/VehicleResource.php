@@ -6,9 +6,9 @@ use App\Http\Resources\Color\ColorResource;
 use App\Http\Resources\Country\CountryResource;
 use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\DestinationCode\DestinationCodeResource;
+use App\Http\Resources\State\StateResource;
 use App\Http\Resources\Vehicle\StageResource;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Carbon\Carbon;
 
 class VehicleResource extends JsonResource
 {
@@ -28,11 +28,10 @@ class VehicleResource extends JsonResource
             'color' => new ColorResource($this->color),
             'country' => new CountryResource($this->country),
             'destination_code' => new DestinationCodeResource($this->destinationCode),
-            'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO E',
-            'hybrid' => 1,
-            'stages' => StageResource::collection($this->stages),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
+            'eoc' => $this->eoc,
+            'hybrid' => $this->hybrid,
+            'stages' => StageResource::collection($this->latestStage),
+            'state' => StateResource::collection($this->latestState),
         ];
     }
 }

@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\User;
  *      @OA\Xml(
  *         name="UserUpdateRequest"
  *      ),
- *      required={"name", "email", "username"}
+ *      required={"name", "surname", "email", "username"}
  * )
  */
 class UserUpdateRequest
@@ -59,14 +59,14 @@ class UserUpdateRequest
      */
     public $username;
 
-    /**
-     * @OA\Property(
-     *     property="admin_pin",
-     *     type="integer",
-     *     maxLength=10,
-     *     description="Pin del administrador",
-     *     example="2584639875"
-     * )
-     */
-    public $admin_pin;
+//    /**
+//     * @OA\Property(
+//     *     property="admin_pin",
+//     *     type="integer",
+//     *     maxLength=10,
+//     *     description="Pin del administrador",
+//     *     example="2584639875"
+//     * )
+//     */
+//    public $admin_pin;
 }

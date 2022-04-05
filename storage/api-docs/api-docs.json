@@ -2409,6 +2409,43 @@
                 ]
             }
         },
+        "/api/v1/holds/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Toggle Active Hold",
+                "description": "Toggle Active Hold",
+                "operationId": "toggleActiveHold",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Hold toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/parkings": {
             "get": {
                 "tags": [
@@ -3293,6 +3330,230 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/states": {
+            "get": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "States List",
+                "description": "List of states",
+                "operationId": "indexStates",
+                "responses": {
+                    "200": {
+                        "description": "State list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Create New State",
+                "description": "Create New State",
+                "operationId": "storeState",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StateStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New State"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/states/{id}": {
+            "get": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Show State Details",
+                "description": "Show State Details",
+                "operationId": "showState",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show State Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Update State",
+                "description": "Update State",
+                "operationId": "updateState",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StateUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update State"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Delete State",
+                "description": "Delete State",
+                "operationId": "destroyState",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete State successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Restore State",
+                "description": "Restore State",
+                "operationId": "restoreState",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "State restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -7484,6 +7745,70 @@
                     "name": "StageUpdateRequest"
                 }
             },
+            "StateStoreRequest": {
+                "title": "State Store Request",
+                "description": "State Store request body data",
+                "required": [
+                    "name",
+                    "model_state_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del estado",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STATIONED"
+                    },
+                    "description": {
+                        "description": "Descripción del estado",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "El vehículo está estacionado"
+                    },
+                    "model_state_id": {
+                        "description": "Indica si el estado será para un vehículo o para una fila",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StateStoreRequest"
+                }
+            },
+            "StateUpdateRequest": {
+                "title": "State Update Request",
+                "description": "State Update request body data",
+                "required": [
+                    "name",
+                    "model_state_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del estado",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "STATIONED"
+                    },
+                    "description": {
+                        "description": "Descripción del estado",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "El vehículo está estacionado"
+                    },
+                    "model_state_id": {
+                        "description": "Indica si el estado será para un vehículo o para una fila",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StateUpdateRequest"
+                }
+            },
             "UserGenerateUsernameRequest": {
                 "title": "User Generate Username Request",
                 "description": "User Generate Username request body data",
@@ -7515,7 +7840,8 @@
                     "name",
                     "email",
                     "username",
-                    "password"
+                    "password",
+                    "password_confirmation"
                 ],
                 "properties": {
                     "name": {
@@ -7541,6 +7867,12 @@
                         "type": "string",
                         "maxLength": 100,
                         "example": "jgbTest6;"
+                    },
+                    "password_confirmation": {
+                        "description": "Contraseña de confirmación del usuario",
+                        "type": "string",
+                        "maxLength": 100,
+                        "example": "jgbTest6;"
                     }
                 },
                 "type": "object",
@@ -7553,6 +7885,7 @@
                 "description": "User Update request body data",
                 "required": [
                     "name",
+                    "surname",
                     "email",
                     "username"
                 ],
@@ -7580,12 +7913,6 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "javier.garrido"
-                    },
-                    "admin_pin": {
-                        "description": "Pin del administrador",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "2584639875"
                     }
                 },
                 "type": "object",
