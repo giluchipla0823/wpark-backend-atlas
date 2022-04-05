@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Resources\Device\DeviceResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Compound\CompoundResource;
 
@@ -15,14 +16,23 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'name' => $this->name,
             'surname' => $this->surname,
             'email' => $this->email,
             'username' => $this->username,
             'admin_pin' => $this->admin_pin,
+            'last_login' => $this->last_login,
             'compounds' => CompoundResource::collection($this->compounds),
         ];
+
+        if (in_array('devices', $relationships)) {
+            $response['devices'] = DeviceResource::collection($this->devices);
+        }
+
+        return $response;
     }
 }

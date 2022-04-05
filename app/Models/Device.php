@@ -41,7 +41,7 @@ class Device extends Model
         'updated_at',
     ];
 
-    public function device()
+    public function device_type()
     {
         return $this->belongsTo(DeviceType::class, 'device_type_id');
     }

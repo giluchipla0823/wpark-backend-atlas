@@ -26,6 +26,8 @@ class DeviceType extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'devices_types';
+
     /**
      * The attributes that are mass assignable.
      *
