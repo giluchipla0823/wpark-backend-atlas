@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Parking;
 
 use App\Http\Resources\Area\AreaResource;
-use App\Http\Resources\parking\parkingTypeResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ParkingResource extends JsonResource
@@ -20,7 +19,7 @@ class ParkingResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'area' => new AreaResource($this->area),
-            'parking_type' => new parkingTypeResource($this->parkingType),
+            'parking_type' => new ParkingTypeResource($this->parkingType),
             'start_row' => $this->start_row,
             'end_row' => $this->end_row,
             'capacity' => $this->capacity,
