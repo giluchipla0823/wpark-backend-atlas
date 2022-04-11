@@ -25,4 +25,18 @@ class BlockStoreRequest
      * )
      */
     public $name;
+
+    /**
+     * @OA\Property(
+     *     property="rows",
+     *     type="array",
+     *     @OA\Items(
+     *          type="integer",
+     *     ),
+     *     @OA\Schema(type="array"),
+     *     description="Opcional, Ids de filas",
+     *     example="[1, 2, 3]"
+     * )
+     */
+    public $rows;
 }

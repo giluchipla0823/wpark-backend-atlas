@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Row;
 
 use App\Models\Row;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\Row\RowService;
@@ -124,10 +125,10 @@ class RowController extends ApiController
         return $this->showMessage('Row updated successfully.');
     }
 
-    /**
-     * @param Row $row
-     * @return JsonResponse
-     */
+//    /**
+//     * @param Row $row
+//     * @return JsonResponse
+//     */
     /* public function destroy(Row $row): JsonResponse
     {
         $this->rowService->delete($row->id);
@@ -135,10 +136,10 @@ class RowController extends ApiController
         return $this->showMessage('Row removed successfully.', Response::HTTP_NO_CONTENT);
     } */
 
-    /**
-     * @param int $id
-     * @return JsonResponse
-     */
+//    /**
+//     * @param int $id
+//     * @return JsonResponse
+//     */
     /* public function restore(int $id): JsonResponse
     {
         $this->rowService->restore($id);

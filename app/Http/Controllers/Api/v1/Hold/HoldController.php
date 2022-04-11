@@ -209,7 +209,7 @@ class HoldController extends ApiController
      *     security={{"sanctum": {}}},
      *     operationId="toggleActiveHold",
      *     @OA\Parameter(ref="#/components/parameters/id"),
-     *     @OA\Response(response=204, description="Hold toggle active successfully"),
+     *     @OA\Response(response=200, description="Hold toggle active successfully"),
      *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -225,7 +225,7 @@ class HoldController extends ApiController
     {
         $active = $this->holdService->toggleActive($hold);
 
-        $message = $active === 0 ? 'El hold se desactivó correctamente' : 'El hold se activó correctamente';
+        $message = $active === 0 ? 'El hold se desactivó correctamente.' : 'El hold se activó correctamente.';
 
         return $this->showMessage($message);
     }

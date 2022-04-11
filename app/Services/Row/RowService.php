@@ -2,6 +2,7 @@
 
 namespace App\Services\Row;
 
+use App\Models\Block;
 use App\Models\Row;
 use App\Repositories\Row\RowRepositoryInterface;
 use Illuminate\Http\Request;
@@ -78,5 +79,35 @@ class RowService
     public function restore(int $id): void
     {
         $this->repository->restore($id);
+    }
+
+    /**
+     * @param Block $block
+     * @return Collection
+     */
+    public function findAllByBlock(Block $block): Collection
+    {
+        $results = $this->repository->findAllByBlock($block);
+
+        return RowResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Row $row
+     * @return void
+     */
+    public function unlinkBlock(Row $row): void
+    {
+        $this->repository->unlinkBlock($row);
+    }
+
+    /**
+     * @param Block $block
+     * @param array $rows
+     * @return void
+     */
+    public function updateBlockToRows(Block $block, array $rows): void
+    {
+        $this->repository->updateBlockToRows($block, $rows);
     }
 }

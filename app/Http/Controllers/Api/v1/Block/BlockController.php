@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Block;
 
+use App\Http\Requests\Block\BlockAddToRowsRequest;
 use App\Models\Block;
+use App\Services\Row\RowService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\Block\BlockService;
 use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Block\BlockStoreRequest;
 use App\Http\Requests\Block\BlockUpdateRequest;
@@ -18,12 +21,19 @@ class BlockController extends ApiController
      */
     private $blockService;
 
+    /**
+     * @var RowService
+     */
+    private $rowService;
+
     public function __construct(
-        BlockService $blockService
+        BlockService $blockService,
+        RowService $rowService
     )
     {
         $this->middleware('role:Super-Admin|admin');
         $this->blockService = $blockService;
+        $this->rowService = $rowService;
     }
 
     /**
@@ -200,5 +210,65 @@ class BlockController extends ApiController
         return $this->showMessage('Block restored successfully.', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/blocks/{id}/toggle-active",
+     *     tags={"Blocks"},
+     *     summary="Toggle Active Block",
+     *     description="Toggle Active Block",
+     *     security={{"sanctum": {}}},
+     *     operationId="toggleActiveBlock",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=200, description="Block toggle active successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Toggle active the specified resource from storage.
+     *
+     * @param Block $block
+     * @return JsonResponse
+     */
+    public function toggleActive(Block $block): JsonResponse
+    {
+        $active = $this->blockService->toggleActive($block);
 
+        $message = $active === 0 ? 'El bloque se desactivó correctamente.' : 'El bloque se activó correctamente.';
+
+        return $this->showMessage($message);
+    }
+
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/blocks/{id}/add-rows",
+     *     tags={"Blocks"},
+     *     summary="Add Block to rows",
+     *     description="Add Block to rows",
+     *     security={{"sanctum": {}}},
+     *     operationId="addBlockToRows",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/BlockAddToRowsRequest")
+     *     ),
+     *     @OA\Response(response=200, description="The block has been assigned to the specified rows."),
+     *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * @param Block $block
+     * @param BlockAddToRowsRequest $request
+     * @return JsonResponse
+     */
+    public function addRows(Block $block, BlockAddToRowsRequest $request): JsonResponse
+    {
+        $this->rowService->updateBlockToRows($block, $request->get('rows'));
+
+        return $this->showMessage("El bloque ha sido asignado a las filas especificadas.");
+    }
 }

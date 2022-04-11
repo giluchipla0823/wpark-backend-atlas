@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\Block\BlockRowController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -119,7 +120,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Blocks
     Route::patch('/blocks/{id}', [BlockController::class, 'restore'])->name('blocks.restore');
+    Route::patch('/blocks/{block}/add-rows', [BlockController::class, 'addRows'])->name('blocks.add-rows');
+    Route::patch('/blocks/{block}/toggle-active', [BlockController::class, 'toggleActive'])->name('blocks.toggle-active');
     Route::resource('blocks', BlockController::class, ['except' =>['create', 'edit']]);
+
+    // Block Rows
+    Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
+    Route::patch('/blocks/{block}/rows/{row}/unlink', [BlockRowController::class, 'unlink'])->name('blocks-rows.unlink');
 
     // Rows
     Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);

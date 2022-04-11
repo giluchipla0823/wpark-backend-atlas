@@ -4,26 +4,37 @@ namespace App\Services\Block;
 
 use App\Models\Block;
 use App\Repositories\Block\BlockRepositoryInterface;
+use App\Repositories\Row\RowRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Block\BlockResource;
+use Illuminate\Support\Facades\DB;
 
 class BlockService
 {
     /**
      * @var BlockRepositoryInterface
      */
-    private $repository;
+    private $blockRepository;
 
-    public function __construct(BlockRepositoryInterface $repository)
+    /**
+     * @var RowRepositoryInterface
+     */
+    private $rowRepository;
+
+    public function __construct(
+        BlockRepositoryInterface $blockRepository,
+        RowRepositoryInterface $rowRepository
+    )
     {
-        $this->repository = $repository;
+        $this->blockRepository = $blockRepository;
+        $this->rowRepository = $rowRepository;
     }
 
     public function all(Request $request): Collection
     {
-        $results = $this->repository->all($request);
+        $results = $this->blockRepository->all($request);
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $data = collect($results->get('data'));
@@ -53,7 +64,17 @@ class BlockService
      */
     public function create(array $params): Block
     {
-        return $this->repository->create($params);
+        return DB::transaction(function () use ($params) {
+            $block = $this->blockRepository->create($params);
+
+            if (array_key_exists('rows', $params) && is_array($params['rows'])) {
+                $this->rowRepository->updateBlockToRows($block, $params['rows']);
+
+                $block->load('rows');
+            }
+
+            return $block;
+        });
     }
 
     /**
@@ -63,7 +84,7 @@ class BlockService
      */
     public function update(array $params, int $id): void
     {
-        $this->repository->update($params, $id);
+        $this->blockRepository->update($params, $id);
     }
 
     /**
@@ -72,11 +93,33 @@ class BlockService
      */
     public function delete(int $id): void
     {
-        $this->repository->delete($id);
+        $this->blockRepository->delete($id);
     }
 
     public function restore(int $id): void
     {
-        $this->repository->restore($id);
+        $this->blockRepository->restore($id);
+    }
+
+    /**
+     * @param Block $block
+     * @return int
+     */
+    public function toggleActive(Block $block): int {
+        $active = $block->active ? 0 : 1;
+
+        $this->update(['active' => $active], $block->id);
+
+        return $active;
+    }
+
+    /**
+     * @param Block $block
+     * @param array $rows
+     * @return void
+     */
+    public function addRows(Block $block, array $rows): void
+    {
+        $this->blockRepository->addRows($block, $rows);
     }
 }

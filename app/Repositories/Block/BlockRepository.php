@@ -30,7 +30,14 @@ class BlockRepository extends BaseRepository implements BlockRepositoryInterface
             return collect($result);
         }
 
+        if ($name = $request->query->get('name')) {
+            $query = $query->where('name', 'LIKE', "%" . $name . "%");
+        }
+
+        $sortBy = $request->query->get('sort_by', 'id');
+        $sortDirection = $request->query->get('sort_direction', 'asc');
+        $query = $query->orderBy($sortBy, $sortDirection);
+
         return $query->get();
     }
-
 }

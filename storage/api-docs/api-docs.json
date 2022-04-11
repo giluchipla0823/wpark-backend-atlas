@@ -617,6 +617,178 @@
                 ]
             }
         },
+        "/api/v1/blocks/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Blocks"
+                ],
+                "summary": "Toggle Active Block",
+                "description": "Toggle Active Block",
+                "operationId": "toggleActiveBlock",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Block toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/blocks/{id}/add-rows": {
+            "patch": {
+                "tags": [
+                    "Blocks"
+                ],
+                "summary": "Add Block to rows",
+                "description": "Add Block to rows",
+                "operationId": "addBlockToRows",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BlockAddToRowsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The block has been assigned to the specified rows."
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/blocks/{id}/rows": {
+            "get": {
+                "tags": [
+                    "Blocks"
+                ],
+                "summary": "Row List of block",
+                "description": "Row List of block",
+                "operationId": "indexBlocksRows",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Row list of Block Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/blocks/{block}/rows/{row}/unlink": {
+            "patch": {
+                "tags": [
+                    "Blocks"
+                ],
+                "summary": "Unlink block of row",
+                "description": "Unlink block of row",
+                "operationId": "unlinkBlocksRows",
+                "parameters": [
+                    {
+                        "name": "block",
+                        "in": "path",
+                        "description": "ID of block",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "row",
+                        "in": "path",
+                        "description": "ID of row",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unlink Block Successfully"
+                    },
+                    "400": {
+                        "description": "The selected row is not in the specified block."
+                    },
+                    "404": {
+                        "description": "Block or Row not found."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/brands": {
             "get": {
                 "tags": [
@@ -2423,7 +2595,7 @@
                     }
                 ],
                 "responses": {
-                    "204": {
+                    "200": {
                         "description": "Hold toggle active successfully"
                     },
                     "404": {
@@ -6713,6 +6885,27 @@
                     "name": "ResetPasswordRequest"
                 }
             },
+            "BlockAddToRowsRequest": {
+                "title": "Block add to rows Request",
+                "description": "Block add to rows request body data",
+                "required": [
+                    "rows"
+                ],
+                "properties": {
+                    "rows": {
+                        "description": "Ids de filas",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": "[1, 2, 3]"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "BlockAddToRowsRequest"
+                }
+            },
             "BlockStoreRequest": {
                 "title": "Block Store Request",
                 "description": "Block Store request body data",
@@ -6725,6 +6918,14 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
+                    },
+                    "rows": {
+                        "description": "Opcional, Ids de filas",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": "[1, 2, 3]"
                     }
                 },
                 "type": "object",

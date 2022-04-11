@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Vehicle;
 
+use Exception;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Design;
 use App\Models\Color;
@@ -46,6 +47,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      *
      * @param array $params
      * @return Model
+     * @throws Exception
      */
     public function create(array $params): Model
     {
