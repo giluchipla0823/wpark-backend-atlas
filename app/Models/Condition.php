@@ -56,6 +56,7 @@ class Condition extends Model
 
     public function rules()
     {
-        return $this->morphedByMany(Rule::class, 'rules_conditions')->withTimestamps();
+        return $this->belongsToMany(Rule::class, 'rules_conditions', 'rule_id', 'condition_id')->withPivot('conditionable_type', 'conditionable_id')->withTimestamps();
     }
+
 }

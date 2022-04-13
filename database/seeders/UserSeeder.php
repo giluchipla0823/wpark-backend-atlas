@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
 
         User::insert($users);
 
-        // Relacionar campas con los usuarios
+        // Relaciones con los usuarios
         $user1 = User::find(1);
         $user1->compounds()->sync([1,2]);
         $user1->devices()->sync([1]);

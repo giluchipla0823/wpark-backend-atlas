@@ -88,7 +88,7 @@ class Rule extends Model
 
     public function conditions()
     {
-        return $this->morphToMany(Condition::class, 'rules_conditions')->withTimestamps();
+        return $this->belongsToMany(Condition::class, 'rules_conditions', 'rule_id', 'condition_id')->withPivot('conditionable_type', 'conditionable_id')->withTimestamps();
     }
 
     public function loads()
@@ -110,4 +110,5 @@ class Rule extends Model
     {
         return $this->hasMany(Rule::class, 'rule_id');
     }
+
 }

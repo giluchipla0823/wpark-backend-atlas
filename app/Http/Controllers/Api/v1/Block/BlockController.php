@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\Block\BlockService;
 use App\Http\Controllers\ApiController;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Block\BlockStoreRequest;
 use App\Http\Requests\Block\BlockUpdateRequest;

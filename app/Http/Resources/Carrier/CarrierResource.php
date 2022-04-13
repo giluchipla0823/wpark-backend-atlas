@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Block;
+namespace App\Http\Resources\Carrier;
 
-use App\Http\Resources\Rule\RuleResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BlockResource extends JsonResource
+class CarrierResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +17,8 @@ class BlockResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'active' => $this->active,
-            'rules' => RuleResource::collection($this->rules)
+            'code' => $this->code,
+            'is_train' => $this->is_train,
         ];
     }
 }

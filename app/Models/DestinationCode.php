@@ -58,4 +58,5 @@ class DestinationCode extends Model
     {
         return $this->hasMany(Vehicle::class, 'destination_code_id');
     }
+
 }

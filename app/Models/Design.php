@@ -67,4 +67,5 @@ class Design extends Model
     {
         return $this->hasMany(Vehicle::class, 'design_id');
     }
+
 }

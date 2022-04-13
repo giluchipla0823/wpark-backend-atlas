@@ -197,7 +197,7 @@ class DestinationCodeController extends ApiController
     {
         $this->destinationCodeService->restore($id);
 
-        return $this->showMessage('DestinationCode restored successfully.', Response::HTTP_NO_CONTENT);
+        return $this->showMessage('DestinationCode restored successfully.');
     }
 
 

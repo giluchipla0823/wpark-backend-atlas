@@ -57,8 +57,9 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             // Creación del vehículo y relación many to many con stages
             // Extracción del vin_short desde el eoc
             // TODO: Sustituir estas relaciones cuando se cree el servicio VehicleStageService
-            $eoc = str_replace(' ', '', $params['eoc']);
-            $params['vin_short'] = substr($eoc, 21, 7);
+            $eoc = $params['eoc'];
+
+            $params['vin_short'] = substr($eoc, 24, 7);
 
             $params['design_id'] = Design::inRandomOrder()->first()->id;
 

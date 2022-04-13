@@ -3,6 +3,7 @@
 namespace App\Services\Row;
 
 use App\Models\Block;
+use App\Models\Parking;
 use App\Models\Row;
 use App\Repositories\Row\RowRepositoryInterface;
 use Illuminate\Http\Request;
@@ -109,5 +110,16 @@ class RowService
     public function updateBlockToRows(Block $block, array $rows): void
     {
         $this->repository->updateBlockToRows($block, $rows);
+    }
+
+    /**
+     * @param Parking $parking
+     * @return Collection
+     */
+    public function findAllByParking(Parking $parking): Collection
+    {
+        $results = $this->repository->findAllByParking($parking);
+
+        return RowResource::collection($results)->collection;
     }
 }

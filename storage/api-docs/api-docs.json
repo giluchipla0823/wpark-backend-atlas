@@ -1013,6 +1013,230 @@
                 ]
             }
         },
+        "/api/v1/carriers": {
+            "get": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Carriers List",
+                "description": "List of carriers",
+                "operationId": "indexCarriers",
+                "responses": {
+                    "200": {
+                        "description": "Carriers list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Create New Carrier",
+                "description": "Create New Carrier",
+                "operationId": "storeCarrier",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CarrierStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Carrier"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/carriers/{id}": {
+            "get": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Show Carrier Details",
+                "description": "Show Carrier Details",
+                "operationId": "showCarrier",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Carrier Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Update Carrier",
+                "description": "Update Carrier",
+                "operationId": "updateCarrier",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CarrierUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Carrier"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Delete Carrier",
+                "description": "Delete Carrier",
+                "operationId": "destroyCarrier",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Carrier successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Restore Carrier",
+                "description": "Restore Carrier",
+                "operationId": "restoreCarrier",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Carrier restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/colors": {
             "get": {
                 "tags": [
@@ -2844,6 +3068,40 @@
                 ]
             }
         },
+        "/api/v1/parkings/{id}/rows": {
+            "get": {
+                "tags": [
+                    "Parkings"
+                ],
+                "summary": "Row List of parking",
+                "description": "Row List of parking",
+                "operationId": "indexParkingsRows",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Row list of Parking Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/parking-types": {
             "get": {
                 "tags": [
@@ -3388,6 +3646,267 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rules": {
+            "get": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Rules List",
+                "description": "List of rules",
+                "operationId": "indexRules",
+                "responses": {
+                    "200": {
+                        "description": "Rule list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Create New Rule",
+                "description": "Create New Rule",
+                "operationId": "storeRule",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RuleStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Rule"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rules/{id}": {
+            "get": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Show Rule Details",
+                "description": "Show Rule Details",
+                "operationId": "showRule",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Rule Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Update Rule",
+                "description": "Update Rule",
+                "operationId": "updateRule",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RuleUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Rule"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Delete Rule",
+                "description": "Delete Rule",
+                "operationId": "destroyRule",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Rule successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Restore Rule",
+                "description": "Restore Rule",
+                "operationId": "restoreRule",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Rule restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rules/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Toggle Active Rule",
+                "description": "Toggle Active Rule",
+                "operationId": "toggleActiveRule",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Rule toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -7025,6 +7544,72 @@
                     "name": "BrandUpdateRequest"
                 }
             },
+            "CarrierStoreRequest": {
+                "title": "Carrier Store Request",
+                "description": "Carrier Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "is_train"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del transportista",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "TRANSFESA"
+                    },
+                    "code": {
+                        "description": "Código del transportista",
+                        "type": "string",
+                        "maxLength": 10,
+                        "minLength": 3,
+                        "example": "TRANS"
+                    },
+                    "is_train": {
+                        "description": "¿Es tren?",
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CarrierStoreRequest"
+                }
+            },
+            "CarrierUpdateRequest": {
+                "title": "Carrier Update Request",
+                "description": "Carrier Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "is_train"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del transportista",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "TRANSFESA"
+                    },
+                    "code": {
+                        "description": "Código del transportista",
+                        "type": "string",
+                        "maxLength": 10,
+                        "minLength": 3,
+                        "example": "TRANS"
+                    },
+                    "is_train": {
+                        "description": "¿Es tren?",
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CarrierUpdateRequest"
+                }
+            },
             "ColorStoreRequest": {
                 "title": "Color Store Request",
                 "description": "Color Store request body data",
@@ -7865,6 +8450,99 @@
                 "type": "object",
                 "xml": {
                     "name": "RowUpdateRequest"
+                }
+            },
+            "RuleStoreRequest": {
+                "title": "Rule Store Request",
+                "description": "Rule Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "priority",
+                    "blocks",
+                    "conditions"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la regla",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "FORD"
+                    },
+                    "priority": {
+                        "description": "Indica el orden de prioridad de la regla",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "1"
+                    },
+                    "blocks": {
+                        "description": "Id´s de los bloques que irán asociados a la regla",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "conditions": {
+                        "description": "Id´s de las condiciones que irán asociadas a la regla",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RuleStoreRequest"
+                }
+            },
+            "RuleUpdateRequest": {
+                "title": "Rule Update Request",
+                "description": "Rule Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "priority",
+                    "active",
+                    "blocks",
+                    "conditions"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la regla",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "FORD"
+                    },
+                    "priority": {
+                        "description": "Indica el orden de prioridad de la regla",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "1"
+                    },
+                    "active": {
+                        "description": "Indica si la regla está activa (0: No está activa, 1: Está activa)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
+                    "blocks": {
+                        "description": "Id´s de los bloques que irán asociados a la regla",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "conditions": {
+                        "description": "Id´s de las condiciones que irán asociadas a la regla",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RuleUpdateRequest"
                 }
             },
             "SlotUpdateRequest": {

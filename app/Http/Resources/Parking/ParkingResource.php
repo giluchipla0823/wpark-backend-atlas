@@ -3,6 +3,9 @@
 namespace App\Http\Resources\Parking;
 
 use App\Http\Resources\Area\AreaResource;
+use App\Http\Resources\parking\parkingTypeResource;
+use App\Http\Resources\Row\RowResource;
+use App\Models\Parking;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ParkingResource extends JsonResource
@@ -15,11 +18,13 @@ class ParkingResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'name' => $this->name,
             'area' => new AreaResource($this->area),
-            'parking_type' => new ParkingTypeResource($this->parkingType),
+            'parking_type' => new parkingTypeResource($this->parkingType),
             'start_row' => $this->start_row,
             'end_row' => $this->end_row,
             'capacity' => $this->capacity,
@@ -28,5 +33,18 @@ class ParkingResource extends JsonResource
             'active' => $this->active,
             'comments' => $this->comments,
         ];
+
+        if ($request->query->get('additional_data') === 'total-capacity') {
+            $slotsAvailable = $this->rows->sum('capacity');
+            $slotsFilled = $this->rows->sum('fill');
+            $parkingFilledPercentage = round(($slotsFilled / $slotsAvailable) * 100, 2);
+
+            $response['slots_available'] = $slotsAvailable;
+            $response['slots_filled'] = $slotsFilled;
+            $response['parking_filled_percentage'] = $parkingFilledPercentage;
+            $response['parking_filled_type'] = Parking::getFilledCategory($parkingFilledPercentage);
+        }
+
+        return $response;
     }
 }

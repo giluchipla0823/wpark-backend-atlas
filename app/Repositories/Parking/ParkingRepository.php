@@ -26,15 +26,29 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
     {
         $query = $this->model->query();
 
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $result = Datatables::customizable($query)->response();
 
             return collect($result);
         }
 
+        if ($name = $request->query->get('name')) {
+            $query = $query->where('name', 'LIKE', "%" . $name . "%");
+        }
+
+        $sortBy = $request->query->get('sort_by', 'id');
+        $sortDirection = $request->query->get('sort_direction', 'asc');
+        $query = $query->orderBy($sortBy, $sortDirection);
+
         return $query->get();
     }
 
+    /**
+     * @param array $params
+     * @return Model
+     */
     public function create(array $params): Model
     {
         $params['capacity'] = (($params['end_row'] - $params['start_row']) + 1) * 8;

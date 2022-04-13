@@ -17,6 +17,7 @@ class CreateConditions extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable()->default('NULL');
+            $table->string('model')->nullable();
             $table->foreignId('model_condition_id')->constrained('model_conditions');
             $table->boolean('required')->default('0');
             $table->softDeletes();

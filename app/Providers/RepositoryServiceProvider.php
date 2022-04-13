@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Carrier\CarrierRepository;
+use App\Repositories\Carrier\CarrierRepositoryInterface;
 use App\Repositories\Color\ColorRepository;
 use App\Repositories\Color\ColorRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -43,6 +45,8 @@ use App\Repositories\Vehicle\VehicleRepository;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use App\Repositories\State\StateRepository;
 use App\Repositories\State\StateRepositoryInterface;
+use App\Repositories\Rule\RuleRepository;
+use App\Repositories\Rule\RuleRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -61,6 +65,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+
+        $this->app->bind(
+            CarrierRepositoryInterface::class,
+            CarrierRepository::class
         );
 
         $this->app->bind(
@@ -156,6 +165,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             StateRepositoryInterface::class,
             StateRepository::class
+        );
+
+        $this->app->bind(
+            RuleRepositoryInterface::class,
+            RuleRepository::class
         );
     }
 }

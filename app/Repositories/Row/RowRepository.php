@@ -4,6 +4,7 @@ namespace App\Repositories\Row;
 
 use App\Helpers\QueryParamsHelper;
 use App\Models\Block;
+use App\Models\Parking;
 use App\Models\Row;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
@@ -69,5 +70,18 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
         $this->model->query()
             ->whereIn('id', $rows)
             ->update(['block_id' => $block->id]);
+    }
+
+    /**
+     * Obtener la lista de rows dado un parking.
+     *
+     * @param Parking $parking
+     * @return Collection
+     */
+    public function findAllByParking(Parking $parking): Collection
+    {
+        return $this->model->query()
+            ->where('parking_id', $parking->id)
+            ->get();
     }
 }

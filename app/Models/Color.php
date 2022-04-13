@@ -48,4 +48,5 @@ class Color extends Model
     {
         return $this->hasMany(Vehicle::class, 'color_id');
     }
+
 }

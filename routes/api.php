@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Carrier\CarrierController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
+use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
 use App\Http\Controllers\Api\v1\Condition\ConditionController;
 use App\Http\Controllers\Api\v1\State\StateController;
 use App\Http\Controllers\Api\v1\Hold\HoldController;
+use App\Http\Controllers\Api\v1\Rule\RuleController;
 use App\Http\Controllers\Api\v1\Zone\ZoneController;
 use App\Http\Controllers\Api\v1\Area\AreaController;
 use App\Http\Controllers\Api\v1\Parking\ParkingTypeController;
@@ -101,6 +104,11 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/holds/{hold}/toggle-active', [HoldController::class, 'toggleActive'])->name('holds.toggle-active');
     Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
 
+    // Rules
+    Route::patch('/rules/{id}', [RuleController::class, 'restore'])->name('rules.restore');
+    Route::patch('/rules/{rule}/toggle-active', [RuleController::class, 'toggleActive'])->name('rules.toggle-active');
+    Route::resource('rules', RuleController::class, ['except' =>['create', 'edit']]);
+
     // Zones
     Route::patch('/zones/{id}', [ZoneController::class, 'restore'])->name('zones.restore');
     Route::resource('zones', ZoneController::class, ['except' =>['create', 'edit']]);
@@ -117,6 +125,9 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/parkings/{id}', [ParkingController::class, 'restore'])->name('parkings.restore');
     Route::post('/parking-design', [ParkingDesignController::class, 'parkingDesign'])->name('parkingDesign');
     Route::resource('parkings', ParkingController::class, ['except' =>['create', 'edit', 'store']]);
+
+    // Parkings Rows
+    Route::get('/parkings/{parking}/rows', [ParkingRowController::class, 'index'])->name('parkings-rows.index');
 
     // Blocks
     Route::patch('/blocks/{id}', [BlockController::class, 'restore'])->name('blocks.restore');
@@ -142,4 +153,8 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
     //Route::post('/vehicle-stage', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage'); // TODO: Cambiar vehicle-stage por las rutas store y update
     Route::resource('vehicles', VehicleController::class, ['except' =>['create', 'edit']]);
+
+    // Carriers
+    Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
+    Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
 });

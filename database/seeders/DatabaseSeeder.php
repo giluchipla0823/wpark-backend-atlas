@@ -38,7 +38,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PermissionSeeder::class,
             StageSeeder::class,
-            VehicleSeeder::class
+            VehicleSeeder::class,
+            RuleSeeder::class,
         ]);
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Block;
+namespace App\Http\Resources\Rule;
 
-use App\Http\Resources\Rule\RuleResource;
+use App\Http\Resources\Block\BlockResource;
+use App\Http\Resources\Condition\ConditionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BlockResource extends JsonResource
+class RuleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,8 +19,10 @@ class BlockResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'priority' => $this->priority,
             'active' => $this->active,
-            'rules' => RuleResource::collection($this->rules)
+            'conditions' => $this->conditions()->get(),
+            //'blocks' => BlockResource::collection($this->blocks)
         ];
     }
 }

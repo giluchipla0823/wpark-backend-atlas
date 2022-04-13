@@ -141,4 +141,5 @@ class Vehicle extends Model
     {
         return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')->withTimestamps()->orderByPivot('created_at', 'desc')->take(1);
     }
+
 }

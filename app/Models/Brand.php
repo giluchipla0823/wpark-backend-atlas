@@ -51,4 +51,5 @@ class Brand extends Model
     {
         return $this->hasMany(Design::class, 'brand_id');
     }
+
 }

@@ -49,4 +49,5 @@ class Country extends Model
     {
         return $this->hasMany(Vehicle::class, 'country_id');
     }
+
 }

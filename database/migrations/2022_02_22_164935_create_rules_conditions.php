@@ -15,7 +15,7 @@ class CreateRulesConditions extends Migration
     {
         Schema::create('rules_conditions', function (Blueprint $table) {
             $table->id();
-            //$table->foreignId('rule_id')->constrained('rules');
+            $table->foreignId('rule_id')->constrained('rules');
             $table->foreignId('condition_id')->constrained('conditions');
             $table->morphs('conditionable');
             $table->softDeletes();
