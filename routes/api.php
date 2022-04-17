@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
+use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
 use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
+use App\Http\Controllers\Api\v1\Row\RowVehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -93,6 +95,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Conditions
     Route::patch('/conditions/{id}', [ConditionController::class, 'restore'])->name('conditions.restore');
+    Route::get('/conditions/{condition}/model-data', [ConditionModelDataController::class, 'index'])->name('conditions-model-data.index');
     Route::resource('conditions', ConditionController::class, ['except' =>['create', 'edit']]);
 
     // States
@@ -141,6 +144,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Rows
     Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
+    Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');
 
     // Slots
     Route::resource('slots', SlotController::class, ['except' =>['create', 'edit', 'store', 'delete']]);

@@ -15,15 +15,22 @@ class SlotResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'slot_number' => $this->slot_number,
-            'row' => new RowResource($this->row),
             'capacity' => $this->capacity,
             'fill' => $this->fill,
             'capacitymm' => $this->capacitymm,
             'fillmm' => $this->fillmm,
-            'comments' => $this->comments
+            'comments' => $this->comments,
         ];
+
+        if (in_array('row', $relationships)) {
+            $response['row'] = new RowResource($this->row);
+        }
+
+        return $response;
     }
 }

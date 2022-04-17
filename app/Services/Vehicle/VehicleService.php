@@ -2,6 +2,8 @@
 
 namespace App\Services\Vehicle;
 
+use App\Http\Resources\Row\RowVehicleResource;
+use App\Models\Row;
 use App\Models\Vehicle;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use Illuminate\Http\Request;
@@ -30,7 +32,7 @@ class VehicleService
 
             $resource = VehicleResource::collection($data);
 
-            $results->put('data', $resource->toArray($request));
+            $results->put('data', $resource->collection->toArray());
 
             return $results;
         }
@@ -78,5 +80,26 @@ class VehicleService
     public function restore(int $id): void
     {
         $this->repository->restore($id);
+    }
+
+    /**
+     * @param Row $row
+     * @return Collection
+     */
+    public function findAllByRow(Row $row): Collection
+    {
+        $results = $this->repository->findAllByRow($row);
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $data = collect($results->get('data'));
+
+            $resource = RowVehicleResource::collection($data);
+
+            $results->put('data', $resource->collection->toArray());
+
+            return $results;
+        }
+
+        return RowVehicleResource::collection($results)->collection;
     }
 }

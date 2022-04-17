@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Vehicle;
 
+use App\Models\Row;
 use Exception;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Design;
@@ -17,6 +18,7 @@ use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class VehicleRepository extends BaseRepository implements VehicleRepositoryInterface
 {
@@ -165,5 +167,29 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             throw $e;
         }
         return true;
+    }
+
+    /**
+     * @param Row $row
+     * @return Collection
+     */
+    public function findAllByRow(Row $row): Collection
+    {
+        $query = $this->model->query()
+                    ->with(['slot'])
+                    ->whereHas('slot', function(Builder $q) use ($row) {
+                        $q->where('row_id', '=', $row->id)
+                            ->where('fill', '=', 1);
+                    });
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $result = Datatables::customizable($query)->response();
+
+            return collect($result);
+        }
+
+        return $query->get();
     }
 }

@@ -70,22 +70,4 @@ class Parking extends Model
     {
         return $this->hasMany(Row::class, 'parking_id');
     }
-
-    /**
-     * @param float $percentage
-     * @return string
-     */
-    public static function getFilledCategory(float $percentage): string
-    {
-        $category = 'almost-full';
-
-        if ($percentage > 60 && $percentage < 80) {
-            $category = 'more-than-half-full';
-        } else if ($percentage < 60) {
-            $category = 'half-full';
-        }
-
-        return $category;
-    }
-
 }

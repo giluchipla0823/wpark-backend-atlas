@@ -1909,6 +1909,40 @@
                 ]
             }
         },
+        "/api/v1/conditions/{id}/model-data": {
+            "get": {
+                "tags": [
+                    "Conditions"
+                ],
+                "summary": "Model data list of condition",
+                "description": "Model data list of condition",
+                "operationId": "indexConditionsModelData",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Model data list of Condition Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/countries": {
             "get": {
                 "tags": [
@@ -3646,6 +3680,40 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rows/{id}/vehicles": {
+            "get": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Vehicles List of row",
+                "description": "Vehicles List of row",
+                "operationId": "indexRowsVehicles",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicles list of Row Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"

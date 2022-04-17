@@ -18,8 +18,9 @@ class ConditionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
+            'model' => $this->model,
             'model_condition' => new ModelConditionResource($this->modelCondition),
-            'required' => $this->required
+            'required' => $this->required,
         ];
     }
 }

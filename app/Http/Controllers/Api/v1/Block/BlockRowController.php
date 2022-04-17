@@ -20,6 +20,7 @@ class BlockRowController extends ApiController
     public function __construct(
         RowService $rowService
     ){
+        $this->middleware('role:Super-Admin|admin');
         $this->rowService = $rowService;
     }
 
