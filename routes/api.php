@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::patch('/blocks/{block}/rows/{row}/unlink', [BlockRowController::class, 'unlink'])->name('blocks-rows.unlink');
 
     // Rows
+    Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
     Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
     Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');
 
