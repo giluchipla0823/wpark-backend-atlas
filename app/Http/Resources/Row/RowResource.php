@@ -34,6 +34,7 @@ class RowResource extends JsonResource
             'fillmm' => $this->fillmm,
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
+            'active' => $this->active,
             'state' => StateResource::collection($this->latestState),
         ];
     }
