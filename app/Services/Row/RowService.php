@@ -122,4 +122,16 @@ class RowService
 
         return RowResource::collection($results)->collection;
     }
+
+    /**
+     * @param Row $row
+     * @return int
+     */
+    public function toggleActive(Row $row): int {
+        $active = $row->active ? 0 : 1;
+
+        $this->update(['active' => $active], $row->id);
+
+        return $active;
+    }
 }

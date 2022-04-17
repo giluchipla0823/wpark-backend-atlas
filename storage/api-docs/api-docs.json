@@ -3698,6 +3698,43 @@
                 ]
             }
         },
+        "/api/v1/rows/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Toggle Active Row",
+                "description": "Toggle Active Row",
+                "operationId": "toggleActiveRow",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Row toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/rows/{id}/vehicles": {
             "get": {
                 "tags": [

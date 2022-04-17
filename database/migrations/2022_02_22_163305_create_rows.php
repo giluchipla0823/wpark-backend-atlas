@@ -24,8 +24,9 @@ class CreateRows extends Migration
             $table->integer('fillmm')->unsigned()->nullable()->default('0');
             $table->string('alt_qr');
             $table->text('comments')->nullable();
-            $table->softDeletes();
+            $table->tinyInteger('active')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

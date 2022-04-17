@@ -10,16 +10,16 @@ class AppHelper
      */
     public static function getFillTypeToParkingOrRow(float $percentage): string
     {
-        $category = 'empty';
+        $type = 'empty';
 
         if ($percentage > 80) {
-            $category = 'almost-full';
+            $type = 'almost-full';
         } else if ($percentage > 60 && $percentage < 80) {
-            $category = 'more-than-half-full';
+            $type = 'more-than-half-full';
         } else if ($percentage > 0 && $percentage < 60) {
-            $category = 'half-full';
+            $type = 'half-full';
         }
 
-        return $category;
+        return $type;
     }
 }

@@ -147,5 +147,34 @@ class RowController extends ApiController
         return $this->showMessage('Row restored successfully.', Response::HTTP_NO_CONTENT);
     } */
 
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/rows/{id}/toggle-active",
+     *     tags={"Rows"},
+     *     summary="Toggle Active Row",
+     *     description="Toggle Active Row",
+     *     security={{"sanctum": {}}},
+     *     operationId="toggleActiveRow",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=200, description="Row toggle active successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Toggle active the specified resource from storage.
+     *
+     * @param Row $row
+     * @return JsonResponse
+     */
+    public function toggleActive(Row $row): JsonResponse
+    {
+        $active = $this->rowService->toggleActive($row);
+
+        $message = $active === 0 ? 'La fila se desactivó correctamente.' : 'La fila se activó correctamente.';
+
+        return $this->showMessage($message);
+    }
 
 }
