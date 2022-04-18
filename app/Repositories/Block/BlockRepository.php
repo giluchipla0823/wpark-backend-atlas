@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Block;
 
-use App\Helpers\QueryParamsHelper;
 use App\Models\Block;
-use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
+use App\Helpers\QueryParamsHelper;
 use Illuminate\Support\Collection;
+use App\Repositories\BaseRepository;
 use Yajra\DataTables\Facades\DataTables;
 
 class BlockRepository extends BaseRepository implements BlockRepositoryInterface
@@ -23,6 +23,8 @@ class BlockRepository extends BaseRepository implements BlockRepositoryInterface
     public function all(Request $request): Collection
     {
         $query = $this->model->query();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $result = Datatables::customizable($query)->response();

@@ -2,14 +2,15 @@
 
 namespace App\Repositories\Parking;
 
-use App\Helpers\QueryParamsHelper;
+use Exception;
 use App\Models\Parking;
-use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use App\Helpers\QueryParamsHelper;
+use Illuminate\Support\Facades\DB;
+use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\DB;
 
 class ParkingRepository extends BaseRepository implements ParkingRepositoryInterface
 {
@@ -57,6 +58,11 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
         return $this->model->create($params);
     }
 
+    /**
+     * @param array $params
+     * @param int $id
+     * @return int|null
+     */
     public function update(array $params, int $id): ?int
     {
         return $this->model->where('id', $id)->update($params);
@@ -65,6 +71,7 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
     /**
      * @param int $id
      * @return bool
+     * @throws Exception
      */
     public function delete(int $id)
     {
@@ -96,6 +103,7 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
     /**
      * @param int $id
      * @return bool
+     * @throws Exception
      */
     public function restore(int $id): ?bool
     {

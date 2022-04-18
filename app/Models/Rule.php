@@ -26,10 +26,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="updated_at", type="string", format="date-time", description="Fecha y hora de la última modificación", example="2021-09-09 11:20:01")
  * )
  *
- * Class Row
+ * Class Rule
  *
  */
-
 class Rule extends Model
 {
     use HasFactory, SoftDeletes;

@@ -34,6 +34,27 @@ class RuleController extends ApiController
      *      description="List of rules",
      *      security={{"sanctum": {}}},
      *      operationId="indexRules",
+     *      @OA\Parameter(
+     *         name="datatables",
+     *         in="query",
+     *         description="Formato de lista: simple o datatables",
+     *         example="",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Añadir bloques, condiciones",
+     *         example="blocks,conditions",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="extra_includes",
+     *         in="query",
+     *         description="Añadir valores de condiciones",
+     *         example="conditions.values",
+     *         required=false
+     *      ),
      *      @OA\Response(response=200, description="Rule list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -92,6 +113,20 @@ class RuleController extends ApiController
      *     security={{"sanctum": {}}},
      *     operationId="showRule",
      *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Añadir bloques, condiciones",
+     *         example="blocks,conditions",
+     *         required=false
+     *     ),
+     *     @OA\Parameter(
+     *         name="extra_includes",
+     *         in="query",
+     *         description="Añadir valores de condiciones",
+     *         example="conditions.values",
+     *         required=false
+     *     ),
      *     @OA\Response(response=200, description="Show Rule Details"),
      *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),

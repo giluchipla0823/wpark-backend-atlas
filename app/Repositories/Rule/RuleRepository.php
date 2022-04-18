@@ -27,6 +27,8 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
     {
         $query = $this->model->query();
 
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $result = Datatables::customizable($query)->response();
 

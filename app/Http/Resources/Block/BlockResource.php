@@ -15,11 +15,18 @@ class BlockResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'name' => $this->name,
             'active' => $this->active,
-            'rules' => RuleResource::collection($this->rules)
         ];
+
+        if (in_array('rules', $relationships)) {
+            $response['rules'] = RuleResource::collection($this->rules);
+        }
+
+        return $response;
     }
 }

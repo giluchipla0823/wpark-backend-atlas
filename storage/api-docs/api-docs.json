@@ -3777,6 +3777,29 @@
                 "summary": "Rules List",
                 "description": "List of rules",
                 "operationId": "indexRules",
+                "parameters": [
+                    {
+                        "name": "datatables",
+                        "in": "query",
+                        "description": "Formato de lista: simple o datatables",
+                        "required": false,
+                        "example": ""
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir bloques, condiciones",
+                        "required": false,
+                        "example": "blocks,conditions"
+                    },
+                    {
+                        "name": "extra_includes",
+                        "in": "query",
+                        "description": "Añadir valores de condiciones",
+                        "required": false,
+                        "example": "conditions.values"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Rule list Successfully"
@@ -3849,6 +3872,20 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/id"
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir bloques, condiciones",
+                        "required": false,
+                        "example": "blocks,conditions"
+                    },
+                    {
+                        "name": "extra_includes",
+                        "in": "query",
+                        "description": "Añadir valores de condiciones",
+                        "required": false,
+                        "example": "conditions.values"
                     }
                 ],
                 "responses": {

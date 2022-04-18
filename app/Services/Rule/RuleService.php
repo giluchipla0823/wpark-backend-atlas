@@ -44,6 +44,8 @@ class RuleService
      */
     public function show(Rule $rule): RuleResource
     {
+        $rule->load(QueryParamsHelper::getIncludesParamFromRequest());
+
         return new RuleResource($rule);
     }
 
