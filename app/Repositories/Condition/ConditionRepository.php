@@ -30,6 +30,10 @@ class ConditionRepository extends BaseRepository implements ConditionRepositoryI
             return collect($result);
         }
 
+        if ($modelConditionId = $request->query->get('model_condition_id')) {
+            $query = $query->where('model_condition_id', '=', $modelConditionId);
+        }
+
         return $query->get();
     }
 
