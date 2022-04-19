@@ -110,17 +110,17 @@ class AreaController extends ApiController
         return $this->successResponse($area);
     }
 
-//    /**
-//     * @param AreaUpdateRequest $request
-//     * @param Area $area
-//     * @return JsonResponse
-//     */
-//    public function update(AreaUpdateRequest $request, Area $area): JsonResponse
-//    {
-//        $this->areaService->update($request->all(), $area->id);
-//
-//        return $this->showMessage('Area updated successfully.');
-//    }
+    /**
+     * @param AreaUpdateRequest $request
+     * @param Area $area
+     * @return JsonResponse
+     */
+    /* public function update(AreaUpdateRequest $request, Area $area): JsonResponse
+    {
+        $this->areaService->update($request->all(), $area->id);
+
+        return $this->showMessage('Area updated successfully.');
+    } */
 
     /**
      * @OA\Delete(

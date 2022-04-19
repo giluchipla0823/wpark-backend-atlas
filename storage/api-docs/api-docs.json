@@ -523,6 +523,21 @@
                 "responses": {
                     "200": {
                         "description": "Update Block"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
                     }
                 },
                 "security": [
@@ -3764,11 +3779,7 @@
                 "operationId": "indexRules",
                 "parameters": [
                     {
-                        "name": "datatables",
-                        "in": "query",
-                        "description": "Formato de lista: simple o datatables",
-                        "required": false,
-                        "example": ""
+                        "$ref": "#/components/parameters/datatables"
                     },
                     {
                         "name": "includes",
@@ -9050,6 +9061,13 @@
             }
         },
         "parameters": {
+            "datatables": {
+                "name": "datatables",
+                "in": "query",
+                "description": "Formato de lista: simple o datatables",
+                "required": false,
+                "example": ""
+            },
             "id": {
                 "name": "id",
                 "in": "path",

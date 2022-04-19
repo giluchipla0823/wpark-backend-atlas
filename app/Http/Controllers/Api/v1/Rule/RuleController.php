@@ -34,13 +34,7 @@ class RuleController extends ApiController
      *      description="List of rules",
      *      security={{"sanctum": {}}},
      *      operationId="indexRules",
-     *      @OA\Parameter(
-     *         name="datatables",
-     *         in="query",
-     *         description="Formato de lista: simple o datatables",
-     *         example="",
-     *         required=false
-     *      ),
+     *      @OA\Parameter(ref="#/components/parameters/datatables"),
      *      @OA\Parameter(
      *         name="includes",
      *         in="query",
