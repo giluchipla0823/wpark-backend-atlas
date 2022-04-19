@@ -25,7 +25,7 @@ class ForgotPasswordResetRequest extends FormRequest
     {
         return [
             // 'email' => 'required|email|max:255',
-            'username' => 'required|max:255|unique:users,username',
+            'username' => 'required|max:255|exists:users,username',
             'password' => 'required|max:100',
             'password_confirmation' => 'required|max:100|same:password',
             'token' => 'required'
