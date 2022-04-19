@@ -523,21 +523,6 @@
                 "responses": {
                     "200": {
                         "description": "Update Block"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/NotFound"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntity"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/Forbidden"
-                    },
-                    "500": {
-                        "$ref": "#/components/responses/InternalServerError"
                     }
                 },
                 "security": [
