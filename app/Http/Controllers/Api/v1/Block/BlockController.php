@@ -133,6 +133,7 @@ class BlockController extends ApiController
      *          @OA\JsonContent(ref="#/components/schemas/BlockUpdateRequest")
      *     ),
      *     @OA\Response(response=200, description="Update Block" ),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
