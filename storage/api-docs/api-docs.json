@@ -7434,11 +7434,11 @@
                     "token"
                 ],
                 "properties": {
-                    "email": {
-                        "description": "Email del usuario",
+                    "username": {
+                        "description": "Username del usuario",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "jgbacerca@gmail.com"
+                        "example": "jgbacerca"
                     },
                     "password": {
                         "description": "Contraseña nueva del usuario",

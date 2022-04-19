@@ -107,7 +107,7 @@ class AuthService
         $user = User::where('username', $request->username)->first();
         $token = $request->token;
 
-        if(!$user){
+        if (!$user) {
             throw new Exception('No es un usuario válido.', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -125,7 +125,15 @@ class AuthService
      */
     public function forgotPasswordReset(Request $request): void
     {
-        $params = $request->only('email', 'password', 'password_confirmation', 'token');
+        $user = User::where('username', $request->get('username'))->first();
+
+        if (!$user) {
+            throw new Exception('No es un usuario válido.', Response::HTTP_BAD_REQUEST);
+        }
+
+        // $params = $request->only('email', 'password', 'password_confirmation', 'token');
+        $params = $request->only('password', 'password_confirmation', 'token');
+        $params['email'] = $user->email;
 
         $status = Password::reset($params, function($user, $password){
             $user->forceFill([

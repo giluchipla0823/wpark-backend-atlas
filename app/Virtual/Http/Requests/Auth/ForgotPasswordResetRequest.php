@@ -17,14 +17,14 @@ class ForgotPasswordResetRequest
 {
     /**
      * @OA\Property(
-     *     property="email",
+     *     property="username",
      *     type="string",
      *     maxLength=255,
-     *     description="Email del usuario",
-     *     example="jgbacerca@gmail.com"
+     *     description="Username del usuario",
+     *     example="jgbacerca"
      * )
      */
-    public $email;
+    public $username;
 
     /**
      * @OA\Property(
