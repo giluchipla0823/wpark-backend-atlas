@@ -139,8 +139,8 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('blocks', BlockController::class, ['except' =>['create', 'edit']]);
 
     // Block Rows
-    Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
-    Route::patch('/blocks/{block}/rows/{row}/unlink', [BlockRowController::class, 'unlink'])->name('blocks-rows.unlink');
+    // Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
+    // Route::patch('/blocks/{block}/rows/{row}/unlink', [BlockRowController::class, 'unlink'])->name('blocks-rows.unlink');
 
     // Rows
     Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
