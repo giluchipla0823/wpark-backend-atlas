@@ -50,10 +50,19 @@ class RuleResource extends JsonResource
         /* @var Collection $conditions */
         $conditions = $this->conditions()->get();
 
+        // dd($conditions->toArray());
+
         $results = collect([]);
 
         foreach ($conditions as $condition) {
-            if ($index = array_search($condition->model, array_column($results->toArray(), 'model'))) {
+
+            $index = $results->search(function($item) use ($condition) {
+                return $item->model === $condition->model;
+            });
+
+            // $index = array_search($condition->model, array_column($results->toArray(), 'model'));
+
+            if ($index !== false) {
                 $results->get($index)->values->push($condition->pivot);
             } else {
                 $condition->values = collect([$condition->pivot]);
