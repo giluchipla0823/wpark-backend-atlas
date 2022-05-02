@@ -18,8 +18,9 @@ class ParkingResource extends JsonResource
      */
     public function toArray($request)
     {
+        $capacity = $this->capacity ?: 0;
         $fill = $this->rows->sum('fill');
-        $fillPercentage = round(($fill / $this->capacity) * 100, 2);
+        $fillPercentage = $capacity > 0 ? round(($fill / $capacity) * 100, 2) : 0;
 
         return [
             'id' => $this->id,
@@ -28,12 +29,13 @@ class ParkingResource extends JsonResource
             'parking_type' => new ParkingTypeResource($this->parkingType),
             'start_row' => $this->start_row,
             'end_row' => $this->end_row,
-            'capacity' => $this->capacity,
+            'capacity' => $capacity,
             'fill' => $fill,
             'fill_percentage' => $fillPercentage,
             'fill_type' => AppHelper::getFillTypeToParkingOrRow($fillPercentage),
             'capacitymm' => $this->capacitymm,
             'full' => $this->full,
+            'order' => $this->order,
             'active' => $this->active,
             'comments' => $this->comments,
         ];
