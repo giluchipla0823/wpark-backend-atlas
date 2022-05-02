@@ -26,6 +26,10 @@ class ParkingType extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const TYPE_ROW = 1;
+    public const TYPE_ESPIGA = 2;
+    public const TYPE_UNLIMITED = 3;
+
     /**
      * The attributes that are mass assignable.
      *

@@ -33,7 +33,7 @@ class ParkingResource extends JsonResource
             'fill' => $fill,
             'fill_percentage' => $fillPercentage,
             'fill_type' => AppHelper::getFillTypeToParkingOrRow($fillPercentage),
-            'capacitymm' => $this->capacitymm,
+            // 'capacitymm' => $this->capacitymm,
             'full' => $this->full,
             'order' => $this->order,
             'active' => $this->active,

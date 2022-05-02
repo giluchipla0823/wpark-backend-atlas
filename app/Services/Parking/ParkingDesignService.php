@@ -2,6 +2,7 @@
 
 namespace App\Services\Parking;
 
+use App\Models\ParkingType;
 use Exception;
 use App\Models\Parking;
 use App\Repositories\Parking\ParkingRepositoryInterface;
@@ -57,7 +58,7 @@ class ParkingDesignService
             // Creación del parking
             $parking = $this->parkingRepository->create($params);
 
-            if ($parking->parking_type_id != 3) {
+            if ($parking->parking_type_id != ParkingType::TYPE_UNLIMITED) {
                 //Creación de las filas y slots del parking
                 $this->parkingRepository->find($parking->id);
 
@@ -68,15 +69,18 @@ class ParkingDesignService
                 $totalRows = $params['rows']['count'];
             }
 
-            if ($parking->parking_type_id == 2) {
+            if ($parking->parking_type_id == ParkingType::TYPE_ESPIGA) {
                 for ($i = 1; $i <= $totalRows; $i++) {
                     // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
                     $row_number = str_pad($i, 3, '0', STR_PAD_LEFT);
 
+                    $capacity = 1;
+
                     $row = [
                         'row_number' => $row_number,
                         'parking_id' => $parking->id,
-                        'capacity' => 1,
+                        'capacity' => $capacity,
+                        'capacitymm' => $capacity * $capacitymm,
                         'alt_qr' => $i == 1 ? $params['qr'] . '.' . $row_number : null,
                         'active' => 1
                     ];
@@ -89,7 +93,8 @@ class ParkingDesignService
                     ];
                     $slot = $this->slotRepository->create($slot);
                 }
-            } else if ($parking->parking_type_id == 1) {
+            }
+            else if ($parking->parking_type_id == ParkingType::TYPE_ROW) {
 
                 for ($i = 0; $i < $totalRows; $i++) {
                     // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
@@ -120,10 +125,10 @@ class ParkingDesignService
             }
 
             DB::commit();
-        } catch (Exception $e) {
+        } catch (Exception $exc) {
             DB::rollback();
 
-            throw $e;
+            throw $exc;
         }
 
         return $parking;
