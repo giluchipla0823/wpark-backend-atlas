@@ -29,7 +29,7 @@ class ParkingResource extends JsonResource
             'parking_type' => new ParkingTypeResource($this->parkingType),
             'start_row' => $this->start_row,
             'end_row' => $this->end_row,
-            'capacity' => $capacity,
+            'capacity' => $this->capacity,
             'fill' => $fill,
             'fill_percentage' => $fillPercentage,
             'fill_type' => AppHelper::getFillTypeToParkingOrRow($fillPercentage),
