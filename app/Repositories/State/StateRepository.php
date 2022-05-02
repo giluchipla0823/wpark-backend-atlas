@@ -30,10 +30,6 @@ class StateRepository extends BaseRepository implements StateRepositoryInterface
             return collect($result);
         }
 
-        if ($modelStateId = $request->query->get('model_state_id')) {
-            $query = $query->where('model_state_id', '=', $modelStateId);
-        }
-
         return $query->get();
     }
 
