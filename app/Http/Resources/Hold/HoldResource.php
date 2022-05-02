@@ -20,6 +20,7 @@ class HoldResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'priority' => $this->priority,
+            'role' => $this->role()->get(),
             'active' => $this->active,
             'count' => $this->count,
             'conditions' => ConditionResource::collection($this->conditions)

@@ -26,7 +26,6 @@ class StateUpdateRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'description' =>'nullable|max:255',
-            'model_state_id' => 'required|exists:model_states,id'
         ];
     }
 }

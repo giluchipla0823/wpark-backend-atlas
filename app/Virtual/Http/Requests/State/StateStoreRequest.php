@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\State;
  *      @OA\Xml(
  *         name="StateStoreRequest"
  *      ),
- *      required={"name", "model_state_id"}
+ *      required={"name"}
  * )
  */
 class StateStoreRequest
@@ -37,14 +37,4 @@ class StateStoreRequest
      */
     public $description;
 
-    /**
-     * @OA\Property(
-     *     property="model_state_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica si el estado será para un vehículo o para una fila",
-     *     example="1"
-     * )
-     */
-    public $model_state_id;
 }

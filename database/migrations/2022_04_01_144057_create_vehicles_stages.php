@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateVehiclesStages extends Migration
 {
-    // TODO: Ver si fuera necesario añadir un campo con un JSON con los cambios realizados en cada estado
     /**
      * Run the migrations.
      *
@@ -18,6 +17,8 @@ class CreateVehiclesStages extends Migration
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles');
             $table->foreignId('stage_id')->constrained('stages');
+            $table->boolean('manual')->default('0');
+            $table->datetime('tracking_date');
             $table->softDeletes();
             $table->timestamps();
         });

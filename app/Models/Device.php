@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Xml(name="Device"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre del dispositivo", example="MOB003"),
- * @OA\Property(property="uuid", type="integer", maxLength=10, description="Imei o IP del dispositivo", example="867906036314920"),
+ * @OA\Property(property="uuid", type="string", maxLength=255, description="Imei o IP del dispositivo", example="867906036314920"),
  * @OA\Property(property="device_type_id", type="integer", maxLength=20, description="Tipo del dispositivo", example="1"),
  * @OA\Property(property="version", type="string", maxLength=255, description="Versión del dispositivo", example="2.1.5"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si el dispositivo está activo (0: No está activo, 1: Está activo)", example="1"),

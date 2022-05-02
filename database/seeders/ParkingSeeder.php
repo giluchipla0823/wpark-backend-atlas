@@ -22,10 +22,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'SP1',
                 'area_id' => 2,
                 'parking_type_id' => 2,
-                'start_row' => 2,
-                'end_row' => 3,
                 'capacity' => 16,
-                'capacitymm' => 76800,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -33,10 +30,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'SP2',
                 'area_id' => 2,
                 'parking_type_id' => 2,
-                'start_row' => 5,
-                'end_row' => 6,
                 'capacity' => 16,
-                'capacitymm' => 76800,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -44,10 +38,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'SP3',
                 'area_id' => 2,
                 'parking_type_id' => 2,
-                'start_row' => 8,
-                'end_row' => 9,
                 'capacity' => 16,
-                'capacitymm' => 76800,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -55,10 +46,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'SP4',
                 'area_id' => 2,
                 'parking_type_id' => 2,
-                'start_row' => 11,
-                'end_row' => 12,
                 'capacity' => 16,
-                'capacitymm' => 76800,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -66,10 +54,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'P1',
                 'area_id' => 2,
                 'parking_type_id' => 1,
-                'start_row' => 1,
-                'end_row' => 12,
                 'capacity' => 96,
-                'capacitymm' => 460800,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -77,10 +62,7 @@ class ParkingSeeder extends Seeder
                 'name' => 'P2',
                 'area_id' => 2,
                 'parking_type_id' => 1,
-                'start_row' => 1,
-                'end_row' => 6,
                 'capacity' => 48,
-                'capacitymm' => 230400,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
@@ -88,10 +70,15 @@ class ParkingSeeder extends Seeder
                 'name' => 'P3',
                 'area_id' => 2,
                 'parking_type_id' => 1,
-                'start_row' => 8,
-                'end_row' => 12,
                 'capacity' => 40,
-                'capacitymm' => 192000,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'FACTORY',
+                'area_id' => 1,
+                'parking_type_id' => 3,
+                'capacity' => null,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ]
@@ -109,7 +96,7 @@ class ParkingSeeder extends Seeder
                     'parking_id' => $parkingSP->id,
                     'block_id' => 1,
                     'capacity' => 1,
-                    'capacitymm' => $parkingSP->capacitymm/$parkingSP->capacity,
+                    'capacitymm' => 4800*$parkingSP->capacity,
                     'alt_qr' => '017.'.$parkingSP->id.'.'.$i,
                 ];
                 $row = Row::create($row);
@@ -128,15 +115,15 @@ class ParkingSeeder extends Seeder
         $parkingsP = Parking::all()->where('area_id', 2)->where('parking_type_id', 1)->sortBy('id');
 
         foreach($parkingsP as $parkingP){
-            $totalRows = ($parkingP->end_row - $parkingP->start_row)+1;
+            $totalRows = 10;
             for($i = 1; $i <= $totalRows; $i++){
                 $row = [
                     'row_number' => $i,
                     'parking_id' => $parkingP->id,
                     'block_id' => 1,
                     'capacity' => 8,
-                    'capacitymm' => $parkingP->capacitymm/$totalRows,
-                    'alt_qr' => '017.'.$parkingP['id'].'.'.$i,
+                    'capacitymm' => 4800*8,
+                    'alt_qr' => $parkingP['id'].'.'.$i,
                 ];
                 $row = Row::create($row);
 
@@ -145,7 +132,7 @@ class ParkingSeeder extends Seeder
                         'slot_number' => $j,
                         'row_id' => $row->id,
                         'capacity' => 1,
-                        'capacitymm' => $row->capacitymm/$row->capacity
+                        'capacitymm' => 4800
                     ];
                     Slot::create($slot);
                 }

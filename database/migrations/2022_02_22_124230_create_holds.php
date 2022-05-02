@@ -18,6 +18,7 @@ class CreateHolds extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->integer('priority')->unsigned();
+            $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->boolean('active')->default('1');
             $table->integer('count')->nullable()->unsigned();
             $table->softDeletes();

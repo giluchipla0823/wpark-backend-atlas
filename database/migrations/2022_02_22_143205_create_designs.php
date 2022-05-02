@@ -24,6 +24,7 @@ class CreateDesigns extends Migration
             $table->integer('height')->unsigned();
             $table->integer('weight')->unsigned();
             $table->string('description');
+            $table->boolean('hybrid')->default('0');
             $table->boolean('manufacturing');
             $table->longText('svg')->nullable();
             $table->softDeletes();

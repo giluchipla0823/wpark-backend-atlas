@@ -4,12 +4,15 @@ namespace App\Services\Vehicle;
 
 use App\Http\Resources\Row\RowVehicleResource;
 use App\Models\Row;
+use App\Models\State;
 use App\Models\Vehicle;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Vehicle\VehicleResource;
+use App\Http\Resources\Vehicle\VehicleStateResource;
+use App\Http\Resources\Vehicle\InfoVehicleResource;
 
 class VehicleService
 {
@@ -101,5 +104,35 @@ class VehicleService
         }
 
         return RowVehicleResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Vehicle $vehicle
+     * @return InfoVehicleResource
+     */
+    public function detail(Vehicle $vehicle): InfoVehicleResource
+    {
+        return new InfoVehicleResource($vehicle);
+    }
+
+    /**
+     * @param State $state
+     * @return Collection
+     */
+    public function findAllByState(State $state): Collection
+    {
+        $results = $this->repository->findAllByState($state);
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $data = collect($results->get('data'));
+
+            $resource = VehicleStateResource::collection($data);
+
+            $results->put('data', $resource->collection->toArray());
+
+            return $results;
+        }
+
+        return VehicleStateResource::collection($results)->collection;
     }
 }

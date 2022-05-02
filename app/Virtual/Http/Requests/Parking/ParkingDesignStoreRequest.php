@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Parking;
  *      @OA\Xml(
  *         name="ParkingDesignStoreRequest"
  *      ),
- *      required={"name", "area_id", "parking_type_id", "start_row", "end_row"}
+ *      required={"name", "area_id", "parking_type_id", "rows", "qr"}
  * )
  */
 class ParkingDesignStoreRequest
@@ -50,25 +50,39 @@ class ParkingDesignStoreRequest
 
     /**
      * @OA\Property(
-     *     property="start_row",
-     *     type="integer",
-     *     maxLength=10,
-     *     description="La fila del área en la que empieza el parking",
-     *     example="12"
+     *     property="rows",
+     *     type="array",
+     *     @OA\Items(
+     *          @OA\Property(
+     *                    property="count",
+     *                    type="integer",
+     *                    example="5",
+     *               ),
+     *              @OA\Property(
+     *                    property="slots",
+     *                    type="array",
+     *                    @OA\Items(
+     *                        type="integer",
+     *                    ),
+     *                    example="[10,5,10]"
+     *               ),
+     *     ),
+     *     @OA\Schema(type="object"),
+     *     description="Filas con sus propiedades"
      * )
      */
-    public $start_row;
+    public $rows;
 
     /**
      * @OA\Property(
-     *     property="end_row",
+     *     property="qr",
      *     type="integer",
      *     maxLength=10,
-     *     description="La fila del área en la que termina el parking",
+     *     description="Parte izquierda del código qr pertenciente al parking",
      *     example="22"
      * )
      */
-    public $end_row;
+    public $qr;
 
     /**
      * @OA\Property(

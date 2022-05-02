@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 
 class BaseRepository
 {
-
     protected $model;
 
     public function __construct(Model $model)
@@ -44,5 +43,34 @@ class BaseRepository
     public function restore(int $id): ?bool
     {
         return $this->model->withTrashed()->findOrFail($id)->restore();
+    }
+
+    /**
+     * @param array $params
+     * @param array|null $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return Model|null
+     */
+    public function findBy(array $params, array $orderBy = null, $limit = null, $offset = null): ?Model
+    {
+        $query = $this->model
+            ->whereRowValues(array_keys($params), '=', array_values($params));
+
+        if (!empty($orderBy)) {
+            foreach ($orderBy as $column => $direction) {
+                $query->orderBy($column, $direction);
+            }
+        }
+
+        if (isset($limit)) {
+            $query->limit($limit);
+        }
+
+        if (isset($offset)) {
+            $query->offset($offset);
+        }
+
+        return $query->first();
     }
 }

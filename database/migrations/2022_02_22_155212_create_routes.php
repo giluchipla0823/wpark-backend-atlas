@@ -18,6 +18,7 @@ class CreateRoutes extends Migration
             $table->string('name', 100);
             $table->string('code', 5)->unique();
             $table->foreignId('carrier_id')->constrained('carriers');
+            $table->foreignId('exit_transport_id')->nullable()->contrained('transports');
             $table->foreignId('origin_compound_id')->constrained('compounds');
             $table->foreignId('destination_compound_id')->constrained('compounds');
             $table->foreignId('dealer_id')->nullable()->constrained('dealers');

@@ -199,6 +199,11 @@ return [
                     'scheme' => 'bearer',
                     'bearerFormat' => 'JWT'
                 ],
+                'basic' => [
+                    'type' => 'http',
+                    'description' => 'Basic authentication',
+                    'scheme' => 'basic'
+                ],
             ],
             'security' => [
                 /*

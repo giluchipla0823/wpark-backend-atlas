@@ -26,7 +26,7 @@ class RowUpdateRequest extends FormRequest
         return [
             'block_id' => 'required|exists:blocks,id',
             'alt_qr' => 'required|max:255',
-            'comments' => 'nullable'
+            'comments' => 'nullable',
         ];
     }
 }

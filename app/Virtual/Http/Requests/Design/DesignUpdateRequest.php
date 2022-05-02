@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Design;
  *      @OA\Xml(
  *         name="DesignUpdateRequest"
  *      ),
- *      required={"name", "code", "brand_id", "length", "width", "height", "weight", "description", "manufacturing"}
+ *      required={"name", "code", "brand_id", "length", "width", "height", "weight", "description", "hybrid", "manufacturing"}
  * )
  */
 class DesignUpdateRequest
@@ -113,6 +113,17 @@ class DesignUpdateRequest
      * )
      */
     public $description;
+
+    /**
+     * @OA\Property(
+     *     property="hybrid",
+     *     type="boolean",
+     *     maxLength=1,
+     *     description="Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+     *     example="1"
+     * )
+     */
+    public $hybrid;
 
     /**
      * @OA\Property(

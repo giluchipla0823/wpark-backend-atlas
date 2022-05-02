@@ -26,10 +26,8 @@ class VehicleResource extends JsonResource
             'vin_short' => $this->vin_short,
             'design' => new DesignResource($this->design),
             'color' => new ColorResource($this->color),
-            'country' => new CountryResource($this->country),
             'destination_code' => new DestinationCodeResource($this->destinationCode),
             'eoc' => $this->eoc,
-            'hybrid' => $this->hybrid,
             'stages' => StageResource::collection($this->latestStage),
             'state' => StateResource::collection($this->latestState),
         ];

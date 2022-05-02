@@ -19,14 +19,12 @@ class CarrierSeeder extends Seeder
             [
                 'name' => 'TRANSFESA',
                 'code' => 'TRANS',
-                'is_train' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'name' => 'CAPSA',
                 'code' => 'CPS',
-                'is_train' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

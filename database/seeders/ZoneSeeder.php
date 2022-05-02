@@ -33,7 +33,7 @@ class ZoneSeeder extends Seeder
             ]
             ,
             [
-                'name' => 'BUFFER',
+                'name' => 'EXTERNO',
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ]

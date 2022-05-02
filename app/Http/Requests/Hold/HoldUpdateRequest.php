@@ -30,6 +30,7 @@ class HoldUpdateRequest extends FormRequest
             'name' => "required|max:255",
             'code' => "required|max:255|unique:holds,code,{$id},id",
             'priority' => 'required|integer|min:1',
+            'role_id' => 'required|exists:roles,id',
             'active' => 'required|boolean',
             'count' => 'nullable|integer',
             'conditions' => 'required|array',

@@ -28,7 +28,6 @@ class CarrierUpdateRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'code' => "required|min:3|max:10|unique:carriers,code,{$id},id",
-            'is_train' => 'required|integer',
         ];
     }
 }

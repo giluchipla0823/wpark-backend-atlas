@@ -26,7 +26,6 @@ class CarrierStoreRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'code' => 'required|min:3|max:20|unique:carriers,code',
-            'is_train' => 'required|integer',
         ];
     }
 }

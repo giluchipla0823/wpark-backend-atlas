@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Hold;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
@@ -20,6 +21,7 @@ class HoldSeeder extends Seeder
                 'name' => 'BLOQUEO TEMPORAL',
                 'code' => 'BP2',
                 'priority' => 2,
+                'role_id' => Role::inRandomOrder()->first()->id,
                 'active' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -28,6 +30,7 @@ class HoldSeeder extends Seeder
                 'name' => 'PENDIENTE DE REVISAR',
                 'code' => 'PDR',
                 'priority' => 1,
+                'role_id' => null,
                 'active' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

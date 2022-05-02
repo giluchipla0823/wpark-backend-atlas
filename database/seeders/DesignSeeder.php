@@ -27,6 +27,7 @@ class DesignSeeder extends Seeder
                 'height' => '500',
                 'weight' => '700',
                 'description' => 'Nuevo modelo kuga 2020',
+                'hybrid' => 1,
                 'manufacturing' => 0,
                 'svg' => '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 547.1 213.2" style="enable-background:new 0 0 547.1 213.2;" xml:space="preserve">
@@ -3573,6 +3574,7 @@ class DesignSeeder extends Seeder
                 'height' => '1500',
                 'weight' => '1700',
                 'description' => 'Nuevo modelo mustang 2020',
+                'hybrid' => 0,
                 'manufacturing' => 0,
                 'svg' => '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 viewBox="0 0 547.1 213.2" style="enable-background:new 0 0 547.1 213.2;" xml:space="preserve">

@@ -15,15 +15,13 @@ class CreateSlots extends Migration
     {
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->integer('slot_number');
+            $table->integer('slot_number')->unsigned();
             $table->foreignId('row_id')->constrained('rows');
             $table->integer('capacity')->unsigned();
             $table->integer('fill')->unsigned()->nullable()->default('0');
-            $table->integer('capacitymm')->unsigned();
+            $table->integer('capacitymm')->unsigned()->nullable();
             $table->integer('fillmm')->unsigned()->nullable()->default('0');
             $table->text('comments')->nullable();
-            //$table->string('latitude', 20)->nullable();
-            //$table->string('longitude', 20)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

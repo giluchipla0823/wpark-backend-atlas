@@ -7,6 +7,7 @@ use App\Models\Design;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
 
 class DesignRepository extends BaseRepository implements DesignRepositoryInterface
@@ -31,6 +32,15 @@ class DesignRepository extends BaseRepository implements DesignRepositoryInterfa
         }
 
         return $query->get();
+    }
+
+    /**
+     * @param string $code
+     * @return Model|null
+     */
+    public function findByCode(string $code): ?Model
+    {
+        return $this->findBy(['code' => $code]);
     }
 
 }

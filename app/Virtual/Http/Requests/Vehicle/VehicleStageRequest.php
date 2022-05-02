@@ -10,52 +10,84 @@ namespace App\Virtual\Http\Requests\Vehicle;
  *      @OA\Xml(
  *         name="VehicleStageRequest"
  *      ),
- *      required={"stage", "vin", "eoc", "hybrid"}
+ *      required={"tracking-date", "lvin", "pvin", "station", "eoc", "destination"}
  * )
  */
 class VehicleStageRequest
 {
     /**
      * @OA\Property(
-     *     property="name",
+     *     property="tracking-date",
      *     type="string",
-     *     maxLength=255,
-     *     description="Nombre de la etapa",
-     *     example="STAGE 3"
+     *     format="date-time",
+     *     description="Fecha y hora de la estación",
+     *     example="2021-07-29 16:05:01.111"
      * )
      */
-    public $stage;
+    public $trackingDate;
 
     /**
      * @OA\Property(
-     *     property="vin",
+     *     property="lvin",
      *     type="string",
      *     maxLength=17,
-     *     description="Número de bastidor del vehículo",
-     *     example="WF0FXXWPMFKY73028"
+     *     description="Número físico de bastidor del vehículo",
+     *     example="WF0UXXWPGUMK11563"
      * )
      */
-    public $vin;
+    public $lvin;
+
+    /**
+     * @OA\Property(
+     *     property="pvin",
+     *     type="string",
+     *     maxLength=17,
+     *     description="Número lógico de bastidor del vehículo",
+     *     example="WF0UXXWPGUMK11563"
+     * )
+     */
+    public $pvin;
+
+    /**
+     * @OA\Property(
+     *     property="station",
+     *     type="string",
+     *     maxLength=2,
+     *     description="Código de la estación",
+     *     example="03"
+     * )
+     */
+    public $station;
 
     /**
      * @OA\Property(
      *     property="eoc",
      *     type="string",
-     *     maxLength=255,
+     *     maxLength=80,
      *     description="Identificador único de ford",
-     *     example="5S8DQ87FZAFF090N6   WPMFKY73028  YSC B3EB  CPGD5EZJN A337C7B A6E 63  1765  MH 15"
+     *     example="2AGK   H 397WDKN4 W WPGUMK11563  ZI9 U3GK1GGKIOPKM4R BM KA5M5N KMNW   22H  AZ  L"
      * )
      */
     public $eoc;
 
     /**
      * @OA\Property(
-     *     property="hybrid",
-     *     type="boolean",
-     *     maxLength=1,
-     *     description="Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-     *     example="1"
+     * property="manual",
+     * type="boolean",
+     * maxLength=1,
+     * description="Indica si la trama es manual o automática (0: No es manual, 1: Es manual)",
+     * example="0")
+    */
+    public $manual;
+
+    /**
+     * @OA\Property(
+     *     property="destination",
+     *     type="string",
+     *     maxLength=3,
+     *     description="Código del código de destino",
+     *     example="39"
      * )
      */
-    public $hybrid;
+    public $destination;
 }

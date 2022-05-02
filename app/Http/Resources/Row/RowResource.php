@@ -19,6 +19,7 @@ class RowResource extends JsonResource
      */
     public function toArray($request)
     {
+        // TODO: Da error al usar el servicio all con datatables
         $fillPercentage = round(($this->fill / $this->capacity) * 100, 2);
 
         return [
@@ -34,8 +35,8 @@ class RowResource extends JsonResource
             'fillmm' => $this->fillmm,
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
-            'active' => $this->active,
-            'state' => StateResource::collection($this->latestState),
+            'active' => $this->active
         ];
+
     }
 }

@@ -52,10 +52,10 @@ class ParkingController extends ApiController
         return $this->showAll($results);
     }
 
-    /**
-     * @param ParkingStoreRequest $request
-     * @return JsonResponse
-     */
+//    /**
+//     * @param ParkingStoreRequest $request
+//     * @return JsonResponse
+//     */
     /* public function store(ParkingStoreRequest $request): JsonResponse
     {
         $parking = $this->parkingService->create($request->all());
@@ -180,5 +180,34 @@ class ParkingController extends ApiController
         return $this->showMessage('Parking restored successfully.', Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/parkings/{id}/toggle-active",
+     *     tags={"Parkings"},
+     *     summary="Toggle Active Parking",
+     *     description="Toggle Active Parking",
+     *     security={{"sanctum": {}}},
+     *     operationId="toggleActiveParking",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=200, description="Parking toogle active successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Toggle active the specified resource from storage.
+     *
+     * @param Parking $parking
+     * @return JsonResponse
+     */
+    public function toggleActive(Parking $parking): JsonResponse
+    {
+        $active = $this->parkingService->toggleActive($parking);
+
+        $message = $active === 0 ? 'El parking se desactivó correctamente.' : 'El parking se activó correctamente.';
+
+        return $this->showMessage($message);
+    }
 
 }

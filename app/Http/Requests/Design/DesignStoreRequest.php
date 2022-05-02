@@ -33,6 +33,7 @@ class DesignStoreRequest extends FormRequest
             'height' => 'required|integer|min:1',
             'weight' => 'required|integer|min:1',
             'description' => 'required|max:255',
+            'hybrid' => 'required|boolean',
             'manufacturing' => 'required|boolean',
             'svg' => 'nullable'
         ];

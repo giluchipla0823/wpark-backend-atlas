@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="fillmm", type="integer", maxLength=10, description="Capacidad en milímetros ocupados de la fila", example="0"),
  * @OA\Property(property="alt_qr", type="string", description="Código QR de la fila", example="022.001"),
  * @OA\Property(property="comments", type="string", description="Comentarios sobre la fila", example="La fila está reservada"),
+ * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si la fila está activa (0: No está activa, 1: Está activa)", example="1"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),
  * @OA\Property(property="updated_at", type="string", format="date-time", description="Fecha y hora de la última modificación", example="2021-09-09 11:20:01")
@@ -62,16 +63,6 @@ class Row extends Model
     public function block()
     {
         return $this->belongsTo(Block::class, 'block_id');
-    }
-
-    public function states()
-    {
-        return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->withTimestamps();
-    }
-
-    public function latestState()
-    {
-        return $this->belongsToMany(State::class, 'rows_states', 'row_id', 'state_id')->withTimestamps()->orderByPivot('created_at', 'desc')->take(1);
     }
 
     public function slots()

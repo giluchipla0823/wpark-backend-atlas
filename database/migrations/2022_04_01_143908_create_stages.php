@@ -16,7 +16,7 @@ class CreateStages extends Migration
         Schema::create('stages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('short_name', 5);
+            $table->string('code', 5);
             $table->string('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

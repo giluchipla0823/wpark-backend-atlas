@@ -17,7 +17,6 @@ class CreateCarriers extends Migration
             $table->id();
             $table->string('name');
             $table->string('code', 25)->unique();
-            $table->boolean('is_train')->default('0'); // Cambiar por active o añadir?
             $table->softDeletes();
             $table->timestamps();
         });

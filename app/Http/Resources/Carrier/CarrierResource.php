@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Carrier;
 
+use App\Http\Resources\Transport\TransportResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class CarrierResource extends JsonResource
@@ -18,7 +19,7 @@ class CarrierResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'is_train' => $this->is_train,
+            'transports' => TransportResource::collection($this->transports)
         ];
     }
 }

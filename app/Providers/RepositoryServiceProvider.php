@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Transport\TransportRepository;
+use App\Repositories\Transport\TransportRepositoryInterface;
 use App\Repositories\Carrier\CarrierRepository;
 use App\Repositories\Carrier\CarrierRepositoryInterface;
 use App\Repositories\Color\ColorRepository;
@@ -65,6 +67,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepositoryInterface::class,
             UserRepository::class
+        );
+
+        $this->app->bind(
+            TransportRepositoryInterface::class,
+            TransportRepository::class
         );
 
         $this->app->bind(

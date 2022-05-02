@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Stage;
  *      @OA\Xml(
  *         name="StageUpdateRequest"
  *      ),
- *      required={"name", "short_name"}
+ *      required={"name", "code"}
  * )
  */
 class StageUpdateRequest
@@ -21,21 +21,21 @@ class StageUpdateRequest
      *     type="string",
      *     maxLength=255,
      *     description="Nombre de la etapa",
-     *     example="STAGE 3"
+     *     example="St3"
      * )
      */
     public $name;
 
     /**
      * @OA\Property(
-     *     property="short_name",
+     *     property="code",
      *     type="string",
      *     maxLength=5,
-     *     description="Nombre corto de la etapa",
-     *     example="ST3"
+     *     description="Código de la etapa",
+     *     example="03"
      * )
      */
-    public $short_name;
+    public $code;
 
     /**
      * @OA\Property(

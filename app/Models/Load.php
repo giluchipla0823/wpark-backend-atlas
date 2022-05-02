@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="oprk", type="string", maxLength=25, description="", example=""),
  * @OA\Property(property="code", type="string", maxLength=50, description="", example=""),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="", example="1"),
+ * @OA\Property(property="transport_id", type="integer", maxLength=20, description="Indica el medio/transporte de entrada del vehículo", example="1"),
  * @OA\Property(property="rule_id", type="integer", maxLength=20, description="", example="1"),
  * @OA\Property(property="ready", type="boolean", maxLength=1, description="", example="1"),
  * @OA\Property(property="compound_id", type="integer", maxLength=20, description="", example="1"),
@@ -39,6 +40,7 @@ class Load extends Model
         'oprk',
         'code',
         'carrier_id',
+        'transport_id',
         'rule_id',
         'ready',
         'compound_id',
@@ -51,6 +53,11 @@ class Load extends Model
     public function carrier()
     {
         return $this->belongsTo(Carrier::class, 'carrier_id');
+    }
+
+    public function transport()
+    {
+        return $this->belongsTo(Transport::class, 'transport_id');
     }
 
     public function rule()

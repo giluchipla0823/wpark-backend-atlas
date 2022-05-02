@@ -26,6 +26,7 @@ class DesignResource extends JsonResource
             'height' => $this->height,
             'wreight' => $this->wreight,
             'description' => $this->description,
+            'hybrid' => $this->hybrid,
             'manufacturing' => $this->manufacturing,
             //'svg' => $this->svg
         ];

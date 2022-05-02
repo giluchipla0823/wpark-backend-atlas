@@ -27,8 +27,11 @@ class ParkingDesignStoreRequest extends FormRequest
             'name' => 'required|max:255',
             'area_id' => 'required|exists:areas,id',
             'parking_type_id' => 'required|exists:parking_types,id',
-            'start_row' => 'required|integer|min:1',
-            'end_row' => 'required|integer|min:1|gt:start_row',
+            'qr' => 'required_if:parking_type_id,1,2|integer',
+            'rows' => 'required_if:parking_type_id,1,2|array',
+            'rows.count' => 'required_if:parking_type_id,1,2|integer|min:1',
+            'rows.slots' => 'required_if:parking_type_id,1,2|array|min:1',
+            'rows.slots.*' => 'required_if:parking_type_id,1,2|integer|min:1', // TODO: Ver como ponerle max: 1 si parking_type_id = 2
             'comments' => 'nullable'
         ];
     }

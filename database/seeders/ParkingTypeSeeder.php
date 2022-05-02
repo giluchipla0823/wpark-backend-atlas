@@ -25,6 +25,11 @@ class ParkingTypeSeeder extends Seeder
                 'name' => 'ESPIGA',
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'ILIMITADO',
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
             ]
         ];
 

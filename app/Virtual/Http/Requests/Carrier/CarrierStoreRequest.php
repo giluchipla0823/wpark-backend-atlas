@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Carrier;
  *      @OA\Xml(
  *         name="CarrierStoreRequest"
  *      ),
- *      required={"name", "code", "is_train"}
+ *      required={"name", "code"}
  * )
  */
 class CarrierStoreRequest
@@ -38,13 +38,4 @@ class CarrierStoreRequest
      */
     public $code;
 
-    /**
-     * @OA\Property(
-     *     property="is_train",
-     *     type="integer",
-     *     description="¿Es tren?",
-     *     example="1"
-     * )
-     */
-    public $is_train;
 }

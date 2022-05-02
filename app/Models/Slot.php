@@ -65,29 +65,4 @@ class Slot extends Model
         return $this->hasMany(Distance::class, 'destination_slot_id');
     }
 
-    public function vehiclesSlot()
-    {
-        return $this->hasMany(Vehicle::class, 'slot_id');
-    }
-
-    public function vehicle()
-    {
-        return $this->hasOne(Vehicle::class, 'slot_id');
-    }
-
-    public function vehiclesLastSlot()
-    {
-        return $this->hasMany(Vehicle::class, 'last_slot_id');
-    }
-
-    public function movementsOriginSlots()
-    {
-        return $this->hasMany(Movement::class, 'origin_slot_id');
-    }
-
-    public function movementsDestinationSlots()
-    {
-        return $this->hasMany(Movement::class, 'destination_slot_id');
-    }
-
 }

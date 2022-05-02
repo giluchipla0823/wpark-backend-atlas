@@ -25,7 +25,7 @@ class StageStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'short_name' => 'required|max:5',
+            'code' => 'required|max:5',
             'description' => 'nullable|max:255',
         ];
     }

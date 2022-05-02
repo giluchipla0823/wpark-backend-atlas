@@ -79,4 +79,16 @@ class ParkingService
     {
         $this->repository->restore($id);
     }
+
+    /**
+     * @param Parking $parking
+     * @return int
+     */
+    public function toggleActive(Parking $parking): int {
+        $active = $parking->active ? 0 : 1;
+
+        $this->update(['active' => $active], $parking->id);
+
+        return $active;
+    }
 }

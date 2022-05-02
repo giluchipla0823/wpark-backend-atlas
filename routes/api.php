@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Transport\TransportController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
 use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
 use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
 use App\Http\Controllers\Api\v1\Row\RowVehicleController;
+use App\Http\Controllers\Api\v1\State\StateVehicleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
@@ -52,6 +54,8 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->
 Route::post('/forgot-password-check', [AuthController::class, 'forgotPasswordCheckToken'])->name('password.check');
 Route::post('/forgot-password-reset', [AuthController::class, 'forgotPasswordReset'])->name('password.reset');
 
+Route::post('/tracking-points', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage');
+
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'auth'], function() {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
@@ -66,6 +70,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('users', UserController::class, ['except' =>['create', 'edit']]);
 
     // Colors
+    Route::post('/colors/datatables', [ColorController::class, 'datatables'])->name('colors.datatables');
     Route::patch('/colors/{id}', [ColorController::class, 'restore'])->name('colors.restore');
     Route::resource('colors', ColorController::class, ['except' =>['create', 'edit']]);
 
@@ -101,6 +106,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     // States
     Route::patch('/states/{id}', [StateController::class, 'restore'])->name('states.restore');
     Route::resource('states', StateController::class, ['except' =>['create', 'edit']]);
+    Route::get('/states/{state}/vehicles', [StateVehicleController::class, 'index'])->name('states-vehicles.index');
 
     // Holds
     Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
@@ -126,6 +132,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Parkings
     Route::patch('/parkings/{id}', [ParkingController::class, 'restore'])->name('parkings.restore');
+    Route::patch('/parkings/{parking}/toggle-active', [ParkingController::class, 'toggleActive'])->name('parkings.toggle-active');
     Route::post('/parking-design', [ParkingDesignController::class, 'parkingDesign'])->name('parkingDesign');
     Route::resource('parkings', ParkingController::class, ['except' =>['create', 'edit', 'store']]);
 
@@ -156,8 +163,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Vehicles
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
-    //Route::post('/vehicle-stage', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage'); // TODO: Cambiar vehicle-stage por las rutas store y update
-    Route::resource('vehicles', VehicleController::class, ['except' =>['create', 'edit']]);
+    Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
+    Route::resource('vehicles', VehicleController::class, ['except' =>['store', 'create', 'update', 'edit']]);
+
+    // Transports
+    Route::patch('/transports/{id}', [TransportController::class, 'restore'])->name('transports.restore');
+    Route::patch('/transports/{transport}/toggle-active', [TransportController::class, 'toggleActive'])->name('transports.toggle-active');
+    Route::resource('transports', TransportController::class, ['except' =>['create', 'edit']]);
 
     // Carriers
     Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');

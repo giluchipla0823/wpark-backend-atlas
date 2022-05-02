@@ -52,9 +52,6 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
      */
     public function create(array $params): Model
     {
-        $params['capacity'] = (($params['end_row'] - $params['start_row']) + 1) * 8;
-        $params['capacitymm'] = $params['capacity'] * 4800;
-
         return $this->model->create($params);
     }
 

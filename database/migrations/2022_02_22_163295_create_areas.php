@@ -17,12 +17,9 @@ class CreateAreas extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('compound_id')->constrained('compounds');
-            $table->foreignId('zone_id')->constrained('zones'); // nullable o notNullable ¿?
-            $table->integer('rows')->unsigned();
-            //$table->integer('columns')->unsigned()->default('8');
-            $table->integer('capacity')->unsigned();
-            //$table->string('latitude', 20)->nullable();
-            //$table->string('longitude', 20)->nullable();
+            $table->foreignId('zone_id')->constrained('zones');
+            $table->integer('rows')->nullable()->unsigned();
+            $table->integer('capacity')->nullable()->unsigned();
             $table->softDeletes();
             $table->timestamps();
         });

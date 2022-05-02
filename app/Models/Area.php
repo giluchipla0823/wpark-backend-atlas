@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  *
  * @OA\Schema(
- * required={"name", "compound_id", "zone_id", "rows", "columns", "capacity"},
+ * required={"name", "compound_id", "zone_id"},
  * @OA\Xml(name="Area"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre del área", example="AREA 1"),

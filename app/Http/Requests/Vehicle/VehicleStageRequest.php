@@ -24,10 +24,13 @@ class VehicleStageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stage' => 'required|max:5',
-            'vin' => 'required|max:17',
-            'eoc' => 'required|max:255',
-            'hybrid' => 'required|boolean'
+            'tracking-date' => 'required|date_format:Y-m-d H:i:s.v',
+            'lvin' => 'required|string|size:17',
+            'pvin' => 'required|string|size:17',
+            'station' => 'required|string|size:2',
+            'eoc' => 'required|string|size:80',
+            'manual' => 'nullable|boolean',
+            'destination' => 'required|string|min:2|max:3'
         ];
     }
 }

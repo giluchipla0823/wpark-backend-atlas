@@ -5,12 +5,9 @@ namespace App\Repositories\Vehicle;
 use App\Models\Row;
 use Exception;
 use App\Helpers\QueryParamsHelper;
-use App\Models\Design;
-use App\Models\Color;
-use App\Models\Country;
-use App\Models\DestinationCode;
 use App\Models\Vehicle;
 use App\Models\Stage;
+use App\Models\State;
 use Illuminate\Database\Eloquent\Model;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
@@ -57,23 +54,14 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
 
         try {
             // Creación del vehículo y relación many to many con stages
-            // Extracción del vin_short desde el eoc
-            // TODO: Sustituir estas relaciones cuando se cree el servicio VehicleStageService
-            $eoc = $params['eoc'];
-
-            $params['vin_short'] = substr($eoc, 24, 7);
-
-            $params['design_id'] = Design::inRandomOrder()->first()->id;
-
-            $params['color_id'] = Color::inRandomOrder()->first()->id;
-
-            $params['destination_code_id'] = Country::inRandomOrder()->first()->id;
-
-            $params['country_id'] = DestinationCode::inRandomOrder()->first()->id;
-
             $vehicle = $this->model->create($params);
-            $stage = Stage::where('short_name', $params['stage'])->first();
-            $vehicle->stages()->attach($stage->id);
+            $stage = Stage::where('code', $params['station'])->first();
+            $vehicle->stages()->sync([
+                $stage->id => [
+                    'manual' => $params['manual'],
+                    'tracking_date' => $params['tracking-date']
+                ]
+            ], false);
 
             DB::commit();
         } catch (Exception $e) {
@@ -100,8 +88,13 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             // Actualización del vehículo y relación many to many con stages
             $vehicle = $this->model->find($id);
             $vehicle->update($params);
-            $stage = Stage::where('short_name', $params['stage'])->first();
-            $vehicle->stages()->attach($stage->id);
+            $stage = Stage::where('code', $params['station'])->first();
+            $vehicle->stages()->sync([
+                $stage->id => [
+                    'manual' => $params['manual'],
+                    'tracking_date' => $params['tracking-date']
+                ]
+            ], false);
 
             DB::commit();
         }catch(Exception $e){
@@ -191,5 +184,38 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         }
 
         return $query->get();
+    }
+
+    /**
+     * Obtener la lista de vehículos dado un estado.
+     *
+     * @param State $state
+     * @return Collection
+     */
+    public function findAllByState(State $state): Collection
+    {
+        $query = $this->model->query()
+                    ->whereHas('states', function(Builder $q) use ($state) {
+                        $q->where('state_id', '=', $state->id);
+                    });
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $result = Datatables::customizable($query)->response();
+
+            return collect($result);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * @param string $vin
+     * @return Model
+     */
+    public function findByVin(string $vin): ?Model
+    {
+        return $this->findBy(['vin' => $vin]);
     }
 }

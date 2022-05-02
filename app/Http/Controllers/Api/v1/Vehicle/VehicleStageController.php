@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api\v1\Vehicle;
 use Illuminate\Http\JsonResponse;
 use App\Services\Vehicle\VehicleStageService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Vehicle\VehicleStageRequest;
 
 class VehicleStageController extends ApiController
 {
-    // TODO: Servicio para crear/actualizar vehículos desde la api de Ford
     /**
      * @var VehicleStageService
      */
@@ -20,15 +18,39 @@ class VehicleStageController extends ApiController
         VehicleStageService $vehicleStageService
     )
     {
-        //$this->middleware('role:Super-Admin|admin');
+        $this->middleware('basic.auth');
         $this->vehicleStageService = $vehicleStageService;
     }
 
+    /**
+     * @OA\POST(
+     *     path="/api/tracking-points",
+     *     tags={"Tracking Points"},
+     *     summary="Create or update vehicle from stage",
+     *     description="Create or update vehicle from stage",
+     *     security={{"basic": {}}},
+     *     operationId="tracking-points",
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/VehicleStageRequest")
+     *     ),
+     *     @OA\Response(response=200, description="Vehicle created or updated successfully."),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display the specified resource.
+     *
+     * @param Vehicle $vehicle
+     * @return JsonResponse
+     */
     public function vehicleStage(VehicleStageRequest $request): JsonResponse
     {
-        $vehicle = $this->vehicleStageService->vehicleStage($request->all());
+        $this->vehicleStageService->vehicleStage($request->all());
 
-        return $this->successResponse($vehicle, 'Vehicle created or updated successfully.', Response::HTTP_CREATED);
+        return $this->showMessage('Vehicle created or updated successfully.');
     }
 
 }

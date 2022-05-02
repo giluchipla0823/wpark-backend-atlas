@@ -15,18 +15,18 @@ class CreateRows extends Migration
     {
         Schema::create('rows', function (Blueprint $table) {
             $table->id();
-            $table->integer('row_number')->unsigned();
+            $table->string('row_number', 5);
             $table->foreignId('parking_id')->constrained('parkings');
             $table->foreignId('block_id')->nullable()->constrained('blocks');
             $table->integer('capacity')->unsigned();
             $table->integer('fill')->unsigned()->nullable()->default('0');
             $table->integer('capacitymm')->unsigned();
             $table->integer('fillmm')->unsigned()->nullable()->default('0');
-            $table->string('alt_qr');
+            $table->string('alt_qr')->nullable();
             $table->text('comments')->nullable();
-            $table->tinyInteger('active')->unsigned();
-            $table->timestamps();
+            $table->boolean('active')->default('1');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -45,9 +45,4 @@ class Country extends Model
         return $this->hasMany(DestinationCode::class, 'country_id');
     }
 
-    public function vehicles()
-    {
-        return $this->hasMany(Vehicle::class, 'country_id');
-    }
-
 }

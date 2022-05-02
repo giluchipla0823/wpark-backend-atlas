@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
 
 class ColorRepository extends BaseRepository implements ColorRepositoryInterface
@@ -31,5 +32,14 @@ class ColorRepository extends BaseRepository implements ColorRepositoryInterface
         }
 
         return $query->get();
+    }
+
+    /**
+     * @param string $code
+     * @return Model|null
+     */
+    public function findByCode(string $code): ?Model
+    {
+        return $this->findBy(['code' => $code]);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Stage;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
 
 class StageRepository extends BaseRepository implements StageRepositoryInterface
@@ -33,4 +34,12 @@ class StageRepository extends BaseRepository implements StageRepositoryInterface
         return $query->get();
     }
 
+    /**
+     * @param string $code
+     * @return Model|null
+     */
+    public function findByCode(string $code): ?Model
+    {
+        return $this->findBy(['code' => $code]);
+    }
 }

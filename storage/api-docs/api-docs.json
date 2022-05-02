@@ -3060,6 +3060,43 @@
                 ]
             }
         },
+        "/api/v1/parkings/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Parkings"
+                ],
+                "summary": "Toggle Active Parking",
+                "description": "Toggle Active Parking",
+                "operationId": "toggleActiveParking",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Parking toogle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/parking-design": {
             "post": {
                 "tags": [
@@ -4401,6 +4438,301 @@
                 ]
             }
         },
+        "/api/v1/state/{id}/vehicles": {
+            "get": {
+                "tags": [
+                    "States"
+                ],
+                "summary": "Vehicles List of state",
+                "description": "Vehicles List of state",
+                "operationId": "indexStatesVehicles",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicles list of State Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/transports": {
+            "get": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Transports List",
+                "description": "List of transports",
+                "operationId": "indexTransports",
+                "responses": {
+                    "200": {
+                        "description": "Transport list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Create New Transport",
+                "description": "Create New Transport",
+                "operationId": "storeTransport",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransportStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Transport"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/transports/{id}": {
+            "get": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Show Transport Details",
+                "description": "Show Transport Details",
+                "operationId": "showTransport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Transport Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Update Transport",
+                "description": "Update Transport",
+                "operationId": "updateTransport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransportUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Transport"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Delete Transport",
+                "description": "Delete Transport",
+                "operationId": "destroyTransport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Transport successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Restore Transport",
+                "description": "Restore Transport",
+                "operationId": "restoreTransport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Transport restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/transports/{id}/toggle-active": {
+            "patch": {
+                "tags": [
+                    "Transports"
+                ],
+                "summary": "Toggle Active Transport",
+                "description": "Toggle Active Transport",
+                "operationId": "toggleActiveTransport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transport toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users": {
             "get": {
                 "tags": [
@@ -5059,6 +5391,80 @@
                 ]
             }
         },
+        "/api/v1/vehicles/{vehicle}/detail": {
+            "get": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Show Vehicle info Details",
+                "description": "Show Vehicle info Details",
+                "operationId": "infoVehicle",
+                "responses": {
+                    "200": {
+                        "description": "Show Vehicle info Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tracking-points": {
+            "post": {
+                "tags": [
+                    "Tracking Points"
+                ],
+                "summary": "Create or update vehicle from stage",
+                "description": "Create or update vehicle from stage",
+                "operationId": "tracking-points",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleStageRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vehicle created or updated successfully."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "basic": []
+                    }
+                ]
+            }
+        },
         "/api/v1/zones": {
             "get": {
                 "tags": [
@@ -5290,10 +5696,7 @@
                 "required": [
                     "name",
                     "compound_id",
-                    "zone_id",
-                    "rows",
-                    "columns",
-                    "capacity"
+                    "zone_id"
                 ],
                 "properties": {
                     "id": {
@@ -5462,8 +5865,7 @@
                 "required": [
                     "name",
                     "short_name",
-                    "code",
-                    "is_train"
+                    "code"
                 ],
                 "properties": {
                     "id": {
@@ -5483,12 +5885,6 @@
                         "type": "string",
                         "maxLength": 25,
                         "example": "SINTAX"
-                    },
-                    "is_train": {
-                        "description": "Indica si el medio de transporte es en tren (0: No es en tren, 1: Es en tren)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -5781,6 +6177,7 @@
                     "weight",
                     "description",
                     "manufacturing",
+                    "hybrid",
                     "svg"
                 ],
                 "properties": {
@@ -5843,6 +6240,12 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "Kuga new"
+                    },
+                    "hybrid": {
+                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
@@ -5962,8 +6365,8 @@
                     },
                     "uuid": {
                         "description": "Imei o IP del dispositivo",
-                        "type": "integer",
-                        "maxLength": 10,
+                        "type": "string",
+                        "maxLength": 255,
                         "example": "867906036314920"
                     },
                     "device_type_id": {
@@ -6136,6 +6539,12 @@
                         "maxLength": 10,
                         "example": "1"
                     },
+                    "role_id": {
+                        "description": "Indica el rol del usuario que puede hacer uso del bloqueo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
                     "active": {
                         "description": "Indica si el bloqueo está activo (0: No está activo, 1: Está activo)",
                         "type": "boolean",
@@ -6207,6 +6616,12 @@
                     },
                     "carrier_id": {
                         "description": "",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "transport_id": {
+                        "description": "Indica el medio/transporte de entrada del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6359,8 +6774,8 @@
                 "required": [
                     "vehicle_id",
                     "user_id",
-                    "origin_slot_id",
-                    "destination_slot_id",
+                    "origin_position_id",
+                    "destination_position_id",
                     "rule_id",
                     "dt_start",
                     "dt_end"
@@ -6384,23 +6799,47 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "origin_slot_id": {
-                        "description": "Indica la posición (slot) desde donde se hace el movimiento",
+                    "origin_position_id": {
+                        "description": "Indica la posición desde donde se hace el movimiento",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "destination_slot_id": {
-                        "description": "Indica la posición (slot) haciá donde se hace el movimiento",
+                    "origin_position_type": {
+                        "description": "Indica el tipo de posición slot o parking de origen",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "App\\Models\\Parking"
+                    },
+                    "destination_position_id": {
+                        "description": "Indica la posición haciá donde se hace el movimiento",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "2"
+                    },
+                    "destination_position_type": {
+                        "description": "Indica el tipo de posición slot o parking de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "App\\Models\\Slot"
                     },
                     "rule_id": {
                         "description": "Indica la regla que está relacionada al movimiento",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
+                    },
+                    "confirmed": {
+                        "description": "Indica si el movimiento se ha completado (0: No está confirmado, 1: Está confirmado)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
+                    "canceled": {
+                        "description": "Indica si el movimiento se ha cancelado (0: No está cancelado, 1: Está cancelado)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
                     },
                     "dt_start": {
                         "description": "Fecha y hora del comienzo del movimiento",
@@ -6443,15 +6882,6 @@
                     "name",
                     "area_id",
                     "parking_type_id",
-                    "start_row",
-                    "end_row",
-                    "start_column",
-                    "end_column",
-                    "capacity",
-                    "fill",
-                    "capacitymm",
-                    "filmm",
-                    "full",
                     "active"
                 ],
                 "properties": {
@@ -6497,8 +6927,8 @@
                         "maxLength": 10,
                         "example": "80"
                     },
-                    "capacitymm": {
-                        "description": "Altura del modelo",
+                    "fill": {
+                        "description": "Número de slots ocupados en el parking",
                         "type": "integer",
                         "maxLength": 10,
                         "example": "400.000"
@@ -6508,6 +6938,12 @@
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "0"
+                    },
+                    "order": {
+                        "description": "Indica si se comienza a llenar desde la primera fila o la última (0: Orden Descendente, 1: Orden Ascendente)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "active": {
                         "description": "Indica si el parking está activo (0: No está activo, 1: Está activo)",
@@ -6585,11 +7021,54 @@
                     "name": "ParkingType"
                 }
             },
+            "Role": {
+                "required": [
+                    "name",
+                    "guard_name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "maxLength": 20,
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Nombre del rol",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "admin"
+                    },
+                    "guard_name": {
+                        "description": "Donde se aplica el rol",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "web"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de la creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-07 09:41:35"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última modificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-09 11:20:01"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Role"
+                }
+            },
             "Route": {
                 "required": [
                     "name",
                     "code",
                     "carrier_id",
+                    "transport_id",
                     "origin_compund_id",
                     "destination_compound_id"
                 ],
@@ -6614,6 +7093,12 @@
                     },
                     "carrier_id": {
                         "description": "Indica la empresa de transporte que hace la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "transport_id": {
+                        "description": "Indica el medio/transporte de salida del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6732,6 +7217,12 @@
                         "type": "string",
                         "example": "La fila está reservada"
                     },
+                    "active": {
+                        "description": "Indica si la fila está activa (0: No está activa, 1: Está activa)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
                         "type": "string",
@@ -6799,13 +7290,7 @@
                         "example": "1"
                     },
                     "next_state_id": {
-                        "description": "",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "compound_id": {
-                        "description": "",
+                        "description": "Indica el estado al que pasará el vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6930,7 +7415,7 @@
             "Stage": {
                 "required": [
                     "name",
-                    "short_name"
+                    "code"
                 ],
                 "properties": {
                     "id": {
@@ -6943,19 +7428,19 @@
                         "description": "Nombre de la etapa",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "STAGE 3"
+                        "example": "St3"
                     },
-                    "short_name": {
-                        "description": "Nombre corto de la etapa",
+                    "code": {
+                        "description": "Código de la etapa",
                         "type": "string",
                         "maxLength": 5,
-                        "example": "ST3"
+                        "example": "03"
                     },
                     "description": {
                         "description": "Descripción de la etapa",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "Etapa de creación del vehículo"
+                        "example": "Stage 3 - Etapa de creación del vehículo"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -7005,10 +7490,52 @@
                         "maxLength": 255,
                         "example": "El vehículo está estacionado"
                     },
-                    "model_state_id": {
-                        "description": "Indica si el estado será para un vehículo o para una fila",
+                    "deleted_at": {
+                        "description": "Fecha y hora del borrado temporal",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-12-09 11:20:01"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de la creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-07 09:41:35"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última modificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-09 11:20:01"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "State"
+                }
+            },
+            "Transport": {
+                "required": [
+                    "name",
+                    "active"
+                ],
+                "properties": {
+                    "id": {
                         "type": "integer",
                         "maxLength": 20,
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Nombre del transporte",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "FACTORY"
+                    },
+                    "active": {
+                        "description": "Indica si el transporte está activo (0: No esta activo, 1: Esta activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
                         "example": "1"
                     },
                     "deleted_at": {
@@ -7032,7 +7559,7 @@
                 },
                 "type": "object",
                 "xml": {
-                    "name": "State"
+                    "name": "Transport"
                 }
             },
             "User": {
@@ -7147,10 +7674,9 @@
                     "vin_shor",
                     "design_id",
                     "color_id",
-                    "country_id",
                     "destination_code",
-                    "eoc",
-                    "hybrid"
+                    "entry_transport_id",
+                    "eoc"
                 ],
                 "properties": {
                     "id": {
@@ -7161,6 +7687,12 @@
                     },
                     "vin": {
                         "description": "Número de bastidor del vehículo",
+                        "type": "string",
+                        "maxLength": 17,
+                        "example": "WF0FXXWPMFKY73028"
+                    },
+                    "lvin": {
+                        "description": "Número de bastidor lógico del vehículo",
                         "type": "string",
                         "maxLength": 17,
                         "example": "WF0FXXWPMFKY73028"
@@ -7183,41 +7715,23 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "country_id": {
-                        "description": "Indica el país de fabricación del vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
                     "destination_code_id": {
                         "description": "Indica el código de destino del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
+                    "entry_transport_id": {
+                        "description": "Indica el método de entrada del vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
                     "load_id": {
-                        "description": "",
+                        "description": "Indica la carga del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": ""
-                    },
-                    "slot_id": {
-                        "description": "Indica la posición dentro de la campa del vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "last_slot_id": {
-                        "description": "Indica la última posición dentro de la campa del vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "2"
-                    },
-                    "compound_id": {
-                        "description": "Indica la campa donde está ubicado el vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
                     },
                     "eoc": {
                         "description": "Identificador único de ford",
@@ -7232,7 +7746,7 @@
                         "example": "1"
                     },
                     "shipping_rule_id": {
-                        "description": "Indica la regla asociada al vehículo",
+                        "description": "Indica la regla de código de destino asociada al vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -7242,12 +7756,6 @@
                         "type": "string",
                         "maxLength": 100,
                         "example": "Pendiente de revisión"
-                    },
-                    "hybrid": {
-                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -7687,8 +8195,7 @@
                 "description": "Carrier Store request body data",
                 "required": [
                     "name",
-                    "code",
-                    "is_train"
+                    "code"
                 ],
                 "properties": {
                     "name": {
@@ -7703,11 +8210,6 @@
                         "maxLength": 10,
                         "minLength": 3,
                         "example": "TRANS"
-                    },
-                    "is_train": {
-                        "description": "¿Es tren?",
-                        "type": "integer",
-                        "example": "1"
                     }
                 },
                 "type": "object",
@@ -7720,8 +8222,7 @@
                 "description": "Carrier Update request body data",
                 "required": [
                     "name",
-                    "code",
-                    "is_train"
+                    "code"
                 ],
                 "properties": {
                     "name": {
@@ -7736,11 +8237,6 @@
                         "maxLength": 10,
                         "minLength": 3,
                         "example": "TRANS"
-                    },
-                    "is_train": {
-                        "description": "¿Es tren?",
-                        "type": "integer",
-                        "example": "1"
                     }
                 },
                 "type": "object",
@@ -8008,6 +8504,7 @@
                     "height",
                     "weight",
                     "description",
+                    "hybrid",
                     "manufacturing"
                 ],
                 "properties": {
@@ -8064,6 +8561,12 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "Kuga new"
+                    },
+                    "hybrid": {
+                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
@@ -8094,6 +8597,7 @@
                     "height",
                     "weight",
                     "description",
+                    "hybrid",
                     "manufacturing"
                 ],
                 "properties": {
@@ -8150,6 +8654,12 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "Kuga new"
+                    },
+                    "hybrid": {
+                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
@@ -8356,8 +8866,8 @@
                     "name",
                     "area_id",
                     "parking_type_id",
-                    "start_row",
-                    "end_row"
+                    "rows",
+                    "qr"
                 ],
                 "properties": {
                     "name": {
@@ -8378,14 +8888,28 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "start_row": {
-                        "description": "La fila del área en la que empieza el parking",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "12"
+                    "rows": {
+                        "description": "Filas con sus propiedades",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "count": {
+                                    "type": "integer",
+                                    "example": "5"
+                                },
+                                "slots": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    },
+                                    "example": "[10,5,10]"
+                                }
+                            },
+                            "type": "object"
+                        }
                     },
-                    "end_row": {
-                        "description": "La fila del área en la que termina el parking",
+                    "qr": {
+                        "description": "Parte izquierda del código qr pertenciente al parking",
                         "type": "integer",
                         "maxLength": 10,
                         "example": "22"
@@ -8703,7 +9227,7 @@
                 "description": "Stage Store request body data",
                 "required": [
                     "name",
-                    "short_name"
+                    "code"
                 ],
                 "properties": {
                     "name": {
@@ -8712,8 +9236,8 @@
                         "maxLength": 255,
                         "example": "STAGE 3"
                     },
-                    "short_name": {
-                        "description": "Nombre corto de la etapa",
+                    "code": {
+                        "description": "Código de la etapa",
                         "type": "string",
                         "maxLength": 5,
                         "example": "ST3"
@@ -8735,20 +9259,20 @@
                 "description": "Stage Update request body data",
                 "required": [
                     "name",
-                    "short_name"
+                    "code"
                 ],
                 "properties": {
                     "name": {
                         "description": "Nombre de la etapa",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "STAGE 3"
+                        "example": "St3"
                     },
-                    "short_name": {
-                        "description": "Nombre corto de la etapa",
+                    "code": {
+                        "description": "Código de la etapa",
                         "type": "string",
                         "maxLength": 5,
-                        "example": "ST3"
+                        "example": "03"
                     },
                     "description": {
                         "description": "Descripción de la etapa",
@@ -8766,8 +9290,7 @@
                 "title": "State Store Request",
                 "description": "State Store request body data",
                 "required": [
-                    "name",
-                    "model_state_id"
+                    "name"
                 ],
                 "properties": {
                     "name": {
@@ -8781,12 +9304,6 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "El vehículo está estacionado"
-                    },
-                    "model_state_id": {
-                        "description": "Indica si el estado será para un vehículo o para una fila",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
                     }
                 },
                 "type": "object",
@@ -8798,8 +9315,7 @@
                 "title": "State Update Request",
                 "description": "State Update request body data",
                 "required": [
-                    "name",
-                    "model_state_id"
+                    "name"
                 ],
                 "properties": {
                     "name": {
@@ -8813,17 +9329,63 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "El vehículo está estacionado"
-                    },
-                    "model_state_id": {
-                        "description": "Indica si el estado será para un vehículo o para una fila",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
                     }
                 },
                 "type": "object",
                 "xml": {
                     "name": "StateUpdateRequest"
+                }
+            },
+            "TransportStoreRequest": {
+                "title": "Transport Store Request",
+                "description": "Transport Store request body data",
+                "required": [
+                    "name",
+                    "import"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del transporte",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "BOAT"
+                    },
+                    "import": {
+                        "description": "Indica si el vehículo es importado (0: No es importado, 1: Es importado)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "TransportStoreRequest"
+                }
+            },
+            "TransportUpdateRequest": {
+                "title": "Transport Update Request",
+                "description": "Transport Update request body data",
+                "required": [
+                    "name",
+                    "import"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del transporte",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "PLANE"
+                    },
+                    "import": {
+                        "description": "Indica si el vehículo es importado (0: No es importado, 1: Es importado)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "TransportUpdateRequest"
                 }
             },
             "UserGenerateUsernameRequest": {
@@ -8941,35 +9503,55 @@
                 "title": "Vehicle Stage Request",
                 "description": "Vehicle Stage request body data",
                 "required": [
-                    "stage",
-                    "vin",
+                    "tracking-date",
+                    "lvin",
+                    "pvin",
+                    "station",
                     "eoc",
-                    "hybrid"
+                    "destination"
                 ],
                 "properties": {
-                    "name": {
-                        "description": "Nombre de la etapa",
+                    "tracking-date": {
+                        "description": "Fecha y hora de la estación",
                         "type": "string",
-                        "maxLength": 255,
-                        "example": "STAGE 3"
+                        "format": "date-time",
+                        "example": "2021-07-29 16:05:01.111"
                     },
-                    "vin": {
-                        "description": "Número de bastidor del vehículo",
+                    "lvin": {
+                        "description": "Número físico de bastidor del vehículo",
                         "type": "string",
                         "maxLength": 17,
-                        "example": "WF0FXXWPMFKY73028"
+                        "example": "WF0UXXWPGUMK11563"
+                    },
+                    "pvin": {
+                        "description": "Número lógico de bastidor del vehículo",
+                        "type": "string",
+                        "maxLength": 17,
+                        "example": "WF0UXXWPGUMK11563"
+                    },
+                    "station": {
+                        "description": "Código de la estación",
+                        "type": "string",
+                        "maxLength": 2,
+                        "example": "03"
                     },
                     "eoc": {
                         "description": "Identificador único de ford",
                         "type": "string",
-                        "maxLength": 255,
-                        "example": "5S8DQ87FZAFF090N6   WPMFKY73028  YSC B3EB  CPGD5EZJN A337C7B A6E 63  1765  MH 15"
+                        "maxLength": 80,
+                        "example": "2AGK   H 397WDKN4 W WPGUMK11563  ZI9 U3GK1GGKIOPKM4R BM KA5M5N KMNW   22H  AZ  L"
                     },
-                    "hybrid": {
-                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
+                    "manual": {
+                        "description": "Indica si la trama es manual o automática (0: No es manual, 1: Es manual)",
                         "type": "boolean",
                         "maxLength": 1,
-                        "example": "1"
+                        "example": "0"
+                    },
+                    "destination": {
+                        "description": "Código del código de destino",
+                        "type": "string",
+                        "maxLength": 3,
+                        "example": "39"
                     }
                 },
                 "type": "object",
@@ -9084,6 +9666,11 @@
                 "description": "Laravel Sanctum token authentication",
                 "scheme": "bearer",
                 "bearerFormat": "JWT"
+            },
+            "basic": {
+                "type": "http",
+                "description": "Basic authentication",
+                "scheme": "basic"
             }
         }
     },

@@ -7,6 +7,7 @@ use App\Models\DestinationCode;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\Facades\DataTables;
 
 class DestinationCodeRepository extends BaseRepository implements DestinationCodeRepositoryInterface
@@ -31,6 +32,15 @@ class DestinationCodeRepository extends BaseRepository implements DestinationCod
         }
 
         return $query->get();
+    }
+
+    /**
+     * @param string $code
+     * @return Model|null
+     */
+    public function findByCode(string $code): ?Model
+    {
+        return $this->findBy(['code' => $code]);
     }
 
 }
