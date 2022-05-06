@@ -17,22 +17,12 @@ class BlockSeeder extends Seeder
     {
         $blocks = [
             [
-                'name' => 'BLOQUE ZP',
+                'name' => 'BLOQUE PRESORTING',
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
             [
-                'name' => 'BLOQUE ZK',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'BLOQUE GLOBAL',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'BLOQUE REVISIÓN',
+                'name' => 'BLOQUE POSICIÓN FINAL',
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ]

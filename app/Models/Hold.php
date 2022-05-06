@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="priority", type="integer", maxLength=10, description="Indica el orden de prioridad del bloqueo", example="1"),
  * @OA\Property(property="role_id", type="integer", maxLength=20, description="Indica el rol del usuario que puede hacer uso del bloqueo", example="1"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si el bloqueo está activo (0: No está activo, 1: Está activo)", example="1"),
- * @OA\Property(property="count", type="integer", maxLength=10, description="Máximo de bloqueos por fila", example="5"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),
  * @OA\Property(property="updated_at", type="string", format="date-time", description="Fecha y hora de la última modificación", example="2021-09-09 11:20:01")
@@ -42,7 +41,6 @@ class Hold extends Model
         'priority',
         'role_id',
         'active',
-        'count',
         'deleted_at',
         'created_at',
         'updated_at',

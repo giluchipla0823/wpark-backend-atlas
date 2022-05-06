@@ -61,17 +61,6 @@ class HoldUpdateRequest
 
     /**
      * @OA\Property(
-     *     property="count",
-     *     type="integer",
-     *     maxLength=10,
-     *     description="Máximo de bloqueos por fila",
-     *     example="5"
-     * )
-     */
-    public $count;
-
-    /**
-     * @OA\Property(
      *     property="conditions",
      *     type="array",
      *     @OA\Items(type="integer"),

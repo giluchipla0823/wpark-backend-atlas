@@ -17,8 +17,8 @@ class CreateTransportsCarriers extends Migration
             $table->id();
             $table->foreignId('transport_id')->nullable()->constrained('transports');
             $table->foreignId('carrier_id')->constrained('carriers');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -25,7 +25,6 @@ class MeResource extends JsonResource
             'last_login' => $this->last_login,
             'online' => $this->online,
             'last_change_password' => $this->last_change_password,
-            'admin_pin' => $this->admin_pin,
             'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

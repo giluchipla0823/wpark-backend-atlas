@@ -17,8 +17,8 @@ class CreateCarriers extends Migration
             $table->id();
             $table->string('name');
             $table->string('code', 25)->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

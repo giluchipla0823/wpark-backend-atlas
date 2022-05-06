@@ -17,8 +17,8 @@ class CreateUsersDevices extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('device_id')->constrained('devices');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

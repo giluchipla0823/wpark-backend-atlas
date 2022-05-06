@@ -24,9 +24,8 @@ class BlockStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'rows' => 'nullable|array',
-            'rows.*' => 'exists:rows,id'
+            "name" => "required|max:255",
+            "is_presorting" => "required|boolean",
         ];
     }
 }

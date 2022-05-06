@@ -35,17 +35,22 @@ class AreaRepository extends BaseRepository implements AreaRepositoryInterface
         return $query->get();
     }
 
+    /**
+     * @param array $params
+     * @return Model
+     */
     public function create(array $params): Model
     {
-        $params['capacity'] = $params['rows'] * $params['columns'];
-
         return $this->model->create($params);
     }
 
+    /**
+     * @param array $params
+     * @param int $id
+     * @return int|null
+     */
     public function update(array $params, int $id): ?int
     {
-        $params['capacity'] = $params['rows'] * $params['columns'];
-
         return $this->model->where('id', $id)->update($params);
     }
 

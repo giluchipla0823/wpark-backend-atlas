@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\Vehicle\VehicleStageService;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleStageRequest;
+use App\Models\Vehicle;
 
 class VehicleStageController extends ApiController
 {
@@ -16,8 +17,7 @@ class VehicleStageController extends ApiController
 
     public function __construct(
         VehicleStageService $vehicleStageService
-    )
-    {
+    ) {
         $this->middleware('basic.auth');
         $this->vehicleStageService = $vehicleStageService;
     }
@@ -52,5 +52,4 @@ class VehicleStageController extends ApiController
 
         return $this->showMessage('Vehicle created or updated successfully.');
     }
-
 }

@@ -29,7 +29,6 @@ class HoldStoreRequest extends FormRequest
             'code' => 'required|max:255|unique:holds,code',
             'priority' => 'required|integer|min:1',
             'role_id' => 'required|exists:roles,id',
-            'count' => 'nullable|integer',
             'conditions' => 'required|array',
             'conditions.*' => 'exists:conditions,id'
         ];

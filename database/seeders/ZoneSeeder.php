@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Zone;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ZoneSeeder extends Seeder
 {
@@ -15,36 +14,8 @@ class ZoneSeeder extends Seeder
      */
     public function run()
     {
-        $zones = [
-            [
-                'name' => 'PLANTA',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'PRESORTING',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'CAMPA GENERAL',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ]
-            ,
-            [
-                'name' => 'EXTERNO',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ]
-            ,
-            [
-                'name' => 'OVERFLOW',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ]
-        ];
-
-        Zone::insert($zones);
+        $path = public_path('sql/zones_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

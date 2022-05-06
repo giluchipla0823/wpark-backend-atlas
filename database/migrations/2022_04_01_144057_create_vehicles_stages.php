@@ -19,8 +19,8 @@ class CreateVehiclesStages extends Migration
             $table->foreignId('stage_id')->constrained('stages');
             $table->boolean('manual')->default('0');
             $table->datetime('tracking_date');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

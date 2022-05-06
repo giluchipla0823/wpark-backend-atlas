@@ -17,8 +17,8 @@ class CreateTransports extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('active')->default('1');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

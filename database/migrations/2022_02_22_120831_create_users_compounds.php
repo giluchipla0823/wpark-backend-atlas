@@ -17,8 +17,8 @@ class CreateUsersCompounds extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('compound_id')->constrained('compounds');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -25,8 +25,8 @@ class CreateRows extends Migration
             $table->string('alt_qr')->nullable();
             $table->text('comments')->nullable();
             $table->boolean('active')->default('1');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

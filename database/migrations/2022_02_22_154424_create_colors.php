@@ -18,9 +18,9 @@ class CreateColors extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('simple_name');
-            $table->string('hex')->nullable()->default('NULL')->unique();
-            $table->softDeletes();
+            $table->string('hex')->nullable()->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

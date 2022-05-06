@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Block;
  *      @OA\Xml(
  *         name="BlockStoreRequest"
  *      ),
- *      required={"name"}
+ *      required={"name", "is_presorting"}
  * )
  */
 class BlockStoreRequest
@@ -28,15 +28,11 @@ class BlockStoreRequest
 
     /**
      * @OA\Property(
-     *     property="rows",
-     *     type="array",
-     *     @OA\Items(
-     *          type="integer",
-     *     ),
-     *     @OA\Schema(type="array"),
-     *     description="Opcional, Ids de filas",
-     *     example="[1, 2, 3]"
+     *     property="is_presorting",
+     *     type="boolean",
+     *     description="Si el bloque es tipo presorting o normal",
+     *     example="false"
      * )
      */
-    public $rows;
+    public $is_presorting;
 }

@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Brand;
-use App\Models\Compound;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BrandSeeder extends Seeder
 {
@@ -16,23 +14,8 @@ class BrandSeeder extends Seeder
      */
     public function run()
     {
-        $brands = [
-            [
-                'name' => 'FORD',
-                'code' => '1',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'UNKNOWN',
-                'code' => '999',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
-        ];
-
-        Brand::insert($brands);
+        $path = public_path('sql/brands_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

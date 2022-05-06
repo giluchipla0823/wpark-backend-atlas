@@ -20,8 +20,8 @@ class CreateAreas extends Migration
             $table->foreignId('zone_id')->constrained('zones');
             $table->integer('rows')->nullable()->unsigned();
             $table->integer('capacity')->nullable()->unsigned();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

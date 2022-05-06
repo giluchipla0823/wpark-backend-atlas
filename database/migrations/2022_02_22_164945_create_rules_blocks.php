@@ -17,8 +17,8 @@ class CreateRulesBlocks extends Migration
             $table->id();
             $table->foreignId('rule_id')->constrained('rules');
             $table->foreignId('block_id')->constrained('blocks');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

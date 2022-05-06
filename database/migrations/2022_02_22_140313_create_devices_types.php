@@ -16,8 +16,8 @@ class CreateDevicesTypes extends Migration
         Schema::create('devices_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

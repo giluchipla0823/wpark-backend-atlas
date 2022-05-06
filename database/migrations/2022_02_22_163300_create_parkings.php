@@ -26,8 +26,8 @@ class CreateParkings extends Migration
             $table->boolean('order')->nullable()->default('0');
             $table->boolean('active')->default('1');
             $table->text('comments')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

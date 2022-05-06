@@ -24,7 +24,6 @@ class UserResource extends JsonResource
             'surname' => $this->surname,
             'email' => $this->email,
             'username' => $this->username,
-            'admin_pin' => $this->admin_pin,
             'last_login' => $this->last_login,
             'compounds' => CompoundResource::collection($this->compounds),
         ];

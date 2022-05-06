@@ -23,8 +23,8 @@ class CreateRoutes extends Migration
             $table->foreignId('destination_compound_id')->constrained('compounds');
             $table->foreignId('dealer_id')->nullable()->constrained('dealers');
             $table->text('comments')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

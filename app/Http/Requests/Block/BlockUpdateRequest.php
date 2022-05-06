@@ -24,8 +24,7 @@ class BlockUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'active' => 'required|boolean'
+            'name' => 'required|max:255'
         ];
     }
 }

@@ -18,8 +18,8 @@ class CreateStages extends Migration
             $table->string('name');
             $table->string('code', 5);
             $table->string('description')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -63,10 +63,33 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                 ]
             ], false);
 
+            activity()
+                ->withProperties([
+                    'lvin' => $params['lvin'],
+                    'pvin' => $params['pvin'],
+                    'station' => $params['station'],
+                    'eoc' => $params['eoc'],
+                    'design_id' => $params['design_id'],
+                    'color_id' => $params['color_id'],
+                    'destination_code_id' => $params['destination_code_id'],
+                    'entry_transport_id' => $params['entry_transport_id'],
+                    'relations' => [
+                        'vehicle_id' => $vehicle->id,
+                        'stage_id' => $stage->id,
+                        'manual' => $params['manual'],
+                        'tracking_date' => $params['tracking-date']
+                    ]
+                ])
+                ->event('Vehículo creado')
+                ->log('Tracking-point');
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-
+            activity()
+                ->withProperties($params)
+                ->event('Error al crear vehículo')
+                ->log('Tracking-point');
             throw $e;
         }
 
@@ -96,10 +119,33 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                 ]
             ], false);
 
-            DB::commit();
-        }catch(Exception $e){
-            DB::rollback();
+            activity()
+                ->withProperties([
+                    'lvin' => $params['lvin'],
+                    'pvin' => $params['pvin'],
+                    'station' => $params['station'],
+                    'eoc' => $params['eoc'],
+                    'design_id' => $params['design_id'],
+                    'color_id' => $params['color_id'],
+                    'destination_code_id' => $params['destination_code_id'],
+                    'entry_transport_id' => $params['entry_transport_id'],
+                    'relations' => [
+                        'vehicle_id' => $vehicle->id,
+                        'stage_id' => $stage->id,
+                        'manual' => $params['manual'],
+                        'tracking_date' => $params['tracking-date']
+                    ]
+                ])
+                ->event('Vehículo actualizado')
+                ->log('Tracking-point');
 
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            activity()
+                ->withProperties($params)
+                ->event('Error al actualizar vehículo')
+                ->log('Tracking-point');
             throw $e;
         }
 
@@ -120,13 +166,13 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             // Borrado del Vehículo y relación many to many con stages
             $vehicle = $this->model->find($id);
             $stages = $vehicle->stages()->get();
-            foreach($stages as $stage){
+            foreach ($stages as $stage) {
                 $vehicle->stages()->updateExistingPivot($stage->id, ['deleted_at' => Carbon::now()]);
             }
             $vehicle->delete();
 
             DB::commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollback();
 
             throw $e;
@@ -148,13 +194,13 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             // Restauración del Vehículo y relación many to many con stages
             $vehicle = $this->model->withTrashed()->findOrFail($id);
             $stages = $vehicle->stages()->get();
-            foreach($stages as $stage){
+            foreach ($stages as $stage) {
                 $vehicle->stages()->updateExistingPivot($stage->id, ['deleted_at' => null]);
             }
             $vehicle->restore();
 
             DB::commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             DB::rollback();
 
             throw $e;
@@ -169,11 +215,11 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
     public function findAllByRow(Row $row): Collection
     {
         $query = $this->model->query()
-                    ->with(['slot'])
-                    ->whereHas('slot', function(Builder $q) use ($row) {
-                        $q->where('row_id', '=', $row->id)
-                            ->where('fill', '=', 1);
-                    });
+            ->with(['slot'])
+            ->whereHas('slot', function (Builder $q) use ($row) {
+                $q->where('row_id', '=', $row->id)
+                    ->where('fill', '=', 1);
+            });
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
@@ -195,9 +241,9 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
     public function findAllByState(State $state): Collection
     {
         $query = $this->model->query()
-                    ->whereHas('states', function(Builder $q) use ($state) {
-                        $q->where('state_id', '=', $state->id);
-                    });
+            ->whereHas('states', function (Builder $q) use ($state) {
+                $q->where('state_id', '=', $state->id);
+            });
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 

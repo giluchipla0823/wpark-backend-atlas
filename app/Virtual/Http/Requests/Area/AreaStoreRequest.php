@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Area;
  *      @OA\Xml(
  *         name="AreaStoreRequest"
  *      ),
- *      required={"name", "compound_id", "zone_id", "rows"}
+ *      required={"name", "compound_id", "zone_id"}
  * )
  */
 class AreaStoreRequest
@@ -47,16 +47,5 @@ class AreaStoreRequest
      * )
      */
     public $zone_id;
-
-    /**
-     * @OA\Property(
-     *     property="rows",
-     *     type="integer",
-     *     maxLength=10,
-     *     description="Número de filas que tiene el área",
-     *     example="30"
-     * )
-     */
-    public $rows;
 
 }

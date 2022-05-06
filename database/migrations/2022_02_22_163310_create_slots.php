@@ -22,8 +22,8 @@ class CreateSlots extends Migration
             $table->integer('capacitymm')->unsigned()->nullable();
             $table->integer('fillmm')->unsigned()->nullable()->default('0');
             $table->text('comments')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -33,11 +33,12 @@ class Block extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'active',
-        'deleted_at',
-        'created_at',
-        'updated_at',
+        "name",
+        "is_presorting",
+        "active",
+        "created_at",
+        "updated_at",
+        "deleted_at"
     ];
 
     public function rows()

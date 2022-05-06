@@ -18,8 +18,8 @@ class CreateModelConditions extends Migration
             $table->id();
             $table->string('name');
             $table->string('model');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

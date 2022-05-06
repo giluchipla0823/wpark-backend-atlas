@@ -16,8 +16,8 @@ class CreateParkingTypes extends Migration
         Schema::create('parking_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

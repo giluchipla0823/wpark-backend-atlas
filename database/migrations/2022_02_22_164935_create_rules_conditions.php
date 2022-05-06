@@ -18,8 +18,8 @@ class CreateRulesConditions extends Migration
             $table->foreignId('rule_id')->constrained('rules');
             $table->foreignId('condition_id')->constrained('conditions');
             $table->morphs('conditionable');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,11 +2,14 @@
 
 namespace App\Services\Vehicle;
 
+use App\Models\Transport;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Design\DesignRepositoryInterface;
 use App\Repositories\DestinationCode\DestinationCodeRepositoryInterface;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use App\Repositories\Vehicle\StageRepositoryInterface;
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 class VehicleStageService
 {
@@ -55,6 +58,20 @@ class VehicleStageService
      */
     public function vehicleStage(array $params): void
     {
+        // Log de petición del servicio
+        activity()
+            ->withProperties([
+                'tracking-date' => $params['tracking-date'],
+                'lvin' => $params['lvin'],
+                'pvin' => $params['pvin'],
+                'station' => $params['station'],
+                'eoc' => $params['eoc'],
+                'manual' => $params['manual'],
+                'destination' => $params['destination']
+            ])
+            ->event('Datos recibidos')
+            ->log('Tracking-point');
+
         // Añadir vin del vehículo
         $params['vin'] = $params['pvin'];
 
@@ -66,7 +83,7 @@ class VehicleStageService
         $design = $this->designRepository->findByCode($designCode);
 
         // Extraer y añadir color desde el eoc
-        $colorCode = substr($params['eoc'], 22, 2).$params['eoc'][72];
+        $colorCode = substr($params['eoc'], 22, 2) . $params['eoc'][72];
         $color = $this->colorRepository->findByCode($colorCode);
 
         // Añadir código de destino
@@ -75,7 +92,7 @@ class VehicleStageService
         $destinationCode = $this->destinationCodeRepository->findByCode(trim($params['destination']));
 
         // Añadir método de entrada (Se añade por defecto 1 correspondiente a la factoria)
-        $params['entry_transport_id'] = 1;
+        $params['entry_transport_id'] = Transport::FACTORY;
 
         // Comprobación si existe o no el stage
         $stage = $this->stageRepository->findByCode($params['station']);
@@ -83,21 +100,40 @@ class VehicleStageService
         // Comprobación si existe o no el vehículo para crear o actualizar
         $vehicle = $this->vehicleRepository->findByVin($params['pvin']);
 
-        if($design != null && $color != null && $destinationCode != null && $stage != null){
+        if ($design != null && $color != null && $destinationCode != null && $stage != null) {
             $params['design_id'] = $design->id;
             $params['color_id'] = $color->id;
             $params['destination_code_id'] = $destinationCode->id;
 
             if ($vehicle == null) {
                 $this->vehicleRepository->create($params);
-            }else{
+            } else {
                 $this->vehicleRepository->update($params, $vehicle->id);
             }
-        }else{
+        } else {
             // TODO: Sacar errores en excel para importarlos (FASE 2)
-            dd("No existe alguna información en la base de datos");
+            activity()
+                    ->withProperties([
+                        'lvin' => $params['lvin'],
+                        'pvin' => $params['pvin'],
+                        'station' => $params['station'],
+                        'eoc' => $params['eoc'],
+                        'vin_short' => $params['vin_short'],
+                        'design_code' => $designCode,
+                        'color_code' => $colorCode,
+                        'destination_code' => $params['destination'],
+                        'entry_transport_id' => $params['entry_transport_id'],
+                        'relations' => [
+                            'manual' => $params['manual'],
+                            'tracking_date' => $params['tracking-date']
+                        ]
+                    ])
+                    ->event('Faltan datos para poder crear o actualizar el vehículo')
+                    ->log('Tracking-point');
+            throw new Exception(
+                "No se ha podido crear o actualizar el vehículo.",
+                Response::HTTP_BAD_REQUEST
+            );
         }
-
-
     }
 }

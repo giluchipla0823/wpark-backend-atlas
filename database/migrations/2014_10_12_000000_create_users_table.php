@@ -25,9 +25,8 @@ class CreateUsersTable extends Migration
             $table->datetime('last_login')->nullable();
             $table->boolean('online')->default('0');
             $table->date('last_change_password')->nullable();
-            $table->integer('admin_pin')->nullable()->unsigned();  // ¿?
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

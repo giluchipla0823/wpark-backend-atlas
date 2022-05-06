@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Block;
  *      @OA\Xml(
  *         name="BlockUpdateRequest"
  *      ),
- *      required={"name", "active"}
+ *      required={"name"}
  * )
  */
 class BlockUpdateRequest
@@ -26,14 +26,4 @@ class BlockUpdateRequest
      */
     public $name;
 
-    /**
-     * @OA\Property(
-     *     property="active",
-     *     type="boolean",
-     *     maxLength=1,
-     *     description="Indica si el bloque está activo (0: No está activo, 1: Está activo)",
-     *     example="1"
-     * )
-     */
-    public $active;
 }

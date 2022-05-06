@@ -16,8 +16,8 @@ class CreateCompounds extends Migration
         Schema::create('compounds', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,8 +20,8 @@ class CreateDevices extends Migration
             $table->foreignId('device_type_id')->constrained('devices_types');
             $table->string('version')->nullable()->default('NULL');
             $table->boolean('active')->default('1');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

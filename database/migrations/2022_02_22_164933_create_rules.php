@@ -23,8 +23,8 @@ class CreateRules extends Migration
             $table->foreignId('next_state_id')->nullable()->constrained('states');
             $table->foreignId('carrier_id')->nullable()->constrained('carriers');
             $table->boolean('active')->default('1');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

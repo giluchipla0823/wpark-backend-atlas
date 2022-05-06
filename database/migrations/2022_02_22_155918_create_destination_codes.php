@@ -17,10 +17,10 @@ class CreateDestinationCodes extends Migration
             $table->id();
             $table->string('name', 100);
             $table->string('code', 5)->unique();
-            $table->foreignId('route_id')->nullable()->constrained('routes');
             $table->foreignId('country_id')->constrained('countries');
-            $table->softDeletes();
+            $table->boolean('active')->default('1');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

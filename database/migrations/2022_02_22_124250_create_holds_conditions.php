@@ -17,8 +17,8 @@ class CreateHoldsConditions extends Migration
             $table->id();
             $table->foreignId('hold_id')->constrained('holds');
             $table->foreignId('condition_id')->constrained('conditions');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

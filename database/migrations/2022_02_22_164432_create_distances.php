@@ -18,8 +18,8 @@ class CreateDistances extends Migration
             $table->foreignId('origin_slot_id')->constrained('slots');
             $table->foreignId('destination_slot_id')->constrained('slots');
             $table->integer('seconds')->unsigned();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

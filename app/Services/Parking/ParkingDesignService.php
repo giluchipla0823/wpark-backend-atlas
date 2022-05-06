@@ -71,7 +71,7 @@ class ParkingDesignService
 
             if ($parking->parking_type_id == ParkingType::TYPE_ESPIGA) {
                 for ($i = 1; $i <= $totalRows; $i++) {
-                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
+                    // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
                     $row_number = str_pad($i, 3, '0', STR_PAD_LEFT);
 
                     $capacity = 1;

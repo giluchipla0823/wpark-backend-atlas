@@ -16,9 +16,10 @@ class CreateBlocks extends Migration
         Schema::create('blocks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('active')->default('1');
-            $table->softDeletes();
+            $table->boolean('is_presorting')->default(0);
+            $table->boolean('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

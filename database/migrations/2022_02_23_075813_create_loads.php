@@ -23,8 +23,8 @@ class CreateLoads extends Migration
             $table->boolean('ready')->default('0');
             $table->foreignId('compound_id')->nullable()->constrained('compounds');
             $table->boolean('processed')->default('0');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

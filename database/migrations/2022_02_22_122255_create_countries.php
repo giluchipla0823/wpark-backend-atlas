@@ -17,8 +17,8 @@ class CreateCountries extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

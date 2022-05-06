@@ -27,8 +27,8 @@ class CreateDesigns extends Migration
             $table->boolean('hybrid')->default('0');
             $table->boolean('manufacturing');
             $table->longText('svg')->nullable();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

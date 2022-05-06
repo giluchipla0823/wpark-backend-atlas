@@ -20,8 +20,8 @@ class CreateConditions extends Migration
             $table->string('model')->nullable();
             $table->foreignId('model_condition_id')->constrained('model_conditions');
             $table->boolean('required')->default('0');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

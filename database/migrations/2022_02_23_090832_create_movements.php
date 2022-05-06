@@ -21,18 +21,15 @@ class CreateMovements extends Migration
             $table->string('origin_position_type');
             $table->integer('destination_position_id')->unsigned();
             $table->string('destination_position_type');
-            $table->foreignId('rule_id')->nullable()->constrained('rules'); // Confirmar que la tabla de movimientos tiene que estar asociada a una regla o a un bloque
-            /* El campo ready o pendiente no sería necesario ya que si se ha creado
-            el movimiento y los campos confirmed y canceled ambos son 0 quiere decir
-            que el movimiento aún está en proceso.
-            */
-            //$table->boolean('ready')->default('1');
+            $table->string('category');
             $table->boolean('confirmed')->default('0');
             $table->boolean('canceled')->default('0');
+            $table->boolean('manual')->default('0');
             $table->datetime('dt_start');
             $table->datetime('dt_end')->nullable();
-            $table->softDeletes();
+            $table->text('comments')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

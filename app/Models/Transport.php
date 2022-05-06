@@ -27,6 +27,8 @@ class Transport extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const FACTORY = 1;
+
     /**
      * The attributes that are mass assignable.
      *

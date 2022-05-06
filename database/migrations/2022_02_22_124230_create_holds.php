@@ -20,9 +20,8 @@ class CreateHolds extends Migration
             $table->integer('priority')->unsigned();
             $table->foreignId('role_id')->nullable()->constrained('roles');
             $table->boolean('active')->default('1');
-            $table->integer('count')->nullable()->unsigned();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

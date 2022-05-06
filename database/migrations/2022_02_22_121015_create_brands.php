@@ -18,8 +18,8 @@ class CreateBrands extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->foreignId('compound_id')->nullable()->constrained('compounds');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

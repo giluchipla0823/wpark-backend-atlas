@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Country;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CountrySeeder extends Seeder
 {
@@ -15,21 +14,8 @@ class CountrySeeder extends Seeder
      */
     public function run()
     {
-        $countries = [
-            [
-                'name' => 'SPAIN',
-                'code' => 'SP',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'BRITAIN',
-                'code' => 'UB',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
-        ];
-
-        Country::insert($countries);
+        $path = public_path('sql/countries_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

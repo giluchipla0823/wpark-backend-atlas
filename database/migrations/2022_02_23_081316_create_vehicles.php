@@ -27,8 +27,8 @@ class CreateVehicles extends Migration
             $table->foreignId('last_rule_id')->nullable()->constrained('rules');
             $table->foreignId('shipping_rule_id')->nullable()->constrained('rules');
             $table->string('info', 100)->nullable()->default('NULL');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -64,17 +64,7 @@ class BlockService
      */
     public function create(array $params): Block
     {
-        return DB::transaction(function () use ($params) {
-            $block = $this->blockRepository->create($params);
-
-            if (array_key_exists('rows', $params) && is_array($params['rows'])) {
-                $this->rowRepository->updateBlockToRows($block, $params['rows']);
-
-                $block->load('rows');
-            }
-
-            return $block;
-        });
+        return $this->blockRepository->create($params);
     }
 
     /**

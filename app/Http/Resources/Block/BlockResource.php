@@ -20,6 +20,7 @@ class BlockResource extends JsonResource
         $response = [
             'id' => $this->id,
             'name' => $this->name,
+            'is_presorting' => $this->is_presorting,
             'active' => $this->active,
         ];
 

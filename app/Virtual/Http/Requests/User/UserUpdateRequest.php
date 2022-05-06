@@ -59,14 +59,4 @@ class UserUpdateRequest
      */
     public $username;
 
-//    /**
-//     * @OA\Property(
-//     *     property="admin_pin",
-//     *     type="integer",
-//     *     maxLength=10,
-//     *     description="Pin del administrador",
-//     *     example="2584639875"
-//     * )
-//     */
-//    public $admin_pin;
 }

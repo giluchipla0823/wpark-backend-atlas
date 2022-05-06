@@ -17,8 +17,8 @@ class CreateHoldsVehicles extends Migration
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles');
             $table->foreignId('hold_id')->constrained('holds');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

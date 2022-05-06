@@ -17,8 +17,8 @@ class CreateVehiclesStates extends Migration
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles');
             $table->foreignId('state_id')->constrained('states');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -6551,12 +6551,6 @@
                         "maxLength": 1,
                         "example": "1"
                     },
-                    "count": {
-                        "description": "Máximo de bloqueos por fila",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "5"
-                    },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
                         "type": "string",
@@ -6823,11 +6817,11 @@
                         "maxLength": 255,
                         "example": "App\\Models\\Slot"
                     },
-                    "rule_id": {
-                        "description": "Indica la regla que está relacionada al movimiento",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
+                    "category": {
+                        "description": "Nombre de la categoría (last_rule_id) que se aplica en ese movimiento",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "FLUSHING"
                     },
                     "confirmed": {
                         "description": "Indica si el movimiento se ha completado (0: No está confirmado, 1: Está confirmado)",
@@ -6837,6 +6831,12 @@
                     },
                     "canceled": {
                         "description": "Indica si el movimiento se ha cancelado (0: No está cancelado, 1: Está cancelado)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
+                    },
+                    "manual": {
+                        "description": "Indica si el movimiento es el recomendado o manual (0: Recomendado, 1: Manual)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "0"
@@ -6852,6 +6852,11 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2021-12-12 11:26:15"
+                    },
+                    "comments": {
+                        "description": "Comentarios sobre la fila",
+                        "type": "string",
+                        "example": "Movimiento cancelado por bloqueo"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -7638,12 +7643,6 @@
                         "format": "date",
                         "example": "2021-09-09"
                     },
-                    "admin_pin": {
-                        "description": "Pin del administrador",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "2584639875"
-                    },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
                         "type": "string",
@@ -7872,8 +7871,7 @@
                 "required": [
                     "name",
                     "compound_id",
-                    "zone_id",
-                    "rows"
+                    "zone_id"
                 ],
                 "properties": {
                     "name": {
@@ -7893,12 +7891,6 @@
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
-                    },
-                    "rows": {
-                        "description": "Número de filas que tiene el área",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "30"
                     }
                 },
                 "type": "object",
@@ -8075,7 +8067,8 @@
                 "title": "Block Store Request",
                 "description": "Block Store request body data",
                 "required": [
-                    "name"
+                    "name",
+                    "is_presorting"
                 ],
                 "properties": {
                     "name": {
@@ -8084,13 +8077,10 @@
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
                     },
-                    "rows": {
-                        "description": "Opcional, Ids de filas",
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        },
-                        "example": "[1, 2, 3]"
+                    "is_presorting": {
+                        "description": "Si el bloque es tipo presorting o normal",
+                        "type": "boolean",
+                        "example": "false"
                     }
                 },
                 "type": "object",
@@ -8102,8 +8092,7 @@
                 "title": "Block Update Request",
                 "description": "Block Update request body data",
                 "required": [
-                    "name",
-                    "active"
+                    "name"
                 ],
                 "properties": {
                     "name": {
@@ -8111,12 +8100,6 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
-                    },
-                    "active": {
-                        "description": "Indica si el bloque está activo (0: No está activo, 1: Está activo)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
                     }
                 },
                 "type": "object",
@@ -8786,12 +8769,6 @@
                         "maxLength": 10,
                         "example": "1"
                     },
-                    "count": {
-                        "description": "Máximo de bloqueos por fila",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "5"
-                    },
                     "conditions": {
                         "description": "Id´s de las condiciones que irán asociadas al bloqueo",
                         "type": "array",
@@ -8839,12 +8816,6 @@
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
-                    },
-                    "count": {
-                        "description": "Máximo de bloqueos por fila",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "5"
                     },
                     "conditions": {
                         "description": "Id´s de las condiciones que irán asociadas al bloqueo",

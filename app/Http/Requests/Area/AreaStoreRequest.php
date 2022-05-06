@@ -27,7 +27,6 @@ class AreaStoreRequest extends FormRequest
             'name' => 'required|max:255',
             'compound_id' => 'required|exists:compounds,id',
             'zone_id' => 'required|exists:zones,id',
-            'rows' => 'required|integer|min:1',
         ];
     }
 }

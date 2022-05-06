@@ -27,7 +27,6 @@ use App\Notifications\MailResetPasswordNotification;
  * @OA\Property(property="last_login", type="string", format="date-time", description="Fecha y hora de la última vez que el usuario ha entrado en la aplicación", example="2021-10-09 11:20:01"),
  * @OA\Property(property="online", type="boolean", maxLength=1, description="Indica si el usuario está conectado (0: No conectado, 1: Conectado)", example="0"),
  * @OA\Property(property="last_change_password", type="string", format="date", description="Fecha del último cambio de contraseña", example="2021-09-09"),
- * @OA\Property(property="admin_pin", type="integer", maxLength=10, description="Pin del administrador", example="2584639875"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),
  * @OA\Property(property="updated_at", type="string", format="date-time", description="Fecha y hora de la última modificación", example="2021-09-09 11:20:01")
@@ -57,7 +56,6 @@ class User extends Authenticatable
         'last_login',
         'online',
         'last_change_password',
-        'admin_pin',
         'deleted_at',
         'created_at',
         'updated_at',
@@ -94,7 +92,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $url = env('APP_URL_FRONT')."?token=" . $token . "&username=". $this->username; // TODO: Cambiar por dirección para actualizar password del front
+        $url = env('APP_URL_FRONT')."?token=" . $token . "&username=". $this->username;
         $this->notify(new MailResetPasswordNotification($url));
     }
 
