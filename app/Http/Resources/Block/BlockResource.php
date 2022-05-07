@@ -22,6 +22,8 @@ class BlockResource extends JsonResource
             'name' => $this->name,
             'is_presorting' => $this->is_presorting,
             'active' => $this->active,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
 
         if (in_array('rules', $relationships)) {
