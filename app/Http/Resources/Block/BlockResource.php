@@ -23,8 +23,8 @@ class BlockResource extends JsonResource
             'name' => $this->name,
             'is_presorting' => $this->is_presorting,
             'active' => $this->active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('Y-m-d') : null,
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('Y-m-d H:i:s') : null,
         ];
 
         if (in_array('rules', $relationships)) {
