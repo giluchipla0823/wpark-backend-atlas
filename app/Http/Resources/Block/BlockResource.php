@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Block;
 
 use App\Http\Resources\Rule\RuleResource;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BlockResource extends JsonResource
@@ -23,7 +24,7 @@ class BlockResource extends JsonResource
             'is_presorting' => $this->is_presorting,
             'active' => $this->active,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('Y-m-d') : null,
         ];
 
         if (in_array('rules', $relationships)) {
