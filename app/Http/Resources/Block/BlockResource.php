@@ -31,6 +31,10 @@ class BlockResource extends JsonResource
             $response['rules'] = RuleResource::collection($this->rules);
         }
 
+        if (in_array('rows', $relationships)) {
+            $response['rows'] = $this->rows;
+        }
+
         return $response;
     }
 }
