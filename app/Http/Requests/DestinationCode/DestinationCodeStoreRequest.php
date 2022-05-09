@@ -26,7 +26,6 @@ class DestinationCodeStoreRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'code' => 'required|max:5|unique:destination_codes,code',
-            'route_id' => 'required|exists:routes,id',
             'country_id' => 'required|exists:countries,id'
         ];
     }

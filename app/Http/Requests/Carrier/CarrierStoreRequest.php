@@ -25,6 +25,7 @@ class CarrierStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
+            'short_name' => 'required|max:255',
             'code' => 'required|min:3|max:20|unique:carriers,code',
         ];
     }

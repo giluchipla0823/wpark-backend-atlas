@@ -23,14 +23,13 @@ class RouteUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        // TODO: Añadir carrier_id y dealer_id en fase 2
         $id = $this->route('route')->id;
 
         return [
             'name' => 'required|max:255',
-            'code' => "required|max:5|unique:routes,code,{$id},id",
+            'cdm_code' => "required|max:5|unique:routes,cdm_code,{$id},id",
             'origin_compound_id' => 'required|exists:compounds,id',
-            'destination_compound_id' => 'required|exists:compounds,id',
+            'destination_compound_id' => 'nullable|exists:compounds,id',
             'comments' => 'nullable'
         ];
     }

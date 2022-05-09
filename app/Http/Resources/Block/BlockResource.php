@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Block;
 
+use App\Http\Resources\Row\RowResource;
 use App\Http\Resources\Rule\RuleResource;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;

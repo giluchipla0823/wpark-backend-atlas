@@ -23,6 +23,7 @@ class CreateVehicles extends Migration
             $table->foreignId('destination_code_id')->constrained('destination_codes');
             $table->foreignId('entry_transport_id')->constrained('transports');
             $table->foreignId('load_id')->nullable()->constrained('loads');
+            $table->foreignId('dealer_id')->nullable()->constrained('dealers');
             $table->string('eoc')->unique();
             $table->foreignId('last_rule_id')->nullable()->constrained('rules');
             $table->foreignId('shipping_rule_id')->nullable()->constrained('rules');

@@ -18,9 +18,8 @@ class CreateRules extends Migration
             $table->string('name');
             $table->integer('countdown')->nullable()->unsigned();
             $table->integer('priority')->nullable()->unsigned();
-            $table->foreignId('predefined_zone_id')->nullable()->constrained('rows'); // TODO: Verificar relaciones de esta tabla
+            $table->foreignId('predefined_zone_id')->nullable()->constrained('rows'); // TODO: Relacionar este campo con parkings
             $table->foreignId('overflow_id')->nullable()->constrained('rows');
-            $table->foreignId('next_state_id')->nullable()->constrained('states');
             $table->foreignId('carrier_id')->nullable()->constrained('carriers');
             $table->boolean('active')->default('1');
             $table->timestamps();

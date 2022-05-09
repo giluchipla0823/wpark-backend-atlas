@@ -28,8 +28,8 @@ class DestinationCodeUpdateRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'code' => "required|max:5|unique:destination_codes,code,{$id},id",
-            'route_id' => 'required|exists:routes,id',
-            'country_id' => 'required|exists:countries,id'
+            'country_id' => 'required|exists:countries,id',
+            'active' => 'required|boolean'
         ];
     }
 }

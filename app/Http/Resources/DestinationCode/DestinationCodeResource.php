@@ -20,8 +20,8 @@ class DestinationCodeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'route' => new RouteResource($this->route),
-            'country' => new CountryResource($this->country)
+            'country' => new CountryResource($this->country),
+            'active' => $this->active
         ];
     }
 }

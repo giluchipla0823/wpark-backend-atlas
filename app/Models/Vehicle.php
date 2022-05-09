@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="destination_code_id", type="integer", maxLength=20, description="Indica el código de destino del vehículo", example="1"),
  * @OA\Property(property="entry_transport_id", type="integer", maxLength=20, description="Indica el método de entrada del vehículo", example="1"),
  * @OA\Property(property="load_id", type="integer", maxLength=20, description="Indica la carga del vehículo", example=""),
+ * @OA\Property(property="dealer_id", type="integer", maxLength=20, description="Indica el distribuidor al que irá el vehículo", example="2"),
  * @OA\Property(property="eoc", type="string", maxLength=255, description="Identificador único de ford", example="5S8DQ87FZAFF090N6   WPMFKY73028  YSC B3EB  CPGD5EZJN A337C7B A6E 63  1765  MH 15"),
  * @OA\Property(property="last_rule_id", type="integer", maxLength=20, description="Indica la última regla asociada al vehículo", example="1"),
  * @OA\Property(property="shipping_rule_id", type="integer", maxLength=20, description="Indica la regla de código de destino asociada al vehículo", example="1"),
@@ -46,6 +47,7 @@ class Vehicle extends Model
         'destination_code_id',
         'entry_transport_id',
         'load_id',
+        'dealer_id',
         'eoc',
         'last_rule_id',
         'shipping_rule_id',
@@ -73,6 +75,11 @@ class Vehicle extends Model
     public function loads()
     {
         return $this->belongsTo(Load::class, 'load_id');
+    }
+
+    public function dealers()
+    {
+        return $this->belongsTo(Dealer::class, 'dealer_id');
     }
 
     public function lastRule()

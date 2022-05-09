@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\DestinationCode;
  *      @OA\Xml(
  *         name="DestinationCodeStoreRequest"
  *      ),
- *      required={"name", "code", "route_id", "country_id"}
+ *      required={"name", "code", "country_id"}
  * )
  */
 class DestinationCodeStoreRequest
@@ -36,17 +36,6 @@ class DestinationCodeStoreRequest
      * )
      */
     public $code;
-
-    /**
-     * @OA\Property(
-     *     property="route_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica la ruta del código de destino",
-     *     example="1"
-     * )
-     */
-    public $route_id;
 
     /**
      * @OA\Property(

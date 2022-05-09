@@ -17,26 +17,26 @@ class StateSeeder extends Seeder
     {
         $states = [
             [
-                'name' => 'ON TERMINAL',
-                'description' => 'Vehículos que en terminal',
+                'name' => 'ANNOUNCED',
+                'description' => 'Vehículos anunciados',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'READY',
-                'description' => 'Vehiculos que están preparados',
+                'name' => 'ON TERMINAL',
+                'description' => 'Vehiculos en terminal',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            /* [
+                'name' => 'READY',
+                'description' => 'Vehículos en movimiento',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ], */
             [
                 'name' => 'LEFT',
-                'description' => '',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'ON_ROUTE',
-                'description' => 'Vehículos en ruta',
+                'description' => 'Vehículos ya transportados',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Transport;
+use App\Models\RouteType;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class TransportSeeder extends Seeder
+class RouteTypeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,27 +15,24 @@ class TransportSeeder extends Seeder
      */
     public function run()
     {
-        $transports = [
+        $data = [
             [
-                'name' => 'FACTORY',
-                'active' => 1,
+                'name' => 'DEFAULT',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'TRAIN',
-                'active' => 1,
+                'name' => 'ALTERNATIVE',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'TRUCK',
-                'active' => 1,
+                'name' => 'EXCEPTION',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]
         ];
 
-        Transport::insert($transports);
+        RouteType::insert($data);
     }
 }

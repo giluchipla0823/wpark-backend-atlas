@@ -17,14 +17,22 @@ class DealerSeeder extends Seeder
     {
         $dealers = [
             [
-                'name' => 'DEALER 1',
-                'code' => 'D1',
+                'name' => 'GARATGE CENTRAL, S.A.',
+                'code' => '10010',
+                'zip_code' => '17600',
+                'city' => 'Figueres',
+                'street' => 'SANT PAU DE LA CALÇADA,9',
+                'country' => 'España',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'DEALER 2',
-                'code' => 'D2',
+                'name' => 'TARRACO CENTER, S.A.',
+                'code' => '10450',
+                'zip_code' => '43006',
+                'city' => 'Tarragona',
+                'street' => 'C/PLATA,2 (P.I. RIU CLAR)',
+                'country' => 'España',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

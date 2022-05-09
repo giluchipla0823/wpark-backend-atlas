@@ -23,12 +23,11 @@ class RouteStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        // TODO: Añadir carrier_id y dealer_id en fase 2
         return [
             'name' => 'required|max:255',
-            'code' => 'required|max:5|unique:routes,code',
+            'cdm_code' => 'required|max:5|unique:routes,cdm_code',
             'origin_compound_id' => 'required|exists:compounds,id',
-            'destination_compound_id' => 'required|exists:compounds,id',
+            'destination_compound_id' => 'nullable|exists:compounds,id',
             'comments' => 'nullable'
         ];
     }

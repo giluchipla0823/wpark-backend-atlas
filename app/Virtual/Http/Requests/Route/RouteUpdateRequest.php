@@ -2,7 +2,6 @@
 
 namespace App\Virtual\Http\Requests\Route;
 
-// TODO: Añadir carrier_id y dealer_id en fase 2
 /**
  * @OA\Schema(
  *      title="Route Update Request",
@@ -11,7 +10,7 @@ namespace App\Virtual\Http\Requests\Route;
  *      @OA\Xml(
  *         name="RouteUpdateRequest"
  *      ),
- *      required={"name", "code", "origin_compound_id", "destination_compound_id"}
+ *      required={"name", "cdm_code", "origin_compound_id"}
  * )
  */
 class RouteUpdateRequest
@@ -29,14 +28,44 @@ class RouteUpdateRequest
 
     /**
      * @OA\Property(
-     *     property="code",
+     *     property="cdm_code",
      *     type="string",
      *     maxLength=5,
      *     description="Código de la ruta",
-     *     example="ANTC1"
+     *     example="AEP"
      * )
      */
-    public $code;
+    public $cdm_code;
+
+    /**
+     * @OA\Property(
+     *     property="carrier_id",
+     *     type="integer",
+     *     maxLength=20,
+     *     description="Indica la empresa de transporte que hace la ruta",
+     *     example="1")
+     */
+    public $carrier_id;
+
+     /**
+     * @OA\Property(
+     *     property="transport_id",
+     *     type="integer",
+     *     maxLength=20,
+     *     description="Indica la método de transporte de la ruta",
+     *     example="1")
+     */
+    public $transport_id;
+
+     /**
+     * @OA\Property(
+     *     property="destination_code_id",
+     *     type="integer",
+     *     maxLength=20,
+     *     description="Indica el código de destino de la ruta",
+     *     example="1")
+     */
+    public $destination_code_id;
 
     /**
      * @OA\Property(

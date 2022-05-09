@@ -15,11 +15,10 @@ class RouteResource extends JsonResource
      */
     public function toArray($request)
     {
-        // TODO: Añadir carrier, transport y dealer en fase 2
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'code' => $this->code,
+            'cdm_code' => $this->cdm_code,
             'origin_compound' => new CompoundResource($this->originCompound),
             'destination_compound' => new CompoundResource($this->destinationCompound),
             'comments' => $this->comment

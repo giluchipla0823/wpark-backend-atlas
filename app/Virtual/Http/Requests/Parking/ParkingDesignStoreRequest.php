@@ -32,7 +32,7 @@ class ParkingDesignStoreRequest
      *     type="integer",
      *     maxLength=20,
      *     description="Indica el área al que pertenece el parking",
-     *     example="1"
+     *     example="2"
      * )
      */
     public $area_id;
@@ -54,21 +54,40 @@ class ParkingDesignStoreRequest
      *     type="array",
      *     @OA\Items(
      *          @OA\Property(
-     *                    property="count",
-     *                    type="integer",
-     *                    example="5",
-     *               ),
-     *              @OA\Property(
-     *                    property="slots",
-     *                    type="array",
-     *                    @OA\Items(
-     *                        type="integer",
-     *                    ),
-     *                    example="[10,5,10]"
-     *               ),
+     *               property="slots",
+     *               type="integer",
+     *               example="10",
+     *          ),
+     *          @OA\Property(
+     *               property="block_id",
+     *               type="integer",
+     *               example="2"
+     *          ),
      *     ),
      *     @OA\Schema(type="object"),
-     *     description="Filas con sus propiedades"
+     *     description="Filas con sus propiedades",
+     *     example={
+     *          {
+     *           "slots": 10,
+     *           "block_id": 2
+     *          },
+     *          {
+     *           "slots": 10,
+     *           "block_id": 2
+     *          },
+     *          {
+     *           "slots": 10,
+     *           "block_id": null
+     *          },
+     *          {
+     *           "slots": 10,
+     *           "block_id": 2
+     *          },
+     *          {
+     *           "slots": 10,
+     *           "block_id": 2
+     *          },
+     *     }
      * )
      */
     public $rows;

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDealers extends Migration
+class CreateDestinationCodes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateDealers extends Migration
      */
     public function up()
     {
-        Schema::create('dealers', function (Blueprint $table) {
+        Schema::create('destination_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code')->unique();
-            $table->string('zip_code');
-            $table->string('city');
-            $table->string('street');
-            $table->string('country');
+            $table->string('name', 100);
+            $table->string('code', 5)->unique();
+            $table->foreignId('country_id')->constrained('countries');
+            $table->boolean('active')->default('1');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +31,6 @@ class CreateDealers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dealers');
+        Schema::dropIfExists('destination_codes');
     }
 }

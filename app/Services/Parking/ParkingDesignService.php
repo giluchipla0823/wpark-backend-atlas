@@ -2,9 +2,14 @@
 
 namespace App\Services\Parking;
 
+use App\Models\Block;
 use App\Models\ParkingType;
 use Exception;
 use App\Models\Parking;
+use App\Models\Row;
+use App\Models\Slot;
+use App\Models\Zone;
+use App\Models\Area;
 use App\Repositories\Parking\ParkingRepositoryInterface;
 use App\Repositories\Row\RowRepositoryInterface;
 use App\Repositories\Slot\SlotRepositoryInterface;
@@ -45,15 +50,29 @@ class ParkingDesignService
      */
     public function parkingDesign(array $params): Parking
     {
-        // Capacidad en mm por slot
-        $capacitymm = 4800;
-        // TODO: Ver que patrón se usa en alt_qr, como se genera y añadirlo
+
         DB::beginTransaction();
 
         try {
+            /* Comprobamos si el parking va a ser de presorting o no a través del área,
+            si es de presorting cambiamos el campo "presorting" a true para automáticamente
+            ponerle el bloque de presorting a las filas de ese parking */
+            $presorting = false;
+
+            $area = Area::where('id', $params['area_id'])->first();
+
+            if($area->zone_id == Zone::PRESORTING){
+                $presorting = true;
+                $presorting_block = Block::where('is_presorting', 1)->first();
+            }
+
             // Calcular la capacidad del parking
-            $params['capacity'] = $params['parking_type_id'] != 3 ? array_sum($params['rows']['slots']) : null;
-            $params['fill'] = $params['parking_type_id'] != 3 ? 0 : null;
+            $params['capacity'] = 0;
+            foreach($params['rows'] as $row){
+                $params['capacity'] += $row['slots'];
+            }
+            $params['capacity'] = $params['parking_type_id'] != ParkingType::TYPE_UNLIMITED ? $params['capacity'] : null;
+            $params['fill'] = $params['parking_type_id'] != ParkingType::TYPE_UNLIMITED ? 0 : null;
 
             // Creación del parking
             $parking = $this->parkingRepository->create($params);
@@ -65,23 +84,27 @@ class ParkingDesignService
                 // Convertimos el  qr para añadir ceros a la izquierda hasta los 3 dígitos
                 $params['qr'] = str_pad($params['qr'], 3, '0', STR_PAD_LEFT);
 
-                // Total de filas que tendrá el parking
-                $totalRows = $params['rows']['count'];
             }
 
             if ($parking->parking_type_id == ParkingType::TYPE_ESPIGA) {
-                for ($i = 1; $i <= $totalRows; $i++) {
-                    // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
-                    $row_number = str_pad($i, 3, '0', STR_PAD_LEFT);
+                foreach ($params['rows'] as $index => $fila) {
 
-                    $capacity = 1;
+                    // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
+                    $index = $index + 1;
+
+                    // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
+                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+
+                    // Establecemos la capacidad de las filas de espiga que siempre será 1
+                    $capacity = Row::ESPIGA_CAPACITY;
 
                     $row = [
                         'row_number' => $row_number,
                         'parking_id' => $parking->id,
+                        'block_id' => !$presorting ? $fila['block_id'] : $presorting_block->id,
                         'capacity' => $capacity,
-                        'capacitymm' => $capacity * $capacitymm,
-                        'alt_qr' => $i == 1 ? $params['qr'] . '.' . $row_number : null,
+                        'capacitymm' => $capacity * Slot::CAPACITY_MM,
+                        'alt_qr' => $index == 1 ? $params['qr'] . '.' . $row_number : null,
                         'active' => 1
                     ];
                     $row = $this->rowRepository->create($row);
@@ -89,35 +112,38 @@ class ParkingDesignService
                     $slot = [
                         'slot_number' => 1,
                         'row_id' => $row->id,
-                        'capacity' => 1
+                        'capacity' => $capacity
                     ];
                     $slot = $this->slotRepository->create($slot);
                 }
             }
             else if ($parking->parking_type_id == ParkingType::TYPE_ROW) {
 
-                for ($i = 0; $i < $totalRows; $i++) {
-                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
-                    $row_number = str_pad($i + 1, 3, '0', STR_PAD_LEFT);
+                foreach ($params['rows'] as $index => $fila) {
 
-                    $capacity = $params['rows']['slots'][$i];
+                    // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
+                    $index = $index + 1;
+                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
+                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
 
                     $row = [
                         'row_number' => $row_number,
                         'parking_id' => $parking->id,
-                        'capacity' => $capacity,
-                        'capacitymm' => $capacity * $capacitymm,
+                        'block_id' => !$presorting ? $fila['block_id'] : $presorting_block->id,
+                        'capacity' => $fila['slots'],
+                        'capacitymm' => $fila['slots'] * Slot::CAPACITY_MM,
                         'alt_qr' => $params['qr'] . '.' . $row_number,
                         'active' => 1
                     ];
+
                     $row = $this->rowRepository->create($row);
 
-                    for ($j = 1; $j <= $capacity; $j++) {
+                    for ($j = 1; $j <= $fila['slots']; $j++) {
                         $slot = [
                             'slot_number' => $j,
                             'row_id' => $row->id,
                             'capacity' => 1,
-                            'capacitymm' => $capacitymm
+                            'capacitymm' => Slot::CAPACITY_MM
                         ];
                         $slot = $this->slotRepository->create($slot);
                     }

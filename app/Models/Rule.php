@@ -10,14 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @OA\Schema(
  * required={"name", "active"},
- * @OA\Xml(name="Row"),
+ * @OA\Xml(name="Rule"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre de la regla", example="FORD"),
  * @OA\Property(property="countdown", type="integer", maxLength=10, description="", example="1"),
  * @OA\Property(property="priority", type="boolean", maxLength=1, description="Indica el orden de prioridad de la regla", example="1"),
  * @OA\Property(property="predefined_zone_id", type="integer", maxLength=20, description="", example="1"),
- * @OA\Property(property="overflow_id", type="integer", maxLength=20, description="", example="1"),
- * @OA\Property(property="next_state_id", type="integer", maxLength=20, description="Indica el estado al que pasará el vehículo", example="1"),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="", example="1"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si el bloqueo está activo (0: No está activo, 1: Está activo)", example="1"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
@@ -38,14 +36,11 @@ class Rule extends Model
      * @var array<int, string>
      */
 
-     // TODO: Revisar funcionalidad de los campos y relaciones de esta tabla
     protected $fillable = [
         'name',
         'countdown',
         'priority',
         'predefined_zone_id',
-        'overflow_id',
-        'next_state_id',
         'compound_id',
         'carrier_id',
         'active',
@@ -57,16 +52,6 @@ class Rule extends Model
     public function predefinedRow()
     {
         return $this->belongsTo(Row::class, 'predefined_zone_id');
-    }
-
-    public function overflowRow()
-    {
-        return $this->belongsTo(Row::class, 'overflow_id');
-    }
-
-    public function state()
-    {
-        return $this->belongsTo(State::class, 'state_id');
     }
 
     public function compound()
@@ -87,11 +72,6 @@ class Rule extends Model
     public function conditions()
     {
         return $this->belongsToMany(Condition::class, 'rules_conditions', 'rule_id', 'condition_id')->withPivot('conditionable_type', 'conditionable_id')->withTimestamps();
-    }
-
-    public function loads()
-    {
-        return $this->hasMany(Load::class, 'rule_id');
     }
 
     public function vehiclesLastRules()

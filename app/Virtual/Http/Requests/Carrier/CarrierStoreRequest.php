@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Carrier;
  *      @OA\Xml(
  *         name="CarrierStoreRequest"
  *      ),
- *      required={"name", "code"}
+ *      required={"name", "short_name", "code"}
  * )
  */
 class CarrierStoreRequest
@@ -21,10 +21,21 @@ class CarrierStoreRequest
      *     type="string",
      *     maxLength=255,
      *     description="Nombre del transportista",
-     *     example="TRANSFESA"
+     *     example="SINTAX LOGISTICA SA"
      * )
      */
     public $name;
+
+    /**
+     * @OA\Property(
+     *     property="short_name",
+     *     type="string",
+     *     maxLength=255,
+     *     description="Nombre corto del transportista",
+     *     example="SINTAX"
+     * )
+     */
+    public $short_name;
 
     /**
      * @OA\Property(
@@ -33,7 +44,7 @@ class CarrierStoreRequest
      *     minLength=3,
      *     maxLength=10,
      *     description="Código del transportista",
-     *     example="TRANS"
+     *     example="BKT9A"
      * )
      */
     public $code;

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  *
  * @OA\Schema(
- * required={"wprk", "code", "rule_id", "ready", "compound_id"},
+ * required={"wprk", "code", "ready", "compound_id"},
  * @OA\Xml(name="Load"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="wprk", type="string", maxLength=50, description="", example=""),
@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="code", type="string", maxLength=50, description="", example=""),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="", example="1"),
  * @OA\Property(property="transport_id", type="integer", maxLength=20, description="Indica el medio/transporte de entrada del vehículo", example="1"),
- * @OA\Property(property="rule_id", type="integer", maxLength=20, description="", example="1"),
  * @OA\Property(property="ready", type="boolean", maxLength=1, description="", example="1"),
  * @OA\Property(property="compound_id", type="integer", maxLength=20, description="", example="1"),
  * @OA\Property(property="processed", type="boolean", maxLength=1, description="", example="1"),
@@ -41,7 +40,6 @@ class Load extends Model
         'code',
         'carrier_id',
         'transport_id',
-        'rule_id',
         'ready',
         'compound_id',
         'processed',
@@ -58,11 +56,6 @@ class Load extends Model
     public function transport()
     {
         return $this->belongsTo(Transport::class, 'transport_id');
-    }
-
-    public function rule()
-    {
-        return $this->belongsTo(Rule::class, 'rule_id');
     }
 
     public function compound()

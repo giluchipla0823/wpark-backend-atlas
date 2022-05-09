@@ -35,6 +35,8 @@ class Row extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const ESPIGA_CAPACITY = 1;
+
     /**
      * The attributes that are mass assignable.
      *

@@ -32,6 +32,9 @@ class Slot extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Capacidad máxima por slot (en mm)
+    public const CAPACITY_MM = 4800;
+
     /**
      * The attributes that are mass assignable.
      *

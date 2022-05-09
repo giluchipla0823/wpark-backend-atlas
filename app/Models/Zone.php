@@ -26,6 +26,12 @@ class Zone extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const PLANTA = 1;
+    public const PRESORTING = 2;
+    public const CAMPA_GENERAL = 3;
+    public const EXTERNO = 4;
+    public const OVERFLOW = 5;
+
     /**
      * The attributes that are mass assignable.
      *

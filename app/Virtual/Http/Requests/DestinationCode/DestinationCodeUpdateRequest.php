@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\DestinationCode;
  *      @OA\Xml(
  *         name="DestinationCodeUpdateRequest"
  *      ),
- *      required={"name", "code", "route_id", "country_id"}
+ *      required={"name", "code", "country_id", "active"}
  * )
  */
 class DestinationCodeUpdateRequest
@@ -39,17 +39,6 @@ class DestinationCodeUpdateRequest
 
     /**
      * @OA\Property(
-     *     property="route_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica la ruta del código de destino",
-     *     example="1"
-     * )
-     */
-    public $route_id;
-
-    /**
-     * @OA\Property(
      *     property="country_id",
      *     type="integer",
      *     maxLength=20,
@@ -58,4 +47,15 @@ class DestinationCodeUpdateRequest
      * )
      */
     public $country_id;
+
+    /**
+     * @OA\Property(
+     *     property="active",
+     *     type="boolean",
+     *     maxLength=1,
+     *     description="Indica si el código de destino está activo (0: No está activo, 1: Está activo)",
+     *     example="1"
+     * )
+     */
+    public $active;
 }

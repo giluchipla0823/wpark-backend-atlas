@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Carrier;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CarrierSeeder extends Seeder
 {
@@ -15,21 +14,12 @@ class CarrierSeeder extends Seeder
      */
     public function run()
     {
-        $carriers = [
-            [
-                'name' => 'TRANSFESA',
-                'code' => 'TRANS',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'CAPSA',
-                'code' => 'CPS',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
-        ];
+        $path = public_path('sql/carriers_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
 
-        Carrier::insert($carriers);
+        $pathRelation = public_path('sql/transports_carriers_data.sql');
+        $sqlRelation = file_get_contents($pathRelation);
+        DB::unprepared($sqlRelation);
     }
 }

@@ -18,7 +18,9 @@ class CarrierResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'short_name' => $this->short_name,
             'code' => $this->code,
+            'active' => $this->active,
             'transports' => TransportResource::collection($this->transports)
         ];
     }

@@ -5865,7 +5865,8 @@
                 "required": [
                     "name",
                     "short_name",
-                    "code"
+                    "code",
+                    "active"
                 ],
                 "properties": {
                     "id": {
@@ -5880,11 +5881,23 @@
                         "maxLength": 255,
                         "example": "SINTAX LOGISTICA SA"
                     },
+                    "short_name": {
+                        "description": "Nombre corto de la empresa de transporte",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "SINTAX"
+                    },
                     "code": {
                         "description": "Código de la empresa de transporte",
                         "type": "string",
                         "maxLength": 25,
                         "example": "SINTAX"
+                    },
+                    "active": {
+                        "description": "Indica si el transportista está activo (0: No está activo, 1: Está activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -6121,7 +6134,11 @@
             "Dealer": {
                 "required": [
                     "name",
-                    "code"
+                    "code",
+                    "zip_code",
+                    "city",
+                    "street",
+                    "country"
                 ],
                 "properties": {
                     "id": {
@@ -6134,13 +6151,37 @@
                         "description": "Nombre del distribuidor",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "SINTAX LOGISTICA SA"
+                        "example": "MOTOREBRE  S.A."
                     },
                     "code": {
                         "description": "Código del distribuidor",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "BKT9A"
+                        "example": "1045V"
+                    },
+                    "zip_code": {
+                        "description": "Código postal del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "43870"
+                    },
+                    "city": {
+                        "description": "Ciudad del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AMPOSTA"
+                    },
+                    "street": {
+                        "description": "Dirección del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AVINGUDA DE SANT JAUME, S/N"
+                    },
+                    "country": {
+                        "description": "Pais del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "España"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -6177,7 +6218,6 @@
                     "weight",
                     "description",
                     "manufacturing",
-                    "hybrid",
                     "svg"
                 ],
                 "properties": {
@@ -6241,12 +6281,6 @@
                         "maxLength": 255,
                         "example": "Kuga new"
                     },
-                    "hybrid": {
-                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
-                    },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
                         "type": "boolean",
@@ -6307,16 +6341,16 @@
                         "maxLength": 5,
                         "example": "AC"
                     },
-                    "route_id": {
-                        "description": "Indica la ruta del código de destino",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
                     "country_id": {
                         "description": "Indica el país del código de destino",
                         "type": "integer",
                         "maxLength": 20,
+                        "example": "1"
+                    },
+                    "active": {
+                        "description": "Indica si el código de destino está activo (0: No está activo, 1: Está activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
                         "example": "1"
                     },
                     "deleted_at": {
@@ -6579,7 +6613,6 @@
                 "required": [
                     "wprk",
                     "code",
-                    "rule_id",
                     "ready",
                     "compound_id"
                 ],
@@ -6616,12 +6649,6 @@
                     },
                     "transport_id": {
                         "description": "Indica el medio/transporte de entrada del vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "rule_id": {
-                        "description": "",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -7071,11 +7098,12 @@
             "Route": {
                 "required": [
                     "name",
-                    "code",
+                    "cdm_code",
+                    "route_type_id",
                     "carrier_id",
                     "transport_id",
-                    "origin_compund_id",
-                    "destination_compound_id"
+                    "destination_code_id",
+                    "origin_compund_id"
                 ],
                 "properties": {
                     "id": {
@@ -7090,11 +7118,17 @@
                         "maxLength": 255,
                         "example": "ANTWERP CHINA"
                     },
-                    "code": {
+                    "cdm_code": {
                         "description": "Código de la ruta",
                         "type": "string",
                         "maxLength": 5,
                         "example": "ANTC1"
+                    },
+                    "route_type_id": {
+                        "description": "Indica el tipo de ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
                     },
                     "carrier_id": {
                         "description": "Indica la empresa de transporte que hace la ruta",
@@ -7104,6 +7138,12 @@
                     },
                     "transport_id": {
                         "description": "Indica el medio/transporte de salida del vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_code_id": {
+                        "description": "Indica el código de destino de la ruta",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -7119,12 +7159,6 @@
                         "type": "integer",
                         "maxLength": 20,
                         "example": "2"
-                    },
-                    "dealer_id": {
-                        "description": "Indica el distribuidor de la ruta",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
                     },
                     "comments": {
                         "description": "Comentarios sobre la ruta",
@@ -7153,6 +7187,47 @@
                 "type": "object",
                 "xml": {
                     "name": "Route"
+                }
+            },
+            "RouteType": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "maxLength": 20,
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "name": {
+                        "description": "Nombre del tipo de ruta",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "DEFAULT"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha y hora del borrado temporal",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-12-09 11:20:01"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de la creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-07 09:41:35"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última modificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-09 11:20:01"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RouteType"
                 }
             },
             "Row": {
@@ -7288,18 +7363,6 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "overflow_id": {
-                        "description": "",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "next_state_id": {
-                        "description": "Indica el estado al que pasará el vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
                     "carrier_id": {
                         "description": "",
                         "type": "integer",
@@ -7333,7 +7396,7 @@
                 },
                 "type": "object",
                 "xml": {
-                    "name": "Row"
+                    "name": "Rule"
                 }
             },
             "Slot": {
@@ -7731,6 +7794,12 @@
                         "type": "integer",
                         "maxLength": 20,
                         "example": ""
+                    },
+                    "dealer_id": {
+                        "description": "Indica el distribuidor al que irá el vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
                     },
                     "eoc": {
                         "description": "Identificador único de ford",
@@ -8178,6 +8247,7 @@
                 "description": "Carrier Store request body data",
                 "required": [
                     "name",
+                    "short_name",
                     "code"
                 ],
                 "properties": {
@@ -8185,14 +8255,20 @@
                         "description": "Nombre del transportista",
                         "type": "string",
                         "maxLength": 255,
-                        "example": "TRANSFESA"
+                        "example": "SINTAX LOGISTICA SA"
+                    },
+                    "short_name": {
+                        "description": "Nombre corto del transportista",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "SINTAX"
                     },
                     "code": {
                         "description": "Código del transportista",
                         "type": "string",
                         "maxLength": 10,
                         "minLength": 3,
-                        "example": "TRANS"
+                        "example": "BKT9A"
                     }
                 },
                 "type": "object",
@@ -8205,11 +8281,19 @@
                 "description": "Carrier Update request body data",
                 "required": [
                     "name",
-                    "code"
+                    "short_name",
+                    "code",
+                    "active"
                 ],
                 "properties": {
                     "name": {
                         "description": "Nombre del transportista",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "TRANSFESA LOGÍSTICA S.L."
+                    },
+                    "short_name": {
+                        "description": "Nombre corto del transportista",
                         "type": "string",
                         "maxLength": 255,
                         "example": "TRANSFESA"
@@ -8220,6 +8304,12 @@
                         "maxLength": 10,
                         "minLength": 3,
                         "example": "TRANS"
+                    },
+                    "active": {
+                        "description": "Indica si el transportista está activo (0: No está activo, 1: Está activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     }
                 },
                 "type": "object",
@@ -8487,7 +8577,6 @@
                     "height",
                     "weight",
                     "description",
-                    "hybrid",
                     "manufacturing"
                 ],
                 "properties": {
@@ -8544,12 +8633,6 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "Kuga new"
-                    },
-                    "hybrid": {
-                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
                     },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
@@ -8580,7 +8663,6 @@
                     "height",
                     "weight",
                     "description",
-                    "hybrid",
                     "manufacturing"
                 ],
                 "properties": {
@@ -8638,12 +8720,6 @@
                         "maxLength": 255,
                         "example": "Kuga new"
                     },
-                    "hybrid": {
-                        "description": "Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
-                    },
                     "manufacturing": {
                         "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
                         "type": "boolean",
@@ -8667,7 +8743,6 @@
                 "required": [
                     "name",
                     "code",
-                    "route_id",
                     "country_id"
                 ],
                 "properties": {
@@ -8682,12 +8757,6 @@
                         "type": "string",
                         "maxLength": 5,
                         "example": "AC"
-                    },
-                    "route_id": {
-                        "description": "Indica la ruta del código de destino",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
                     },
                     "country_id": {
                         "description": "Indica el país del código de destino",
@@ -8707,8 +8776,8 @@
                 "required": [
                     "name",
                     "code",
-                    "route_id",
-                    "country_id"
+                    "country_id",
+                    "active"
                 ],
                 "properties": {
                     "name": {
@@ -8723,16 +8792,16 @@
                         "maxLength": 5,
                         "example": "AC"
                     },
-                    "route_id": {
-                        "description": "Indica la ruta del código de destino",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
                     "country_id": {
                         "description": "Indica el país del código de destino",
                         "type": "integer",
                         "maxLength": 20,
+                        "example": "1"
+                    },
+                    "active": {
+                        "description": "Indica si el código de destino está activo (0: No está activo, 1: Está activo)",
+                        "type": "boolean",
+                        "maxLength": 1,
                         "example": "1"
                     }
                 },
@@ -8851,7 +8920,7 @@
                         "description": "Indica el área al que pertenece el parking",
                         "type": "integer",
                         "maxLength": 20,
-                        "example": "1"
+                        "example": "2"
                     },
                     "parking_type_id": {
                         "description": "Indica el tipo de parking",
@@ -8864,20 +8933,39 @@
                         "type": "array",
                         "items": {
                             "properties": {
-                                "count": {
-                                    "type": "integer",
-                                    "example": "5"
-                                },
                                 "slots": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "integer"
-                                    },
-                                    "example": "[10,5,10]"
+                                    "type": "integer",
+                                    "example": "10"
+                                },
+                                "block_id": {
+                                    "type": "integer",
+                                    "example": "2"
                                 }
                             },
                             "type": "object"
-                        }
+                        },
+                        "example": [
+                            {
+                                "slots": 10,
+                                "block_id": 2
+                            },
+                            {
+                                "slots": 10,
+                                "block_id": 2
+                            },
+                            {
+                                "slots": 10,
+                                "block_id": null
+                            },
+                            {
+                                "slots": 10,
+                                "block_id": 2
+                            },
+                            {
+                                "slots": 10,
+                                "block_id": 2
+                            }
+                        ]
                     },
                     "qr": {
                         "description": "Parte izquierda del código qr pertenciente al parking",
@@ -8970,9 +9058,8 @@
                 "description": "Route Store request body data",
                 "required": [
                     "name",
-                    "code",
-                    "origin_compound_id",
-                    "destination_compound_id"
+                    "cdm_code",
+                    "origin_compound_id"
                 ],
                 "properties": {
                     "name": {
@@ -8981,11 +9068,29 @@
                         "maxLength": 255,
                         "example": "ANTWERP CHINA"
                     },
-                    "code": {
+                    "cdm_code": {
                         "description": "Código de la ruta",
                         "type": "string",
                         "maxLength": 5,
-                        "example": "ANTC1"
+                        "example": "AEP"
+                    },
+                    "carrier_id": {
+                        "description": "Indica la empresa de transporte que hace la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "transport_id": {
+                        "description": "Indica la método de transporte de la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_code_id": {
+                        "description": "Indica el código de destino de la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
                     },
                     "origin_compound_id": {
                         "description": "Indica la campa de origen",
@@ -9015,9 +9120,8 @@
                 "description": "Route Update request body data",
                 "required": [
                     "name",
-                    "code",
-                    "origin_compound_id",
-                    "destination_compound_id"
+                    "cdm_code",
+                    "origin_compound_id"
                 ],
                 "properties": {
                     "name": {
@@ -9026,11 +9130,29 @@
                         "maxLength": 255,
                         "example": "ANTWERP CHINA"
                     },
-                    "code": {
+                    "cdm_code": {
                         "description": "Código de la ruta",
                         "type": "string",
                         "maxLength": 5,
-                        "example": "ANTC1"
+                        "example": "AEP"
+                    },
+                    "carrier_id": {
+                        "description": "Indica la empresa de transporte que hace la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "transport_id": {
+                        "description": "Indica la método de transporte de la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_code_id": {
+                        "description": "Indica el código de destino de la ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
                     },
                     "origin_compound_id": {
                         "description": "Indica la campa de origen",

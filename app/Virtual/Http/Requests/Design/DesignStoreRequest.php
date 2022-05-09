@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Design;
  *      @OA\Xml(
  *         name="DesignStoreRequest"
  *      ),
- *      required={"name", "code", "brand_id", "length", "width", "height", "weight", "description", "hybrid", "manufacturing"}
+ *      required={"name", "code", "brand_id", "length", "width", "height", "weight", "description", "manufacturing"}
  * )
  */
 class DesignStoreRequest
@@ -113,17 +113,6 @@ class DesignStoreRequest
      * )
      */
     public $description;
-
-    /**
-     * @OA\Property(
-     *     property="hybrid",
-     *     type="boolean",
-     *     maxLength=1,
-     *     description="Indica si el vehículo es híbrido (0: No es híbrido, 1: Es híbrido)",
-     *     example="1"
-     * )
-     */
-    public $hybrid;
 
     /**
      * @OA\Property(
