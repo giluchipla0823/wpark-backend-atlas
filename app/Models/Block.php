@@ -35,6 +35,7 @@ class Block extends Model
     protected $fillable = [
         "name",
         "is_presorting",
+        "presorting_default",
         "active",
         "created_at",
         "updated_at",
