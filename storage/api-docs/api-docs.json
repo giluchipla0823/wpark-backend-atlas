@@ -8150,6 +8150,11 @@
                         "description": "Si el bloque es tipo presorting o normal",
                         "type": "boolean",
                         "example": "false"
+                    },
+                    "presorting_default": {
+                        "description": "Si el bloque es tipo presorting o normal",
+                        "type": "boolean",
+                        "example": "false"
                     }
                 },
                 "type": "object",
@@ -8169,6 +8174,11 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
+                    },
+                    "presorting_default": {
+                        "description": "Si el bloque es tipo presorting o normal",
+                        "type": "boolean",
+                        "example": "false"
                     }
                 },
                 "type": "object",
