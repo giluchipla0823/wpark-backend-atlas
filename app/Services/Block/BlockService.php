@@ -64,7 +64,13 @@ class BlockService
      */
     public function create(array $params): Block
     {
-        return $this->blockRepository->create($params);
+        return DB::transaction(function () use ($params) {
+            if ((bool) $params['is_presorting']) {
+                $this->blockRepository->removeAllPresortingDefault();
+            }
+
+            return $this->blockRepository->create($params);
+        });
     }
 
     /**
@@ -74,7 +80,13 @@ class BlockService
      */
     public function update(array $params, int $id): void
     {
-        $this->blockRepository->update($params, $id);
+        DB::transaction(function () use ($id, $params) {
+            if ((bool) $params['is_presorting']) {
+                $this->blockRepository->removeAllPresortingDefault();
+            }
+
+            $this->blockRepository->update($params, $id);
+        });
     }
 
     /**
