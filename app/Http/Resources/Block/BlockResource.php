@@ -20,12 +20,13 @@ class BlockResource extends JsonResource
         $relationships = array_keys($this->resource->getRelations());
 
         $response = [
-            'id' => $this->id,
-            'name' => $this->name,
-            'is_presorting' => $this->is_presorting,
-            'active' => $this->active,
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at ? Carbon::parse($this->updated_at)->format('Y-m-d H:i:s') : null,
+            "id" => $this->id,
+            "name" => $this->name,
+            "is_presorting" => (bool) $this->is_presorting,
+            "presorting_default" => $this->is_presorting ? (bool) $this->presorting_default : null,
+            "active" => (bool) $this->active,
+            "created_at" => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
+            "updated_at" => $this->updated_at ? Carbon::parse($this->updated_at)->format('Y-m-d H:i:s') : null,
         ];
 
         if (in_array('rules', $relationships)) {

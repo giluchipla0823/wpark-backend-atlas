@@ -17,6 +17,7 @@ class CreateBlocks extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_presorting')->default(0);
+            $table->boolean('presorting_default')->nullable();
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();

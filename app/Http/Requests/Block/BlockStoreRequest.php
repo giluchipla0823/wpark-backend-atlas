@@ -26,6 +26,7 @@ class BlockStoreRequest extends FormRequest
         return [
             "name" => "required|max:255",
             "is_presorting" => "required|boolean",
+            'presorting_default' => 'boolean|required_if:is_presorting,1',
         ];
     }
 }

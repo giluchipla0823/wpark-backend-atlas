@@ -3,6 +3,7 @@
 namespace App\Repositories\Block;
 
 use App\Models\Block;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Helpers\QueryParamsHelper;
 use Illuminate\Support\Collection;
@@ -41,5 +42,18 @@ class BlockRepository extends BaseRepository implements BlockRepositoryInterface
         $query = $query->orderBy($sortBy, $sortDirection);
 
         return $query->get();
+    }
+
+    /**
+     * @param array $params
+     * @return Model
+     */
+    public function create(array $params): Model
+    {
+        if (! (bool) $params['is_presorting']) {
+            unset($params['presorting_default']);
+        }
+
+        return parent::create($params);
     }
 }
