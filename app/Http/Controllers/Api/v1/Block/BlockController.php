@@ -148,7 +148,9 @@ class BlockController extends ApiController
      */
     public function update(BlockUpdateRequest $request, Block $block): JsonResponse
     {
-        $this->blockService->update($request->only(['name']), $block->id);
+        $request->request->add(['is_presorting' => $block->is_presorting]);
+
+        $this->blockService->update($request->only(['name', 'is_presorting']), $block->id);
 
         return $this->showMessage('Block updated successfully.');
     }
