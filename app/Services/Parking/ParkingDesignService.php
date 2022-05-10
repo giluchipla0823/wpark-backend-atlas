@@ -58,12 +58,21 @@ class ParkingDesignService
             si es de presorting cambiamos el campo "presorting" a true para automáticamente
             ponerle el bloque de presorting a las filas de ese parking */
             $presorting = false;
+            $presorting_block = null;
 
             $area = Area::where('id', $params['area_id'])->first();
 
             if($area->zone_id == Zone::PRESORTING){
                 $presorting = true;
-                $presorting_block = Block::where('is_presorting', 1)->first();
+
+                $presorting_block = Block::where([
+                    'is_presorting', '=' , 1,
+                    'presorting_default', '=' , 1,
+                ])->first();
+
+                if (null === $presorting_block) {
+                    $presorting_block = Block::where('is_presorting', 1)->first();
+                }
             }
 
             // Calcular la capacidad del parking
