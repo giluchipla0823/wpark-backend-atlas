@@ -66,8 +66,8 @@ class ParkingDesignService
                 $presorting = true;
 
                 $presorting_block = Block::where([
-                    'is_presorting', '=' , 1,
-                    'presorting_default', '=' , 1,
+                    ['is_presorting', '=' , 1,],
+                    ['presorting_default', '=' , 1,]
                 ])->first();
 
                 if (null === $presorting_block) {
@@ -101,8 +101,9 @@ class ParkingDesignService
                     // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
                     $index = $index + 1;
 
-                    // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
-                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+                    // // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
+                    // $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+                    $row_number = $index;
 
                     // Establecemos la capacidad de las filas de espiga que siempre será 1
                     $capacity = Row::ESPIGA_CAPACITY;
@@ -132,8 +133,9 @@ class ParkingDesignService
 
                     // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
                     $index = $index + 1;
-                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
-                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+//                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
+//                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+                    $row_number = $index;
 
                     $row = [
                         'row_number' => $row_number,
