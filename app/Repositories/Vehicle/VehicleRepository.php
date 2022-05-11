@@ -229,9 +229,14 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
 //                  ->where('fill', 1);
 //            });
             ->with(['lastMovement', 'lastMovement.destination_slot'])
-            ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
-                $q->where('row_id', $row->id)
-                    ->where('fill', 1);
+            ->whereHas('lastMovement', function (Builder $q) use ($row) {
+                $q->where('confirmed', 1)
+                    ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
+                        $q->where([
+                            ['row_id', '=', $row->id],
+                            ['fill', '=', 1],
+                        ]);
+                    });
             });
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
