@@ -3,6 +3,7 @@
 namespace App\Repositories\Vehicle;
 
 use App\Models\Row;
+use App\Models\Slot;
 use Exception;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Vehicle;
@@ -214,11 +215,22 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function findAllByRow(Row $row): Collection
     {
+//        $query = $this->model->query()
+//            ->with(['slot'])
+//            ->whereHas('slot', function (Builder $q) use ($row) {
+//                $q->where('row_id', '=', $row->id)
+//                    ->where('fill', '=', 1);
+//            });
+
         $query = $this->model->query()
-            ->with(['slot'])
-            ->whereHas('slot', function (Builder $q) use ($row) {
-                $q->where('row_id', '=', $row->id)
-                    ->where('fill', '=', 1);
+            ->with(['lastMovement.destination_slot', 'lastMovement.origin_slot'])
+            ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
+                $q->where('row_id', $row->id)
+                  ->where('fill', 1);
+            })
+            ->orWhereHas('lastMovement.origin_slot', function (Builder $q) use ($row) {
+                $q->where('row_id', $row->id)
+                    ->where('fill', 1);
             });
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
