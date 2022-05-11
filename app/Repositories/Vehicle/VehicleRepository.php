@@ -223,12 +223,13 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
 //            });
 
         $query = $this->model->query()
-            ->with(['lastMovement.destination_slot', 'lastMovement.origin_slot'])
+//            ->with(['lastMovement.destination_slot'])
+//            ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
+//                $q->where('row_id', $row->id)
+//                  ->where('fill', 1);
+//            });
+            ->with(['lastMovement', 'lastMovement.destination_slot'])
             ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
-                $q->where('row_id', $row->id)
-                  ->where('fill', 1);
-            })
-            ->orWhereHas('lastMovement.origin_slot', function (Builder $q) use ($row) {
                 $q->where('row_id', $row->id)
                     ->where('fill', 1);
             });

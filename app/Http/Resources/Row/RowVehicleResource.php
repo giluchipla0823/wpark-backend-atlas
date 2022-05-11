@@ -21,23 +21,7 @@ class RowVehicleResource extends JsonResource
             "vin" => $this->vin,
             "vin_short" => $this->vin_short,
             "eoc" => $this->eoc,
-            "slot" => $this->getCurrentSlot()
+            "slot" => $this->lastMovement ? $this->lastMovement->destination_slot : null
         ];
-    }
-
-    /**
-     * @return Slot|null
-     */
-    protected function getCurrentSlot():? Slot
-    {
-        if (!$this->lastMovement) {
-            return null;
-        }
-
-        if ($this->lastMovement->destination_slot) {
-            return $this->lastMovement->destination_slot;
-        }
-
-        return $this->lastMovement->origin_slot;
     }
 }

@@ -72,11 +72,6 @@ class Movement extends Model
         return $this->belongsTo(Rule::class, 'rule_id');
     }
 
-    public function origin_slot()
-    {
-        return $this->belongsTo(Slot::class, 'origin_position_id');
-    }
-
     public function destination_slot()
     {
         return $this->belongsTo(Slot::class, 'destination_position_id');
