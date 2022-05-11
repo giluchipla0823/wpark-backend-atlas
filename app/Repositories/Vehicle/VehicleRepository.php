@@ -231,7 +231,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             ->with(['lastMovement', 'lastMovement.destination_slot'])
             ->whereHas('lastMovement', function (Builder $q) use ($row) {
                 $q->where('confirmed', 1)
-                    ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
+                    ->whereHas('destination_slot', function (Builder $q) use ($row) {
                         $q->where([
                             ['row_id', '=', $row->id],
                             ['fill', '=', 1],
