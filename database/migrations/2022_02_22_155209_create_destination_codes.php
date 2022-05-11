@@ -18,6 +18,7 @@ class CreateDestinationCodes extends Migration
             $table->string('name', 100);
             $table->string('code', 5)->unique();
             $table->foreignId('country_id')->constrained('countries');
+            $table->string('description')->nullable()->default('NULL');
             $table->boolean('active')->default('1');
             $table->timestamps();
             $table->softDeletes();

@@ -48,4 +48,15 @@ class DestinationCodeStoreRequest
      */
     public $country_id;
 
+    /**
+     * @OA\Property(
+     *     property="description",
+     *     type="string",
+     *     maxLength=255,
+     *     description="Descripción del código de destino",
+     *     example="Código de destino para Italia"
+     * )
+     */
+    public $description;
+
 }

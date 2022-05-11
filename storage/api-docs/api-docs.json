@@ -6347,6 +6347,12 @@
                         "maxLength": 20,
                         "example": "1"
                     },
+                    "description": {
+                        "description": "Descripción del código de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Código de destino para Italia"
+                    },
                     "active": {
                         "description": "Indica si el código de destino está activo (0: No está activo, 1: Está activo)",
                         "type": "boolean",
@@ -6611,8 +6617,8 @@
             },
             "Load": {
                 "required": [
-                    "wprk",
-                    "code",
+                    "license_plate",
+                    "transport_identifier",
                     "ready",
                     "compound_id"
                 ],
@@ -6623,23 +6629,23 @@
                         "readOnly": "true",
                         "example": "1"
                     },
-                    "wprk": {
-                        "description": "",
+                    "transport_identifier": {
+                        "description": "Código de la carga/albarán",
                         "type": "string",
                         "maxLength": 50,
-                        "example": ""
+                        "example": "4529465"
                     },
-                    "oprk": {
-                        "description": "",
+                    "license_plate": {
+                        "description": "Matrícula del método de transporte",
+                        "type": "string",
+                        "maxLength": 50,
+                        "example": "45852-FRL"
+                    },
+                    "trailer_license_plate": {
+                        "description": "Matrícula del remolque del método de transporte",
                         "type": "string",
                         "maxLength": 25,
-                        "example": ""
-                    },
-                    "code": {
-                        "description": "",
-                        "type": "string",
-                        "maxLength": 50,
-                        "example": ""
+                        "example": "58463-JKI"
                     },
                     "carrier_id": {
                         "description": "",
@@ -6647,8 +6653,14 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "transport_id": {
-                        "description": "Indica el medio/transporte de entrada del vehículo",
+                    "exit_transport_id": {
+                        "description": "Indica el medio de transporte de salida del vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "compound_id": {
+                        "description": "",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6657,12 +6669,6 @@
                         "description": "",
                         "type": "boolean",
                         "maxLength": 1,
-                        "example": "1"
-                    },
-                    "compound_id": {
-                        "description": "",
-                        "type": "integer",
-                        "maxLength": 20,
                         "example": "1"
                     },
                     "processed": {
@@ -7101,7 +7107,6 @@
                     "cdm_code",
                     "route_type_id",
                     "carrier_id",
-                    "transport_id",
                     "destination_code_id",
                     "origin_compund_id"
                 ],
@@ -7132,12 +7137,6 @@
                     },
                     "carrier_id": {
                         "description": "Indica la empresa de transporte que hace la ruta",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "transport_id": {
-                        "description": "Indica el medio/transporte de salida del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -8773,6 +8772,12 @@
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
+                    },
+                    "description": {
+                        "description": "Descripción del código de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Código de destino para Italia"
                     }
                 },
                 "type": "object",
@@ -8807,6 +8812,12 @@
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
+                    },
+                    "description": {
+                        "description": "Descripción del código de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Código de destino para Italia"
                     },
                     "active": {
                         "description": "Indica si el código de destino está activo (0: No está activo, 1: Está activo)",
@@ -9069,6 +9080,9 @@
                 "required": [
                     "name",
                     "cdm_code",
+                    "route_type_id",
+                    "carrier_id",
+                    "destination_code_id",
                     "origin_compound_id"
                 ],
                 "properties": {
@@ -9078,6 +9092,12 @@
                         "maxLength": 255,
                         "example": "ANTWERP CHINA"
                     },
+                    "route_type_id": {
+                        "description": "Indica el tipo de ruta",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
                     "cdm_code": {
                         "description": "Código de la ruta",
                         "type": "string",
@@ -9086,12 +9106,6 @@
                     },
                     "carrier_id": {
                         "description": "Indica la empresa de transporte que hace la ruta",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "transport_id": {
-                        "description": "Indica la método de transporte de la ruta",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -9131,6 +9145,9 @@
                 "required": [
                     "name",
                     "cdm_code",
+                    "route_type_id",
+                    "carrier_id",
+                    "destination_code_id",
                     "origin_compound_id"
                 ],
                 "properties": {
@@ -9146,14 +9163,14 @@
                         "maxLength": 5,
                         "example": "AEP"
                     },
-                    "carrier_id": {
-                        "description": "Indica la empresa de transporte que hace la ruta",
+                    "route_type_id": {
+                        "description": "Indica el tipo de ruta",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "transport_id": {
-                        "description": "Indica la método de transporte de la ruta",
+                    "carrier_id": {
+                        "description": "Indica la empresa de transporte que hace la ruta",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"

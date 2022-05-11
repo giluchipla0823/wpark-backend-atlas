@@ -44,38 +44,4 @@ class BlockRepository extends BaseRepository implements BlockRepositoryInterface
 
         return $query->get();
     }
-
-    /**
-     * @param array $params
-     * @return Model
-     */
-    public function create(array $params): Model
-    {
-        if (! (bool) $params['is_presorting']) {
-            unset($params['presorting_default']);
-        }
-
-        return parent::create($params);
-    }
-
-    /**
-     * @param array $params
-     * @param int $id
-     * @return int|null
-     */
-    public function update(array $params, int $id): ?int
-    {
-        if (! (bool) $params['is_presorting']) {
-            unset($params['presorting_default']);
-        }
-
-        return parent::update($params, $id);
-    }
-
-    public function removeAllPresortingDefault(): void
-    {
-        DB::table($this->model->getTable())
-            ->where('is_presorting', 1)
-            ->update(['presorting_default' => 0]);
-    }
 }

@@ -28,6 +28,9 @@ class RouteUpdateRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'cdm_code' => "required|max:5|unique:routes,cdm_code,{$id},id",
+            'route_type_id' => 'required|exists:route_types,id',
+            'carrier_id' => 'required|exists:carriers,id',
+            'destination_code_id' => 'required|exists:destination_codes,id',
             'origin_compound_id' => 'required|exists:compounds,id',
             'destination_compound_id' => 'nullable|exists:compounds,id',
             'comments' => 'nullable'

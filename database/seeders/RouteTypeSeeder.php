@@ -25,11 +25,6 @@ class RouteTypeSeeder extends Seeder
                 'name' => 'ALTERNATIVE',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'EXCEPTION',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ]
         ];
 

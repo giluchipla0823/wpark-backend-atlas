@@ -19,7 +19,6 @@ class CreateRoutes extends Migration
             $table->string('cdm_code', 5)->unique();
             $table->foreignId('route_type_id')->constrained('route_types');
             $table->foreignId('carrier_id')->constrained('carriers');
-            $table->foreignId('exit_transport_id')->nullable()->contrained('transports');
             $table->foreignId('destination_code_id')->constrained('destination_codes');
             $table->foreignId('origin_compound_id')->constrained('compounds');
             $table->foreignId('destination_compound_id')->nullable()->constrained('compounds');

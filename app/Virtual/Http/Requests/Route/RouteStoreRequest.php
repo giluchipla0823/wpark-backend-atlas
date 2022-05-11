@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Route;
  *      @OA\Xml(
  *         name="RouteStoreRequest"
  *      ),
- *      required={"name", "cdm_code", "origin_compound_id"}
+ *      required={"name", "cdm_code", "route_type_id", "carrier_id", "destination_code_id", "origin_compound_id"}
  * )
  */
 class RouteStoreRequest
@@ -25,6 +25,17 @@ class RouteStoreRequest
      * )
      */
     public $name;
+
+    /**
+     * @OA\Property(
+     *     property="route_type_id",
+     *     type="integer",
+     *     maxLength=20,
+     *     description="Indica el tipo de ruta",
+     *     example="1"
+     * )
+     */
+    public $route_type_id;
 
     /**
      * @OA\Property(
@@ -46,16 +57,6 @@ class RouteStoreRequest
      *     example="1")
      */
     public $carrier_id;
-
-     /**
-     * @OA\Property(
-     *     property="transport_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica la método de transporte de la ruta",
-     *     example="1")
-     */
-    public $transport_id;
 
      /**
      * @OA\Property(

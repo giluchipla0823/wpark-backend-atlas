@@ -50,6 +50,17 @@ class DestinationCodeUpdateRequest
 
     /**
      * @OA\Property(
+     *     property="description",
+     *     type="string",
+     *     maxLength=255,
+     *     description="Descripción del código de destino",
+     *     example="Código de destino para Italia"
+     * )
+     */
+    public $description;
+
+    /**
+     * @OA\Property(
      *     property="active",
      *     type="boolean",
      *     maxLength=1,

@@ -23,16 +23,8 @@ class BlockUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $block = $this->route('block');
-
-        $rules = [
+        return [
             'name' => 'required|max:255',
         ];
-
-        if ($block->is_presorting) {
-            $rules['presorting_default'] = 'required|boolean';
-        }
-
-        return $rules;
     }
 }

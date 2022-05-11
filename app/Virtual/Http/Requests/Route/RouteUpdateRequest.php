@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Route;
  *      @OA\Xml(
  *         name="RouteUpdateRequest"
  *      ),
- *      required={"name", "cdm_code", "origin_compound_id"}
+ *      required={"name", "cdm_code", "route_type_id", "carrier_id", "destination_code_id", "origin_compound_id"}
  * )
  */
 class RouteUpdateRequest
@@ -39,6 +39,17 @@ class RouteUpdateRequest
 
     /**
      * @OA\Property(
+     *     property="route_type_id",
+     *     type="integer",
+     *     maxLength=20,
+     *     description="Indica el tipo de ruta",
+     *     example="1"
+     * )
+     */
+    public $route_type_id;
+
+    /**
+     * @OA\Property(
      *     property="carrier_id",
      *     type="integer",
      *     maxLength=20,
@@ -46,16 +57,6 @@ class RouteUpdateRequest
      *     example="1")
      */
     public $carrier_id;
-
-     /**
-     * @OA\Property(
-     *     property="transport_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica la método de transporte de la ruta",
-     *     example="1")
-     */
-    public $transport_id;
 
      /**
      * @OA\Property(

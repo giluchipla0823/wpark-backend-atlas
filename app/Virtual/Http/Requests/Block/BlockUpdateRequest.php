@@ -26,14 +26,4 @@ class BlockUpdateRequest
      */
     public $name;
 
-    /**
-     * @OA\Property(
-     *     property="presorting_default",
-     *     type="boolean",
-     *     description="Si el bloque es tipo presorting o normal",
-     *     example="false"
-     * )
-     */
-    public $presorting_default;
-
 }

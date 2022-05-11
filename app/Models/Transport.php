@@ -42,9 +42,9 @@ class Transport extends Model
         'updated_at',
     ];
 
-    public function routes()
+    public function loads()
     {
-        return $this->hasMany(Route::class, 'transport_id');
+        return $this->hasMany(Route::class, 'exit_transport_id');
     }
 
     public function vehicles()

@@ -215,28 +215,16 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function findAllByRow(Row $row): Collection
     {
-//        $query = $this->model->query()
-//            ->with(['slot'])
-//            ->whereHas('slot', function (Builder $q) use ($row) {
-//                $q->where('row_id', '=', $row->id)
-//                    ->where('fill', '=', 1);
-//            });
-
         $query = $this->model->query()
-//            ->with(['lastMovement.destination_slot'])
-//            ->whereHas('lastMovement.destination_slot', function (Builder $q) use ($row) {
-//                $q->where('row_id', $row->id)
-//                  ->where('fill', 1);
-//            });
             ->with(['lastMovement', 'lastMovement.destination_slot'])
             ->whereHas('lastMovement', function (Builder $q) use ($row) {
                 $q->where('confirmed', 1)
-                    ->whereHas('destination_slot', function (Builder $q) use ($row) {
+                  ->whereHas('destination_slot', function (Builder $q) use ($row) {
                         $q->where([
                             ['row_id', '=', $row->id],
                             ['fill', '=', 1],
                         ]);
-                    });
+                  });
             });
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());

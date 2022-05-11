@@ -61,7 +61,7 @@ class Carrier extends Model
 
     public function transports()
     {
-        return $this->belongsToMany(Transport::class, 'transports_carriers', 'transport_id', 'carriers_id')->withTimestamps();
+        return $this->belongsToMany(Transport::class, 'transports_carriers', 'transport_id', 'carrier_id')->withTimestamps();
     }
 
 }

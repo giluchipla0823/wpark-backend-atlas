@@ -9,14 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  *
  * @OA\Schema(
- * required={"name", "cdm_code", "route_type_id", "carrier_id", "transport_id", "destination_code_id", "origin_compund_id"},
+ * required={"name", "cdm_code", "route_type_id", "carrier_id", "destination_code_id", "origin_compund_id"},
  * @OA\Xml(name="Route"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre de la ruta", example="ANTWERP CHINA"),
  * @OA\Property(property="cdm_code", type="string", maxLength=5, description="Código de la ruta", example="ANTC1"),
  * @OA\Property(property="route_type_id", type="integer", maxLength=20, description="Indica el tipo de ruta", example="1"),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="Indica la empresa de transporte que hace la ruta", example="1"),
- * @OA\Property(property="transport_id", type="integer", maxLength=20, description="Indica el medio/transporte de salida del vehículo", example="1"),
  * @OA\Property(property="destination_code_id", type="integer", maxLength=20, description="Indica el código de destino de la ruta", example="1"),
  * @OA\Property(property="origin_compound_id", type="integer", maxLength=20, description="Indica la campa de origen", example="1"),
  * @OA\Property(property="destination_compound_id", type="integer", maxLength=20, description="Indica la campa de destino", example="2"),
@@ -44,7 +43,6 @@ class Route extends Model
         'cdm_code',
         'route_type_id',
         'carrier_id',
-        'transport_id',
         'destination_code_id',
         'origin_compound_id',
         'destination_compound_id',
@@ -62,11 +60,6 @@ class Route extends Model
     public function carrier()
     {
         return $this->belongsTo(Carrier::class, 'carrier_id');
-    }
-
-    public function transport()
-    {
-        return $this->belongsTo(Transport::class, 'transport_id');
     }
 
     public function destinationCode()

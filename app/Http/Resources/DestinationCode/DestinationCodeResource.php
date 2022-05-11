@@ -21,6 +21,7 @@ class DestinationCodeResource extends JsonResource
             'name' => $this->name,
             'code' => $this->code,
             'country' => new CountryResource($this->country),
+            'description' => $this->description,
             'active' => $this->active
         ];
     }

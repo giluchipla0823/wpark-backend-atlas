@@ -150,7 +150,7 @@ class BlockController extends ApiController
     {
         $request->merge(['is_presorting' => $block->is_presorting]);
 
-        $this->blockService->update($request->all(), $block->id);
+        $this->blockService->update($request->only(['name', 'is_presorting']), $block->id);
 
         return $this->showMessage('Block updated successfully.');
     }

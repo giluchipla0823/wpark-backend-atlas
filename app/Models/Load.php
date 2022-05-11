@@ -9,16 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  *
  * @OA\Schema(
- * required={"wprk", "code", "ready", "compound_id"},
+ * required={"license_plate", "transport_identifier", "ready", "compound_id"},
  * @OA\Xml(name="Load"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
- * @OA\Property(property="wprk", type="string", maxLength=50, description="", example=""),
- * @OA\Property(property="oprk", type="string", maxLength=25, description="", example=""),
- * @OA\Property(property="code", type="string", maxLength=50, description="", example=""),
+ * @OA\Property(property="transport_identifier", type="string", maxLength=50, description="Código de la carga/albarán", example="4529465"),
+ * @OA\Property(property="license_plate", type="string", maxLength=50, description="Matrícula del método de transporte", example="45852-FRL"),
+ * @OA\Property(property="trailer_license_plate", type="string", maxLength=25, description="Matrícula del remolque del método de transporte", example="58463-JKI"),
  * @OA\Property(property="carrier_id", type="integer", maxLength=20, description="", example="1"),
- * @OA\Property(property="transport_id", type="integer", maxLength=20, description="Indica el medio/transporte de entrada del vehículo", example="1"),
- * @OA\Property(property="ready", type="boolean", maxLength=1, description="", example="1"),
+ * @OA\Property(property="exit_transport_id", type="integer", maxLength=20, description="Indica el medio de transporte de salida del vehículo", example="1"),
  * @OA\Property(property="compound_id", type="integer", maxLength=20, description="", example="1"),
+ * @OA\Property(property="ready", type="boolean", maxLength=1, description="", example="1"),
  * @OA\Property(property="processed", type="boolean", maxLength=1, description="", example="1"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),
@@ -33,15 +33,14 @@ class Load extends Model
 {
     use HasFactory, SoftDeletes;
 
-     // TODO: Revisar funcionalidad de los campos y relaciones de esta tabla
     protected $fillable = [
-        'wprk',
-        'oprk',
-        'code',
+        'transport_identifier',
+        'license_plate',
+        'trailer_license_plate',
         'carrier_id',
-        'transport_id',
-        'ready',
+        'exit_transport_id',
         'compound_id',
+        'ready',
         'processed',
         'deleted_at',
         'created_at',
@@ -55,7 +54,7 @@ class Load extends Model
 
     public function transport()
     {
-        return $this->belongsTo(Transport::class, 'transport_id');
+        return $this->belongsTo(Transport::class, 'exit_transport_id');
     }
 
     public function compound()
