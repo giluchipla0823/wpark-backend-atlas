@@ -77,8 +77,10 @@ class ParkingDesignService
 
             // Calcular la capacidad del parking
             $params['capacity'] = 0;
-            foreach($params['rows'] as $row){
-                $params['capacity'] += $row['slots'];
+            if ($params['parking_type_id'] != ParkingType::TYPE_UNLIMITED) {
+                foreach($params['rows'] as $row){
+                    $params['capacity'] += $row['slots'];
+                }
             }
             $params['capacity'] = $params['parking_type_id'] != ParkingType::TYPE_UNLIMITED ? $params['capacity'] : null;
             $params['fill'] = $params['parking_type_id'] != ParkingType::TYPE_UNLIMITED ? 0 : null;
