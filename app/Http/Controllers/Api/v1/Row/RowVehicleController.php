@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1\Row;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Row;
-use App\Services\Vehicle\VehicleService;
+use App\Services\Application\Vehicle\VehicleService;
 use Illuminate\Http\JsonResponse;
 
 class RowVehicleController extends ApiController

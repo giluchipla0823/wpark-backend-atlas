@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\State;
 
-use App\Models\State;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\State\StateService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\State\StateStoreRequest;
 use App\Http\Requests\State\StateUpdateRequest;
+use App\Models\State;
+use App\Services\Application\State\StateService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class StateController extends ApiController
 {

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  *
  * @OA\Schema(
- * required={"name", "code", "brand_id", "length", "width", "height", "weight", "description", "manufacturing", "svg"},
+ * required={"name", "code", "brand_id", "length", "width", "height", "weight", "manufacturing", "svg"},
  * @OA\Xml(name="Design"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="name", type="string", maxLength=255, description="Nombre del modelo", example="KUGA 2021"),
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="height", type="integer", maxLength=10, description="Altura del modelo", example="1661"),
  * @OA\Property(property="weight", type="integer", maxLength=10, description="Peso del modelo", example="1580"),
  * @OA\Property(property="description", type="string", maxLength=255, description="Descripción del modelo", example="Kuga new"),
- * @OA\Property(property="manufacturing", type="boolean", maxLength=1, description="Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)", example="1"),
+ * @OA\Property(property="manufacturing", type="boolean", maxLength=1, description="Indica si el modelo es importado o fabricado en campa (0: Importado, 1: Fabricado)", example="1"),
  * @OA\Property(property="svg", type="string", description="Imagen del modelo", example="<svg>...</svg>"),
  * @OA\Property(property="deleted_at", type="string", format="date-time", description="Fecha y hora del borrado temporal", example="2021-12-09 11:20:01"),
  * @OA\Property(property="created_at", type="string", format="date-time", description="Fecha y hora de la creación", example="2021-09-07 09:41:35"),

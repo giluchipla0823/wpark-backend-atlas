@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\DestinationCode;
 
-use App\Models\DestinationCode;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\DestinationCode\DestinationCodeService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\DestinationCode\DestinationCodeStoreRequest;
 use App\Http\Requests\DestinationCode\DestinationCodeUpdateRequest;
+use App\Models\DestinationCode;
+use App\Services\Application\DestinationCode\DestinationCodeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DestinationCodeController extends ApiController
 {

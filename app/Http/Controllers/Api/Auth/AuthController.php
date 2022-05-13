@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Auth\AuthService;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Auth\ForgotPasswordResetRequest;
 use App\Http\Requests\Auth\ForgotPasswordSendRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Services\Application\Auth\AuthService;
+use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AuthController extends ApiController
 {

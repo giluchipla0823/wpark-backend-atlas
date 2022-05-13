@@ -16,9 +16,6 @@ class RuleUpdateRequest extends FormRequest
         return true;
     }
 
-    // TODO: Filtrar para que solo pueden añadirse condiciones del modelo Rule
-    // TODO: Falta añadir relaciones, pendiente de video de Vicente para sacarlas
-    // TODO: Validar que los conditionable_id existen en sus respectivas tablas
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,13 +23,19 @@ class RuleUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'name' => 'required|max:255',
-            'priority' => 'required|integer|min:1',
+            'priority' => 'required_if:is_group,0|integer|min:1',
+            'is_group' => 'required|boolean',
+            'predefined_zone_id' => 'nullable|exists:parkings,id',
+            'carrier_id' => 'required_if:is_group,0|exists:carriers,id',
+            'block_id' => 'nullable|exists:blocks,id,is_presorting,0',
+            'conditions' => 'required_if:is_group,0|array',
+            'rules' => 'required_if:is_group,1|array',
+            'rules.*' => 'required_if:is_group,1|exists:rules,id,is_group,0',
             'active' => 'required|boolean',
-            'blocks' => 'required|array',
-            'blocks.*' => 'exists:blocks,id',
-            'conditions' => 'required|array',
         ];
     }
+
 }

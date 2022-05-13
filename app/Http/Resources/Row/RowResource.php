@@ -33,6 +33,7 @@ class RowResource extends JsonResource
             'fill_type' => AppHelper::getFillTypeToParkingOrRow($fillPercentage),
             'capacitymm' => $this->capacitymm,
             'fillmm' => $this->fillmm,
+            'full' => $this->full,
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
             'active' => $this->active

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Design;
 
-use App\Models\Design;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Design\DesignService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Design\DesignStoreRequest;
 use App\Http\Requests\Design\DesignUpdateRequest;
+use App\Models\Design;
+use App\Services\Application\Design\DesignService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DesignController extends ApiController
 {

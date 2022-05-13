@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
-use Illuminate\Http\JsonResponse;
-use App\Services\Vehicle\VehicleStageService;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleStageRequest;
 use App\Models\Vehicle;
+use App\Services\Application\Vehicle\VehicleStageService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class VehicleStageController extends ApiController
 {
@@ -34,7 +35,7 @@ class VehicleStageController extends ApiController
      *          required=true,
      *          @OA\JsonContent(ref="#/components/schemas/VehicleStageRequest")
      *     ),
-     *     @OA\Response(response=200, description="Vehicle created or updated successfully."),
+     *     @OA\Response(response=201, description="OK"),
      *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
@@ -50,6 +51,6 @@ class VehicleStageController extends ApiController
     {
         $this->vehicleStageService->vehicleStage($request->all());
 
-        return $this->showMessage('Vehicle created or updated successfully.');
+        return $this->showMessage('OK', Response::HTTP_CREATED);
     }
 }

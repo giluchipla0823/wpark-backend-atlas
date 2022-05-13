@@ -6,7 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\Carrier\CarrierStoreRequest;
 use App\Http\Requests\Carrier\CarrierUpdateRequest;
 use App\Models\Carrier;
-use App\Services\Carrier\CarrierService;
+use App\Services\Application\Carrier\CarrierService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

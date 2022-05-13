@@ -33,13 +33,40 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
     {
         $query = $this->model->query();
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
+        return $query->get();
+    }
 
-            return collect($result);
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        if ($states = $request->get('states')) {
+            $query = $query->whereHas('states', function (Builder $q) use ($states) {
+                $states = explode(',', $states);
+
+                $q->whereRaw('
+                    vehicles_states.id = (
+                        SELECT
+                            id
+                        FROM
+                            vehicles_states
+                        WHERE
+                            vehicles_states.vehicle_id = vehicles.id
+                        ORDER BY
+                            vehicles_states.created_at DESC
+                        LIMIT 1
+                    )
+                ');
+
+                $q->whereIn('state_id', $states);
+            });
         }
 
-        return $query->get();
+        return Datatables::customizable($query)->response();
     }
 
     /**

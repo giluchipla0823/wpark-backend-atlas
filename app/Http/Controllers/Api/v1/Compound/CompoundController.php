@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Compound;
 
-use App\Models\Compound;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Compound\CompoundService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Compound\CompoundStoreRequest;
 use App\Http\Requests\Compound\CompoundUpdateRequest;
+use App\Models\Compound;
+use App\Services\Application\Compound\CompoundService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CompoundController extends ApiController
 {

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Route;
 
-use App\Models\Route;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Route\RouteService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Route\RouteStoreRequest;
 use App\Http\Requests\Route\RouteUpdateRequest;
+use App\Models\Route;
+use App\Services\Application\Route\RouteService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class RouteController extends ApiController
 {

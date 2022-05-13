@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1\Parking;
 
 use App\Http\Controllers\ApiController;
 use App\Models\Parking;
-use App\Services\Row\RowService;
+use App\Services\Application\Row\RowService;
 use Illuminate\Http\JsonResponse;
 
 class ParkingRowController extends ApiController

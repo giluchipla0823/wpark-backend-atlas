@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1\Parking;
 
-use Illuminate\Http\JsonResponse;
-use App\Services\Parking\ParkingDesignService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Parking\ParkingDesignStoreRequest;
+use App\Services\Application\Parking\ParkingDesignService;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ParkingDesignController extends ApiController
 {

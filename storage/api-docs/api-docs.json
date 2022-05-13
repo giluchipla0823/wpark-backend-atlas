@@ -738,57 +738,6 @@
                 ]
             }
         },
-        "/api/v1/blocks/{block}/rows/{row}/unlink": {
-            "patch": {
-                "tags": [
-                    "Blocks"
-                ],
-                "summary": "Unlink block of row",
-                "description": "Unlink block of row",
-                "operationId": "unlinkBlocksRows",
-                "parameters": [
-                    {
-                        "name": "block",
-                        "in": "path",
-                        "description": "ID of block",
-                        "required": true,
-                        "example": "1"
-                    },
-                    {
-                        "name": "row",
-                        "in": "path",
-                        "description": "ID of row",
-                        "required": true,
-                        "example": "1"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Unlink Block Successfully"
-                    },
-                    "400": {
-                        "description": "The selected row is not in the specified block."
-                    },
-                    "404": {
-                        "description": "Block or Row not found."
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/Forbidden"
-                    },
-                    "500": {
-                        "$ref": "#/components/responses/InternalServerError"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/v1/brands": {
             "get": {
                 "tags": [
@@ -3621,6 +3570,101 @@
                 ]
             }
         },
+        "/api/v1/rows/{row}/blocks/{block}": {
+            "patch": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Update block to row",
+                "description": "Update block to row",
+                "operationId": "updateRowsBlocks",
+                "parameters": [
+                    {
+                        "name": "row",
+                        "in": "path",
+                        "description": "ID of row",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "block",
+                        "in": "path",
+                        "description": "ID of block",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update Block to Row Successfully"
+                    },
+                    "400": {
+                        "description": "The selected row is not in the specified block."
+                    },
+                    "404": {
+                        "description": "Block or Row not found."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rows/{row}/blocks/unlink": {
+            "patch": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Unlink block of row",
+                "description": "Unlink block of row",
+                "operationId": "unlinkRowsBlocks",
+                "parameters": [
+                    {
+                        "name": "row",
+                        "in": "path",
+                        "description": "ID of row",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unlink Block of Row Successfully"
+                    },
+                    "400": {
+                        "description": "The selected row is not in the specified block."
+                    },
+                    "404": {
+                        "description": "Block or Row not found."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/rows": {
             "get": {
                 "tags": [
@@ -5284,6 +5328,44 @@
                 ]
             }
         },
+        "/api/v1/vehicles/datatables": {
+            "post": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Vehicles List",
+                "description": "List of vehicles with datatables",
+                "operationId": "datatablesVehicles",
+                "parameters": [
+                    {
+                        "name": "states",
+                        "in": "query",
+                        "description": "Filtrar por states",
+                        "required": false,
+                        "example": "2"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vehicle list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/vehicles/{id}": {
             "get": {
                 "tags": [
@@ -5442,8 +5524,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Vehicle created or updated successfully."
+                    "201": {
+                        "description": "OK"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
@@ -5762,6 +5844,7 @@
             "Block": {
                 "required": [
                     "name",
+                    "is_presorting",
                     "active"
                 ],
                 "properties": {
@@ -5776,6 +5859,18 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
+                    },
+                    "is_presorting": {
+                        "description": "Indica si el bloque es de presorting (0: No es presorting, 1: Es presorting)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
+                    "presorting_default": {
+                        "description": "Indica si el bloque de presorting es por defecto (0: No es por defecto, 1: Es por defecto)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     },
                     "active": {
                         "description": "Indica si el bloque está activo (0: No está activo, 1: Está activo)",
@@ -5937,24 +6032,25 @@
                         "example": "1"
                     },
                     "name": {
-                        "description": "Nombre del color",
+                        "description": "Nombre específico del color",
                         "type": "string",
                         "maxLength": 255,
                         "example": "RUBY RED"
                     },
                     "code": {
-                        "description": "Código de color único",
+                        "description": "Código de color",
                         "type": "string",
                         "maxLength": 255,
                         "example": "RYBB"
                     },
                     "simple_name": {
-                        "description": "Datetime marker of verification status",
+                        "description": "Nombre básico del color",
                         "type": "string",
                         "maxLength": 255,
                         "example": "RED"
                     },
                     "hex": {
+                        "description": "Código hexadecimal del color",
                         "type": "string",
                         "maxLength": 255,
                         "example": "#9b111e"
@@ -6216,7 +6312,6 @@
                     "width",
                     "height",
                     "weight",
-                    "description",
                     "manufacturing",
                     "svg"
                 ],
@@ -6282,7 +6377,7 @@
                         "example": "Kuga new"
                     },
                     "manufacturing": {
-                        "description": "Indica si el modelo está fabricado (0: No fabricado, 1: Fabricado)",
+                        "description": "Indica si el modelo es importado o fabricado en campa (0: Importado, 1: Fabricado)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
@@ -6580,7 +6675,7 @@
                         "example": "1"
                     },
                     "role_id": {
-                        "description": "Indica el rol del usuario que puede hacer uso del bloqueo",
+                        "description": "Indica el rol del usuario que puede aplicar un bloqueo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6636,7 +6731,7 @@
                         "example": "4529465"
                     },
                     "license_plate": {
-                        "description": "Matrícula del método de transporte",
+                        "description": "Matrícula principal del método de transporte",
                         "type": "string",
                         "maxLength": 50,
                         "example": "45852-FRL"
@@ -6648,31 +6743,31 @@
                         "example": "58463-JKI"
                     },
                     "carrier_id": {
-                        "description": "",
+                        "description": "Indica la empresa de transporte que realiza la carga",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
                     "exit_transport_id": {
-                        "description": "Indica el medio de transporte de salida del vehículo",
+                        "description": "Indica el medio de transporte de salida de los vehículos",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
                     "compound_id": {
-                        "description": "",
+                        "description": "Indica la campa donde se realiza la carga",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
                     "ready": {
-                        "description": "",
+                        "description": "Indica si la carga está preprada (0: No está preparada, 1: Está preparada)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
                     },
                     "processed": {
-                        "description": "",
+                        "description": "Indica si la carga ya se ha realizado (0: No se ha realizado, 1: Se ha realizado)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
@@ -6815,7 +6910,7 @@
                         "example": "1"
                     },
                     "vehicle_id": {
-                        "description": "Indica el vehículo que se está moviendo",
+                        "description": "Indica el vehículo que se mueve",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -6851,13 +6946,13 @@
                         "example": "App\\Models\\Slot"
                     },
                     "category": {
-                        "description": "Nombre de la categoría (last_rule_id) que se aplica en ese movimiento",
+                        "description": "Nombre de la categoría (shipping_rule_id) que se aplica en ese movimiento",
                         "type": "string",
                         "maxLength": 255,
                         "example": "FLUSHING"
                     },
                     "confirmed": {
-                        "description": "Indica si el movimiento se ha completado (0: No está confirmado, 1: Está confirmado)",
+                        "description": "Indica si el movimiento se ha confirmado (0: No está confirmado, 1: Está confirmado)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
@@ -6972,7 +7067,7 @@
                         "example": "400.000"
                     },
                     "full": {
-                        "description": "Indica si el parking está lleno (0: Está vacío, 1: Está lleno)",
+                        "description": "Indica si el parking está lleno (0: No está lleno, 1: Está lleno)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "0"
@@ -7286,6 +7381,12 @@
                         "maxLength": 10,
                         "example": "0"
                     },
+                    "full": {
+                        "description": "Indica si la fila está llena (0: No está llena, 1: Está llena)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
+                    },
                     "alt_qr": {
                         "description": "Código QR de la fila",
                         "type": "string",
@@ -7329,6 +7430,7 @@
             "Rule": {
                 "required": [
                     "name",
+                    "is_group",
                     "active"
                 ],
                 "properties": {
@@ -7345,31 +7447,43 @@
                         "example": "FORD"
                     },
                     "countdown": {
-                        "description": "",
+                        "description": "Número de vehículos máximo para aplicarles la regla",
                         "type": "integer",
                         "maxLength": 10,
                         "example": "1"
                     },
                     "priority": {
                         "description": "Indica el orden de prioridad de la regla",
+                        "type": "integer",
+                        "maxLength": 1,
+                        "example": "1"
+                    },
+                    "is_group": {
+                        "description": "Indica si es una regla simple o un grupo de reglas (0: Regla simple, 1: Grupo de reglas)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
+                    },
+                    "final_position": {
+                        "description": "Indica si la regla es de posición final (0: No es posición final, 1: Es posición final)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
                     },
                     "predefined_zone_id": {
-                        "description": "",
+                        "description": "Indica el parking al que va asociada la regla",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
                     "carrier_id": {
-                        "description": "",
+                        "description": "Indica el transportista por defecto asociado a la regla",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
                     },
                     "active": {
-                        "description": "Indica si el bloqueo está activo (0: No está activo, 1: Está activo)",
+                        "description": "Indica si la regla está activa (0: No está activa, 1: Está activa)",
                         "type": "boolean",
                         "maxLength": 1,
                         "example": "1"
@@ -7492,19 +7606,19 @@
                         "example": "1"
                     },
                     "name": {
-                        "description": "Nombre de la etapa",
+                        "description": "Nombre de la estación",
                         "type": "string",
                         "maxLength": 255,
                         "example": "St3"
                     },
                     "code": {
-                        "description": "Código de la etapa",
+                        "description": "Código de la estación",
                         "type": "string",
                         "maxLength": 5,
                         "example": "03"
                     },
                     "description": {
-                        "description": "Descripción de la etapa",
+                        "description": "Descripción de la estación",
                         "type": "string",
                         "maxLength": 255,
                         "example": "Stage 3 - Etapa de creación del vehículo"
@@ -7759,7 +7873,7 @@
                         "example": "WF0FXXWPMFKY73028"
                     },
                     "vin_short": {
-                        "description": "Últimos 7 dígitos del número de bastidor del vehículo",
+                        "description": "Número de bastidor corto del vehículo",
                         "type": "string",
                         "maxLength": 10,
                         "example": "KY73028"
@@ -7789,10 +7903,10 @@
                         "example": "1"
                     },
                     "load_id": {
-                        "description": "Indica la carga del vehículo",
+                        "description": "Indica la carga a la que pertenece el vehículo",
                         "type": "integer",
                         "maxLength": 20,
-                        "example": ""
+                        "example": "1"
                     },
                     "dealer_id": {
                         "description": "Indica el distribuidor al que irá el vehículo",
@@ -7807,7 +7921,7 @@
                         "example": "5S8DQ87FZAFF090N6   WPMFKY73028  YSC B3EB  CPGD5EZJN A337C7B A6E 63  1765  MH 15"
                     },
                     "last_rule_id": {
-                        "description": "Indica la última regla asociada al vehículo",
+                        "description": "Indica la última regla con mayor prioridad asociada al vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -8149,11 +8263,6 @@
                         "description": "Si el bloque es tipo presorting o normal",
                         "type": "boolean",
                         "example": "false"
-                    },
-                    "presorting_default": {
-                        "description": "Si el bloque es tipo presorting o normal",
-                        "type": "boolean",
-                        "example": "false"
                     }
                 },
                 "type": "object",
@@ -8173,11 +8282,6 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "BLOQUE ZP"
-                    },
-                    "presorting_default": {
-                        "description": "Si el bloque es tipo presorting o normal",
-                        "type": "boolean",
-                        "example": "false"
                     }
                 },
                 "type": "object",
@@ -9239,10 +9343,7 @@
                 "description": "Rule Store request body data",
                 "required": [
                     "name",
-                    "code",
-                    "priority",
-                    "blocks",
-                    "conditions"
+                    "is_group"
                 ],
                 "properties": {
                     "name": {
@@ -9257,18 +9358,43 @@
                         "maxLength": 10,
                         "example": "1"
                     },
-                    "blocks": {
-                        "description": "Id´s de los bloques que irán asociados a la regla",
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                    "is_group": {
+                        "description": "Indica si es una regla simple o un grupo de reglas (0: Regla simple, 1: Grupo de reglas)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "0"
+                    },
+                    "block_id": {
+                        "description": "Indica el bloque que va asociado la regla",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "2"
+                    },
+                    "carrier_id": {
+                        "description": "Indica el transportista por defecto que va asociado la regla",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
                     },
                     "conditions": {
                         "description": "Id´s de las condiciones que irán asociadas a la regla",
                         "type": "array",
                         "items": {
-                            "type": "integer"
+                            "properties": {
+                                "condition_id": {
+                                    "type": "integer",
+                                    "example": "3"
+                                },
+                                "conditionable_type": {
+                                    "type": "string",
+                                    "example": "App\\Models\\DestinationCode"
+                                },
+                                "conditionable_id": {
+                                    "type": "integer",
+                                    "example": "2"
+                                }
+                            },
+                            "type": "object"
                         }
                     }
                 },
@@ -9282,11 +9408,8 @@
                 "description": "Rule Update request body data",
                 "required": [
                     "name",
-                    "code",
-                    "priority",
-                    "active",
-                    "blocks",
-                    "conditions"
+                    "is_group",
+                    "active"
                 ],
                 "properties": {
                     "name": {
@@ -9301,25 +9424,50 @@
                         "maxLength": 10,
                         "example": "1"
                     },
-                    "active": {
-                        "description": "Indica si la regla está activa (0: No está activa, 1: Está activa)",
+                    "is_group": {
+                        "description": "Indica si es una regla simple o un grupo de reglas (0: Regla simple, 1: Grupo de reglas)",
                         "type": "boolean",
                         "maxLength": 1,
-                        "example": "1"
+                        "example": "0"
                     },
-                    "blocks": {
-                        "description": "Id´s de los bloques que irán asociados a la regla",
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                    "block_id": {
+                        "description": "Indica el bloque que va asociado la regla",
+                        "type": "integer",
+                        "maxLength": 10,
+                        "example": "2"
+                    },
+                    "carrier_id": {
+                        "description": "Indica el transportista por defecto que va asociado la regla",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
                     },
                     "conditions": {
                         "description": "Id´s de las condiciones que irán asociadas a la regla",
                         "type": "array",
                         "items": {
-                            "type": "integer"
+                            "properties": {
+                                "condition_id": {
+                                    "type": "integer",
+                                    "example": "3"
+                                },
+                                "conditionable_type": {
+                                    "type": "string",
+                                    "example": "App\\Models\\DestinationCode"
+                                },
+                                "conditionable_id": {
+                                    "type": "integer",
+                                    "example": "2"
+                                }
+                            },
+                            "type": "object"
                         }
+                    },
+                    "active": {
+                        "description": "Indica si la regla está activa (0: No está activa, 1: Está activa)",
+                        "type": "boolean",
+                        "maxLength": 1,
+                        "example": "1"
                     }
                 },
                 "type": "object",

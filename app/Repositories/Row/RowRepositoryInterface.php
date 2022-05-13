@@ -12,7 +12,7 @@ interface RowRepositoryInterface extends BaseRepositoryInterface
 {
     public function findAllByBlock(Block $block): Collection;
 
-    public function unlinkBlock(Row $row): void;
+    public function updateBlock(Row $row, Block $block): void;
 
     public function updateBlockToRows(Block $block, array $rows): void;
 

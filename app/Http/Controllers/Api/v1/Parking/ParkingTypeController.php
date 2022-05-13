@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Parking;
 
-use App\Models\ParkingType;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Parking\ParkingTypeService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Parking\ParkingTypeStoreRequest;
 use App\Http\Requests\Parking\ParkingTypeUpdateRequest;
+use App\Models\ParkingType;
+use App\Services\Application\Parking\ParkingTypeService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ParkingTypeController extends ApiController
 {

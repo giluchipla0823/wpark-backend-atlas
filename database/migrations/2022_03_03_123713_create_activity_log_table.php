@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateActivityLogTable extends Migration
 {
@@ -18,6 +19,7 @@ class CreateActivityLogTable extends Migration
             $table->timestamps();
             $table->index('log_name');
         });
+        DB::statement("ALTER TABLE `activity_log` comment 'Logs de acciones realizadas en la aplicación'");
     }
 
     public function down()

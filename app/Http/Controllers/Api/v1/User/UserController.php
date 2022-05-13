@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\User;
 
-use App\Http\Requests\User\UserGenerateUsernameRequest;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\User\UserService;
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\User\UserGenerateUsernameRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\User;
+use App\Services\Application\User\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends ApiController

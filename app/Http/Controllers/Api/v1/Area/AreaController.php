@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Area;
 
-use App\Models\Area;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Area\AreaService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Area\AreaStoreRequest;
 use App\Http\Requests\Area\AreaUpdateRequest;
+use App\Models\Area;
+use App\Services\Application\Area\AreaService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AreaController extends ApiController
 {

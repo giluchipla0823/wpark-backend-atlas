@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Brand;
 
-use App\Models\Brand;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Brand\BrandService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Brand\BrandStoreRequest;
 use App\Http\Requests\Brand\BrandUpdateRequest;
+use App\Models\Brand;
+use App\Services\Application\Brand\BrandService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BrandController extends ApiController
 {

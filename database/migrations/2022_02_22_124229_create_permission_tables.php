@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\PermissionRegistrar;
+use Illuminate\Support\Facades\DB;
 
 class CreatePermissionTables extends Migration
 {
@@ -33,6 +34,7 @@ class CreatePermissionTables extends Migration
 
             $table->unique(['name', 'guard_name']);
         });
+        DB::statement("ALTER TABLE `permissions` comment 'Control de permisos de usuarios'");
 
         Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
             $table->bigIncrements('id');
@@ -49,6 +51,7 @@ class CreatePermissionTables extends Migration
                 $table->unique(['name', 'guard_name']);
             }
         });
+        DB::statement("ALTER TABLE `roles` comment 'Control de roles de usuarios'");
 
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
@@ -73,6 +76,7 @@ class CreatePermissionTables extends Migration
             }
 
         });
+        DB::statement("ALTER TABLE `model_has_permissions` comment 'Tipos de permisos'");
 
         Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $teams) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotRole);
@@ -96,6 +100,7 @@ class CreatePermissionTables extends Migration
                     'model_has_roles_role_model_type_primary');
             }
         });
+        DB::statement("ALTER TABLE `model_has_roles` comment 'Tipos de roles'");
 
         Schema::create($tableNames['role_has_permissions'], function (Blueprint $table) use ($tableNames) {
             $table->unsignedBigInteger(PermissionRegistrar::$pivotPermission);
@@ -113,6 +118,7 @@ class CreatePermissionTables extends Migration
 
             $table->primary([PermissionRegistrar::$pivotPermission, PermissionRegistrar::$pivotRole], 'role_has_permissions_permission_id_role_id_primary');
         });
+        DB::statement("ALTER TABLE `role_has_permissions` comment 'Relación de roles y permisos'");
 
         app('cache')
             ->store(config('permission.cache.store') != 'default' ? config('permission.cache.store') : null)

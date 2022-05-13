@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\Row;
 
-use App\Models\Row;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Row\RowService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Row\RowStoreRequest;
 use App\Http\Requests\Row\RowUpdateRequest;
+use App\Models\Row;
+use App\Services\Application\Row\RowService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RowController extends ApiController
 {

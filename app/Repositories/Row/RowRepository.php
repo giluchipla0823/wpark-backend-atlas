@@ -49,15 +49,15 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
     }
 
     /**
-     * Desvincular el bloque actual de una fila.
-     *
      * @param Row $row
+     * @param Block|null $block
      * @return void
      */
-    public function unlinkBlock(Row $row): void {
+    public function updateBlock(Row $row, ?Block $block = null): void
+    {
         $this->model->query()
-             ->where('id', $row->id)
-             ->update(['block_id' => null]);
+            ->where('id', $row->id)
+            ->update(['block_id' => $block ? $block->id : null]);
     }
 
     /**

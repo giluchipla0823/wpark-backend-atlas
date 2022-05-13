@@ -3,6 +3,7 @@
 namespace App\Repositories\Rule;
 
 use App\Helpers\QueryParamsHelper;
+use App\Models\Block;
 use App\Models\Rule;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
@@ -54,16 +55,25 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
             // Creación de la regla y relación many to many con condiciones y bloques
             $rule = $this->model->create($params);
 
-            $rule->blocks()->sync($params['blocks']);
+            $presortingBlock = Block::where('presorting_default', 1)->first();
 
-            $conditions = $params['conditions'];
+            if (!$params['is_group']) {
 
-            foreach ($conditions as $condition) {
-                $rule->conditions()->attach($condition['condition_id'], [
-                    'conditionable_type' => $condition['conditionable_type'],
-                    'conditionable_id' => $condition['conditionable_id']
-                ]);
+                $rule->blocks()->sync([$presortingBlock->id, $params['block_id']]);
+
+                $conditions = $params['conditions'];
+
+                foreach ($conditions as $condition) {
+                    $rule->conditions()->attach($condition['condition_id'], [
+                        'conditionable_type' => $condition['conditionable_type'],
+                        'conditionable_id' => $condition['conditionable_id']
+                    ]);
+                }
+            } else {
+                $rule->rules_groups()->sync($params['rules']);
+                $rule->blocks()->sync($presortingBlock->id);
             }
+
 
             DB::commit();
         } catch (Exception $e) {
@@ -91,19 +101,23 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
             $rule = $this->model->find($id);
             $rule->update($params);
 
-            if (array_key_exists('blocks', $params) && is_array($params['blocks'])) {
-                $rule->blocks()->sync($params['blocks']);
-            }
+            $presortingBlock = Block::where('presorting_default', 1)->first();
 
-            if (array_key_exists('conditions', $params) && is_array($params['conditions'])) {
+            if (!$params['is_group']) {
+
+                $rule->blocks()->sync([$presortingBlock->id, $params['block_id']]);
+
                 $conditions = $params['conditions'];
-                $rule->conditions()->detach();
+
                 foreach ($conditions as $condition) {
-                    $rule->conditions()->attach([$condition['condition_id'] => [
+                    $rule->conditions()->attach($condition['condition_id'], [
                         'conditionable_type' => $condition['conditionable_type'],
                         'conditionable_id' => $condition['conditionable_id']
-                    ]]);
+                    ]);
                 }
+            } else {
+                $rule->rules_groups()->sync($params['rules']);
+                $rule->blocks()->sync($presortingBlock->id);
             }
 
             DB::commit();

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateFailedJobsTable extends Migration
 {
@@ -22,6 +23,7 @@ class CreateFailedJobsTable extends Migration
             $table->longText('exception');
             $table->timestamp('failed_at')->useCurrent();
         });
+        DB::statement("ALTER TABLE `failed_jobs` comment 'Control de errores de la aplicación'");
     }
 
     /**

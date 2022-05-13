@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
-use App\Models\Vehicle;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Vehicle\VehicleService;
 use App\Http\Controllers\ApiController;
+use App\Models\Vehicle;
+use App\Services\Application\Vehicle\VehicleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Vehicle\VehicleStageRequest;
 
 class VehicleController extends ApiController
 {
@@ -47,6 +46,41 @@ class VehicleController extends ApiController
     public function index(Request $request): JsonResponse
     {
         $results = $this->vehicleService->all($request);
+
+        return $this->showAll($results);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/vehicles/datatables",
+     *      tags={"Vehicles"},
+     *      summary="Vehicles List",
+     *      description="List of vehicles with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesVehicles",
+     *      @OA\Parameter(
+     *         name="states",
+     *         in="query",
+     *         description="Filtrar por states",
+     *         example="2",
+     *         required=false
+     *      ),
+     *      @OA\Response(response=200, description="Vehicle list Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $request->query->add(['datatables' => 1]);
+
+        $results = $this->vehicleService->datatables($request);
 
         return $this->showAll($results);
     }

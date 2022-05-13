@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1\Condition;
 
-use Exception;
-use App\Models\Condition;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\ApiController;
-use App\Services\Condition\ConditionService;
+use App\Models\Condition;
+use App\Services\Application\Condition\ConditionService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class ConditionModelDataController extends ApiController
 {

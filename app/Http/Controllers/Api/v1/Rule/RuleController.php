@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Rule;
 
-use App\Models\Rule;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Rule\RuleService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Rule\RuleStoreRequest;
 use App\Http\Requests\Rule\RuleUpdateRequest;
+use App\Models\Rule;
+use App\Services\Application\Rule\RuleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class RuleController extends ApiController
 {

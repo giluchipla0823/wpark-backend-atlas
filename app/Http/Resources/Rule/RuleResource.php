@@ -6,6 +6,8 @@ use JsonSerializable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Http\Resources\Block\BlockResource;
+use App\Http\Resources\Carrier\CarrierResource;
+use App\Http\Resources\Parking\ParkingResource;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\RuleCondition\RuleConditionResource;
@@ -28,6 +30,10 @@ class RuleResource extends JsonResource
             'name' => $this->name,
             'priority' => $this->priority,
             'countdown' => $this->countdown,
+            'is_group' => $this->is_group,
+            'final_position' => $this->final_position,
+            'predefined_zone' => new ParkingResource($this->parking),
+            'carrier' => new CarrierResource($this->carrier),
             'active' => $this->active,
         ];
 

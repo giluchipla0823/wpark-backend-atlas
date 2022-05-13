@@ -8,6 +8,7 @@ use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\DestinationCode\DestinationCodeResource;
 use App\Http\Resources\State\StateResource;
 use App\Http\Resources\Vehicle\StageResource;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VehicleResource extends JsonResource
@@ -28,8 +29,8 @@ class VehicleResource extends JsonResource
             'color' => new ColorResource($this->color),
             'destination_code' => new DestinationCodeResource($this->destinationCode),
             'eoc' => $this->eoc,
-            'stages' => StageResource::collection($this->latestStage),
-            'state' => StateResource::collection($this->latestState),
+            'stage' => StageResource::collection($this->latestStage)->collection->first(),
+            'state' => StateResource::collection($this->latestState)->collection->first()
         ];
     }
 }

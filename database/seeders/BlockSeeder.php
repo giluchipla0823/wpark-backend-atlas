@@ -19,12 +19,14 @@ class BlockSeeder extends Seeder
             [
                 'name' => 'BLOQUE PRESORTING',
                 'is_presorting' => 1,
+                'presorting_default' => 1,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ],
             [
                 'name' => 'BLOQUE POSICIÓN FINAL',
                 'is_presorting' => 0,
+                'presorting_default' => null,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
             ]

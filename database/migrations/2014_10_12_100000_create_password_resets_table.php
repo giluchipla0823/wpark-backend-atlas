@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreatePasswordResetsTable extends Migration
 {
@@ -18,6 +19,7 @@ class CreatePasswordResetsTable extends Migration
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
+        DB::statement("ALTER TABLE `password_resets` comment 'Control de cambios de contraseña'");
     }
 
     /**

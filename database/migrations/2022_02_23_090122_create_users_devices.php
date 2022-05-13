@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateUsersDevices extends Migration
 {
@@ -14,12 +15,13 @@ class CreateUsersDevices extends Migration
     public function up()
     {
         Schema::create('users_devices', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('device_id')->constrained('devices');
+            $table->id()->comment('Identificador único de la relación');
+            $table->foreignId('user_id')->comment('Identificador del usuario')->constrained('users');
+            $table->foreignId('device_id')->comment('Identificador del dispositivo')->constrained('devices');
             $table->timestamps();
             $table->softDeletes();
         });
+        DB::statement("ALTER TABLE `users_devices` comment 'Relación de los usuarios con los dispositivos'");
     }
 
     /**

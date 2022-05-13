@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Zone;
 
-use App\Models\Zone;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Zone\ZoneService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Zone\ZoneStoreRequest;
 use App\Http\Requests\Zone\ZoneUpdateRequest;
+use App\Models\Zone;
+use App\Services\Application\Zone\ZoneService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ZoneController extends ApiController
 {

@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="end_row", type="integer", maxLength=10, description="La fila del área en la que termina el parking", example="22"),
  * @OA\Property(property="capacity", type="integer", maxLength=10, description="Capacidad (número de slots) del parking", example="80"),
  * @OA\Property(property="fill", type="integer", maxLength=10, description="Número de slots ocupados en el parking", example="400.000"),
- * @OA\Property(property="full", type="boolean", maxLength=1, description="Indica si el parking está lleno (0: Está vacío, 1: Está lleno)", example="0"),
+ * @OA\Property(property="full", type="boolean", maxLength=1, description="Indica si el parking está lleno (0: No está lleno, 1: Está lleno)", example="0"),
  * @OA\Property(property="order", type="boolean", maxLength=1, description="Indica si se comienza a llenar desde la primera fila o la última (0: Orden Descendente, 1: Orden Ascendente)", example="1"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si el parking está activo (0: No está activo, 1: Está activo)", example="1"),
  * @OA\Property(property="comments", type="string", description="Comentarios sobre el parking", example="Este parking deberá cambiar de ubicación"),
@@ -71,5 +71,10 @@ class Parking extends Model
     public function rows()
     {
         return $this->hasMany(Row::class, 'parking_id');
+    }
+
+    public function rulesPredefinedParking()
+    {
+        return $this->hasMany(Rule::class, 'predefined_zone_id');
     }
 }

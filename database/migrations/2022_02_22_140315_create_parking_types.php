@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateParkingTypes extends Migration
 {
@@ -14,11 +15,12 @@ class CreateParkingTypes extends Migration
     public function up()
     {
         Schema::create('parking_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id()->comment('Identificador único del tipo de parking');
+            $table->string('name')->comment('Nombre del tipo de parking');
             $table->timestamps();
             $table->softDeletes();
         });
+        DB::statement("ALTER TABLE `parking_types` comment 'Tipos de parking. Pueden ser de tipo fila, espiga, ilimitado...'");
     }
 
     /**

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="fill", type="integer", maxLength=10, description="Número de slots ocupados en la fila", example="0"),
  * @OA\Property(property="capacitymm", type="integer", maxLength=10, description="Capacidad en milímetros de la fila", example="40.000"),
  * @OA\Property(property="fillmm", type="integer", maxLength=10, description="Capacidad en milímetros ocupados de la fila", example="0"),
+ * @OA\Property(property="full", type="boolean", maxLength=1, description="Indica si la fila está llena (0: No está llena, 1: Está llena)", example="0"),
  * @OA\Property(property="alt_qr", type="string", description="Código QR de la fila", example="022.001"),
  * @OA\Property(property="comments", type="string", description="Comentarios sobre la fila", example="La fila está reservada"),
  * @OA\Property(property="active", type="boolean", maxLength=1, description="Indica si la fila está activa (0: No está activa, 1: Está activa)", example="1"),
@@ -50,6 +51,7 @@ class Row extends Model
         'fill',
         'capacitymm',
         'fillmm',
+        'full',
         'alt_qr',
         'comments',
         'deleted_at',
@@ -70,11 +72,6 @@ class Row extends Model
     public function slots()
     {
         return $this->hasMany(Slot::class, 'row_id');
-    }
-
-    public function rulesPredefinedRows()
-    {
-        return $this->hasMany(Rule::class, 'predefined_zone_id');
     }
 
     public function rulesOverflowRows()

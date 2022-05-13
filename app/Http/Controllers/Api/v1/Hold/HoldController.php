@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Hold;
 
-use App\Models\Hold;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Hold\HoldService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Hold\HoldStoreRequest;
 use App\Http\Requests\Hold\HoldUpdateRequest;
+use App\Models\Hold;
+use App\Services\Application\Hold\HoldService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HoldController extends ApiController
 {

@@ -2,15 +2,16 @@
 
 namespace App\Helpers\Datatables;
 
-use Exception;
 use Yajra\DataTables\EloquentDataTable as YajraEloquentDataTable;
+use Yajra\DataTables\Exceptions\Exception as EloquentException;
 
 class EloquentDataTable extends YajraEloquentDataTable
 {
+
     /**
      * @param bool $transform
      * @return array
-     * @throws \Yajra\DataTables\Exceptions\Exception
+     * @throws EloquentException
      */
     public function response(bool $transform = false): array
     {
@@ -22,8 +23,9 @@ class EloquentDataTable extends YajraEloquentDataTable
             $processed = $this->processingResults($results, $transform);
 
             return $this->render($processed);
-        } catch (Exception $exception) {
-            return $this->errorResponse($exception);
+        } catch (EloquentException $exception) {
+            // TODO: Crear EloquentDatatableException para manejar errores de este tipo en Handler.php
+            throw $exception;
         }
     }
 

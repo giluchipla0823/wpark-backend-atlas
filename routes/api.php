@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
@@ -147,12 +148,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Block Rows
     Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
-    Route::patch('/blocks/{block}/rows/{row}/unlink', [BlockRowController::class, 'unlink'])->name('blocks-rows.unlink');
 
     // Rows
     Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
     Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
     Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');
+    Route::patch('/rows/{row}/blocks/unlink', [RowBlockController::class, 'unlink'])->name('rows-blocks.unlink');
+    Route::patch('/rows/{row}/blocks/{block}', [RowBlockController::class, 'update'])->name('rows-blocks.update');
 
     // Slots
     Route::resource('slots', SlotController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
@@ -164,6 +166,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     // Vehicles
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
     Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
+    Route::post('/vehicles/datatables', [VehicleController::class, 'datatables'])->name('vehicles.datatables');
     Route::resource('vehicles', VehicleController::class, ['except' =>['store', 'create', 'update', 'edit']]);
 
     // Transports

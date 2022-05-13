@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Transport;
 
-use App\Models\Transport;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Transport\TransportService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Transport\TransportStoreRequest;
 use App\Http\Requests\Transport\TransportUpdateRequest;
+use App\Models\Transport;
+use App\Services\Application\Transport\TransportService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransportController extends ApiController
 {

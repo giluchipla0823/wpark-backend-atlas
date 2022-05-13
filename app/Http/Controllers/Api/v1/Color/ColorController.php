@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Color;
 
-use App\Models\Color;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Color\ColorService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Color\ColorStoreRequest;
 use App\Http\Requests\Color\ColorUpdateRequest;
+use App\Models\Color;
+use App\Services\Application\Color\ColorService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ColorController extends ApiController
 {

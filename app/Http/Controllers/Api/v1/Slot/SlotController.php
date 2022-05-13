@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\Slot;
 
-use App\Models\Slot;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Slot\SlotService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Slot\SlotStoreRequest;
 use App\Http\Requests\Slot\SlotUpdateRequest;
+use App\Models\Slot;
+use App\Services\Application\Slot\SlotService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class SlotController extends ApiController
 {

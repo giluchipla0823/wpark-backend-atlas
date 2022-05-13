@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
-use App\Models\Stage;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Services\Vehicle\StageService;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Vehicle\StageStoreRequest;
 use App\Http\Requests\Vehicle\StageUpdateRequest;
+use App\Models\Stage;
+use App\Services\Application\Vehicle\StageService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class StageController extends ApiController
 {
