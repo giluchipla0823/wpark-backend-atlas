@@ -57,6 +57,17 @@ class Vehicle extends Model
         'updated_at',
     ];
 
+    protected $appends = ['category'];
+
+    /**
+     * @param $value
+     * @return string|null
+     */
+    public function getCategoryAttribute($value): string | null
+    {
+        return $this->shippingRule ? $this->shippingRule->name : null;
+    }
+
     public function design()
     {
         return $this->belongsTo(Design::class, 'design_id');

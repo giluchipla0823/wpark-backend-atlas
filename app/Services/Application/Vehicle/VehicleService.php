@@ -5,6 +5,7 @@ namespace App\Services\Application\Vehicle;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Row\RowVehicleResource;
 use App\Http\Resources\Vehicle\InfoVehicleResource;
+use App\Http\Resources\Vehicle\VehicleDatatableResource;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Http\Resources\Vehicle\VehicleStateResource;
 use App\Models\Row;
@@ -45,11 +46,13 @@ class VehicleService
     {
         $results = $this->repository->datatables($request);
 
-        $resource = VehicleResource::collection($results['data']);
+        $collection = VehicleDatatableResource::collection(
+            $results->get('data')
+        )->collection;
 
-        $results['data'] = $resource->collection->toArray();
+        $results->put('data', $collection);
 
-        return collect($results);
+        return $results;
     }
 
     /**

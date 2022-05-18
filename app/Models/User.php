@@ -85,6 +85,16 @@ class User extends Authenticatable
         return $this->hasMany(Movement::class, 'user_id');
     }
 
+    public function senderNotifications()
+    {
+        return $this->hasMany(Notification::class, 'sender_id');
+    }
+
+    public function recipientNotifications()
+    {
+        return $this->hasMany(Notification::class, 'recipient_id');
+    }
+
     /**
      * Creación de la url donde se envía el token para hacer el cambio de contraseña.
      * @param string $token

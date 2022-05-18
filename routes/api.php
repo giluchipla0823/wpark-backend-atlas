@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\v1\Block\BlockRowController;
 use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
+use App\Http\Controllers\Api\v1\Dealer\DealerController;
 use App\Http\Controllers\Api\v1\Color\ColorController;
 use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
 use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
@@ -34,6 +35,8 @@ use App\Http\Controllers\Api\v1\Slot\SlotController;
 use App\Http\Controllers\Api\v1\Vehicle\StageController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
+use App\Http\Controllers\Api\v1\Notification\NotificationController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +52,7 @@ use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
 /* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 }); */
+//Route::get('/testGet', [TestController::class, 'testGet']);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->name('password.send');
@@ -177,4 +181,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     // Carriers
     Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
     Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
+
+    // Dealers
+    Route::patch('/dealers/{id}', [DealerController::class, 'restore'])->name('dealers.restore');
+    Route::resource('dealers', DealerController::class, ['except' =>['create', 'edit']]);
+
+    // Notifications
+    Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
+    Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
+    Route::resource('notifications', NotificationController::class, ['except' =>['create', 'store', 'edit', 'update']]);
 });

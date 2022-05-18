@@ -92,4 +92,9 @@ class Rule extends Model
         return $this->belongsToMany(Rule::class, 'rules_groups', 'parent_rule_id', 'child_rule_id')->withTimestamps();
     }
 
+    public function rows()
+    {
+        return $this->hasMany(Row::class, 'rule_id');
+    }
+
 }

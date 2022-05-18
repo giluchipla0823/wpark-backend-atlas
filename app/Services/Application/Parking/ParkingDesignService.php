@@ -98,7 +98,7 @@ class ParkingDesignService
                     $index = $index + 1;
 
                     // // Convertimos el row_number para añadir ceros a la izquierda hasta los 3 dígitos
-                    // $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+                    $format_row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
                     $row_number = $index;
 
                     // Establecemos la capacidad de las filas de espiga que siempre será 1
@@ -110,7 +110,7 @@ class ParkingDesignService
                         'block_id' => !$presorting ? $fila['block_id'] : $presorting_block->id,
                         'capacity' => $capacity,
                         'capacitymm' => $capacity * Slot::CAPACITY_MM,
-                        'alt_qr' => $index == 1 ? $params['qr'] . '.' . $row_number : null,
+                        'alt_qr' => $index == 1 ? $params['qr'] . '.' . $format_row_number : null,
                         'active' => 1
                     ];
                     $row = $this->rowRepository->create($row);
@@ -130,7 +130,7 @@ class ParkingDesignService
                     // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
                     $index = $index + 1;
 //                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
-//                    $row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
+                    $format_row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
                     $row_number = $index;
 
                     $row = [
@@ -139,7 +139,7 @@ class ParkingDesignService
                         'block_id' => !$presorting ? $fila['block_id'] : $presorting_block->id,
                         'capacity' => $fila['slots'],
                         'capacitymm' => $fila['slots'] * Slot::CAPACITY_MM,
-                        'alt_qr' => $params['qr'] . '.' . $row_number,
+                        'alt_qr' => $params['qr'] . '.' . $format_row_number,
                         'active' => 1
                     ];
 

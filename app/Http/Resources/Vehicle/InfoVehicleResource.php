@@ -31,6 +31,7 @@ class InfoVehicleResource extends JsonResource
             'color' => new ColorResource($this->color),
             'states' => StateResource::collection($this->states),
             'stages' => StageResource::collection($this->stages),
+            'category' => $this->category,
             'destination_code' => new DestinationCodeResource($this->destinationCode),
             'category' => new RuleResource($this->shippingRule),
             'info' => $this->info,

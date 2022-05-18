@@ -28,9 +28,11 @@ class VehicleResource extends JsonResource
             'design' => new DesignResource($this->design),
             'color' => new ColorResource($this->color),
             'destination_code' => new DestinationCodeResource($this->destinationCode),
+            'category' => $this->category,
             'eoc' => $this->eoc,
             'stage' => StageResource::collection($this->latestStage)->collection->first(),
-            'state' => StateResource::collection($this->latestState)->collection->first()
+            'state' => StateResource::collection($this->latestState)->collection->first(),
+            'last_movement' => $this->lastMovement
         ];
     }
 }

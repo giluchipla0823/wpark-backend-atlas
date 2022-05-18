@@ -86,6 +86,7 @@ class RowController extends ApiController
     public function show(Row $row): JsonResponse
     {
         $row = $this->rowService->show($row);
+
         return $this->successResponse($row);
     }
 

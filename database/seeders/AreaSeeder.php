@@ -31,6 +31,13 @@ class AreaSeeder extends Seeder
                 'zone_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'ÁREA 3',
+                'compound_id' => Compound::inRandomOrder()->first()->id,
+                'zone_id' => 2,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
         ];
 

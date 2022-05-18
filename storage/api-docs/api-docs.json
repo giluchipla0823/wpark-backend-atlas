@@ -2116,6 +2116,230 @@
                 ]
             }
         },
+        "/api/v1/dealers": {
+            "get": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Dealers List",
+                "description": "List of dealers",
+                "operationId": "indexDealers",
+                "responses": {
+                    "200": {
+                        "description": "Dealers list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Create New Dealer",
+                "description": "Create New Dealer",
+                "operationId": "storeDealer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DealerStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Dealer"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/dealers/{id}": {
+            "get": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Show Dealer Details",
+                "description": "Show Dealer Details",
+                "operationId": "showDealer",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Dealer Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Update Dealer",
+                "description": "Update Dealer",
+                "operationId": "updateDealer",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DealerUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Update Dealer"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Delete Dealer",
+                "description": "Delete Dealer",
+                "operationId": "destroyDealer",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Dealer successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Dealers"
+                ],
+                "summary": "Restore Dealer",
+                "description": "Restore Dealer",
+                "operationId": "restoreDealer",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Dealer restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/designs": {
             "get": {
                 "tags": [
@@ -2804,6 +3028,220 @@
                 "responses": {
                     "200": {
                         "description": "Hold toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Notifications List",
+                "description": "List of notifications",
+                "operationId": "indexNotifications",
+                "parameters": [
+                    {
+                        "name": "reference_code",
+                        "in": "query",
+                        "description": "Filtrar por reference_code",
+                        "required": false,
+                        "example": "ROW_COMPLETED"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Límite de resultados",
+                        "required": false,
+                        "example": "5"
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Ordenar por campo específico",
+                        "required": false,
+                        "example": "id"
+                    },
+                    {
+                        "name": "sort_direction",
+                        "in": "query",
+                        "description": "Ordenar por orden ascendente o descendente",
+                        "required": false,
+                        "example": "desc"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notification list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notifications/datatables": {
+            "post": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Notifications List",
+                "description": "List of notifications with datatables",
+                "operationId": "datatablesNotifications",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/datatables"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notifications list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/notifications/{id}": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Show Notification Details",
+                "description": "Show Notification Details",
+                "operationId": "showNotification",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir bloques, condiciones",
+                        "required": false,
+                        "example": "blocks,conditions"
+                    },
+                    {
+                        "name": "extra_includes",
+                        "in": "query",
+                        "description": "Añadir valores de condiciones",
+                        "required": false,
+                        "example": "conditions.values"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Notification Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Delete Notification",
+                "description": "Delete Notification",
+                "operationId": "destroyNotification",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Delete Notification successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Restore Notification",
+                "description": "Restore Notification",
+                "operationId": "restoreNotification",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Notification restored successfully"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
@@ -5333,18 +5771,19 @@
                 "tags": [
                     "Vehicles"
                 ],
-                "summary": "Vehicles List",
-                "description": "List of vehicles with datatables",
+                "summary": "Vehicles List to datatables plugin",
+                "description": "List of vehicles to datatables plugin",
                 "operationId": "datatablesVehicles",
-                "parameters": [
-                    {
-                        "name": "states",
-                        "in": "query",
-                        "description": "Filtrar por states",
-                        "required": false,
-                        "example": "2"
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleDatatablesRequest"
+                            }
+                        }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Vehicle list Successfully"
@@ -7010,6 +7449,91 @@
                     "name": "Movement"
                 }
             },
+            "Notification": {
+                "required": [
+                    "sender_id",
+                    "type",
+                    "reference_code",
+                    "data"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "maxLength": 20,
+                        "readOnly": "true",
+                        "example": "1"
+                    },
+                    "sender_id": {
+                        "description": "Identificador del usuario que genera la notificación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "recipient_id": {
+                        "description": "Indentificador del usuario al que va dirigida la notificación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "type": {
+                        "description": "Clase sobre la que se ha creado la notificación",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Full row notification"
+                    },
+                    "resourceable_type": {
+                        "description": "",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "App\\Models\\Row"
+                    },
+                    "resourceable_id": {
+                        "description": "",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
+                    },
+                    "reference_code": {
+                        "description": "Código de referencia de la notificación",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "589645V"
+                    },
+                    "data": {
+                        "description": "Datos relevantes sobre la notificación",
+                        "type": "string",
+                        "example": "{'row': '004'}"
+                    },
+                    "reat_at": {
+                        "description": "Fecha y hora de cuando se ha leido la notificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-12-09 11:20:01"
+                    },
+                    "deleted_at": {
+                        "description": "Fecha y hora del borrado temporal",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-12-09 11:20:01"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de la creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-07 09:41:35"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última modificación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-09-09 11:20:01"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Notification"
+                }
+            },
             "Parking": {
                 "required": [
                     "name",
@@ -7353,6 +7877,12 @@
                     },
                     "block_id": {
                         "description": "Indica el bloque al que pertenece la fila",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "rule_id": {
+                        "description": "Indica la regla de posición final de transporte heredada del primer vehículo que se posicionó en la fila",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -8678,6 +9208,114 @@
                     "name": "CountryUpdateRequest"
                 }
             },
+            "DealerStoreRequest": {
+                "title": "Dealer Store Request",
+                "description": "Dealer Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "zip_code",
+                    "city",
+                    "street",
+                    "country"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "MOTOREBRE  S.A."
+                    },
+                    "code": {
+                        "description": "Código del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "1045V"
+                    },
+                    "zip_code": {
+                        "description": "Código postal del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "43870"
+                    },
+                    "city": {
+                        "description": "Ciudad del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AMPOSTA"
+                    },
+                    "street": {
+                        "description": "Dirección del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AVINGUDA DE SANT JAUME, S/N"
+                    },
+                    "country": {
+                        "description": "Pais del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "España"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DealerStoreRequest"
+                }
+            },
+            "DealerUpdateRequest": {
+                "title": "Dealer Update Request",
+                "description": "Dealer Update request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "zip_code",
+                    "city",
+                    "street",
+                    "country"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "MOTOREBRE  S.A."
+                    },
+                    "code": {
+                        "description": "Código del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "1045V"
+                    },
+                    "zip_code": {
+                        "description": "Código postal del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "43870"
+                    },
+                    "city": {
+                        "description": "Ciudad del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AMPOSTA"
+                    },
+                    "street": {
+                        "description": "Dirección del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "AVINGUDA DE SANT JAUME, S/N"
+                    },
+                    "country": {
+                        "description": "Pais del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "España"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DealerUpdateRequest"
+                }
+            },
             "DesignStoreRequest": {
                 "title": "Design Store Request",
                 "description": "Design Store request body data",
@@ -9765,6 +10403,21 @@
                 "type": "object",
                 "xml": {
                     "name": "UserUpdateRequest"
+                }
+            },
+            "VehicleDatatablesRequest": {
+                "title": "Vehicle Datatables Request",
+                "description": "Vehicle Stage request body data",
+                "properties": {
+                    "states": {
+                        "description": "Filtro de estados de vehículos",
+                        "type": "string",
+                        "example": "2,3,4"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "VehicleDatatatblesRequest"
                 }
             },
             "VehicleStageRequest": {

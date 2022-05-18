@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Helpers\RowHelper;
+use App\Http\Resources\Row\RowResource;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="row_number", type="integer", maxLength=10, description="Número de fila del parking", example="1"),
  * @OA\Property(property="parking_id", type="integer", maxLength=20, description="Indica el parking al que pertenece la fila", example="1"),
  * @OA\Property(property="block_id", type="integer", maxLength=20, description="Indica el bloque al que pertenece la fila", example="1"),
+ * @OA\Property(property="rule_id", type="integer", maxLength=20, description="Indica la regla de posición final de transporte heredada del primer vehículo que se posicionó en la fila", example="1"),
  * @OA\Property(property="capacity", type="integer", maxLength=10, description="Número de slots que tiene la fila", example="8"),
  * @OA\Property(property="fill", type="integer", maxLength=10, description="Número de slots ocupados en la fila", example="0"),
  * @OA\Property(property="capacitymm", type="integer", maxLength=10, description="Capacidad en milímetros de la fila", example="40.000"),
@@ -31,12 +35,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Row
  *
  */
-
 class Row extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Cantidad de slots máximo que puede tener una fila de espiga
     public const ESPIGA_CAPACITY = 1;
+
+    // Resource
+    public $notificationResource = RowResource::class;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +54,7 @@ class Row extends Model
         'row_number',
         'parking_id',
         'block_id',
+        'rule_id',
         'capacity',
         'fill',
         'capacitymm',
@@ -56,8 +64,40 @@ class Row extends Model
         'comments',
         'deleted_at',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
+
+    protected $appends = ['row_name', 'category'];
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getRowNameAttribute($value): string
+    {
+        return $this->parking->name .  "." . RowHelper::zeroFill($this->row_number);
+    }
+
+    /**
+     * @param $value
+     * @return string|null
+     */
+    public function getCategoryAttribute($value): string | null
+    {
+        return $this->rule ? $this->rule->name : null;
+    }
+
+    /**
+     * @return Attribute
+     */
+    protected function rowNumber(): Attribute
+    {
+        return new Attribute(
+            function ($value) {
+                return RowHelper::zeroFill($value);
+            }
+        );
+    }
 
     public function parking()
     {
@@ -67,6 +107,11 @@ class Row extends Model
     public function block()
     {
         return $this->belongsTo(Block::class, 'block_id');
+    }
+
+    public function rule()
+    {
+        return $this->belongsTo(Rule::class, 'rule_id');
     }
 
     public function slots()

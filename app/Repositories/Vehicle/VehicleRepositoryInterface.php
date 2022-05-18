@@ -14,6 +14,6 @@ interface VehicleRepositoryInterface extends BaseRepositoryInterface
 
     public function findAllByState(State $state): Collection;
 
-    public function datatables(Request $request): array;
+    public function datatables(Request $request): Collection;
 
 }

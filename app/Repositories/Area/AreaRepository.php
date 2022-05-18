@@ -124,4 +124,9 @@ class AreaRepository extends BaseRepository implements AreaRepositoryInterface
 
         return true;
     }
+
+    public function hello_world(): string
+    {
+        return 'hola';
+    }
 }

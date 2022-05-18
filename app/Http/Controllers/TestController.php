@@ -2,15 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RowNotification;
 use Illuminate\Http\Request;
-use App\Models\Compound;
+use App\Services\Application\Notification\NotificationService;
+use App\Http\Controllers\ApiController;
+use App\Models\Row;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TestController extends Controller
+class TestController extends ApiController
 {
-    //
-    public function test(){
-        $response = User::find(1)->compounds;
-        dd($response);
+    /**
+     * @var NotificationService
+     */
+    private $notificationService;
+
+    public function __construct(
+        NotificationService $notificationService
+    )
+    {
+        $this->notificationService = $notificationService;
     }
+
+    public function test(Request $request): JsonResponse{
+
+        $notification = $this->notificationService->create($request->all());
+        dd($notification);
+        return $this->successResponse($notification, 'Notification created successfully.', Response::HTTP_CREATED);
+    }
+
+    public function testGet(Request $request){
+
+        $row = Row::find(2);
+        $sender = User::find(2);
+        $params = [
+            'title' => 'Fila completada',
+            'message' => 'Se ha completado la fila ' . $row->parking->name . '.' . $row->row_number,
+            'item' => [
+                'id' => $row->id,
+                'name' => $row->parking->name . '.' . $row->row_number
+            ]
+        ];
+
+        event(new RowNotification($sender, $row, $params));
+    }
+
 }

@@ -19,11 +19,12 @@ class Notifications extends Migration
             $table->foreignId('sender_id')->comment('Identificador del usuario que genera la notificación')->constrained('users');
             $table->foreignId('recipient_id')->nullable()->comment('Indentificador del usuario al que va dirigida la notificación')->constrained('users');
             $table->string('type')->comment('Clase sobre la que se ha creado la notificación');
-            $table->morphs('resourceable');
+            $table->nullableMorphs('resourceable');
             $table->string('reference_code')->comment('Código de referencia de la notificación');
             $table->text('data')->comment('Datos relevantes sobre la notificación');
             $table->datetime('reat_at')->nullable()->comment('Fecha y hora de cuando se ha leido la notificación');
             $table->timestamps();
+            $table->softDeletes();
         });
         DB::statement("ALTER TABLE `notifications` comment 'Notificaciones de avisos en la aplicación'");
     }

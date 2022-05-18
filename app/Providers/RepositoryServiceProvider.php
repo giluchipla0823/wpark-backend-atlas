@@ -49,6 +49,10 @@ use App\Repositories\State\StateRepository;
 use App\Repositories\State\StateRepositoryInterface;
 use App\Repositories\Rule\RuleRepository;
 use App\Repositories\Rule\RuleRepositoryInterface;
+use App\Repositories\Dealer\DealerRepository;
+use App\Repositories\Dealer\DealerRepositoryInterface;
+use App\Repositories\Notification\NotificationRepository;
+use App\Repositories\Notification\NotificationRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -177,6 +181,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             RuleRepositoryInterface::class,
             RuleRepository::class
+        );
+
+        $this->app->bind(
+            DealerRepositoryInterface::class,
+            DealerRepository::class
+        );
+
+        $this->app->bind(
+            NotificationRepositoryInterface::class,
+            NotificationRepository::class
         );
     }
 }

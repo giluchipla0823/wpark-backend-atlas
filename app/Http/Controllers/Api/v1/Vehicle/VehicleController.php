@@ -54,16 +54,13 @@ class VehicleController extends ApiController
      * @OA\Post(
      *      path="/api/v1/vehicles/datatables",
      *      tags={"Vehicles"},
-     *      summary="Vehicles List",
-     *      description="List of vehicles with datatables",
+     *      summary="Vehicles List to datatables plugin",
+     *      description="List of vehicles to datatables plugin",
      *      security={{"sanctum": {}}},
      *      operationId="datatablesVehicles",
-     *      @OA\Parameter(
-     *         name="states",
-     *         in="query",
-     *         description="Filtrar por states",
-     *         example="2",
-     *         required=false
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(ref="#/components/schemas/VehicleDatatablesRequest")
      *      ),
      *      @OA\Response(response=200, description="Vehicle list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
