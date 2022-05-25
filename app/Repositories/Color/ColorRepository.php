@@ -23,15 +23,18 @@ class ColorRepository extends BaseRepository implements ColorRepositoryInterface
      */
     public function all(Request $request): Collection
     {
+        return $this->model->all();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
         $query = $this->model->query();
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
-
-        return $query->get();
+        return Datatables::customizable($query)->response();
     }
 
     /**

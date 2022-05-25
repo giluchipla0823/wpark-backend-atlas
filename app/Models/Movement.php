@@ -14,10 +14,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="vehicle_id", type="integer", maxLength=20, description="Indica el vehículo que se mueve", example="1"),
  * @OA\Property(property="user_id", type="integer", maxLength=20, description="Indica el usuario que está moviendo el vehículo", example="1"),
- * @OA\Property(property="origin_position_id", type="integer", maxLength=20, description="Indica la posición desde donde se hace el movimiento", example="1"),
  * @OA\Property(property="origin_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de origen", example="App\Models\Parking"),
- * @OA\Property(property="destination_position_id", type="integer", maxLength=20, description="Indica la posición haciá donde se hace el movimiento", example="2"),
+ * @OA\Property(property="origin_position_id", type="integer", maxLength=20, description="Indica la posición desde donde se hace el movimiento", example="1"),
  * @OA\Property(property="destination_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de destino", example="App\Models\Slot"),
+ * @OA\Property(property="destination_position_id", type="integer", maxLength=20, description="Indica la posición haciá donde se hace el movimiento", example="2"),
  * @OA\Property(property="category", type="string", maxLength=255, description="Nombre de la categoría (shipping_rule_id) que se aplica en ese movimiento", example="FLUSHING"),
  * @OA\Property(property="confirmed", type="boolean", maxLength=1, description="Indica si el movimiento se ha confirmado (0: No está confirmado, 1: Está confirmado)", example="1"),
  * @OA\Property(property="canceled", type="boolean", maxLength=1, description="Indica si el movimiento se ha cancelado (0: No está cancelado, 1: Está cancelado)", example="0"),
@@ -67,13 +67,14 @@ class Movement extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function rule()
+    public function originPosition()
     {
-        return $this->belongsTo(Rule::class, 'rule_id');
+        return $this->morphTo(__FUNCTION__, 'origin_position_type', 'origin_position_id');
     }
 
-    public function destination_slot()
+    public function destinationPosition()
     {
-        return $this->belongsTo(Slot::class, 'destination_position_id');
+        return $this->morphTo(__FUNCTION__, 'destination_position_type', 'destination_position_id');
     }
+
 }

@@ -21,7 +21,8 @@ class CarrierResource extends JsonResource
             'short_name' => $this->short_name,
             'code' => $this->code,
             'active' => $this->active,
-            'transports' => TransportResource::collection($this->transports)
+            'transports' => $this->transports
+            // 'transports' => TransportResource::collection($this->transports)
         ];
     }
 }

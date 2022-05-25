@@ -22,14 +22,17 @@ class CarrierRepository extends BaseRepository implements CarrierRepositoryInter
      */
     public function all(Request $request): Collection
     {
+        return $this->model->all();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
         $query = $this->model->query();
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = DataTables::customizable($query)->response();
-
-            return collect($result);
-        }
-
-        return $query->get();
+        return DataTables::customizable($query)->response();
     }
 }

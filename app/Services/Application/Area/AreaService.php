@@ -25,17 +25,16 @@ class AreaService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = AreaResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return AreaResource::collection($results)->collection;
+    }
+
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $results['data'] = AreaResource::collection($results['data'])->collection;;
+
+        return collect($results);
     }
 
     /**

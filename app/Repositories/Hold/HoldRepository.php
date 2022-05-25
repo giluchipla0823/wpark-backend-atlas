@@ -37,6 +37,17 @@ class HoldRepository extends BaseRepository implements HoldRepositoryInterface
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        return Datatables::customizable($query)->response();
+    }
+
+    /**
      * Crear Hold.
      *
      * @param array $params

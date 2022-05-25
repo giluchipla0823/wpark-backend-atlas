@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
 use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
 use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
 use App\Http\Controllers\Api\v1\Row\RowVehicleController;
 use App\Http\Controllers\Api\v1\State\StateVehicleController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\v1\User\UserController;
@@ -36,6 +36,8 @@ use App\Http\Controllers\Api\v1\Vehicle\StageController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
 use App\Http\Controllers\Api\v1\Notification\NotificationController;
+use App\Http\Controllers\Api\v1\Movement\MovementController;
+use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
 use App\Http\Controllers\TestController;
 
 /*
@@ -70,6 +72,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Users
     Route::get('/me', [UserController::class, 'me']);
+    Route::post('/users/datatables', [UserController::class, 'datatables'])->name('users.datatables');
     Route::patch('/users/{id}', [UserController::class, 'restore'])->name('users.restore');
     Route::post('/users/generate-username', [UserController::class, 'generateUsername'])->name('users.generate-username');
     Route::resource('users', UserController::class, ['except' =>['create', 'edit']]);
@@ -80,6 +83,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('colors', ColorController::class, ['except' =>['create', 'edit']]);
 
     // Compounds
+    Route::post('/compounds/datatables', [CompoundController::class, 'datatables'])->name('compounds.datatables');
     Route::patch('/compounds/{id}', [CompoundController::class, 'restore'])->name('compounds.restore');
     Route::resource('compounds', CompoundController::class, ['except' =>['create', 'edit']]);
 
@@ -88,10 +92,12 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('brands', BrandController::class, ['except' =>['create', 'edit']]);
 
     // Designs
+    Route::post('/designs/datatables', [DesignController::class, 'datatables'])->name('designs.datatables');
     Route::patch('/designs/{id}', [DesignController::class, 'restore'])->name('designs.restore');
     Route::resource('designs', DesignController::class, ['except' =>['create', 'edit']]);
 
     // Countries
+    Route::post('/countries/datatables', [CountryController::class, 'datatables'])->name('countries.datatables');
     Route::patch('/countries/{id}', [CountryController::class, 'restore'])->name('countries.restore');
     Route::resource('countries', CountryController::class, ['except' =>['create', 'edit']]);
 
@@ -100,6 +106,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('routes', RouteController::class, ['except' =>['create', 'edit']]);
 
     // Destination Codes
+    Route::post('/destination-codes/datatables', [DestinationCodeController::class, 'datatables'])->name('destination-codes.datatables');
     Route::patch('/destination-codes/{id}', [DestinationCodeController::class, 'restore'])->name('destination-codes.restore');
     Route::resource('destination-codes', DestinationCodeController::class, ['except' =>['create', 'edit']]);
 
@@ -114,11 +121,13 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::get('/states/{state}/vehicles', [StateVehicleController::class, 'index'])->name('states-vehicles.index');
 
     // Holds
+    Route::post('/holds/datatables', [HoldController::class, 'datatables'])->name('holds.datatables');
     Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
     Route::patch('/holds/{hold}/toggle-active', [HoldController::class, 'toggleActive'])->name('holds.toggle-active');
     Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
 
     // Rules
+    Route::post('/rules/datatables', [RuleController::class, 'datatables'])->name('rules.datatables');
     Route::patch('/rules/{id}', [RuleController::class, 'restore'])->name('rules.restore');
     Route::patch('/rules/{rule}/toggle-active', [RuleController::class, 'toggleActive'])->name('rules.toggle-active');
     Route::resource('rules', RuleController::class, ['except' =>['create', 'edit']]);
@@ -128,6 +137,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('zones', ZoneController::class, ['except' =>['create', 'edit']]);
 
     // Areas
+    Route::post('/areas/datatables', [AreaController::class, 'datatables'])->name('areas.datatables');
     Route::patch('/areas/{id}', [AreaController::class, 'restore'])->name('areas.restore');
     Route::resource('areas', AreaController::class, ['except' =>['create', 'edit', 'update']]);
 
@@ -136,6 +146,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('parking-types', ParkingTypeController::class, ['except' =>['create', 'edit']]);
 
     // Parkings
+    Route::post('/parkings/datatables', [ParkingController::class, 'datatables'])->name('parkings.datatables');
     Route::patch('/parkings/{id}', [ParkingController::class, 'restore'])->name('parkings.restore');
     Route::patch('/parkings/{parking}/toggle-active', [ParkingController::class, 'toggleActive'])->name('parkings.toggle-active');
     Route::post('/parking-design', [ParkingDesignController::class, 'parkingDesign'])->name('parkingDesign');
@@ -168,8 +179,11 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('stages', StageController::class, ['except' =>['create', 'edit']]);
 
     // Vehicles
+    Route::get('/vehicles/vin/{vin}', [VehicleMovementsController::class, 'vehicleMatchRules']);
+    Route::patch('/vehicles/massive-change-data', [VehicleController::class, 'massiveChangeData'])->name('vehicles.massive-change-data');
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
     Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
+    Route::patch('/vehicles/{vehicle}/change-position', [VehicleController::class, 'massiveChangeData'])->name('vehicles.change-position');
     Route::post('/vehicles/datatables', [VehicleController::class, 'datatables'])->name('vehicles.datatables');
     Route::resource('vehicles', VehicleController::class, ['except' =>['store', 'create', 'update', 'edit']]);
 
@@ -179,6 +193,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('transports', TransportController::class, ['except' =>['create', 'edit']]);
 
     // Carriers
+    Route::post('/carriers/datatables', [CarrierController::class, 'datatables'])->name('carriers.datatables');
     Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
     Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
 
@@ -190,4 +205,14 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
     Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
     Route::resource('notifications', NotificationController::class, ['except' =>['create', 'store', 'edit', 'update']]);
+
+    // Loads
+    Route::patch('/loads/{load}/confirm-left', [LoadConfirmLeftController::class, 'confirmLeft'])->name('loads.confirme-left');
+
+    // Movements
+    Route::post('/movements/datatables', [MovementController::class, 'datatables'])->name('movements.datatables');
+    //Route::patch('/movements/{id}', [MovementController::class, 'restore'])->name('movements.restore');
+    Route::resource('movements', MovementController::class, ['except' =>['create', 'edit', 'update', 'delete']]);
 });
+
+Route::get('/send-row-notification', [TestController::class, 'sendRowNotification']);

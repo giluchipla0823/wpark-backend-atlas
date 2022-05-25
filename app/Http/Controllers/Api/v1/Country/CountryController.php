@@ -53,6 +53,32 @@ class CountryController extends ApiController
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/v1/countries/datatables",
+     *      tags={"Countries"},
+     *      summary="Countries List with datatables",
+     *      description="List of countries with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesCountries",
+     *      @OA\Response(response=200, description="Country list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->countryService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/countries",
      *     tags={"Countries"},

@@ -21,21 +21,30 @@ class RuleService
         $this->repository = $repository;
     }
 
+    /**
+     * @param Request $request
+     * @return Collection
+     */
     public function all(Request $request): Collection
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = RuleResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return RuleResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $resource = RuleResource::collection($results['data']);
+
+        $results['data'] = $resource->collection;
+
+        return collect($results);
     }
 
     /**

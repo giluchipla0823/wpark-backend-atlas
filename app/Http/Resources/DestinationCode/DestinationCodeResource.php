@@ -16,13 +16,20 @@ class DestinationCodeResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'country' => new CountryResource($this->country),
             'description' => $this->description,
             'active' => $this->active
         ];
+
+        if (in_array('country', $relationships)) {
+            $response['country'] = new CountryResource($this->country);
+        }
+
+        return $response;
     }
 }

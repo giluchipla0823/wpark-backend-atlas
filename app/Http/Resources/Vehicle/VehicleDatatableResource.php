@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Vehicle;
 
+use App\Helpers\RowHelper;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VehicleDatatableResource extends JsonResource
@@ -41,9 +42,10 @@ class VehicleDatatableResource extends JsonResource
                 "code" => $this->country_code,
                 "name" => $this->country_name,
             ],
-            "dt_terminal" => $this->dt_terminal,
             "last_state" => $this->includeLastState(),
+            "states_dates" => $this->includeStatesDates(),
             "last_stage" => $this->includeLastStage(),
+            "stages_dates" => $this->includeStagesDates(),
             "origin_position" => $this->includeOriginPosition(),
             "destination_position" => $this->includeDestinationPosition(),
             "shipping_rule" => $this->includeShippingRule(),
@@ -83,8 +85,20 @@ class VehicleDatatableResource extends JsonResource
         return $this->origin_position_id ? [
             "id" => $this->origin_position_id,
             "name" => $this->origin_position_name,
-            "slot" => $this->origin_position_slot,
             "type" => $this->origin_position_type,
+            "parking" => $this->origin_position_parking_id ? [
+                "id" => $this->origin_position_parking_id,
+                "name" => $this->origin_position_parking_name,
+            ] : null,
+            "row" => $this->origin_position_row_id ? [
+                "id" => $this->origin_position_row_id,
+                "number" => $this->origin_position_row_number,
+                "name" => RowHelper::zeroFill($this->origin_position_row_number),
+            ] : null,
+            "slot" => $this->origin_position_slot_id ? [
+                "id" => $this->origin_position_slot_id,
+                "number" => $this->origin_position_slot_number,
+            ] : null,
         ] : null;
     }
 
@@ -93,12 +107,24 @@ class VehicleDatatableResource extends JsonResource
         return $this->destination_position_id ? [
             "id" => $this->destination_position_id,
             "name" => $this->destination_position_name,
-            "slot" => $this->destination_position_slot,
             "type" => $this->destination_position_type,
+            "parking" => $this->destination_position_parking_id ? [
+                "id" => $this->destination_position_parking_id,
+                "name" => $this->destination_position_parking_name,
+            ] : null,
+            "row" => $this->destination_position_row_id ? [
+                "id" => $this->destination_position_row_id,
+                "number" => $this->destination_position_row_number,
+                "name" => RowHelper::zeroFill($this->destination_position_row_number),
+            ] : null,
+            "slot" => $this->destination_position_slot_id ? [
+                "id" => $this->destination_position_slot_id,
+                "number" => $this->destination_position_slot_number,
+            ] : null,
         ] : null;
     }
 
-    private function includeShippingRule(): ? array
+    private function includeShippingRule(): ?array
     {
         return $this->shipping_rule_id ? [
             "id" => $this->shipping_rule_id,
@@ -106,7 +132,7 @@ class VehicleDatatableResource extends JsonResource
         ] : null;
     }
 
-    private function includeCarrier(): ? array
+    private function includeCarrier(): ?array
     {
         return $this->carrier_id ? [
             "id" => $this->carrier_id,
@@ -114,7 +140,7 @@ class VehicleDatatableResource extends JsonResource
         ] : null;
     }
 
-    private function includeTransportEntry(): ? array
+    private function includeTransportEntry(): ?array
     {
         return $this->transport_entry_id ? [
             "id" => $this->transport_entry_id,
@@ -122,11 +148,35 @@ class VehicleDatatableResource extends JsonResource
         ] : null;
     }
 
-    private function includeTransportExit(): ? array
+    private function includeTransportExit(): ?array
     {
         return $this->transport_exit_id ? [
             "id" => $this->transport_exit_id,
             "name" => $this->transport_exit_name
+        ] : null;
+    }
+
+    private function includeStatesDates(): ?array
+    {
+        if (
+            !$this->dt_announced &&
+            !$this->dt_terminal &&
+            !$this->dt_left
+        ) {
+            return null;
+        }
+
+        return [
+            "dt_announced" => $this->dt_announced,
+            "dt_terminal" => $this->dt_terminal,
+            "dt_left" => $this->dt_left,
+        ];
+    }
+
+    private function includeStagesDates(): ?array
+    {
+        return $this->dt_gate_release ? [
+            "dt_gate_release" => $this->dt_gate_release,
         ] : null;
     }
 

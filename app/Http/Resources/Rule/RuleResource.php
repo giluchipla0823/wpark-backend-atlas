@@ -32,8 +32,8 @@ class RuleResource extends JsonResource
             'countdown' => $this->countdown,
             'is_group' => $this->is_group,
             'final_position' => $this->final_position,
-            'predefined_zone' => new ParkingResource($this->parking),
-            'carrier' => new CarrierResource($this->carrier),
+            'predefined_zone' => $this->parking ? new ParkingResource($this->parking) : null,
+            'carrier' => $this->carrier ? new CarrierResource($this->carrier) : null,
             'active' => $this->active,
         ];
 

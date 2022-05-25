@@ -52,6 +52,33 @@ class DestinationCodeController extends ApiController
         return $this->showAll($results);
     }
 
+
+    /**
+     * @OA\Get(
+     *      path="/api/v1/destination-codes/datatables",
+     *      tags={"DestinationCodes"},
+     *      summary="DestinationCodes List with datatables",
+     *      description="List of destinationCodes with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesDestinationCodes",
+     *      @OA\Response(response=200, description="DestinationCode list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->destinationCodeService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
     /**
      * @OA\POST(
      *     path="/api/v1/destination-codes",

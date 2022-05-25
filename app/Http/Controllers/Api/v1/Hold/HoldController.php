@@ -53,6 +53,32 @@ class HoldController extends ApiController
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/v1/holds/datatables",
+     *      tags={"Holds"},
+     *      summary="Holds List with datatables",
+     *      description="List of holds with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesHolds",
+     *      @OA\Response(response=200, description="Hold list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->holdService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/holds",
      *     tags={"Holds"},

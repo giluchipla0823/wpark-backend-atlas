@@ -22,15 +22,17 @@ class CompoundRepository extends BaseRepository implements CompoundRepositoryInt
      */
     public function all(Request $request): Collection
     {
-        $query = $this->model->query();
-
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
-
-        return $query->get();
+        return $this->model->all();
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        return Datatables::customizable($query)->response();
+    }
 }

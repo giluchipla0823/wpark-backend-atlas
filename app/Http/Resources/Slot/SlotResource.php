@@ -20,6 +20,7 @@ class SlotResource extends JsonResource
         $response = [
             'id' => $this->id,
             'slot_number' => $this->slot_number,
+            'row_name' => $this->row_name,
             'capacity' => $this->capacity,
             'fill' => $this->fill,
             'capacitymm' => $this->capacitymm,

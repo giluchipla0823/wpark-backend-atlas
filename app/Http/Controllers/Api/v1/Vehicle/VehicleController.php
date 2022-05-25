@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Vehicle\VehicleDatatablesRequest;
 use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleService;
 use Illuminate\Http\JsonResponse;
@@ -68,18 +69,16 @@ class VehicleController extends ApiController
      *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
      * )
      *
-     * Display a listing of the resource.
+     * Display a listing of the resource using datatables plugin.
      *
-     * @param Request $request
+     * @param VehicleDatatablesRequest $request
      * @return JsonResponse
      */
-    public function datatables(Request $request): JsonResponse
+    public function datatables(VehicleDatatablesRequest $request): JsonResponse
     {
-        $request->query->add(['datatables' => 1]);
-
         $results = $this->vehicleService->datatables($request);
 
-        return $this->showAll($results);
+        return $this->datatablesResponse($results);
     }
 
  //   /**
@@ -117,6 +116,7 @@ class VehicleController extends ApiController
     public function show(Vehicle $vehicle): JsonResponse
     {
         $vehicle = $this->vehicleService->show($vehicle);
+
         return $this->successResponse($vehicle);
     }
 
@@ -211,6 +211,23 @@ class VehicleController extends ApiController
     {
         $vehicle = $this->vehicleService->detail($vehicle);
         return $this->successResponse($vehicle);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function massiveChangeData(): JsonResponse
+    {
+        return $this->showMessage("Cambios realizados.");
+    }
+
+    /**
+     * @param Vehicle $vehicle
+     * @return JsonResponse
+     */
+    public function changePosition(Vehicle $vehicle): JsonResponse
+    {
+        return $this->showMessage("Cambios realizados.");
     }
 
 }

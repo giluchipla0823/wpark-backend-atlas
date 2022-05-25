@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class BasicAuth
@@ -12,9 +12,10 @@ class BasicAuth
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
+     * @throws Exception
      */
     public function handle(Request $request, Closure $next)
     {
@@ -22,6 +23,5 @@ class BasicAuth
             return $next($request);
         }
         throw new Exception('Access denied.', Response::HTTP_UNAUTHORIZED);
-        // return response('Access denied', 401, ['WWW-Authenticate' => 'Basic']);
     }
 }

@@ -64,15 +64,24 @@ trait ApiResponse
     protected function showAll(Collection $data): JsonResponse
     {
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            return $this->successResponse(
-                null,
-                ApiHelper::MSG_SUCCESSFUL_OPERATION,
-                Response::HTTP_OK,
-                $data->toArray()
-            );
+            return $this->datatablesResponse($data);
         }
 
         return $this->successResponse($data);
+    }
+
+    /**
+     * @param Collection $collection
+     * @return JsonResponse
+     */
+    protected function datatablesResponse(Collection $collection): JsonResponse
+    {
+        return $this->successResponse(
+            null,
+            ApiHelper::MSG_SUCCESSFUL_OPERATION,
+            Response::HTTP_OK,
+            $collection->toArray()
+        );
     }
 
     /**

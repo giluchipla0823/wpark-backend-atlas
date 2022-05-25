@@ -53,6 +53,32 @@ class CompoundController extends ApiController
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/v1/compounds/datatables",
+     *      tags={"Compounds"},
+     *      summary="Compounds List with datatables",
+     *      description="List of compounds with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesCompounds",
+     *      @OA\Response(response=200, description="Compound list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->compoundService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/compounds",
      *     tags={"Compounds"},

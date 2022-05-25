@@ -25,17 +25,22 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function all(Request $request): Collection
     {
+        return $this->model->query()
+                    ->with(QueryParamsHelper::getIncludesParamFromRequest())
+                    ->get();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
         $query = $this->model->query();
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
-
-        return $query->get();
+        return Datatables::customizable($query)->response();
     }
 
     // TODO: Añadir relaciones many to many con campas y dispositivos como en holds

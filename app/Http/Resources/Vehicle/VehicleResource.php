@@ -30,8 +30,8 @@ class VehicleResource extends JsonResource
             'destination_code' => new DestinationCodeResource($this->destinationCode),
             'category' => $this->category,
             'eoc' => $this->eoc,
-            'stage' => StageResource::collection($this->latestStage)->collection->first(),
-            'state' => StateResource::collection($this->latestState)->collection->first(),
+            'last_stage' => StageResource::collection($this->latestStage)->collection->first(),
+            'last_state' => StateResource::collection($this->latestState)->collection->first(),
             'last_movement' => $this->lastMovement
         ];
     }

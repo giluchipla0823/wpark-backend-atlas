@@ -53,6 +53,32 @@ class DesignController extends ApiController
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/v1/designs/datatables",
+     *      tags={"Designs"},
+     *      summary="Designs List with datatables",
+     *      description="List of designs with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesDesigns",
+     *      @OA\Response(response=200, description="Design list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->designService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/designs",
      *     tags={"Designs"},

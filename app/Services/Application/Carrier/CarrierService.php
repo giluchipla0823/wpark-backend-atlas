@@ -30,17 +30,16 @@ class CarrierService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = CarrierResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return CarrierResource::collection($results)->collection;
+    }
+
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $results['data'] = CarrierResource::collection($results['data'])->collection;;
+
+        return collect($results);
     }
 
     /**

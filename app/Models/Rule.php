@@ -82,11 +82,6 @@ class Rule extends Model
         return $this->hasMany(Vehicle::class, 'shipping_rule_id');
     }
 
-    public function movements()
-    {
-        return $this->hasMany(Rule::class, 'rule_id');
-    }
-
     public function rules_groups()
     {
         return $this->belongsToMany(Rule::class, 'rules_groups', 'parent_rule_id', 'child_rule_id')->withTimestamps();

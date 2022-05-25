@@ -25,17 +25,20 @@ class HoldService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = HoldResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return HoldResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $results['data'] = HoldResource::collection($results['data'])->collection;;
+
+        return collect($results);
     }
 
     /**

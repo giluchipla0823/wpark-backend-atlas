@@ -29,17 +29,20 @@ class ColorService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = ColorResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return ColorResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $results['data'] = ColorResource::collection($results['data'])->collection;
+
+        return collect($results);
     }
 
     /**

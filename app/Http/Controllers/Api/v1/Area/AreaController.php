@@ -53,6 +53,32 @@ class AreaController extends ApiController
     }
 
     /**
+     * @OA\Get(
+     *      path="/api/v1/areas/datatables",
+     *      tags={"Areas"},
+     *      summary="Areas List with datatables",
+     *      description="List of areas with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesAreas",
+     *      @OA\Response(response=200, description="Area list Successfully with datatables"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->areaService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/areas",
      *     tags={"Areas"},

@@ -73,4 +73,5 @@ class BaseRepository
 
         return $query->first();
     }
+
 }

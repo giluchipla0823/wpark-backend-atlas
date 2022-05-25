@@ -15,12 +15,13 @@ class DesignResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
             'id' => $this->id,
             'name' => $this->name,
             'short_name' => $this->short_name,
             'code' => $this->code,
-            'brand' => new BrandResource($this->brand),
             'lenght' => $this->lenght,
             'width' => $this->width,
             'height' => $this->height,
@@ -29,5 +30,11 @@ class DesignResource extends JsonResource
             'manufacturing' => $this->manufacturing,
             //'svg' => $this->svg
         ];
+
+        if (in_array('brand', $relationships)) {
+            $response['brand'] = new BrandResource($this->brand);
+        }
+
+        return $response;
     }
 }

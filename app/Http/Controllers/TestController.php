@@ -31,9 +31,14 @@ class TestController extends ApiController
         return $this->successResponse($notification, 'Notification created successfully.', Response::HTTP_CREATED);
     }
 
-    public function testGet(Request $request){
-
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sendRowNotification(Request $request): JsonResponse
+    {
         $row = Row::find(2);
+
         $sender = User::find(2);
         $params = [
             'title' => 'Fila completada',
@@ -45,6 +50,8 @@ class TestController extends ApiController
         ];
 
         event(new RowNotification($sender, $row, $params));
+
+        return $this->showMessage("Notification sent");
     }
 
 }

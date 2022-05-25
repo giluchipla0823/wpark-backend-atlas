@@ -4,6 +4,7 @@ namespace App\Services\Application\Design;
 
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Design\DesignResource;
+use App\Http\Resources\Rule\RuleResource;
 use App\Models\Design;
 use App\Repositories\Design\DesignRepositoryInterface;
 use Illuminate\Http\Request;
@@ -25,18 +26,24 @@ class DesignService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = DesignResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return DesignResource::collection($results)->collection;
     }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $resource = DesignResource::collection($results['data']);
+
+        $results['data'] = $resource->collection;
+
+        return collect($results);
+    }
+
 
     /**
      * @param Design $design

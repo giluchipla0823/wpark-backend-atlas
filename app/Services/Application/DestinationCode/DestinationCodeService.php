@@ -25,17 +25,22 @@ class DestinationCodeService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = DestinationCodeResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return DestinationCodeResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $resource = DestinationCodeResource::collection($results['data']);
+
+        $results['data'] = $resource->collection;
+
+        return collect($results);
     }
 
     /**

@@ -25,13 +25,22 @@ class DesignRepository extends BaseRepository implements DesignRepositoryInterfa
     {
         $query = $this->model->query();
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         return $query->get();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        return Datatables::customizable($query)->response();
     }
 
     /**

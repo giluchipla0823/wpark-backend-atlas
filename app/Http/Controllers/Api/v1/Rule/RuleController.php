@@ -67,6 +67,13 @@ class RuleController extends ApiController
         return $this->showAll($results);
     }
 
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->ruleService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
     /**
      * @OA\POST(
      *     path="/api/v1/rules",

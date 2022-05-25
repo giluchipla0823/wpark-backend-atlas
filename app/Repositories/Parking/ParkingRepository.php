@@ -25,15 +25,7 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
      */
     public function all(Request $request): Collection
     {
-        $query = $this->model->query();
-
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
-
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
+        $query = $this->model->query()->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         if ($name = $request->query->get('name')) {
             $query = $query->where('name', 'LIKE', "%" . $name . "%");
@@ -44,6 +36,18 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
         $query = $query->orderBy($sortBy, $sortDirection);
 
         return $query->get();
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query()
+                      ->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        return Datatables::customizable($query)->response();
     }
 
     /**

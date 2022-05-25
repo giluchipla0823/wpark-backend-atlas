@@ -30,13 +30,19 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $result = Datatables::customizable($query)->response();
-
-            return collect($result);
-        }
-
         return $query->get();
+    }
+
+    /**
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        return Datatables::customizable($query)->response();
     }
 
     // TODO: Asociar correctamente las relaciones para crear, actualizar, borrar y restaurar

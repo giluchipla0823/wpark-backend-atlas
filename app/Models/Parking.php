@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Http\Resources\Parking\ParkingResource;
 
 /**
  *
@@ -35,6 +36,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Parking extends Model
 {
     use HasFactory, SoftDeletes;
+
+    // Resource
+    public $movementResource = ParkingResource::class;
 
     /**
      * The attributes that are mass assignable.
@@ -76,5 +80,15 @@ class Parking extends Model
     public function rulesPredefinedParking()
     {
         return $this->hasMany(Rule::class, 'predefined_zone_id');
+    }
+
+    public function originMovement()
+    {
+        return $this->morphMany(Movement::class, 'originPosition');
+    }
+
+    public function destinationMovement()
+    {
+        return $this->morphMany(Movement::class, 'destinationPosition');
     }
 }

@@ -53,6 +53,32 @@ class ColorController extends ApiController
     }
 
     /**
+     * @OA\Post(
+     *      path="/api/v1/colors/datatables",
+     *      tags={"Colors"},
+     *      summary="Colors List with datatables",
+     *      description="List of colors with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesColors",
+     *      @OA\Response(response=200, description="Color list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
+    {
+        $results = $this->colorService->datatables($request);
+
+        return $this->datatablesResponse($results);
+    }
+
+    /**
      * @OA\POST(
      *     path="/api/v1/colors",
      *     tags={"Colors"},

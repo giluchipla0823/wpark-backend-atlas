@@ -53,6 +53,8 @@ use App\Repositories\Dealer\DealerRepository;
 use App\Repositories\Dealer\DealerRepositoryInterface;
 use App\Repositories\Notification\NotificationRepository;
 use App\Repositories\Notification\NotificationRepositoryInterface;
+use App\Repositories\Movement\MovementRepository;
+use App\Repositories\Movement\MovementRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -191,6 +193,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             NotificationRepositoryInterface::class,
             NotificationRepository::class
+        );
+
+        $this->app->bind(
+            MovementRepositoryInterface::class,
+            MovementRepository::class
         );
     }
 }

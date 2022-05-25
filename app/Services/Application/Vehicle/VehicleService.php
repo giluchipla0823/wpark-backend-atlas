@@ -7,6 +7,7 @@ use App\Http\Resources\Row\RowVehicleResource;
 use App\Http\Resources\Vehicle\InfoVehicleResource;
 use App\Http\Resources\Vehicle\VehicleDatatableResource;
 use App\Http\Resources\Vehicle\VehicleResource;
+use App\Http\Resources\Vehicle\VehicleShowResource;
 use App\Http\Resources\Vehicle\VehicleStateResource;
 use App\Models\Row;
 use App\Models\State;
@@ -57,11 +58,11 @@ class VehicleService
 
     /**
      * @param Vehicle $vehicle
-     * @return VehicleResource
+     * @return VehicleShowResource
      */
-    public function show(Vehicle $vehicle): VehicleResource
+    public function show(Vehicle $vehicle): VehicleShowResource
     {
-        return new VehicleResource($vehicle);
+        return new VehicleShowResource($vehicle);
     }
 
     /**

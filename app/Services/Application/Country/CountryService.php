@@ -25,17 +25,20 @@ class CountryService
     {
         $results = $this->repository->all($request);
 
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            $data = collect($results->get('data'));
-
-            $resource = CountryResource::collection($data);
-
-            $results->put('data', $resource->toArray($request));
-
-            return $results;
-        }
-
         return CountryResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Request $request
+     * @return Collection
+     */
+    public function datatables(Request $request): Collection
+    {
+        $results = $this->repository->datatables($request);
+
+        $results['data'] = CountryResource::collection($results['data'])->collection;;
+
+        return collect($results);
     }
 
     /**

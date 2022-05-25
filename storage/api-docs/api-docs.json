@@ -286,6 +286,35 @@
                 ]
             }
         },
+        "/api/v1/areas/datatables": {
+            "get": {
+                "tags": [
+                    "Areas"
+                ],
+                "summary": "Areas List with datatables",
+                "description": "List of areas with datatables",
+                "operationId": "datatablesAreas",
+                "responses": {
+                    "200": {
+                        "description": "Area list Successfully with datatables"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/areas/{id}": {
             "get": {
                 "tags": [
@@ -1031,6 +1060,35 @@
                 ]
             }
         },
+        "/api/v1/carriers/datatables": {
+            "get": {
+                "tags": [
+                    "Carriers"
+                ],
+                "summary": "Carriers List with datatables",
+                "description": "List of carriers with datatables",
+                "operationId": "datatablesCarriers",
+                "responses": {
+                    "200": {
+                        "description": "Carriers list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/carriers/{id}": {
             "get": {
                 "tags": [
@@ -1255,6 +1313,35 @@
                 ]
             }
         },
+        "/api/v1/colors/datatables": {
+            "post": {
+                "tags": [
+                    "Colors"
+                ],
+                "summary": "Colors List with datatables",
+                "description": "List of colors with datatables",
+                "operationId": "datatablesColors",
+                "responses": {
+                    "200": {
+                        "description": "Color list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/colors/{id}": {
             "get": {
                 "tags": [
@@ -1461,6 +1548,35 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/compounds/datatables": {
+            "post": {
+                "tags": [
+                    "Compounds"
+                ],
+                "summary": "Compounds List with datatables",
+                "description": "List of compounds with datatables",
+                "operationId": "datatablesCompounds",
+                "responses": {
+                    "200": {
+                        "description": "Compound list with datatables Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -1961,6 +2077,35 @@
                 ]
             }
         },
+        "/api/v1/countries/datatables": {
+            "get": {
+                "tags": [
+                    "Countries"
+                ],
+                "summary": "Countries List with datatables",
+                "description": "List of countries with datatables",
+                "operationId": "datatablesCountries",
+                "responses": {
+                    "200": {
+                        "description": "Country list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/countries/{id}": {
             "get": {
                 "tags": [
@@ -2409,6 +2554,35 @@
                 ]
             }
         },
+        "/api/v1/designs/datatables": {
+            "post": {
+                "tags": [
+                    "Designs"
+                ],
+                "summary": "Designs List with datatables",
+                "description": "List of designs with datatables",
+                "operationId": "datatablesDesigns",
+                "responses": {
+                    "200": {
+                        "description": "Design list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/designs/{id}": {
             "get": {
                 "tags": [
@@ -2615,6 +2789,35 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/destination-codes/datatables": {
+            "get": {
+                "tags": [
+                    "DestinationCodes"
+                ],
+                "summary": "DestinationCodes List with datatables",
+                "description": "List of destinationCodes with datatables",
+                "operationId": "datatablesDestinationCodes",
+                "responses": {
+                    "200": {
+                        "description": "DestinationCode list with datatables Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -2857,6 +3060,35 @@
                 ]
             }
         },
+        "/api/v1/holds/datatables": {
+            "post": {
+                "tags": [
+                    "Holds"
+                ],
+                "summary": "Holds List with datatables",
+                "description": "List of holds with datatables",
+                "operationId": "datatablesHolds",
+                "responses": {
+                    "200": {
+                        "description": "Hold list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/holds/{id}": {
             "get": {
                 "tags": [
@@ -3028,6 +3260,165 @@
                 "responses": {
                     "200": {
                         "description": "Hold toggle active successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements": {
+            "get": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Movements List",
+                "description": "List of movements",
+                "operationId": "indexMovements",
+                "responses": {
+                    "200": {
+                        "description": "Movement list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Create New Movement",
+                "description": "Create New Movement",
+                "operationId": "storeMovement",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Movement"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/datatables": {
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Movements List",
+                "description": "List of movements with datatables",
+                "operationId": "datatablesMovements",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementDatatablesRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Movements list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/{id}": {
+            "get": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Show Movement Details",
+                "description": "Show Movement Details",
+                "operationId": "showMovement",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir bloques, condiciones",
+                        "required": false,
+                        "example": "blocks,conditions"
+                    },
+                    {
+                        "name": "extra_includes",
+                        "in": "query",
+                        "description": "Añadir valores de condiciones",
+                        "required": false,
+                        "example": "conditions.values"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Movement Details"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
@@ -3274,6 +3665,35 @@
                 "responses": {
                     "200": {
                         "description": "Parking list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/parkings/datatables": {
+            "post": {
+                "tags": [
+                    "Parkings"
+                ],
+                "summary": "Parkings List with datatables",
+                "description": "List of parkings with datatables",
+                "operationId": "datatablesParkings",
+                "responses": {
+                    "200": {
+                        "description": "Parking list with datatables Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -5284,6 +5704,35 @@
                 ]
             }
         },
+        "/api/v1/users/datatables": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Users List with datatables",
+                "description": "List of users with datatables",
+                "operationId": "datatablesUsers",
+                "responses": {
+                    "200": {
+                        "description": "User list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users/{id}": {
             "get": {
                 "tags": [
@@ -5932,6 +6381,43 @@
                     },
                     "403": {
                         "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vehicles/vin/{vin}": {
+            "get": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Match rules from vehicles",
+                "description": "Match rules from vehicles",
+                "operationId": "match-rules",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/vin"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
@@ -7360,29 +7846,29 @@
                         "maxLength": 20,
                         "example": "1"
                     },
-                    "origin_position_id": {
-                        "description": "Indica la posición desde donde se hace el movimiento",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
                     "origin_position_type": {
                         "description": "Indica el tipo de posición slot o parking de origen",
                         "type": "string",
                         "maxLength": 255,
                         "example": "App\\Models\\Parking"
                     },
-                    "destination_position_id": {
-                        "description": "Indica la posición haciá donde se hace el movimiento",
+                    "origin_position_id": {
+                        "description": "Indica la posición desde donde se hace el movimiento",
                         "type": "integer",
                         "maxLength": 20,
-                        "example": "2"
+                        "example": "1"
                     },
                     "destination_position_type": {
                         "description": "Indica el tipo de posición slot o parking de destino",
                         "type": "string",
                         "maxLength": 255,
                         "example": "App\\Models\\Slot"
+                    },
+                    "destination_position_id": {
+                        "description": "Indica la posición haciá donde se hace el movimiento",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
                     },
                     "category": {
                         "description": "Nombre de la categoría (shipping_rule_id) que se aplica en ese movimiento",
@@ -9662,6 +10148,100 @@
                     "name": "HoldUpdateRequest"
                 }
             },
+            "MovementDatatablesRequest": {
+                "title": "Movement Datatables Request",
+                "description": "Movement request body data",
+                "properties": {
+                    "vins": {
+                        "description": "Filtro de vins de movimientos",
+                        "type": "string",
+                        "example": "NM0GE9E20N1514928,NM0GE9E20N1514931"
+                    },
+                    "users": {
+                        "description": "Filtro de usuarios de movimientos",
+                        "type": "string",
+                        "example": "1,2"
+                    },
+                    "origins_parkings": {
+                        "description": "Filtro de parkings de origen de movimientos",
+                        "type": "string",
+                        "example": "1,2"
+                    },
+                    "destinations_parkings": {
+                        "description": "Filtro de parkings de destino de movimientos",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "description": "Filtro de rango de fechas de movimientos",
+                        "type": "string",
+                        "example": "18/05/2022 - 23/05/2022"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementDatatatblesRequest"
+                }
+            },
+            "MovementStoreRequest": {
+                "title": "Movement Store Request",
+                "description": "Movement Store request body data",
+                "required": [
+                    "vehicle_id",
+                    "user_id",
+                    "origin_position_type",
+                    "origin_position_id",
+                    "destination_position_type",
+                    "destination_position_id"
+                ],
+                "properties": {
+                    "vehicle_id": {
+                        "description": "Indica el vehículo que se mueve",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "user_id": {
+                        "description": "Indica el usuario que está moviendo el vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "origin_position_type": {
+                        "description": "Indica el tipo de posición slot o parking de origen",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "App\\Models\\Parking"
+                    },
+                    "origin_position_id": {
+                        "description": "Indica la posición desde donde se hace el movimiento",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "destination_position_type": {
+                        "description": "Indica el tipo de posición slot o parking de destino",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "App\\Models\\Slot"
+                    },
+                    "destination_position_id": {
+                        "description": "Indica la posición haciá donde se hace el movimiento",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
+                    },
+                    "comments": {
+                        "description": "Comentarios sobre la fila",
+                        "type": "string",
+                        "example": "Movimiento cancelado por bloqueo"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementStoreRequest"
+                }
+            },
             "ParkingDesignStoreRequest": {
                 "title": "Parking Design Store Request",
                 "description": "Parking Design Store request body data",
@@ -10409,10 +10989,40 @@
                 "title": "Vehicle Datatables Request",
                 "description": "Vehicle Stage request body data",
                 "properties": {
-                    "states": {
-                        "description": "Filtro de estados de vehículos",
+                    "state_id": {
+                        "description": "Filtro por estado del vehículo",
+                        "type": "integer",
+                        "example": "2"
+                    },
+                    "rows": {
+                        "description": "Filtro por ids de filas donde se encuentran ubicados los vehículos",
                         "type": "string",
-                        "example": "2,3,4"
+                        "example": "2,3,4,5"
+                    },
+                    "vins": {
+                        "description": "",
+                        "properties": {
+                            "value": {
+                                "description": "Valores de vins separados por comas",
+                                "type": "string",
+                                "example": "DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI"
+                            },
+                            "filter_type": {
+                                "description": "Tipo de filtro: equal|not_equal",
+                                "type": "string",
+                                "example": "equal"
+                            }
+                        },
+                        "type": "object",
+                        "example": {
+                            "value": "DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI",
+                            "filter_type": "equal"
+                        }
+                    },
+                    "state_date": {
+                        "description": "Filtro por rango de fecha del estado seleccionado en el campo state_id",
+                        "type": "string",
+                        "example": "10/01/2022 - 20/01/2022"
                     }
                 },
                 "type": "object",
@@ -10578,6 +11188,15 @@
                 "required": true,
                 "schema": {
                     "type": "integer"
+                }
+            },
+            "vin": {
+                "name": "vin",
+                "in": "path",
+                "description": "vin, eg; MK08949",
+                "required": true,
+                "schema": {
+                    "type": "string"
                 }
             }
         },

@@ -27,6 +27,10 @@ class State extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const STATE_ANNOUNCED_ID = 1;
+    public const STATE_ON_TERMINAL_ID = 2;
+    public const STATE_LEFT_ID = 3;
+
     /**
      * The attributes that are mass assignable.
      *

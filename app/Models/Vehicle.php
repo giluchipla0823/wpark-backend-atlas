@@ -38,6 +38,8 @@ class Vehicle extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const VIN_SHORT_MAX_LENGTH = 7;
+
     protected $fillable = [
         'vin',
         'lvin',
@@ -116,8 +118,10 @@ class Vehicle extends Model
             'vehicle_id',
             'state_id'
         )
-        ->orderByPivot('created_at', 'desc')
-        ->take(1);
+            ->withTimestamps()
+            ->orderByPivot('id', 'desc')
+            ->orderByPivot('created_at', 'desc')
+            ->take(1);
     }
 
     public function holds()
@@ -150,6 +154,7 @@ class Vehicle extends Model
         )
         ->withPivot('manual', 'tracking_date')
         ->withTimestamps()
+        ->orderByPivot('id', 'desc')
         ->orderByPivot('created_at', 'desc')
         ->take(1);
     }

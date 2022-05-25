@@ -52,16 +52,31 @@ class ParkingController extends ApiController
         return $this->showAll($results);
     }
 
-//    /**
-//     * @param ParkingStoreRequest $request
-//     * @return JsonResponse
-//     */
-    /* public function store(ParkingStoreRequest $request): JsonResponse
+    /**
+     * @OA\Post(
+     *      path="/api/v1/parkings/datatables",
+     *      tags={"Parkings"},
+     *      summary="Parkings List with datatables",
+     *      description="List of parkings with datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesParkings",
+     *      @OA\Response(response=200, description="Parking list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function datatables(Request $request): JsonResponse
     {
-        $parking = $this->parkingService->create($request->all());
+        $results = $this->parkingService->datatables($request);
 
-        return $this->successResponse($parking, 'Parking created successfully.', Response::HTTP_CREATED);
-    } */
+        return $this->datatablesResponse($results);
+    }
 
     /**
      * @OA\GET(

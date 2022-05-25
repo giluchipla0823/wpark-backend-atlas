@@ -80,25 +80,25 @@ class VehicleStageService
 
         // Extraer y añadir modelo desde el eoc
         $designCode = substr($params['eoc'], 22, 2);
-        $design = $this->designRepository->findByCode($designCode);
+        $design = $this->designRepository->findBy(['code' => $designCode]);
 
         // Extraer y añadir color desde el eoc
         $colorCode = substr($params['eoc'], 22, 2) . $params['eoc'][72];
-        $color = $this->colorRepository->findByCode($colorCode);
+        $color = $this->colorRepository->findBy(['code' => $colorCode]);
 
         // Añadir código de destino
         // $destination_code = substr($params['eoc'], 9, 2);
         // Se puede sacar el código de destino por el eoc pero lo pasan a parte porque puede no estar actualizado en el eoc
-        $destinationCode = $this->destinationCodeRepository->findByCode(trim($params['destination']));
+        $destinationCode = $this->destinationCodeRepository->findBy(['code' => trim($params['destination'])]);
 
         // Añadir método de entrada (Se añade por defecto 1 correspondiente a la factoria)
         $params['entry_transport_id'] = Transport::FACTORY;
 
         // Comprobación si existe o no el stage
-        $stage = $this->stageRepository->findByCode($params['station']);
+        $stage = $this->stageRepository->findBy(['code'=> $params['station']]);
 
         // Comprobación si existe o no el vehículo para crear o actualizar
-        $vehicle = $this->vehicleRepository->findByVin($params['pvin']);
+        $vehicle = $this->vehicleRepository->findBy(['vin' => $params['pvin']]);
 
         if ($design != null && $color != null && $destinationCode != null && $stage != null) {
             $params['design_id'] = $design->id;

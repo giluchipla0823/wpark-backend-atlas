@@ -28,4 +28,5 @@ interface BaseRepositoryInterface
      * @return Model
      */
     public function findBy(array $params, array $orderBy = null, $limit = null, $offset = null) : ?Model;
+
 }

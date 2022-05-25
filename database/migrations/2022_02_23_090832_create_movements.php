@@ -18,10 +18,10 @@ class CreateMovements extends Migration
             $table->id()->comment('Identificador único del movimiento');
             $table->foreignId('vehicle_id')->comment('Indica el vehículo que se mueve')->constrained('vehicles');
             $table->foreignId('user_id')->comment('Indica el usuario que está moviendo el vehículo')->constrained('users');
-            $table->integer('origin_position_id')->unsigned()->comment('Indica la posición desde donde se hace el movimiento');
             $table->string('origin_position_type')->comment('Indica el tipo de posición slot o parking de origen');
-            $table->integer('destination_position_id')->unsigned()->comment('Indica la posición haciá donde se hace el movimiento');
+            $table->integer('origin_position_id')->unsigned()->comment('Indica la posición desde donde se hace el movimiento');
             $table->string('destination_position_type')->comment('Indica el tipo de posición slot o parking de destino');
+            $table->integer('destination_position_id')->unsigned()->comment('Indica la posición haciá donde se hace el movimiento');
             $table->string('category')->comment('Nombre de la categoría (last_rule_id) que se aplica en ese movimiento');
             $table->boolean('confirmed')->default('0')->comment('Indica si el movimiento se ha confirmado (0: No está confirmado, 1: Está confirmado)');
             $table->boolean('canceled')->default('0')->comment('Indica si el movimiento se ha cancelado (0: No está cancelado, 1: Está cancelado)');

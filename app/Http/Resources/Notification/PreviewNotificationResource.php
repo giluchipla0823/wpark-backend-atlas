@@ -17,13 +17,12 @@ class PreviewNotificationResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        $response = [
-            'id' => $this->id,
-            'data' => $this->data,
-        ];
-
-        return $response;
+        return array_merge(
+            [
+                'id' => $this->id,
+            ],
+            json_decode($this->data, true)
+        );
     }
 
 }

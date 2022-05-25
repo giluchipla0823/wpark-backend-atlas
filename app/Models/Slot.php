@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Http\Resources\Slot\SlotResource;
+use App\Helpers\RowHelper;
 
 /**
  *
@@ -35,6 +37,9 @@ class Slot extends Model
     // Capacidad máxima por slot (en mm)
     public const CAPACITY_MM = 4800;
 
+    // Resource
+    public $movementResource = SlotResource::class;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -53,6 +58,17 @@ class Slot extends Model
         'updated_at',
     ];
 
+    protected $appends = ['row_name'];
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getRowNameAttribute($value): string
+    {
+        return $this->row->parking->name .  "." . RowHelper::zeroFill($this->row->row_number);
+    }
+
     public function row()
     {
         return $this->belongsTo(Row::class, 'row_id');
@@ -66,6 +82,16 @@ class Slot extends Model
     public function distancesDestinationSlots()
     {
         return $this->hasMany(Distance::class, 'destination_slot_id');
+    }
+
+    public function originMovement()
+    {
+        return $this->morphMany(Movement::class, 'originPosition');
+    }
+
+    public function destinationMovement()
+    {
+        return $this->morphMany(Movement::class, 'destinationPosition');
     }
 
 }

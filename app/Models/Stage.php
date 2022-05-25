@@ -28,6 +28,8 @@ class Stage extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const STAGE_GATE_RELEASE_ID = 5;
+
     /**
      * The attributes that are mass assignable.
      *
