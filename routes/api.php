@@ -179,6 +179,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('stages', StageController::class, ['except' =>['create', 'edit']]);
 
     // Vehicles
+    Route::get('/vehicles/search-by-vin/{vin}', [VehicleController::class, 'searchByVin'])->name("vehicles.search-by-vin");
     Route::get('/vehicles/vin/{vin}', [VehicleMovementsController::class, 'vehicleMatchRules']);
     Route::patch('/vehicles/massive-change-data', [VehicleController::class, 'massiveChangeData'])->name('vehicles.massive-change-data');
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');

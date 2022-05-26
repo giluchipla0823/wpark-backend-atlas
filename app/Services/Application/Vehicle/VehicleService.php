@@ -13,8 +13,10 @@ use App\Models\Row;
 use App\Models\State;
 use App\Models\Vehicle;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class VehicleService
 {
@@ -147,5 +149,25 @@ class VehicleService
         }
 
         return VehicleStateResource::collection($results)->collection;
+    }
+
+    /**
+     * @param string $vin
+     * @return VehicleShowResource
+     * @throws Exception
+     */
+    public function searchByVin(string $vin): VehicleShowResource
+    {
+        if (strlen($vin) > Vehicle::VIN_SHORT_MAX_LENGTH) {
+            $vehicle = $this->repository->findBy(['vin' => $vin]);
+        } else {
+            $vehicle = $this->repository->findBy(['vin_short' => $vin]);
+        }
+
+        if (!$vehicle) {
+            throw new Exception("No se encontró información del vehículo", Response::HTTP_NOT_FOUND);
+        }
+
+        return new VehicleShowResource($vehicle);
     }
 }

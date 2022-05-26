@@ -81,6 +81,7 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
     public function findAllByParking(Parking $parking): Collection
     {
         return $this->model->query()
+            ->with(QueryParamsHelper::getIncludesParamFromRequest())
             ->where('parking_id', $parking->id)
             ->get();
     }

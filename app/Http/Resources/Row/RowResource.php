@@ -5,8 +5,7 @@ namespace App\Http\Resources\Row;
 use App\Helpers\AppHelper;
 use App\Http\Resources\Block\BlockResource;
 use App\Http\Resources\Parking\ParkingResource;
-use App\Http\Resources\State\StateResource;
-use App\Models\Parking;
+use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RowResource extends JsonResource
@@ -19,10 +18,12 @@ class RowResource extends JsonResource
      */
     public function toArray($request)
     {
+        $relationships = array_keys($this->resource->getRelations());
+
         // TODO: Da error al usar el servicio all con datatables
         $fillPercentage = round(($this->fill / $this->capacity) * 100, 2);
 
-        return [
+        $response = [
             'id' => $this->id,
             'row_number' => $this->row_number,
             'row_name' => $this->row_name,
@@ -41,5 +42,10 @@ class RowResource extends JsonResource
             'active' => $this->active
         ];
 
+        if (in_array('slots', $relationships)) {
+            $response['slots'] = SlotResource::collection($this->slots);
+        }
+
+        return $response;
     }
 }

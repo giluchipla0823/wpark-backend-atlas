@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleDatatablesRequest;
 use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -228,6 +229,18 @@ class VehicleController extends ApiController
     public function changePosition(Vehicle $vehicle): JsonResponse
     {
         return $this->showMessage("Cambios realizados.");
+    }
+
+    /**
+     * @param string $vin
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function searchByVin(string $vin): JsonResponse
+    {
+        $vehicle = $this->vehicleService->searchByVin($vin);
+
+        return $this->successResponse($vehicle);
     }
 
 }
