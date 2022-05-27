@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
 use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
@@ -62,6 +63,8 @@ Route::post('/forgot-password-check', [AuthController::class, 'forgotPasswordChe
 Route::post('/forgot-password-reset', [AuthController::class, 'forgotPasswordReset'])->name('password.reset');
 
 Route::post('/tracking-points', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage');
+
+Route::get('/v1/designs/svg-default/{filename}', [DesignSvgController::class, 'default'])->name('designs-svg.default');
 
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'auth'], function() {
     Route::get('/logout', [AuthController::class, 'logout']);

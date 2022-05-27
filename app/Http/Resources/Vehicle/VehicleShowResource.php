@@ -56,10 +56,10 @@ class VehicleShowResource extends JsonResource
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),
             "svg" => [
-                "front" => $this->getVehicleSvgContent("front.svg"),
-                "side" => $this->getVehicleSvgContent("side.svg"),
-                "back" => $this->getVehicleSvgContent("back.svg"),
-                "top" => $this->getVehicleSvgContent("top.svg"),
+                "front" => route("designs-svg.default", ["filename" => "front.svg"]),
+                "side" => route("designs-svg.default", ["filename" => "side.svg"]),
+                "back" => route("designs-svg.default", ["filename" => "back.svg"]),
+                "top" => route("designs-svg.default", ["filename" => "top.svg"]),
             ],
         ];
     }
@@ -85,20 +85,5 @@ class VehicleShowResource extends JsonResource
         }
 
         return $lastMovement->{$relation};
-    }
-
-    /**
-     * @param string $filename
-     * @return string|null
-     */
-    private function getVehicleSvgContent(string $filename): ?string
-    {
-        $path = public_path("vehicles_svg/default/{$filename}");
-
-        if (!file_exists($path) || pathinfo($path, PATHINFO_EXTENSION) === '.svg') {
-            return null;
-        }
-
-        return file_get_contents($path);
     }
 }
