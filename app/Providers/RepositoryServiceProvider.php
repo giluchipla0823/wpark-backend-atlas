@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Load\LoadRepository;
+use App\Repositories\Load\LoadRepositoryInterface;
 use App\Repositories\Transport\TransportRepository;
 use App\Repositories\Transport\TransportRepositoryInterface;
 use App\Repositories\Carrier\CarrierRepository;
@@ -198,6 +200,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             MovementRepositoryInterface::class,
             MovementRepository::class
+        );
+
+        $this->app->bind(
+            LoadRepositoryInterface::class,
+            LoadRepository::class
         );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\RowNotification;
+use App\Events\CompletedRowNotification;
 use App\Models\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,10 +22,10 @@ class StoreRowNotification
     /**
      * Handle the event.
      *
-     * @param  \App\Events\RowNotification  $event
+     * @param  \App\Events\CompletedRowNotification  $event
      * @return void
      */
-    public function handle(RowNotification $event): void
+    public function handle(CompletedRowNotification $event): void
     {
         $sender_id = $event->sendUser->id;
         $recipient_id = $event->recipientUser ? $event->recipientUser->id : null;

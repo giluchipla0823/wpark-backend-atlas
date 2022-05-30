@@ -4,6 +4,8 @@ namespace App\Services\Application\Vehicle;
 
 use App\Models\Color;
 use App\Models\DestinationCode;
+use App\Models\Design;
+use App\Models\Stage;
 use App\Models\Rule;
 use App\Models\Vehicle;
 use App\Repositories\Rule\RuleRepositoryInterface;
@@ -12,6 +14,7 @@ use App\Repositories\Block\BlockRepositoryInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
+use Mockery\Undefined;
 
 class VehicleMovementsService
 {
@@ -64,13 +67,13 @@ class VehicleMovementsService
      * @param Vehicle $vehicle
      * @return array
      */
-    public function vehicleMatchRules(Vehicle $vehicle): Array
+    public function vehicleMatchRules(Vehicle $vehicle): array
     {
         // Lógica para comparar el vehículo con las reglas
 
         // Sacamos las características a comprobar del vehículo
         $vehicleProperties = [
-            'vin' => $vehicle->vin,
+            'vin' => $vehicle->id,
             'stage' => $vehicle->latestStage[0]->id,
             'design' => $vehicle->design_id,
             'destination_code' => $vehicle->destination_code_id,
@@ -86,60 +89,66 @@ class VehicleMovementsService
         foreach ($rules as $index => $rule) {
 
             $conditions = $rule->conditions;
-
+            $getRule = null;
+            $rulePass = false;
             // Al recorrer cada condición se comprobará si existen coincidencias con el vehículo y de ser así lo agrega al array $matches
             foreach ($conditions as $condition) {
 
-                if ($condition->pivot->conditionable_type == Vehicle::class) {
-                    if ($vehicleProperties['vin'] == $condition->pivot->conditionable_id) {
+                if ($condition->pivot->conditionable_type === Vehicle::class) {
+                    if ($vehicleProperties['vin'] === $condition->pivot->conditionable_id) {
                         $getRule = $condition->pivot->rule_id;
                         $getCondition = $condition->pivot->condition_id;
                         $matches[$index]['vin'] = $getCondition;
                     }
                 }
 
-                if ($condition->pivot->conditionable_typel == Stage::class) {
-                    if ($vehicleProperties['stage'] == $condition->pivot->conditionable_id) {
+                if ($condition->pivot->conditionable_type === Stage::class) {
+                    if ($vehicleProperties['stage'] === $condition->pivot->conditionable_id) {
                         $getRule = $condition->pivot->rule_id;
                         $getCondition = $condition->pivot->condition_id;
                         $matches[$index]['stage'] = $getCondition;
                     }
                 }
 
-                if ($condition->pivot->conditionable_type == Design::class) {
-                    if ($vehicleProperties['design'] == $condition->pivot->conditionable_id) {
+                if ($condition->pivot->conditionable_type === Design::class) {
+                    if ($vehicleProperties['design'] === $condition->pivot->conditionable_id) {
                         $getRule = $condition->pivot->rule_id;
                         $getCondition = $condition->pivot->condition_id;
                         $matches[$index]['design'] = $getCondition;
                     }
                 }
 
-                if ($condition->pivot->conditionable_type == DestinationCode::class) {
-                    if ($vehicleProperties['destination_code'] == $condition->pivot->conditionable_id) {
+                if ($condition->pivot->conditionable_type === DestinationCode::class) {
+                    if ($vehicleProperties['destination_code'] === $condition->pivot->conditionable_id) {
                         $getRule = $condition->pivot->rule_id;
                         $getCondition = $condition->pivot->condition_id;
                         $matches[$index]['destination_code'] = $getCondition;
                     }
                 }
 
-                if ($condition->pivot->conditionable_type == Color::class) {
-                    if ($vehicleProperties['color'] == $condition->pivot->conditionable_id) {
+                if ($condition->pivot->conditionable_type === Color::class) {
+                    if ($vehicleProperties['color'] === $condition->pivot->conditionable_id) {
                         $getRule = $condition->pivot->rule_id;
                         $getCondition = $condition->pivot->condition_id;
                         $matches[$index]['color'] = $getCondition;
                     }
                 }
-                // Añadimos el id de la regla a cada array que se va agregando al array $matches
+            }
+
+            // Añadimos el id de la regla a cada array que se va agregando al array $matches
+            if ($getRule) {
                 $matches[$index]['rule'] = $getRule;
+                $rulePass = true;
+            } else {
+                $rulePass = false;
             }
 
             // Si se han encontrado coincidencias con alguna regla se empiezan a establecer las prioridades
-            if (!empty($matches)) {
-                $numberOfConditions = count($matches[$index])-1;
-
+            if ($rulePass) {
+                $numberOfConditions = count($matches[$index]) - 1;
                 switch ($numberOfConditions) {
-                    case 1:
-                        if (isset($matches[$index]['vins'])) {
+                    case Rule::ONE_CONDITION:
+                        if (isset($matches[$index]['vin'])) {
                             $matches[$index]['priority'] = 1;
                         } else if (isset($matches[$index]['stage'])) {
                             $matches[$index]['priority'] = 14;
@@ -151,7 +160,7 @@ class VehicleMovementsService
                             $matches[$index]['priority'] = 17;
                         }
                         break;
-                    case 2:
+                    case Rule::TWO_CONDITIONS:
                         if (isset($matches[$index]['stage'])) {
                             $matches[$index]['priority'] = 10;
                         } else if (isset($matches[$index]['design'])) {
@@ -162,7 +171,7 @@ class VehicleMovementsService
                             $matches[$index]['priority'] = 13;
                         }
                         break;
-                    case 3:
+                    case Rule::THREE_CONDITIONS:
                         if (isset($matches[$index]['stage'])) {
                             $matches[$index]['priority'] = 6;
                         } else if (isset($matches[$index]['design'])) {
@@ -173,7 +182,7 @@ class VehicleMovementsService
                             $matches[$index]['priority'] = 9;
                         }
                         break;
-                    case 4:
+                    case Rule::FOUR_CONDITIONS:
                         if (isset($matches[$index]['stage'])) {
                             $matches[$index]['priority'] = 2;
                         } else if (isset($matches[$index]['design'])) {
@@ -185,22 +194,20 @@ class VehicleMovementsService
                         }
                         break;
                     default:
-                            $matches[$index]['priority'] = 99;
+                        $matches[$index]['priority'] = 99;
                         break;
                 }
 
                 // Añadimos a cada array los bloques asociados a la regla para posteriormente comprobar cuales son de presorting o no
                 $blocks = $rule->blocks;
-
                 foreach ($blocks as $block) {
                     $matches[$index]['blocks'][] = $block->pivot->block_id;
                 }
             }
-
         }
 
         // Ordenamos el array con los matches para que muestre por orden de prioridad
-        usort($matches, function($a, $b){
+        usort($matches, function ($a, $b) {
             return $a['priority'] <=> $b['priority'];
         });
 
@@ -213,16 +220,16 @@ class VehicleMovementsService
         $shipping_rule_id = null;
 
         foreach ($matches as $match) {
-            if(!$last_rule_id || !$shipping_rule_id){
+            if (!$last_rule_id || !$shipping_rule_id) {
 
-                foreach($match['blocks'] as $block){
+                foreach ($match['blocks'] as $block) {
                     $presorting = $this->blockRepository->findBy(['id' => $block, 'is_presorting' => 1]);
 
-                    if($presorting && !$last_rule_id){
+                    if ($presorting && !$last_rule_id) {
                         $last_rule_id = $match['rule'];
                     }
 
-                    if(!$presorting && !$shipping_rule_id){
+                    if (!$presorting && !$shipping_rule_id) {
                         $shipping_rule_id = $match['rule'];
                     }
                 }
@@ -236,9 +243,9 @@ class VehicleMovementsService
         */
         $rulesGroup = Rule::where('is_group', 1)->get();
 
-        foreach ($rulesGroup as $rule){
+        foreach ($rulesGroup as $rule) {
             $isInGroup = $rule->rules_groups->contains($last_rule_id);
-            if($isInGroup){
+            if ($isInGroup) {
                 $last_rule_id = $rule->id;
             }
         }

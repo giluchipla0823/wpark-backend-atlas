@@ -8,6 +8,7 @@ use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
 
 class CarrierRepository extends BaseRepository implements CarrierRepositoryInterface
 {
@@ -34,5 +35,18 @@ class CarrierRepository extends BaseRepository implements CarrierRepositoryInter
         $query = $this->model->query();
 
         return DataTables::customizable($query)->response();
+    }
+
+    /**
+     * @param int $routeTypeId
+     * @return Collection
+     */
+    public function findAllByRouteTypeId(int $routeTypeId): Collection
+    {
+        return $this->model->query()
+                    ->whereHas('routes', function (Builder $q) use ($routeTypeId) {
+                        $q->where('route_type_id', "=", $routeTypeId);
+                    })
+                    ->get();
     }
 }

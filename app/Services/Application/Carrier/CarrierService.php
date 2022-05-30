@@ -5,6 +5,7 @@ namespace App\Services\Application\Carrier;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Carrier\CarrierResource;
 use App\Models\Carrier;
+use App\Models\RouteType;
 use App\Repositories\Carrier\CarrierRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -87,5 +88,16 @@ class CarrierService
     public function restore(int $id): void
     {
         $this->repository->restore($id);
+    }
+
+    /**
+     * @param RouteType $routeType
+     * @return Collection
+     */
+    public function findAllByRouteType(RouteType $routeType): Collection
+    {
+        $results = $this->repository->findAllByRouteTypeId($routeType->id);
+
+        return CarrierResource::collection($results)->collection;
     }
 }

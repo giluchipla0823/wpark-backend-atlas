@@ -6,27 +6,50 @@ use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Movement\MovementResource;
 use App\Http\Resources\Movement\MovementDatatablesResource;
 use App\Models\Movement;
+use App\Models\ParkingType;
+use App\Models\Slot;
 use App\Models\Vehicle;
 use App\Repositories\Movement\MovementRepositoryInterface;
+use App\Repositories\Row\RowRepositoryInterface;
+use App\Repositories\Slot\SlotRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use App\Events\CompletedRowNotification;
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 class MovementService
 {
     /**
      * @var MovementRepositoryInterface
      */
-    private $repository;
+    private $movementRepository;
 
-    public function __construct(MovementRepositoryInterface $repository)
-    {
-        $this->repository = $repository;
+    /**
+     * @var SlotRepositoryInterface
+     */
+    private $slotRepository;
+
+    /**
+     * @var RowRepositoryInterface
+     */
+    private $rowRepository;
+
+    public function __construct(
+        MovementRepositoryInterface $movementRepository,
+        SlotRepositoryInterface $slotRepository,
+        RowRepositoryInterface $rowRepository
+    ) {
+        $this->movementRepository = $movementRepository;
+        $this->slotRepository = $slotRepository;
+        $this->rowRepository = $rowRepository;
     }
 
     public function all(Request $request): Collection
     {
-        $results = $this->repository->all($request);
+        $results = $this->movementRepository->all($request);
 
         return MovementResource::collection($results)->collection;
     }
@@ -37,7 +60,7 @@ class MovementService
      */
     public function datatables(Request $request): Collection
     {
-        $results = $this->repository->datatables($request);
+        $results = $this->movementRepository->datatables($request);
 
         $resource = MovementDatatablesResource::collection($results['data']);
 
@@ -69,7 +92,7 @@ class MovementService
         $params['category'] = $vehicle->shippingRule->name;
         $params['dt_start'] = Carbon::now();
 
-        return $this->repository->create($params);
+        return $this->movementRepository->create($params);
     }
 
     /**
@@ -79,7 +102,7 @@ class MovementService
      */
     public function update(array $params, int $id): void
     {
-        $this->repository->update($params, $id);
+        $this->movementRepository->update($params, $id);
     }
 
     /**
@@ -88,12 +111,138 @@ class MovementService
      */
     public function delete(int $id): void
     {
-        $this->repository->delete($id);
+        $this->movementRepository->delete($id);
     }
 
     public function restore(int $id): void
     {
-        $this->repository->restore($id);
+        $this->movementRepository->restore($id);
     }
 
+    /**
+     * @param array $params
+     * @param int $id
+     * @return void
+     */
+    public function confirmMovement(Movement $movement): void
+    {
+        // Comprobación de que el movimiento está en proceso
+        if ($movement->confirmed) {
+            throw new Exception('This movement is already confirmed', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($movement->canceled) {
+            throw new Exception('This movement is already canceled', Response::HTTP_BAD_REQUEST);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Actualización del movimiento para indicar que el vehículo ya está en esa posición
+            $MovementParams = [
+                'confirmed' => 1,
+                'dt_end' => Carbon::now()
+            ];
+            $this->movementRepository->update($MovementParams, $movement->id);
+
+            // Comprobar que el origen es parking con filas
+            if ($movement->origin_position_type === Slot::class) {
+                // Actualización de la fila y el slot para desocupar la posición de origen
+                $slotParams = [
+                    'fill' => 0,
+                    'fillmm' => 0
+                ];
+                $this->slotRepository->update($slotParams, $movement->origin_position_id);
+
+                $rowParams = [
+                    'rule_id' => $movement->originPosition->row->fill === 1 ? null : $movement->originPosition->row->rule_id,
+                    'fill' => $movement->originPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->originPosition->row->fill - 1 : 0,
+                    'fillmm' => $movement->originPosition->row->fillmm - $movement->vehicle->design->length
+                ];
+                $this->rowRepository->update($rowParams, $movement->originPosition->row_id);
+            }
+
+            // Comprobar que el destino es parking con filas
+            if ($movement->destination_position_type === Slot::class) {
+                /* Calcular espacio en mm restantes para saber si cabe otro vehículo.
+                En caso de no caber indicar que la fila está completa con el campo full
+                */
+                $rowTotalCapacitymm = $movement->destinationPosition->row->capacitymm - $movement->destinationPosition->row->fillmm;
+
+                if ($rowTotalCapacitymm < Slot::CAPACITY_MM) {
+                    $rowParams = [
+                        'full' => 1,
+                    ];
+                    $this->rowRepository->update($rowParams, $movement->destinationPosition->row_id);
+
+                    // Lanzamos la notificación de fila completada
+                    $row = $movement->destinationPosition->row;
+
+                    $sender = $movement->user;
+
+                    event(new CompletedRowNotification($sender, $row));
+                }
+            }
+
+            DB::commit();
+        } catch (Exception $exc) {
+            DB::rollback();
+
+            throw $exc;
+        }
+    }
+
+    /**
+     * @param array $params
+     * @param int $id
+     * @return void
+     */
+    public function cancelMovement(Movement $movement): void
+    {
+        // Comprobación de que el movimiento está en proceso
+        if ($movement->canceled) {
+            throw new Exception('This movement is already canceled', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($movement->confirmed) {
+            throw new Exception('This movement is already confirmed', Response::HTTP_BAD_REQUEST);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Actualización del movimiento para indicar que el movimiento se ha cancelado
+            $MovementParams = [
+                'canceled' => 1,
+            ];
+            $this->movementRepository->update($MovementParams, $movement->id);
+
+            // Comprobar que el destino es parking con filas
+            if ($movement->destination_position_type === Slot::class) {
+
+                /* Se desocupa la posición guardada al crear el movimiento y si ocupaba la primera
+                posición también se vuelve a poner el rule_id de la fila en null */
+                $slotParams = [
+                    'fill' => 0,
+                    'fillmm' => 0
+                ];
+                $this->slotRepository->update($slotParams, $movement->destinationPosition->id);
+
+                $rowParams = [
+                    'rule_id' => $movement->destinationPosition->row->fill === 1 ? null : $movement->destinationPosition->row->rule_id,
+                    'fill' => $movement->destinationPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->destinationPosition->row->fill - 1 : 0,
+                    'fillmm' => $movement->destinationPosition->row->fillmm - $movement->vehicle->design->length
+                ];
+
+                $this->rowRepository->update($rowParams, $movement->destinationPosition->row_id);
+
+            }
+
+            DB::commit();
+        } catch (Exception $exc) {
+            DB::rollback();
+
+            throw $exc;
+        }
+    }
 }

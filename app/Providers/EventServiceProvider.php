@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\RowNotification;
+use App\Events\CompletedRowNotification;
 use App\Listeners\SendRowNotification;
 use App\Listeners\StoreRowNotification;
 use Illuminate\Auth\Events\Registered;
@@ -21,7 +21,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        RowNotification::class => [
+        CompletedRowNotification::class => [
             //SendRowNotification::class,
             StoreRowNotification::class
         ]

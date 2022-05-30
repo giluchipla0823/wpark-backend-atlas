@@ -157,6 +157,66 @@ class MovementController extends ApiController
         return $this->successResponse($movement);
     }
 
+    /**
+     * @OA\PUT(
+     *     path="/api/v1/movements/{id}/confirm",
+     *     tags={"Movements"},
+     *     summary="Confirm Movement",
+     *     description="Confirm Movement",
+     *     security={{"sanctum": {}}},
+     *     operationId="confirmMovement",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=200, description="Confirm Movement" ),
+     *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Confirm the specified movement.
+     *
+     * @param Movement $movement
+     * @return JsonResponse
+     */
+    public function confirmMovement(Movement $movement): JsonResponse
+    {
+        $this->movementService->confirmMovement($movement);
+
+        return $this->showMessage('Movement confirmed.');
+    }
+
+    /**
+     * @OA\PUT(
+     *     path="/api/v1/movements/{id}/cancel",
+     *     tags={"Movements"},
+     *     summary="Cancel Movement",
+     *     description="Cancel Movement",
+     *     security={{"sanctum": {}}},
+     *     operationId="cancelMovement",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=200, description="Cancel Movement" ),
+     *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Cancel the specified movement.
+     *
+     * @param Movement $movement
+     * @return JsonResponse
+     */
+    public function cancelMovement(Movement $movement): JsonResponse
+    {
+        $this->movementService->cancelMovement($movement);
+
+        return $this->showMessage('Movement canceled.');
+    }
+
     ///**
     // * @OA\PUT(
     // *     path="/api/v1/movements/{id}",

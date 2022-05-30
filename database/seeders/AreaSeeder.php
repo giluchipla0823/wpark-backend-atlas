@@ -19,23 +19,23 @@ class AreaSeeder extends Seeder
     {
         $areas = [
             [
-                'name' => 'ÁREA 1',
+                'name' => 'FACTORY',
                 'compound_id' => Compound::inRandomOrder()->first()->id,
                 'zone_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'ÁREA 2',
+                'name' => 'PRESORTING',
                 'compound_id' => Compound::inRandomOrder()->first()->id,
-                'zone_id' => 3,
+                'zone_id' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'ÁREA 3',
+                'name' => 'CAMPA GENERAL',
                 'compound_id' => Compound::inRandomOrder()->first()->id,
-                'zone_id' => 2,
+                'zone_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\RowNotification;
+use App\Events\CompletedRowNotification;
 use Illuminate\Http\Request;
 use App\Services\Application\Notification\NotificationService;
 use App\Http\Controllers\ApiController;
@@ -38,18 +38,9 @@ class TestController extends ApiController
     public function sendRowNotification(Request $request): JsonResponse
     {
         $row = Row::find(2);
-
         $sender = User::find(2);
-        $params = [
-            'title' => 'Fila completada',
-            'message' => 'Se ha completado la fila ' . $row->parking->name . '.' . $row->row_number,
-            'item' => [
-                'id' => $row->id,
-                'name' => $row->parking->name . '.' . $row->row_number
-            ]
-        ];
 
-        event(new RowNotification($sender, $row, $params));
+        event(new CompletedRowNotification($sender, $row));
 
         return $this->showMessage("Notification sent");
     }

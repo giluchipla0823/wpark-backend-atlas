@@ -2,6 +2,9 @@
 
 namespace App\Repositories\Vehicle;
 
+use App\Helpers\QueryHelper;
+use App\Models\Parking;
+use App\Models\Slot;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Row;
 use App\Models\Stage;
@@ -231,17 +234,47 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function findAllByRow(Row $row): Collection
     {
+        $slotModel = QueryHelper::escapeNamespaceClass(Slot::class);
+
         $query = $this->model->query()
-            ->with(['lastMovement', 'lastMovement.destination_slot'])
+            ->with(['lastMovement', 'lastMovement.destinationPosition'])
+            ->join(DB::raw("
+                    (
+                        SELECT
+                            m.id AS movement_id,
+                            m.vehicle_id AS movement_vehicle_id,
+                            m.destination_position_id,
+                            m.destination_position_type
+                        FROM
+                            movements AS m
+                        WHERE
+                            m.destination_position_type = '". $slotModel ."'
+                    ) AS movements
+            "), "vehicles.id", "=", DB::raw("
+                movements.movement_vehicle_id AND movements.movement_id = (
+                    SELECT
+                            lmov.id
+                        FROM
+                            movements AS lmov
+                        WHERE
+                            lmov.vehicle_id = vehicles.id AND lmov.confirmed = 1
+                        ORDER BY
+                            lmov.created_at DESC
+                        LIMIT 1
+                )
+            "))
             ->whereHas('lastMovement', function (Builder $q) use ($row) {
                 $q->where('confirmed', 1)
-                  ->whereHas('destination_slot', function (Builder $q) use ($row) {
+                  ->whereHasMorph('destinationPosition', [Parking::class, Slot::class], function (Builder $q, $type) use ($row) {
+                      if($type === Slot::class){
                         $q->where([
                             ['row_id', '=', $row->id],
                             ['fill', '=', 1],
                         ]);
+                      }
                   });
-            });
+            })
+            ->orderBy("movements.destination_position_id", "ASC");
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 

@@ -136,7 +136,7 @@ class Vehicle extends Model
 
     public function lastMovement()
     {
-        return $this->hasOne(Movement::class, 'vehicle_id')->orderBy('created_at', 'desc')->latest();
+        return $this->hasOne(Movement::class, 'vehicle_id')->where('confirmed', 1)->orderBy('created_at', 'desc')->latest();
     }
 
     public function stages()

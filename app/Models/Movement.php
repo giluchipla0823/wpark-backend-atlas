@@ -38,6 +38,11 @@ class Movement extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const MOVEMENT_ACTION_OK = 1;
+    public const MOVEMENT_ACTION_NO_OK = 2;
+    public const MOVEMENT_ACTION_SALES = 3;
+    public const MOVEMENT_ACTION_ESCAPE = 4;
+
     protected $fillable = [
         'vehicle_id',
         'user_id',
@@ -76,5 +81,4 @@ class Movement extends Model
     {
         return $this->morphTo(__FUNCTION__, 'destination_position_type', 'destination_position_id');
     }
-
 }

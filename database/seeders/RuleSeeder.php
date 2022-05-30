@@ -67,7 +67,7 @@ class RuleSeeder extends Seeder
         $rule1->blocks()->sync([1]);
 
         $rule2 = Rule::find(2);
-        $destinationCode = DestinationCode::find(2);
+        $destinationCode = DestinationCode::find(6);
 
         $conditions2 = [$destinationCode];
         $rulesConditions2 = [];

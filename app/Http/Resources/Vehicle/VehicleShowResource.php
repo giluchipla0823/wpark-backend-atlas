@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Vehicle;
 
+use App\Http\Resources\Hold\HoldResource;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\Brand\BrandResource;
@@ -55,6 +56,7 @@ class VehicleShowResource extends JsonResource
             "last_movement" => $this->lastMovement,
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),
+            "holds" =>  HoldResource::collection($this->holds),
             "svg" => [
                 "front" => route("designs-svg.default", ["filename" => "front.svg"]),
                 "side" => route("designs-svg.default", ["filename" => "side.svg"]),

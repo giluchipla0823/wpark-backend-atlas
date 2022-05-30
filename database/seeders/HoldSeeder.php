@@ -41,9 +41,9 @@ class HoldSeeder extends Seeder
 
         // Relacionar condiciones con los holds
         $hold1 = Hold::find(1);
-        $hold1->conditions()->sync([1,2]);
+        $hold1->conditions()->sync([6,7]);
 
         $hold2 = Hold::find(2);
-        $hold2->conditions()->sync([1]);
+        $hold2->conditions()->sync([6]);
     }
 }

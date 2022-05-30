@@ -22,26 +22,146 @@ class VehicleSeeder extends Seeder
     {
         $vehicles = [
             [
-                'vin' => 'NM0GE9E20N1514928',
-                'lvin' => 'NM0GE9E20N1514928',
-                'vin_short' => 'MK08949',
+                'vin' => 'NM0GE9E20N1514920',
+                'lvin' => 'NM0GE9E20N1514920',
+                'vin_short' => 'MK08940',
                 'design_id' => Design::inRandomOrder()->first()->id,
                 'color_id' => Color::inRandomOrder()->first()->id,
-                'destination_code_id' => DestinationCode::inRandomOrder()->first()->id,
-                'entry_transport_id' => Transport::inRandomOrder()->first()->id,
-                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP E',
+                'destination_code_id' => 1,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP 0',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'vin' => 'NM0GE9E20N1514931',
                 'lvin' => 'NM0GE9E20N1514931',
-                'vin_short' => 'MK08952',
+                'vin_short' => 'MK08951',
                 'design_id' => Design::inRandomOrder()->first()->id,
                 'color_id' => Color::inRandomOrder()->first()->id,
-                'destination_code_id' => DestinationCode::inRandomOrder()->first()->id,
-                'entry_transport_id' => Transport::inRandomOrder()->first()->id,
-                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO E',
+                'destination_code_id' => 1,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO 1',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514922',
+                'lvin' => 'NM0GE9E20N1514922',
+                'vin_short' => 'MK08942',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 2,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP 2',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514933',
+                'lvin' => 'NM0GE9E20N1514933',
+                'vin_short' => 'MK08953',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 2,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO 3',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514924',
+                'lvin' => 'NM0GE9E20N1514924',
+                'vin_short' => 'MK08944',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 3,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP 4',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514935',
+                'lvin' => 'NM0GE9E20N1514935',
+                'vin_short' => 'MK08955',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 3,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO 5',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514926',
+                'lvin' => 'NM0GE9E20N1514926',
+                'vin_short' => 'MK08946',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 4,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP 6',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514937',
+                'lvin' => 'NM0GE9E20N1514937',
+                'vin_short' => 'MK08957',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 4,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO 7',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514928',
+                'lvin' => 'NM0GE9E20N1514928',
+                'vin_short' => 'MK08948',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 5,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 BP 8',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514939',
+                'lvin' => 'NM0GE9E20N1514939',
+                'vin_short' => 'MK08959',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 5,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 BO 9',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514910',
+                'lvin' => 'NM0GE9E20N1514910',
+                'vin_short' => 'MK08910',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 2,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD SOEIAC 2P5 B0 E',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'vin' => 'NM0GE9E20N1514912',
+                'lvin' => 'NM0GE9E20N1514912',
+                'vin_short' => 'MK08912',
+                'design_id' => Design::inRandomOrder()->first()->id,
+                'color_id' => Color::inRandomOrder()->first()->id,
+                'destination_code_id' => 5,
+                'entry_transport_id' => 1,
+                'eoc' => '2FUS K5UO385120 WPGUMK08952 5IG 73UD NVBF KE5R DB 5FABJD SOPI 235 5O E',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]
@@ -73,7 +193,6 @@ class VehicleSeeder extends Seeder
                 'tracking_date' => Carbon::now()
             ]
         ]);
-        //$vehicle1->stages()->sync([1 ,2,3,4,5]);
 
         $vehicle2 = Vehicle::find(2);
         $vehicle2->stages()->sync([
@@ -83,6 +202,84 @@ class VehicleSeeder extends Seeder
             ]
         ]);
 
-        //$vehicle2->stages()->sync([1]);
+        $vehicle3 = Vehicle::find(3);
+        $vehicle3->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle4 = Vehicle::find(4);
+        $vehicle4->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle5 = Vehicle::find(5);
+        $vehicle5->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle6 = Vehicle::find(6);
+        $vehicle6->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle7 = Vehicle::find(7);
+        $vehicle7->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle8 = Vehicle::find(8);
+        $vehicle8->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle9 = Vehicle::find(9);
+        $vehicle9->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle10 = Vehicle::find(10);
+        $vehicle10->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle11 = Vehicle::find(11);
+        $vehicle11->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
+
+        $vehicle12 = Vehicle::find(12);
+        $vehicle12->stages()->sync([
+            1 => [
+                'manual' => false,
+                'tracking_date' => Carbon::now()
+            ]
+        ]);
     }
 }

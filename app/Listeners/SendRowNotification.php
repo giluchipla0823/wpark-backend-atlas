@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\RowNotification;
+use App\Events\CompletedRowNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -21,10 +21,10 @@ class SendRowNotification
     /**
      * Handle the event.
      *
-     * @param  \App\Events\RowNotification  $event
+     * @param  \App\Events\CompletedRowNotification  $event
      * @return void
      */
-    public function handle(RowNotification $event)
+    public function handle(CompletedRowNotification $event)
     {
         //
     }

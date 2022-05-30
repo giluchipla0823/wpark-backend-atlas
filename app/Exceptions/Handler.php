@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
             //
         });
     }
-    // TODO: No se muestran los errores como json
+
     /**
      * @param $request
      * @param Throwable $e

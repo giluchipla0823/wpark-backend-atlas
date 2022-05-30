@@ -3281,6 +3281,90 @@
                 ]
             }
         },
+        "/api/v1/loads/check-vehicles": {
+            "post": {
+                "tags": [
+                    "Loads"
+                ],
+                "summary": "Check Vehicles",
+                "description": "Validate if the vehicles have the same destination as the carrier on their routes",
+                "operationId": "checkVehicles",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoadValidateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Check Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/load/generate": {
+            "post": {
+                "tags": [
+                    "Load"
+                ],
+                "summary": "Generate New Load",
+                "description": "Generate New Load",
+                "operationId": "generateLoad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoadGenerateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Load"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/movements": {
             "get": {
                 "tags": [
@@ -3422,6 +3506,134 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/{id}/confirm": {
+            "put": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Confirm Movement",
+                "description": "Confirm Movement",
+                "operationId": "confirmMovement",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirm Movement"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/{id}/cancel": {
+            "put": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Cancel Movement",
+                "description": "Cancel Movement",
+                "operationId": "cancelMovement",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cancel Movement"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movement/recomend": {
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Movements Recommend",
+                "description": "Este servicio contempla las cuatro acciones definidas para mover un vehículo desde que sale de CANOPY\r\n     *                   Las acciones son las siguientes:\r\n     *                   - action = 1 : Se ejecuta al pulsar el botón OK y hace una recomendación de movimiento en presorting\r\n     *                   - action = 2 : Se ejecuta al pulsar el botón NOK y muestra desplegable para mandar vehículo a planta\r\n     *                   - action = 3 : Se ejecuta al pulsar el botón VENTAS y permite elegir ubicación manual\r\n     *                   - action = 4 : Se ejecuta al pulsar el botón ESCAPE y hace una recomendación de movimiento en posición final",
+                "operationId": "recommendMovements",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementRecommendRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Movement Recommend Successfully"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -4186,6 +4398,35 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/routes-types/{id}/carriers": {
+            "get": {
+                "tags": [
+                    "RoutesTypes"
+                ],
+                "summary": "List of carriers given a route type",
+                "description": "List of carriers given a route type",
+                "operationId": "indexRoutesTypesCarriers",
+                "responses": {
+                    "200": {
+                        "description": "Carriers list successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -10148,6 +10389,96 @@
                     "name": "HoldUpdateRequest"
                 }
             },
+            "LoadGenerateRequest": {
+                "title": "Color Store Request",
+                "description": "Color Store request body data",
+                "required": [
+                    "transport_exit_id",
+                    "transport_identifier",
+                    "carrier_id",
+                    "vins",
+                    "license_plate",
+                    "compound_id"
+                ],
+                "properties": {
+                    "transport_exit_id": {
+                        "description": "ID del transporte de salida",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "minLength": 20,
+                        "example": "3 → TRUCT"
+                    },
+                    "transport_identifier": {
+                        "description": "Identificador de la carga",
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "example": "3 → TRUCT"
+                    },
+                    "carrier_id": {
+                        "description": "Id del transportista",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "6"
+                    },
+                    "vins": {
+                        "description": "Array de vins de los vehiculos",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": "['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+                    },
+                    "license_plate": {
+                        "description": "Matricula del camion",
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "example": "5263KAZ"
+                    },
+                    "compound_id": {
+                        "description": "ID de la campa",
+                        "type": "string",
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "example": "2"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ColorStoreRequest"
+                }
+            },
+            "LoadValidateRequest": {
+                "title": "Color Store Request",
+                "description": "Color Store request body data",
+                "required": [
+                    "name",
+                    "code",
+                    "simple_name",
+                    "hex"
+                ],
+                "properties": {
+                    "carrier_id": {
+                        "description": "Id del transportista",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "6"
+                    },
+                    "vins": {
+                        "description": "Array de vins de los vehiculos",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": "['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "ColorStoreRequest"
+                }
+            },
             "MovementDatatablesRequest": {
                 "title": "Movement Datatables Request",
                 "description": "Movement request body data",
@@ -10181,6 +10512,32 @@
                 "type": "object",
                 "xml": {
                     "name": "MovementDatatatblesRequest"
+                }
+            },
+            "MovementRecommendRequest": {
+                "title": "Movement Recommend Request",
+                "description": "Movement Recommend request body data",
+                "required": [
+                    "vehicle_id",
+                    "action"
+                ],
+                "properties": {
+                    "vehicle_id": {
+                        "description": "Indica el vehículo sobre el que se va a hacer la recomendación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "action": {
+                        "description": "Indica el tipo de acción que se va a realizar en la recomendación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementRecommendRequest"
                 }
             },
             "MovementStoreRequest": {

@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Load\LoadController;
+use App\Http\Controllers\Api\v1\Load\LoadGenerateController;
 use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
+use App\Http\Controllers\Api\v1\RouteType\RouteTypeCarrierController;
 use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
 use App\Http\Controllers\Api\v1\Carrier\CarrierController;
@@ -38,6 +41,7 @@ use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
 use App\Http\Controllers\Api\v1\Notification\NotificationController;
 use App\Http\Controllers\Api\v1\Movement\MovementController;
+use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
 use App\Http\Controllers\TestController;
 
@@ -211,12 +215,19 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::resource('notifications', NotificationController::class, ['except' =>['create', 'store', 'edit', 'update']]);
 
     // Loads
+    Route::post('/loads/generate', [LoadGenerateController::class, 'generate'])->name('loads.generate');
     Route::patch('/loads/{load}/confirm-left', [LoadConfirmLeftController::class, 'confirmLeft'])->name('loads.confirme-left');
+    Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
 
     // Movements
+    Route::put('movements/{movement}/confirm', [MovementController::class, 'confirmMovement'])->name('movements.confirm-movement');
+    Route::put('movements/{movement}/cancel', [MovementController::class, 'cancelMovement'])->name('movements.cancel-movement');
+    Route::post('/movements/recommend', [MovementRecommendController::class, 'index'])->name('movements.recommend');
     Route::post('/movements/datatables', [MovementController::class, 'datatables'])->name('movements.datatables');
     //Route::patch('/movements/{id}', [MovementController::class, 'restore'])->name('movements.restore');
     Route::resource('movements', MovementController::class, ['except' =>['create', 'edit', 'update', 'delete']]);
+
+    Route::get('routes-types/{routeType}/carriers', [RouteTypeCarrierController::class, "index"])->name("routes-types.carriers.index");
 });
 
 Route::get('/send-row-notification', [TestController::class, 'sendRowNotification']);

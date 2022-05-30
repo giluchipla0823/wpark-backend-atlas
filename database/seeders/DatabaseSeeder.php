@@ -34,12 +34,12 @@ class DatabaseSeeder extends Seeder
             ZoneSeeder::class,
             AreaSeeder::class,
             parkingTypeSeeder::class,
-            //ParkingSeeder::class,
+            ParkingSeeder::class,
             UserSeeder::class,
             PermissionSeeder::class,
             HoldSeeder::class,
             StageSeeder::class,
-            RuleSeeder::class,
+            //RuleSeeder::class,
             VehicleSeeder::class
         ]);
     }

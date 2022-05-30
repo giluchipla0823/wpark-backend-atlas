@@ -32,6 +32,12 @@ class Rule extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Cantidad de condiciones en una regla
+    public const ONE_CONDITION = 1;
+    public const TWO_CONDITIONS = 2;
+    public const THREE_CONDITIONS = 3;
+    public const FOUR_CONDITIONS = 4;
+
     /**
      * The attributes that are mass assignable.
      *
