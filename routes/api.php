@@ -64,7 +64,6 @@ use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
 }); */
 Route::get('/testing', [TestController::class, 'test']);
 
-Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->name('password.send');
 Route::post('/forgot-password-check', [AuthController::class, 'forgotPasswordCheckToken'])->name('password.check');
@@ -77,6 +76,10 @@ Route::get('/v1/designs/svg-default/{filename}', [DesignSvgController::class, 'd
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'auth'], function() {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+});
+
+Route::group(['prefix' => 'v1'], function() {
+    Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
 });
 
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
