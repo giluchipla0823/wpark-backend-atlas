@@ -22,7 +22,7 @@ class CompoundController extends ApiController
         CompoundService $compoundService
     )
     {
-        $this->middleware('role:Super-Admin|admin');
+        $this->middleware('role:Super-Admin|admin')->except(['index']);
         $this->compoundService = $compoundService;
     }
 
