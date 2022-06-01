@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CompletedRowNotification;
+use App\Models\Movement;
 use Illuminate\Http\Request;
 use App\Services\Application\Notification\NotificationService;
 use App\Http\Controllers\ApiController;
@@ -25,6 +26,10 @@ class TestController extends ApiController
     }
 
     public function test(Request $request): JsonResponse{
+        $movement = Movement::find(1);
+
+        dd($movement);
+
 
         $notification = $this->notificationService->create($request->all());
         dd($notification);

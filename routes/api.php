@@ -1,49 +1,52 @@
 <?php
 
-use App\Http\Controllers\Api\v1\Block\BlockRowController;
 use App\Http\Controllers\Api\v1\Load\LoadController;
 use App\Http\Controllers\Api\v1\Load\LoadGenerateController;
 use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
 use App\Http\Controllers\Api\v1\RouteType\RouteTypeCarrierController;
-use App\Http\Controllers\Api\v1\Row\RowBlockController;
-use App\Http\Controllers\Api\v1\Transport\TransportController;
-use App\Http\Controllers\Api\v1\Carrier\CarrierController;
-use App\Http\Controllers\Api\v1\Dealer\DealerController;
-use App\Http\Controllers\Api\v1\Color\ColorController;
-use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
-use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
-use App\Http\Controllers\Api\v1\Row\RowVehicleController;
-use App\Http\Controllers\Api\v1\State\StateVehicleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\v1\User\UserController;
-use App\Http\Controllers\Api\v1\Compound\CompoundController;
-use App\Http\Controllers\Api\v1\Brand\BrandController;
-use App\Http\Controllers\Api\v1\Design\DesignController;
-use App\Http\Controllers\Api\v1\Country\CountryController;
-use App\Http\Controllers\Api\v1\Route\RouteController;
-use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
-use App\Http\Controllers\Api\v1\Condition\ConditionController;
-use App\Http\Controllers\Api\v1\State\StateController;
+use App\Http\Controllers\Api\v1\Row\RowController;
+use App\Http\Controllers\Api\v1\Area\AreaController;
 use App\Http\Controllers\Api\v1\Hold\HoldController;
 use App\Http\Controllers\Api\v1\Rule\RuleController;
-use App\Http\Controllers\Api\v1\Zone\ZoneController;
-use App\Http\Controllers\Api\v1\Area\AreaController;
-use App\Http\Controllers\Api\v1\Parking\ParkingTypeController;
-use App\Http\Controllers\Api\v1\Parking\ParkingController;
-use App\Http\Controllers\Api\v1\Parking\ParkingDesignController;
-use App\Http\Controllers\Api\v1\Block\BlockController;
-use App\Http\Controllers\Api\v1\Row\RowController;
 use App\Http\Controllers\Api\v1\Slot\SlotController;
+use App\Http\Controllers\Api\v1\User\UserController;
+use App\Http\Controllers\Api\v1\Zone\ZoneController;
+use App\Http\Controllers\Api\v1\Block\BlockController;
+use App\Http\Controllers\Api\v1\Brand\BrandController;
+use App\Http\Controllers\Api\v1\Color\ColorController;
+use App\Http\Controllers\Api\v1\Row\RowBlockController;
+use App\Http\Controllers\Api\v1\Dealer\DealerController;
+use App\Http\Controllers\Api\v1\Block\BlockRowController;
+use App\Http\Controllers\Api\v1\Row\RowVehicleController;
+use App\Http\Controllers\Api\v1\Carrier\CarrierController;
+use App\Http\Controllers\Api\v1\Route\RouteController;
+use App\Http\Controllers\Api\v1\State\StateController;
+use App\Http\Controllers\Api\v1\Design\DesignController;
 use App\Http\Controllers\Api\v1\Vehicle\StageController;
+use App\Http\Controllers\Api\v1\Country\CountryController;
+use App\Http\Controllers\Api\v1\Parking\ParkingController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
+use App\Http\Controllers\Api\v1\Compound\CompoundController;
+use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
+use App\Http\Controllers\Api\v1\State\StateVehicleController;
+use App\Http\Controllers\Api\v1\Transport\TransportController;
+use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
+use App\Http\Controllers\Api\v1\FreightVerify\VehicleReceivedController;
+use App\Http\Controllers\Api\External\RecirculationController;
+use App\Http\Controllers\Api\v1\Condition\ConditionController;
+use App\Http\Controllers\Api\v1\Parking\ParkingTypeController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
+use App\Http\Controllers\Api\v1\Parking\ParkingDesignController;
 use App\Http\Controllers\Api\v1\Notification\NotificationController;
+use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
 use App\Http\Controllers\Api\v1\Movement\MovementController;
 use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
-use App\Http\Controllers\TestController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +62,7 @@ use App\Http\Controllers\TestController;
 /* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 }); */
-//Route::get('/testGet', [TestController::class, 'testGet']);
+Route::get('/testing', [TestController::class, 'test']);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->name('password.send');
@@ -204,6 +207,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::post('/carriers/datatables', [CarrierController::class, 'datatables'])->name('carriers.datatables');
     Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
     Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
+    Route::post('/carriers/match-vins', [CarrierController::class, 'matchVins'])->name('carriers.match-vins');
 
     // Dealers
     Route::patch('/dealers/{id}', [DealerController::class, 'restore'])->name('dealers.restore');
@@ -213,6 +217,11 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
     Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
     Route::resource('notifications', NotificationController::class, ['except' =>['create', 'store', 'edit', 'update']]);
+
+    // FreightVerify
+    Route::post('/freight-verify/vehicle-received', VehicleReceivedController::class);
+    // SOAP FORD
+    Route::get('/external/recirculations/{vin}', [RecirculationController::class, 'get'])->name('recirculations.get');
 
     // Loads
     Route::post('/loads/generate', [LoadGenerateController::class, 'generate'])->name('loads.generate');

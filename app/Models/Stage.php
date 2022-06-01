@@ -30,6 +30,13 @@ class Stage extends Model
 
     public const STAGE_GATE_RELEASE_ID = 5;
 
+    public const STAGE_ST3_CODE = "03";
+    public const STAGE_ST4_CODE = "04";
+    public const STAGE_ST5_CODE = "05";
+    public const STAGE_ST6_CODE = "06";
+    public const STAGE_ST7_CODE = "07";
+    public const STAGE_ST8_CODE = "08";
+
     /**
      * The attributes that are mass assignable.
      *

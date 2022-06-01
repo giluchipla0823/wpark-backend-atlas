@@ -3,6 +3,7 @@
 namespace App\Services\Application\Carrier;
 
 use App\Helpers\QueryParamsHelper;
+use App\Http\Resources\Carrier\CarrierMatchResource;
 use App\Http\Resources\Carrier\CarrierResource;
 use App\Models\Carrier;
 use App\Models\RouteType;
@@ -99,5 +100,16 @@ class CarrierService
         $results = $this->repository->findAllByRouteTypeId($routeType->id);
 
         return CarrierResource::collection($results)->collection;
+    }
+
+    /**
+     * @param array $params
+     * @return Collection
+     */
+    public function matchVins(array $params): Collection
+    {
+        $results = $this->repository->matchVins($params);
+
+        return CarrierMatchResource::collection($results)->collection;
     }
 }

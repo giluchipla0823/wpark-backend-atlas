@@ -52,6 +52,27 @@ class Route extends Model
         'updated_at',
     ];
 
+    protected $appends = ['default'];
+
+
+    /**
+     * @return bool
+     */
+    public function getDefaultAttribute(): bool
+    {
+        return $this->isDefault();
+    }
+
+    public function isDefault(): bool
+    {
+        return $this->route_type_id === RouteType::ROUTE_TYPE_DEFAULT_ID;
+    }
+
+    public function isAlternative(): bool
+    {
+        return $this->route_type_id === RouteType::ROUTE_TYPE_ALTERNATIVE_ID;
+    }
+
     public function route_type()
     {
         return $this->belongsTo(RouteType::class, 'route_type_id');

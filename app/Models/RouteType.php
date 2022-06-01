@@ -28,6 +28,9 @@ class RouteType extends Model
 
     protected $table = 'route_types';
 
+    public const ROUTE_TYPE_DEFAULT_ID = 1;
+    public const ROUTE_TYPE_ALTERNATIVE_ID = 2;
+
     /**
      * The attributes that are mass assignable.
      *

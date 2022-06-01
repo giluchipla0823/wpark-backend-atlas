@@ -11,4 +11,6 @@ interface CarrierRepositoryInterface extends BaseRepositoryInterface
     public function datatables(Request $request): array;
 
     public function findAllByRouteTypeId(int $routeTypeId): Collection;
+
+    public function matchVins(array $params): Collection;
 }

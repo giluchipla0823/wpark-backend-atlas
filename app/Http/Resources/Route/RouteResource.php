@@ -17,16 +17,42 @@ class RouteResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'cdm_code' => $this->cdm_code,
-            'route_type_id' => $this->route_type()->get(),
-            'carrier_id' => new CarrierResource($this->carrier),
-            'destination_code_id' => new DestinationCodeResource($this->destination_code),
-            'origin_compound' => new CompoundResource($this->originCompound),
-            'destination_compound' => new CompoundResource($this->destinationCompound),
-            'comments' => $this->comment
+        $relationships = array_keys($this->resource->getRelations());
+
+        $response = [
+            "id" => $this->id,
+            "name" => $this->name,
+            "cdm_code" => $this->cdm_code,
+            "route_type" => $this->route_type()->get(),
         ];
+
+        if (in_array('carrier', $relationships)) {
+            $response['carrier'] = new CarrierResource($this->carrier);
+        } else {
+            $response['carrier_id'] = $this->carrier_id;
+        }
+
+        if (in_array('destinationCode', $relationships)) {
+            $response['destination_code'] = new DestinationCodeResource($this->destinationCode);
+        } else {
+            $response['destination_code_id'] = $this->destination_code_id;
+        }
+
+        if (in_array('originCompound', $relationships)) {
+            $response['origin_compound'] = new CompoundResource($this->originCompound);
+        } else {
+            $response['origin_compound_id'] = $this->origin_compound_id;
+        }
+
+        if (in_array('destinationCompound', $relationships)) {
+            $response['destination_compound'] = new CompoundResource($this->destinationCompound);
+        } else {
+            $response['destination_compound_id'] = $this->destination_compound_id;
+        }
+
+        return array_merge($response, [
+            'comments' => $this->comment,
+            "default" => (bool) $this->default
+        ]);
     }
 }

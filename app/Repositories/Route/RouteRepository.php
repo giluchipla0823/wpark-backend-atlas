@@ -24,6 +24,8 @@ class RouteRepository extends BaseRepository implements RouteRepositoryInterface
     {
         $query = $this->model->query();
 
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $result = Datatables::customizable($query)->response();
 

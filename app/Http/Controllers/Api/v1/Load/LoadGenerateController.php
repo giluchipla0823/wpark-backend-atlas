@@ -29,7 +29,7 @@ class LoadGenerateController extends ApiController
     /**
      * @OA\POST(
      *     path="/api/v1/load/generate",
-     *     tags={"Load"},
+     *     tags={"Loads"},
      *     summary="Generate New Load",
      *     description="Generate New Load",
      *     security={{"sanctum": {} }},

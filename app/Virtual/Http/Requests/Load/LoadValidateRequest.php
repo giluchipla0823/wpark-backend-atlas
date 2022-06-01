@@ -32,11 +32,11 @@ class LoadValidateRequest
      * @OA\Property(
      *     property="vins",
      *     type="array",
-     *      @OA\Items(
+     *     @OA\Items(
      *          type="string",
      *     ),
      *     description="Array de vins de los vehiculos",
-     *     example="['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+     *     example={"NM0GE9E20N1514928", "NM0GE9E20N1514931"}
      * )
      */
     public $vins;

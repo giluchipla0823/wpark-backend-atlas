@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             BlockSeeder::class,
             ZoneSeeder::class,
             AreaSeeder::class,
-            parkingTypeSeeder::class,
+            ParkingTypeSeeder::class,
             ParkingSeeder::class,
             UserSeeder::class,
             PermissionSeeder::class,

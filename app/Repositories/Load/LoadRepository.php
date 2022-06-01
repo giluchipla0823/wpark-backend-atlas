@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Load;
 
+use App\Http\Resources\Route\RouteResource;
 use App\Models\Carrier;
 use App\Models\Load;
+use App\Models\RouteType;
 use App\Models\Vehicle;
 use App\Repositories\BaseRepository;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,79 +108,129 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
         return $query->get();
     }
 
+    /**
+     * @param array $params
+     * @return array
+     * @throws Exception
+     */
     public function checkVehicles(array $params): array
     {
-        $vins = $params['vins'];
+        $vins = array_unique($params['vins']);
         $carrier_id = $params['carrier_id'];
         $array_check = [];
-        $vehicles = Vehicle::whereIn('vin',$vins)->get();//obtenemos los vehiculos por el vin
-        $carrier = Carrier::with('routes')->find($carrier_id);//obtenemos el transportista
+
+        /* @var Collection $vehicles */
+        $vehicles = Vehicle::whereIn('vin', $vins)->get();
+        $carrier = Carrier::with('routes')->find($carrier_id);
+
         if ($carrier->routes->isEmpty()) {
             throw new Exception(
                 "El transportista seleccionado no tiene rutas definidas.",
                 Response::HTTP_BAD_REQUEST
             );
         }
-        //recorremos los vehiculos para hacer las comprobaciones
-        $array_need_carriers = [];
-        foreach ($vehicles as $vehicle) {
-            //iniciamos el array para cada vin
-            $array_check[$vehicle->vin] = [
-                "exists" => true,
-                "enable_to_load" => true
+
+        foreach ($vins as $vinValue) {
+            $vehicle = $vehicles->where("vin", "=", $vinValue)->first();
+            $existsVin = $vehicle instanceof Vehicle;
+            $destinationCode = null;
+
+            if ($existsVin) {
+                $destinationCodeRelationship = $vehicle->destinationCode;
+
+                $destinationCode = $destinationCodeRelationship ? [
+                    "id" => $destinationCodeRelationship->id,
+                    "code" => $destinationCodeRelationship->code
+                ] : null;
+            }
+
+            $array_check[$vinValue] = [
+                "vehicle" => [
+                    "id" => $existsVin ? $vehicle->id : null,
+                    "vin" => $vinValue,
+                    "destination_code" => $destinationCode
+                ],
+                "exists" => $existsVin,
+                "enable_to_load" => $existsVin
             ];
 
-            $errors = [];//iniciamos el array de errores
+            if (!$existsVin) {
+                continue;
+            }
 
-            if ($vehicle->holds->isNotEmpty()) {//comprobamos que el vehiculo no tenga ningun bloqueo
+            $errors = [];
+
+            /**
+             * Verificamos si el vehículo tiene Holds(Retenciones).
+             */
+            if ($vehicle->holds->isNotEmpty()) {
                 $hold_errors = [];
+
                 foreach ($vehicle->holds as $hold) {
-                    $hold_errors[] = [//si tiene bloqueos los añadimos a un array
+                    $hold_errors[] = [
                         "id" => $hold->id,
-                        "name" => $carrier->name
+                        "name" => $hold->name
                     ];
                 }
+
                 $errors[] = ["condition" => "hold", "items" => $hold_errors];
-                $array_check[$vehicle->vin]['enable_to_load'] = false;//marcamos como falso por tener bloqueos
+                $array_check[$vehicle->vin]['enable_to_load'] = false;
             }
-            //comprobamos que los destinos sean los mismos
-            $destination_errors = [];
+
+            /**
+             * De todas las rutas que tiene el transportista seleccionado, comprobamos que coincida al menos una
+             * con el código de destino del vehículo
+             */
             $match = false;
+
             foreach ($carrier->routes as $route) {
-                if ($vehicle->destination_code_id == $route->destination_code_id) {
+                if ($vehicle->destination_code_id === $route->destination_code_id) {
                     $match = true;
                 }
             }
+
             if (!$match) {
-                $destination_errors[] = [//si los codigos de destino no coinciden
+
+                /**
+                 * Si no coinciden los códigos de destino del vehículo con el transportista seleccionado,
+                 * entonces procedemos a obtener los transportistas que pueden llevar al vehículo.
+                 *
+                 */
+                $carriers = Route::where('destination_code_id', "=", $vehicle->destination_code_id)
+                                ->with('carrier')
+                                ->get()
+                                ->pluck('carrier')
+                                ->map(function(Carrier $carrier) {
+                                   return [
+                                     "id" => $carrier->id,
+                                     "name" => $carrier->name,
+                                     "short_name" => $carrier->short_name,
+                                     "code" => $carrier->code,
+                                   ];
+                                });
+
+                $errors[] = [
                     "condition" => "carrier",
-                    "message" => "No cumple con el transportista seleccionado"
-                ];
-                array_push($errors, $destination_errors);
-                $array_need_carriers[$vehicle->vin] = $vehicle->destination_code_id;
+                    "items" => $carriers
+                ];;
+
+                $array_check[$vehicle->vin]['enable_to_load'] = false;
             }
 
             if (!empty($errors)) {
                 $array_check[$vehicle->vin]['errors'] = $errors;
-            }
+            } else {
+                $routes = $carrier->routes
+                    ->filter(function(Route $route) use ($vehicle) {
+                        return $route->destination_code_id === $vehicle->destination_code_id;
+                    })
+                    ->sortBy('route_type_id')
+                    ->values();
 
-        }
-
-
-        //Obtenemos los transportistas que pueden llevar al vehiculo al destino
-        if (!empty($array_need_carriers)) {
-            $routes = Route::whereIn('destination_code_id', $array_need_carriers)->with('carrier')->get();
-            foreach ($array_need_carriers as $vin => $destiny) {
-                $valid_routes = $routes->where('destination_code_id', $destiny);
-                foreach ($valid_routes as $valid_route) {
-                    $array_check[$vin]['carriers_valid'][] = [
-                        "id" => $valid_route->carrier->id,
-                        "name" => $valid_route->carrier->name
-                    ];
-                }
+                $array_check[$vehicle->vin]['routing_codes'] = RouteResource::collection($routes)->collection;
             }
         }
 
-        return $array_check;
+        return array_values($array_check);
     }
 }

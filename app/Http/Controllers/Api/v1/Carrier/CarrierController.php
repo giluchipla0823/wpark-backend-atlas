@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Carrier;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Carrier\CarrierMatchRequest;
 use App\Http\Requests\Carrier\CarrierStoreRequest;
 use App\Http\Requests\Carrier\CarrierUpdateRequest;
 use App\Models\Carrier;
@@ -224,5 +225,36 @@ class CarrierController extends ApiController
         $this->carrierService->restore($id);
 
         return $this->showMessage('Carrier restored successfully.');
+    }
+
+    /**
+     * @OA\POST(
+     *     path="/api/v1/carriers/match-vins",
+     *     tags={"Carriers", "Vins"},
+     *     summary="Carrier match destiny vehicles",
+     *     description="Carrier match destiny vehicles",
+     *     security={{"sanctum": {}}},
+     *     operationId="matchVinsCarrier",
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/CarrierMatchRequest")
+     *     ),
+     *     @OA\Response(response=204, description="Carrier restored successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Restores the specified resource from storage.
+     *
+     * @param CarrierMatchRequest $request
+     * @return JsonResponse
+     */
+    public function matchVins(CarrierMatchRequest $request): JsonResponse
+    {
+        $carriers = $this->carrierService->matchVins($request->all());
+
+        return $this->successResponse($carriers);
     }
 }

@@ -217,6 +217,32 @@
                 }
             }
         },
+        "/api/v1/recirculations/{vin}": {
+            "get": {
+                "tags": [
+                    "Recirculations"
+                ],
+                "summary": "Recirculations Get",
+                "description": "SOAP FORD",
+                "operationId": "recirculationsGet",
+                "responses": {
+                    "200": {
+                        "description": "Data FORD"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/areas": {
             "get": {
                 "tags": [
@@ -3323,7 +3349,7 @@
         "/api/v1/load/generate": {
             "post": {
                 "tags": [
-                    "Load"
+                    "Loads"
                 ],
                 "summary": "Generate New Load",
                 "description": "Generate New Load",
@@ -10471,7 +10497,10 @@
                         "items": {
                             "type": "string"
                         },
-                        "example": "['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+                        "example": [
+                            "NM0GE9E20N1514928",
+                            "NM0GE9E20N1514931"
+                        ]
                     }
                 },
                 "type": "object",
