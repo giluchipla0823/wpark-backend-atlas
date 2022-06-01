@@ -64,6 +64,7 @@ use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
 }); */
 Route::get('/testing', [TestController::class, 'test']);
 
+Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->name('password.send');
 Route::post('/forgot-password-check', [AuthController::class, 'forgotPasswordCheckToken'])->name('password.check');
@@ -95,7 +96,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     // Compounds
     Route::post('/compounds/datatables', [CompoundController::class, 'datatables'])->name('compounds.datatables');
     Route::patch('/compounds/{id}', [CompoundController::class, 'restore'])->name('compounds.restore');
-    Route::resource('compounds', CompoundController::class, ['except' =>['create', 'edit']]);
+    Route::resource('compounds', CompoundController::class, ['except' =>['create', 'edit', 'index']]);
 
     // Brands
     Route::patch('/brands/{id}', [BrandController::class, 'restore'])->name('brands.restore');
