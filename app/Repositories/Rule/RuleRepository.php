@@ -30,10 +30,17 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
+        if ($request->query->has("is_group")) {
+            $isGroup = $request->query->getInt("is_group");
+
+            $query = $query->where("is_group", "=", $isGroup);
+        }
+
         return $query->get();
     }
 
     /**
+     * @param Request $request
      * @return array
      */
     public function datatables(Request $request): array
@@ -41,6 +48,12 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
         $query = $this->model->query();
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        if ($request->query->has("is_group")) {
+            $isGroup = $request->query->getInt("is_group");
+
+            $query = $query->where("is_group", "=", $isGroup);
+        }
 
         return Datatables::customizable($query)->response();
     }

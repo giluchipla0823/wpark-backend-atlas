@@ -99,7 +99,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     // Compounds
     Route::post('/compounds/datatables', [CompoundController::class, 'datatables'])->name('compounds.datatables');
     Route::patch('/compounds/{id}', [CompoundController::class, 'restore'])->name('compounds.restore');
-    Route::resource('compounds', CompoundController::class, ['except' =>['create', 'edit', 'index']]);
+    Route::resource('compounds', CompoundController::class, ['except' => ['create', 'edit', 'index']]);
 
     // Brands
     Route::patch('/brands/{id}', [BrandController::class, 'restore'])->name('brands.restore');

@@ -34,7 +34,7 @@ class RuleResource extends JsonResource
             'final_position' => $this->final_position,
             'predefined_zone' => $this->parking ? new ParkingResource($this->parking) : null,
             'carrier' => $this->carrier ? new CarrierResource($this->carrier) : null,
-            'active' => $this->active,
+            'active' => $this->active
         ];
 
         if (in_array('conditions', $relationships)) {
@@ -43,6 +43,10 @@ class RuleResource extends JsonResource
 
         if (in_array('blocks', $relationships)) {
             $response['blocks'] = BlockResource::collection($this->blocks);
+        }
+
+        if (in_array('rules_groups', $relationships) && (bool) $this->is_group) {
+            $response['rules'] = RuleResource::collection($this->rules_groups);
         }
 
         return $response;
