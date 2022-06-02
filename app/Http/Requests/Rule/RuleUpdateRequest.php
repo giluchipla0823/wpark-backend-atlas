@@ -34,7 +34,7 @@ class RuleUpdateRequest extends FormRequest
             'conditions' => 'required_if:is_group,0|array',
             'rules' => 'required_if:is_group,1|array',
             'rules.*' => 'required_if:is_group,1|exists:rules,id,is_group,0',
-            'active' => 'required|boolean',
+            'active' => 'required_if:is_group,0|boolean',
         ];
     }
 

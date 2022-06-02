@@ -4,10 +4,13 @@ namespace App\Services\Application\Rule;
 
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Rule\RuleResource;
+use App\Models\Block;
 use App\Models\Rule;
 use App\Repositories\Rule\RuleRepositoryInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RuleService
 {
@@ -61,10 +64,15 @@ class RuleService
     /**
      * @param array $params
      * @return Rule
+     * @throws Exception
      */
     public function create(array $params): Rule
     {
-        return $this->repository->create($params);
+        return DB::transaction(function () use ($params) {
+            $rule = $this->repository->create($params);
+
+            return $this->createOrUpdateRelationship($rule, $params);
+        });
     }
 
     /**
@@ -74,7 +82,56 @@ class RuleService
      */
     public function update(array $params, int $id): void
     {
-        $this->repository->update($params, $id);
+        DB::transaction(function() use($params, $id) {
+            $modelAttributes = Rule::getModel()->getFillable();
+
+            $this->repository->update(
+                collect($params)->only($modelAttributes)->toArray(),
+                $id
+            );
+
+            $rule = $this->repository->find($id);
+
+            $this->createOrUpdateRelationship($rule, $params);
+        });
+    }
+
+    /**
+     * @param Rule $rule
+     * @param array $params
+     * @return Rule
+     */
+    private function createOrUpdateRelationship(Rule $rule, array $params): Rule
+    {
+        $presortingBlock = Block::where('presorting_default', 1)->first();
+
+        if (! (bool) $params['is_group']) {
+            $rule->blocks()->sync([$presortingBlock->id, $params['block_id']]);
+
+            if ($rule->conditions()->count() > 0) {
+                $currentConditionsIds = array_unique(
+                    $rule->conditions()->get()
+                        ->pluck('pivot.condition_id')
+                        ->toArray()
+                );
+
+                $rule->conditions()->detach($currentConditionsIds);
+            }
+
+            $conditions = $params['conditions'];
+
+            foreach ($conditions as $condition) {
+                $rule->conditions()->attach($condition['condition_id'], [
+                    'conditionable_type' => $condition['conditionable_type'],
+                    'conditionable_id' => $condition['conditionable_id']
+                ]);
+            }
+        } else {
+            $rule->rules_groups()->sync($params['rules']);
+            $rule->blocks()->sync($presortingBlock->id);
+        }
+
+        return $rule;
     }
 
     /**
@@ -98,7 +155,7 @@ class RuleService
     public function toggleActive(Rule $rule): int {
         $active = $rule->active ? 0 : 1;
 
-        $this->update(['active' => $active], $rule->id);
+        $this->repository->update(['active' => $active], $rule->id);
 
         return $active;
     }

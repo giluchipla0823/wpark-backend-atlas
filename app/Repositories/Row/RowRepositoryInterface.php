@@ -17,4 +17,6 @@ interface RowRepositoryInterface extends BaseRepositoryInterface
     public function updateBlockToRows(Block $block, array $rows): void;
 
     public function findAllByParking(Parking $parking): Collection;
+
+    public function findOneByQrcode($value): ?Row;
 }

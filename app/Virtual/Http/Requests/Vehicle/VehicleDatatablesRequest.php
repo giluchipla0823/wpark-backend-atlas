@@ -38,8 +38,7 @@ class VehicleDatatablesRequest
      * @OA\Property(
      *     property="vins",
      *     type="object",
-     *     description="",
-     *     example="",
+     *     description="Filtro por vins",
      *     @OA\Property(
      *        property="value",
      *        type="string",

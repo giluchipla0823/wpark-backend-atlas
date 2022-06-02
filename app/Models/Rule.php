@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,6 +59,17 @@ class Rule extends Model
         'updated_at',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($query) {
+            if ((bool) $query->is_group) {
+                $query->final_position = 0;
+            }
+        });
+    }
+
     public function predefinedParking()
     {
         return $this->belongsTo(Parking::class, 'predefined_zone_id');
@@ -97,5 +109,4 @@ class Rule extends Model
     {
         return $this->hasMany(Row::class, 'rule_id');
     }
-
 }

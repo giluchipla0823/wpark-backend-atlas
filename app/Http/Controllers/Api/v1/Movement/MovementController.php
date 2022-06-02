@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Movement;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Movement\MovementDatatablesRequest;
 use App\Http\Requests\Movement\MovementStoreRequest;
 use App\Models\Movement;
 use App\Services\Application\Movement\MovementService;
@@ -71,16 +72,14 @@ class MovementController extends ApiController
      *
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param MovementDatatablesRequest $request
      * @return JsonResponse
      */
-    public function datatables(Request $request): JsonResponse
+    public function datatables(MovementDatatablesRequest $request): JsonResponse
     {
-        $request->query->add(['datatables' => 1]);
-
         $results = $this->movementService->datatables($request);
 
-        return $this->showAll($results);
+        return $this->datatablesResponse($results);
     }
 
      /**

@@ -7,7 +7,7 @@ use App\Http\Resources\Parking\ParkingResource;
 use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RowResource extends JsonResource
+class RowShowResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,7 @@ class RowResource extends JsonResource
      */
     public function toArray($request)
     {
-        $relationships = array_keys($this->resource->getRelations());
-
-        $response = [
+        return [
             'id' => $this->id,
             'row_number' => $this->row_number,
             'row_name' => $this->row_name,
@@ -35,13 +33,8 @@ class RowResource extends JsonResource
             'full' => $this->full,
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
-            'active' => $this->active
+            'active' => $this->active,
+            "slots" => SlotResource::collection($this->slots)
         ];
-
-        if (in_array('slots', $relationships)) {
-            $response['slots'] = SlotResource::collection($this->slots);
-        }
-
-        return $response;
     }
 }

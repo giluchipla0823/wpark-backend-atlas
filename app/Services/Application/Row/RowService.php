@@ -4,12 +4,15 @@ namespace App\Services\Application\Row;
 
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Row\RowResource;
+use App\Http\Resources\Row\RowShowResource;
 use App\Models\Block;
 use App\Models\Parking;
 use App\Models\Row;
 use App\Repositories\Row\RowRepositoryInterface;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 
 class RowService
 {
@@ -42,11 +45,11 @@ class RowService
 
     /**
      * @param Row $area
-     * @return RowResource
+     * @return RowShowResource
      */
-    public function show(Row $area): RowResource
+    public function show(Row $area): RowShowResource
     {
-        return new RowResource($area);
+        return new RowShowResource($area);
     }
 
     /**
@@ -143,5 +146,22 @@ class RowService
         $this->update(['active' => $active], $row->id);
 
         return $active;
+    }
+
+    /**
+     * @param string $value
+     * @return RowShowResource
+     * @throws Exception
+     */
+    public function findOneByQrcode(string $value): RowShowResource
+    {
+        if (!$row = $this->repository->findOneByQrcode($value)) {
+            throw new Exception(
+                "No se encontró información de la fila con el QR {$value}",
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return new RowShowResource($row);
     }
 }

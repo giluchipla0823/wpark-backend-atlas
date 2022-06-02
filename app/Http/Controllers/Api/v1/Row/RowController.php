@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\v1\Row;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Requests\Row\RowStoreRequest;
 use App\Http\Requests\Row\RowUpdateRequest;
 use App\Models\Row;
 use App\Services\Application\Row\RowService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -50,17 +50,6 @@ class RowController extends ApiController
 
         return $this->showAll($results);
     }
-
-    /**
-     * @param RowStoreRequest $request
-     * @return JsonResponse
-     */
-    /* public function store(RowStoreRequest $request): JsonResponse
-    {
-        $row = $this->rowService->create($request->all());
-
-        return $this->successResponse($row, 'Row created successfully.', Response::HTTP_CREATED);
-    } */
 
     /**
      * @OA\GET(
@@ -124,28 +113,6 @@ class RowController extends ApiController
         return $this->showMessage('Row updated successfully.');
     }
 
-//    /**
-//     * @param Row $row
-//     * @return JsonResponse
-//     */
-    /* public function destroy(Row $row): JsonResponse
-    {
-        $this->rowService->delete($row->id);
-
-        return $this->showMessage('Row removed successfully.', Response::HTTP_NO_CONTENT);
-    } */
-
-//    /**
-//     * @param int $id
-//     * @return JsonResponse
-//     */
-    /* public function restore(int $id): JsonResponse
-    {
-        $this->rowService->restore($id);
-
-        return $this->showMessage('Row restored successfully.', Response::HTTP_NO_CONTENT);
-    } */
-
     /**
      * @OA\PATCH(
      *     path="/api/v1/rows/{id}/toggle-active",
@@ -174,6 +141,43 @@ class RowController extends ApiController
         $message = $active === 0 ? 'La fila se desactivó correctamente.' : 'La fila se activó correctamente.';
 
         return $this->showMessage($message);
+    }
+
+    /**
+     *
+     * @OA\GET(
+     *     path="/api/v1/rows/show-by-qrcode/{qrcode}",
+     *     tags={"Rows"},
+     *     summary="Show Row Details by QR code",
+     *     description="Show Row Details by QR code",
+     *     security={{"sanctum": {}}},
+     *     operationId="showRowByQrcode",
+     *     @OA\Parameter(
+     *          parameter="qrcode",
+     *          name="qrcode",
+     *          description="qrcode, eg; 100.001",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="Show Row Details by QR code"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display the specified resource by QR code.
+     *
+     * @param string $qrcode
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function showByQrCode(string $qrcode): JsonResponse
+    {
+        $row = $this->rowService->findOneByQrcode($qrcode);
+
+        return $this->successResponse($row);
     }
 
 }

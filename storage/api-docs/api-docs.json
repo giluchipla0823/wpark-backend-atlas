@@ -1270,6 +1270,49 @@
                 ]
             }
         },
+        "/api/v1/carriers/match-vins": {
+            "post": {
+                "tags": [
+                    "Carriers",
+                    "Vins"
+                ],
+                "summary": "Carrier match destiny vehicles",
+                "description": "Carrier match destiny vehicles",
+                "operationId": "matchVinsCarrier",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CarrierMatchRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Carrier restored successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/colors": {
             "get": {
                 "tags": [
@@ -3005,6 +3048,45 @@
                     },
                     "403": {
                         "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/freight-verify/vehicle-received": {
+            "post": {
+                "tags": [
+                    "FreightVerify"
+                ],
+                "summary": "Envío de milestone de Vehicle Received a FreightVerify",
+                "description": "Envío de milestone de Vehicle Received a FreightVerify",
+                "operationId": "sendVehicleReceivedMilestone",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleReceivedRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "FreightVerify response data"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
@@ -4941,6 +5023,50 @@
                 ]
             }
         },
+        "/api/v1/rows/show-by-qrcode/{qrcode}": {
+            "get": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Show Row Details by QR code",
+                "description": "Show Row Details by QR code",
+                "operationId": "showRowByQrcode",
+                "parameters": [
+                    {
+                        "parameter": "qrcode",
+                        "name": "qrcode",
+                        "in": "path",
+                        "description": "qrcode, eg; 100.001",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Row Details by QR code"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/rows/{id}/vehicles": {
             "get": {
                 "tags": [
@@ -4985,7 +5111,11 @@
                 "operationId": "indexRules",
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/datatables"
+                        "name": "is_group",
+                        "in": "query",
+                        "description": "Filtro de reglas agrupadas o simples",
+                        "required": false,
+                        "example": "1"
                     },
                     {
                         "name": "includes",
@@ -5045,6 +5175,61 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rules/datatables": {
+            "post": {
+                "tags": [
+                    "Rules"
+                ],
+                "summary": "Rules List with datatables",
+                "description": "List of rules using datatables",
+                "operationId": "datatablesRules",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/datatables"
+                    },
+                    {
+                        "name": "is_group",
+                        "in": "query",
+                        "description": "Filtro de reglas agrupadas o simples",
+                        "required": false,
+                        "example": "1"
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir bloques, condiciones",
+                        "required": false,
+                        "example": "blocks,conditions"
+                    },
+                    {
+                        "name": "extra_includes",
+                        "in": "query",
+                        "description": "Añadir valores de condiciones",
+                        "required": false,
+                        "example": "conditions.values"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rule list with datatables Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -9638,6 +9823,30 @@
                     "name": "BrandUpdateRequest"
                 }
             },
+            "CarrierMatchRequest": {
+                "title": "Carrier Match Vins",
+                "description": "Carrier Match vins",
+                "required": [
+                    "vins"
+                ],
+                "properties": {
+                    "vins": {
+                        "description": "List of Vins",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "NM0GE9E20N1514928",
+                            "NM0GE9E20N1514931"
+                        ]
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "CarrierStoreRequest"
+                }
+            },
             "CarrierStoreRequest": {
                 "title": "Carrier Store Request",
                 "description": "Carrier Store request body data",
@@ -10326,6 +10535,101 @@
                     "name": "DestinationCodeUpdateRequest"
                 }
             },
+            "VehicleReceivedRequest": {
+                "title": "FreightVerify Vehicle Received Request",
+                "description": "Send Vehicle Received Milestone to FreightVerify API",
+                "required": [
+                    "vin",
+                    "transportationType",
+                    "senderName",
+                    "scac",
+                    "ms1LocationCode",
+                    "ms1StateOrProvinceCode",
+                    "ms1CountryCode",
+                    "compoundCode",
+                    "yardCode",
+                    "bayCode",
+                    "nextCarrier",
+                    "equipmentType",
+                    "equipmentNumber",
+                    "voyageNumber",
+                    "assetId"
+                ],
+                "properties": {
+                    "vin": {
+                        "description": "VIN",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "transportationType": {
+                        "description": "Mode types are defined as: 01 – Truck, 02 – Rail, 03 – Ship, 04 – Air",
+                        "type": "string",
+                        "maxLength": 2,
+                        "enum": [
+                            "01",
+                            "02",
+                            "03",
+                            "04"
+                        ]
+                    },
+                    "senderName": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "scac": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "ms1LocationCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "ms1StateOrProvinceCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "ms1CountryCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "compoundCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "yardCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "bayCode": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "nextCarrier": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "equipmentType": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "equipmentNumber": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "voyageNumber": {
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "assetId": {
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "HoldStoreRequest"
+                }
+            },
             "HoldStoreRequest": {
                 "title": "Hold Store Request",
                 "description": "Hold Store request body data",
@@ -10513,9 +10817,24 @@
                 "description": "Movement request body data",
                 "properties": {
                     "vins": {
-                        "description": "Filtro de vins de movimientos",
-                        "type": "string",
-                        "example": "NM0GE9E20N1514928,NM0GE9E20N1514931"
+                        "description": "Filtro por vins",
+                        "properties": {
+                            "value": {
+                                "description": "Valores de vins separados por comas",
+                                "type": "string",
+                                "example": "DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI"
+                            },
+                            "filter_type": {
+                                "description": "Tipo de filtro: equal|not_equal",
+                                "type": "string",
+                                "example": "equal"
+                            }
+                        },
+                        "type": "object",
+                        "example": {
+                            "value": "DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI",
+                            "filter_type": "equal"
+                        }
                     },
                     "users": {
                         "description": "Filtro de usuarios de movimientos",
@@ -11386,7 +11705,7 @@
                         "example": "2,3,4,5"
                     },
                     "vins": {
-                        "description": "",
+                        "description": "Filtro por vins",
                         "properties": {
                             "value": {
                                 "description": "Valores de vins separados por comas",

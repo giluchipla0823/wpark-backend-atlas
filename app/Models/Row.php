@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\AppHelper;
 use App\Helpers\RowHelper;
 use App\Http\Resources\Row\RowResource;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -67,37 +68,7 @@ class Row extends Model
         'updated_at'
     ];
 
-    protected $appends = ['row_name', 'category'];
-
-    /**
-     * @param $value
-     * @return string
-     */
-    public function getRowNameAttribute($value): string
-    {
-        return $this->parking->name .  "." . RowHelper::zeroFill($this->row_number);
-    }
-
-    /**
-     * @param $value
-     * @return string|null
-     */
-    public function getCategoryAttribute($value): string | null
-    {
-        return $this->rule ? $this->rule->name : null;
-    }
-
-    /**
-     * @return Attribute
-     */
-    protected function rowNumber(): Attribute
-    {
-        return new Attribute(
-            function ($value) {
-                return RowHelper::zeroFill($value);
-            }
-        );
-    }
+    protected $appends = ["row_name", "category", "fill_percentage", "fill_type"];
 
     public function parking()
     {
@@ -122,5 +93,51 @@ class Row extends Model
     public function rulesOverflowRows()
     {
         return $this->hasMany(Rule::class, 'overflow_id');
+    }
+
+    /**
+     * @return string
+     */
+    public function getRowNameAttribute(): string
+    {
+        return $this->parking->name .  "." . RowHelper::zeroFill($this->row_number);
+    }
+
+    /**
+     * @return float
+     */
+    public function getFillPercentageAttribute(): float
+    {
+        $capacity = $this->capacity === null ? 0 : $this->capacity;
+
+        return round(($this->fill / $capacity) * 100, 2);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFillTypeAttribute(): string
+    {
+        return AppHelper::getFillTypeToParkingOrRow($this->fill_percentage);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCategoryAttribute(): ?string
+    {
+        return $this->rule ? $this->rule->name : null;
+    }
+
+    /**
+     * @return Attribute
+     */
+    protected function rowNumber(): Attribute
+    {
+        return new Attribute(
+            function ($value) {
+                return RowHelper::zeroFill($value);
+            }
+        );
     }
 }

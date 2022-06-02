@@ -7,6 +7,7 @@ use App\Http\Requests\Rule\RuleStoreRequest;
 use App\Http\Requests\Rule\RuleUpdateRequest;
 use App\Models\Rule;
 use App\Services\Application\Rule\RuleService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,13 @@ class RuleController extends ApiController
      *      description="List of rules",
      *      security={{"sanctum": {}}},
      *      operationId="indexRules",
-     *      @OA\Parameter(ref="#/components/parameters/datatables"),
+     *      @OA\Parameter(
+     *         name="is_group",
+     *         in="query",
+     *         description="Filtro de reglas agrupadas o simples",
+     *         example="1",
+     *         required=false
+     *      ),
      *      @OA\Parameter(
      *         name="includes",
      *         in="query",
@@ -67,6 +74,47 @@ class RuleController extends ApiController
         return $this->showAll($results);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/v1/rules/datatables",
+     *      tags={"Rules"},
+     *      summary="Rules List with datatables",
+     *      description="List of rules using datatables",
+     *      security={{"sanctum": {}}},
+     *      operationId="datatablesRules",
+     *      @OA\Parameter(ref="#/components/parameters/datatables"),
+     *      @OA\Parameter(
+     *         name="is_group",
+     *         in="query",
+     *         description="Filtro de reglas agrupadas o simples",
+     *         example="1",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Añadir bloques, condiciones",
+     *         example="blocks,conditions",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="extra_includes",
+     *         in="query",
+     *         description="Añadir valores de condiciones",
+     *         example="conditions.values",
+     *         required=false
+     *      ),
+     *      @OA\Response(response=200, description="Rule list with datatables Successfully"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * Display a listing of the resource with datatables.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function datatables(Request $request): JsonResponse
     {
         $results = $this->ruleService->datatables($request);
@@ -97,6 +145,7 @@ class RuleController extends ApiController
      *
      * @param RuleStoreRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function store(RuleStoreRequest $request): JsonResponse
     {

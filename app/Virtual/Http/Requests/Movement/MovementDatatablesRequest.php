@@ -17,9 +17,24 @@ class MovementDatatablesRequest
     /**
      * @OA\Property(
      *     property="vins",
-     *     type="string",
-     *     description="Filtro de vins de movimientos",
-     *     example="NM0GE9E20N1514928,NM0GE9E20N1514931"
+     *     type="object",
+     *     description="Filtro por vins",
+     *     @OA\Property(
+     *        property="value",
+     *        type="string",
+     *        description="Valores de vins separados por comas",
+     *        example="DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI"
+     *     ),
+     *     @OA\Property(
+     *        property="filter_type",
+     *        type="string",
+     *        description="Tipo de filtro: equal|not_equal",
+     *        example="equal"
+     *     ),
+     *     example={
+     *       "value": "DGEHEUDJJDDEUUEEJ,CNNMDJKREEKEK,OORRIIEOEOEIEEIEI",
+     *       "filter_type": "equal"
+     *     }
      * )
      */
     public $vins;

@@ -179,6 +179,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
 
     // Rows
+    Route::get('/rows/show-by-qrcode/{qrcode}', [RowController::class, 'showByQrCode'])->name('rows.show-by-qrcode');
     Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
     Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
     Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');

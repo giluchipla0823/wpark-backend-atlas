@@ -85,4 +85,15 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
             ->where('parking_id', $parking->id)
             ->get();
     }
+
+    /**
+     * @param $value
+     * @return Row|null
+     */
+    public function findOneByQrcode($value): ?Row
+    {
+        return $this->model->query()
+                    ->where("alt_qr", "=", $value)
+                    ->first();
+    }
 }
