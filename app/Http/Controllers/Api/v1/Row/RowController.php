@@ -122,6 +122,9 @@ class RowController extends ApiController
      *     security={{"sanctum": {}}},
      *     operationId="toggleActiveRow",
      *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\RequestBody(
+     *          @OA\JsonContent(ref="#/components/schemas/RowToggleActiveRequest")
+     *     ),
      *     @OA\Response(response=200, description="Row toggle active successfully"),
      *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
@@ -132,11 +135,12 @@ class RowController extends ApiController
      * Toggle active the specified resource from storage.
      *
      * @param Row $row
+     * @param Request $request
      * @return JsonResponse
      */
-    public function toggleActive(Row $row): JsonResponse
+    public function toggleActive(Row $row, Request $request): JsonResponse
     {
-        $active = $this->rowService->toggleActive($row);
+        $active = $this->rowService->toggleActive($row, $request->get('comments'));
 
         $message = $active === 0 ? 'La fila se desactivó correctamente.' : 'La fila se activó correctamente.';
 

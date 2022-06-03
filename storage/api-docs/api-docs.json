@@ -5173,6 +5173,15 @@
                         "$ref": "#/components/parameters/id"
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RowToggleActiveRequest"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Row toggle active successfully"
@@ -11433,6 +11442,21 @@
                 "type": "object",
                 "xml": {
                     "name": "RouteUpdateRequest"
+                }
+            },
+            "RowToggleActiveRequest": {
+                "title": "Row Toggle Active Request",
+                "description": "Row Toggle Active request body data",
+                "properties": {
+                    "comments": {
+                        "description": "Comentarios sobre la fila",
+                        "type": "string",
+                        "example": "La fila está activada/desactivada"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RowToggleActiveRequest"
                 }
             },
             "RowUpdateRequest": {

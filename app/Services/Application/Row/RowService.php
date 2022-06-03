@@ -138,12 +138,16 @@ class RowService
 
     /**
      * @param Row $row
+     * @param string|null $comments
      * @return int
      */
-    public function toggleActive(Row $row): int {
+    public function toggleActive(Row $row, ?string $comments = null): int {
         $active = $row->active ? 0 : 1;
 
-        $this->update(['active' => $active], $row->id);
+        $this->update([
+            "active" => $active,
+            "comments" => $comments,
+        ], $row->id);
 
         return $active;
     }

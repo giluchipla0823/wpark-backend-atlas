@@ -4,7 +4,7 @@ namespace App\Http\Requests\Row;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RowUpdateRequest extends FormRequest
+class RowToggleActiveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,6 @@ class RowUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'block_id' => 'required|exists:blocks,id',
-            'alt_qr' => 'required|max:255',
             'comments' => 'nullable|string|max:255',
         ];
     }
