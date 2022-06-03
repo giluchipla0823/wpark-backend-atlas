@@ -32,9 +32,9 @@ class RuleResource extends JsonResource
             'countdown' => $this->countdown,
             'is_group' => $this->is_group,
             'final_position' => $this->final_position,
+            'active' => $this->active,
             'predefined_zone' => $this->parking ? new ParkingResource($this->parking) : null,
-            'carrier' => $this->carrier ? new CarrierResource($this->carrier) : null,
-            'active' => $this->active
+            'carrier' => $this->carrier ? new CarrierResource($this->carrier) : null
         ];
 
         if (in_array('conditions', $relationships)) {
@@ -60,8 +60,6 @@ class RuleResource extends JsonResource
         /* @var Collection $conditions */
         $conditions = $this->conditions()->get();
 
-        // dd($conditions->toArray());
-
         $results = collect([]);
 
         foreach ($conditions as $condition) {
@@ -69,8 +67,6 @@ class RuleResource extends JsonResource
             $index = $results->search(function($item) use ($condition) {
                 return $item->model === $condition->model;
             });
-
-            // $index = array_search($condition->model, array_column($results->toArray(), 'model'));
 
             if ($index !== false) {
                 $results->get($index)->values->push($condition->pivot);

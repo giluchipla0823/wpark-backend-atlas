@@ -14,6 +14,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Vehicle\Builders\VehicleDatatablesQueryBuilder;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -30,13 +31,24 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
 
     /**
      * @param Request $request
-     * @return Collection
+     * @return LengthAwarePaginator|Collection
      */
-    public function all(Request $request): Collection
+    public function all(Request $request)
     {
         $query = $this->model->query()->with(QueryParamsHelper::getIncludesParamFromRequest());
 
-        return $query->get();
+        if ($vin = $request->query->get('vin')) {
+            $query = $query->where('vin', "LIKE", "%{$vin}%");
+        }
+
+        $query = $query->orderBy(
+            $request->query->get('sort_by', 'id'),
+            $request->query->get('sort_direction', 'asc')
+        );
+
+        return QueryParamsHelper::checkPaginateParam()
+                    ? $query->paginate($request->query->getInt('per_page', 10))
+                    : $query->get();
     }
 
     /**

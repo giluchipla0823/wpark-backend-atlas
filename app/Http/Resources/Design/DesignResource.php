@@ -28,7 +28,6 @@ class DesignResource extends JsonResource
             'wreight' => $this->wreight,
             'description' => $this->description,
             'manufacturing' => $this->manufacturing,
-            //'svg' => $this->svg
         ];
 
         if (in_array('brand', $relationships)) {

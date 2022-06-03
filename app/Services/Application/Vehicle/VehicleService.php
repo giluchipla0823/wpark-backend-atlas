@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Vehicle;
 
+use App\Helpers\Paginator\EloquentPaginator;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Row\RowVehicleResource;
 use App\Http\Resources\Vehicle\InfoVehicleResource;
@@ -14,6 +15,7 @@ use App\Models\State;
 use App\Models\Vehicle;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +39,10 @@ class VehicleService
     public function all(Request $request): Collection
     {
         $results = $this->repository->all($request);
+
+        if ($results instanceof LengthAwarePaginator) {
+            return (new EloquentPaginator($results, VehicleResource::class))->collection();
+        }
 
         return VehicleResource::collection($results)->collection;
     }

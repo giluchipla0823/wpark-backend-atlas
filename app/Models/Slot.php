@@ -46,19 +46,19 @@ class Slot extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'slot_number',
-        'row_id',
-        'capacity',
-        'fill',
-        'capacitymm',
-        'fillmm',
-        'comments',
-        'deleted_at',
-        'created_at',
-        'updated_at',
+        "slot_number",
+        "row_id",
+        "capacity",
+        "fill",
+        "capacitymm",
+        "fillmm",
+        "comments",
+        "deleted_at",
+        "created_at",
+        "updated_at",
     ];
 
-    protected $appends = ['row_name'];
+    protected $appends = ["row_name", "lp_name", "lp_code"];
 
     /**
      * @param $value
@@ -71,27 +71,50 @@ class Slot extends Model
 
     public function row()
     {
-        return $this->belongsTo(Row::class, 'row_id');
+        return $this->belongsTo(Row::class, "row_id");
     }
 
     public function distancesOriginSlots()
     {
-        return $this->hasMany(Distance::class, 'origin_slot_id');
+        return $this->hasMany(Distance::class, "origin_slot_id");
     }
 
     public function distancesDestinationSlots()
     {
-        return $this->hasMany(Distance::class, 'destination_slot_id');
+        return $this->hasMany(Distance::class, "destination_slot_id");
     }
 
     public function originMovement()
     {
-        return $this->morphMany(Movement::class, 'originPosition');
+        return $this->morphMany(Movement::class, "originPosition");
     }
 
     public function destinationMovement()
     {
-        return $this->morphMany(Movement::class, 'destinationPosition');
+        return $this->morphMany(Movement::class, "destinationPosition");
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpNameAttribute(): ?string
+    {
+        $row = $this->row;
+        $parking = $row->parking;
+        $rowNumber = ltrim($row->row_number, "0");
+
+        return "{$parking->area->compound->name}.{$parking->name}.{$rowNumber}.{$this->slot_number}";
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpCodeAttribute(): ?string
+    {
+        $row = $this->row;
+        $parking = $row->parking;
+
+        return "{$parking->area->compound->id}.{$parking->id}.{$row->id}.{$this->id}";
     }
 
 }

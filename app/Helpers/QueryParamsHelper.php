@@ -24,4 +24,12 @@ class QueryParamsHelper
     {
         return request()->query->getInt('datatables', 0) === 1;
     }
+
+    /**
+     * @return bool
+     */
+    public static function checkPaginateParam(): bool
+    {
+        return request()->query->getBoolean('paginate', false);
+    }
 }

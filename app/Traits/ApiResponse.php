@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Exception;
 use App\Helpers\ApiHelper;
 use App\Helpers\QueryParamsHelper;
 use Illuminate\Http\JsonResponse;
@@ -61,13 +62,13 @@ trait ApiResponse
      * @return JsonResponse
      * @throws Exception
      */
-    protected function showAll(Collection $data): JsonResponse
+    protected function showAll(Collection $collection): JsonResponse
     {
-        if (QueryParamsHelper::checkIncludeParamDatatables()) {
-            return $this->datatablesResponse($data);
+        if ($collection->has('data')) {
+            return $this->datatablesResponse($collection);
         }
 
-        return $this->successResponse($data);
+        return $this->successResponse($collection);
     }
 
     /**

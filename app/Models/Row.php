@@ -68,7 +68,7 @@ class Row extends Model
         'updated_at'
     ];
 
-    protected $appends = ["row_name", "category", "fill_percentage", "fill_type"];
+    protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code"];
 
     public function parking()
     {
@@ -108,7 +108,8 @@ class Row extends Model
      */
     public function getFillPercentageAttribute(): float
     {
-        $capacity = $this->capacity === null ? 0 : $this->capacity;
+        // $capacity = $this->capacity === null ? 0 : $this->capacity;
+        $capacity = $this->capacity ?: 0;
 
         return round(($this->fill / $capacity) * 100, 2);
     }
@@ -127,6 +128,27 @@ class Row extends Model
     public function getCategoryAttribute(): ?string
     {
         return $this->rule ? $this->rule->name : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpNameAttribute(): ?string
+    {
+        $parking = $this->parking;
+        $rowNumber = ltrim($this->row_number, "0");
+
+        return "{$parking->area->compound->name}.{$parking->name}.{$rowNumber}.0";
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpCodeAttribute(): ?string
+    {
+        $parking = $this->parking;
+
+        return "{$parking->area->compound->id}.{$parking->id}.{$this->id}.0";
     }
 
     /**

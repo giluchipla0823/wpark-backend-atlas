@@ -2,13 +2,18 @@
 
 namespace App\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface BaseRepositoryInterface
 {
-    public function all(Request $request): Collection;
+    /**
+     * @param Request $request
+     * @return LengthAwarePaginator|Collection
+     */
+    public function all(Request $request);
 
     public function create(array $params): Model;
 

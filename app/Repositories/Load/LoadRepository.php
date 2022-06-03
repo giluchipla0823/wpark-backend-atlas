@@ -3,6 +3,7 @@
 namespace App\Repositories\Load;
 
 use App\Http\Resources\Route\RouteResource;
+use App\Helpers\QueryParamsHelper;
 use App\Models\Carrier;
 use App\Models\Load;
 use App\Models\RouteType;
@@ -14,6 +15,7 @@ use Exception;
 use App\Models\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Yajra\DataTables\Facades\DataTables;
 
 class LoadRepository extends BaseRepository implements LoadRepositoryInterface
 {
@@ -97,13 +99,15 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
         return $load;
     }
 
-    /*
+    /**
      * @param Request $request
      * @return Collection
      */
     public function all(Request $request): Collection
     {
         $query = $this->model->query();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         return $query->get();
     }
@@ -113,6 +117,59 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
      * @return array
      * @throws Exception
      */
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function datatables(Request $request): array
+    {
+        $query = $this->model->query();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        return Datatables::customizable($query)->response();
+    }
+
+    /**
+     * @param Load $load
+     * @return array
+     */
+    public function datatablesVehicles(Load $load): array
+    {
+        $query = $load->vehicles();
+
+        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        return Datatables::customizable($query)->response();
+    }
+
+    public function unlinkVehicle(Load $load, Vehicle $vehicle):void
+    {
+        if ($load->processed === 1) {
+            throw new Exception(
+                "No se puede realizar esta acción, porque el load ya se procesó anteriormente.",
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($load->ready === 1) {
+            throw new Exception(
+                "No se puede realizar esta acción, porque el load se encuentra listo para ser transportado.",
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($load->id !== $vehicle->load_id) {
+            throw new Exception(
+                "El vehículo no se encuentra en el load especificado",
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $vehicle->load_id = null;
+        $vehicle->save();
+    }
+
     public function checkVehicles(array $params): array
     {
         $vins = array_unique($params['vins']);

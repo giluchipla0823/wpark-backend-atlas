@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\DB;
 
 /**
  *
@@ -118,10 +120,20 @@ class Vehicle extends Model
             'vehicle_id',
             'state_id'
         )
-            ->withTimestamps()
-            ->orderByPivot('id', 'desc')
-            ->orderByPivot('created_at', 'desc')
-            ->take(1);
+        ->join("vehicles", "vehicles_states.vehicle_id", "=", "vehicles.id")
+        ->where("vehicles_states.id", "=", DB::raw("
+            (
+                SELECT
+                    vs.id
+                FROM
+                    vehicles_states AS vs
+                WHERE
+                    vs.vehicle_id = vehicles.id
+                ORDER BY
+                    vs.id DESC
+                LIMIT 1
+            )
+        "));
     }
 
     public function holds()
@@ -152,11 +164,20 @@ class Vehicle extends Model
             'vehicle_id',
             'stage_id'
         )
-        ->withPivot('manual', 'tracking_date')
-        ->withTimestamps()
-        ->orderByPivot('id', 'desc')
-        ->orderByPivot('created_at', 'desc')
-        ->take(1);
+        ->join("vehicles", "vehicles_stages.vehicle_id", "=", "vehicles.id")
+        ->where("vehicles_stages.id", "=", DB::raw("
+            (
+                SELECT
+                    vs.id
+                FROM
+                    vehicles_stages AS vs
+                WHERE
+                    vs.vehicle_id = vehicles.id
+                ORDER BY
+                    vs.id DESC
+                LIMIT 1
+            )
+        "));
     }
 
     /* public function getStage($stage)

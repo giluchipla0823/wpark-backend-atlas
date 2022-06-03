@@ -4,6 +4,16 @@ use App\Http\Controllers\Api\v1\Load\LoadController;
 use App\Http\Controllers\Api\v1\Load\LoadGenerateController;
 use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
+use App\Http\Controllers\Api\v1\Load\LoadVehicleController;
+use App\Http\Controllers\Api\v1\Row\RowBlockController;
+use App\Http\Controllers\Api\v1\Transport\TransportController;
+use App\Http\Controllers\Api\v1\Carrier\CarrierController;
+use App\Http\Controllers\Api\v1\Dealer\DealerController;
+use App\Http\Controllers\Api\v1\Color\ColorController;
+use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
+use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
+use App\Http\Controllers\Api\v1\Row\RowVehicleController;
+use App\Http\Controllers\Api\v1\State\StateVehicleController;
 use App\Http\Controllers\Api\v1\RouteType\RouteTypeCarrierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
@@ -17,12 +27,7 @@ use App\Http\Controllers\Api\v1\User\UserController;
 use App\Http\Controllers\Api\v1\Zone\ZoneController;
 use App\Http\Controllers\Api\v1\Block\BlockController;
 use App\Http\Controllers\Api\v1\Brand\BrandController;
-use App\Http\Controllers\Api\v1\Color\ColorController;
-use App\Http\Controllers\Api\v1\Row\RowBlockController;
-use App\Http\Controllers\Api\v1\Dealer\DealerController;
 use App\Http\Controllers\Api\v1\Block\BlockRowController;
-use App\Http\Controllers\Api\v1\Row\RowVehicleController;
-use App\Http\Controllers\Api\v1\Carrier\CarrierController;
 use App\Http\Controllers\Api\v1\Route\RouteController;
 use App\Http\Controllers\Api\v1\State\StateController;
 use App\Http\Controllers\Api\v1\Design\DesignController;
@@ -31,10 +36,6 @@ use App\Http\Controllers\Api\v1\Country\CountryController;
 use App\Http\Controllers\Api\v1\Parking\ParkingController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleController;
 use App\Http\Controllers\Api\v1\Compound\CompoundController;
-use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
-use App\Http\Controllers\Api\v1\State\StateVehicleController;
-use App\Http\Controllers\Api\v1\Transport\TransportController;
-use App\Http\Controllers\Api\v1\Condition\ConditionModelDataController;
 use App\Http\Controllers\Api\v1\FreightVerify\VehicleReceivedController;
 use App\Http\Controllers\Api\External\RecirculationController;
 use App\Http\Controllers\Api\v1\Condition\ConditionController;
@@ -46,6 +47,8 @@ use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
 use App\Http\Controllers\Api\v1\Movement\MovementController;
 use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
+use App\Http\Controllers\Api\v1\Load\LoadTransportST8Controller;
+use App\Http\Controllers\External\FORD\TransportST8Controller;
 
 
 /*
@@ -229,8 +232,12 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::get('/external/recirculations/{vin}', [RecirculationController::class, 'get'])->name('recirculations.get');
 
     // Loads
+    Route::get('/loads', [LoadController::class, 'index'])->name('loads.index');
+    Route::post('/loads/datatables', [LoadController::class, 'datatables'])->name('loads.datatables');
+    Route::post('/loads/{load}/vehicles/datatables', [LoadVehicleController::class, 'datatables'])->name('loads.vehicles.datatables');
+    Route::patch('/loads/{load}/vehicles/{vehicle}/unlink', [LoadVehicleController::class, 'unlinkVehicle'])->name('loads.vehicles.unlink');
     Route::post('/loads/generate', [LoadGenerateController::class, 'generate'])->name('loads.generate');
-    Route::patch('/loads/{load}/confirm-left', [LoadConfirmLeftController::class, 'confirmLeft'])->name('loads.confirme-left');
+    Route::patch('/loads/{load}/confirm-left', LoadConfirmLeftController::class)->name('loads.confirme-left');
     Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
 
     // Movements
@@ -241,7 +248,12 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     //Route::patch('/movements/{id}', [MovementController::class, 'restore'])->name('movements.restore');
     Route::resource('movements', MovementController::class, ['except' =>['create', 'edit', 'update', 'delete']]);
 
+    // Valencia TSI Webservice ST8
+    Route::get('/loads/{load}/transport-st8', LoadTransportST8Controller::class);
+    Route::post('transport-st8', TransportST8Controller::class);
+
     Route::get('routes-types/{routeType}/carriers', [RouteTypeCarrierController::class, "index"])->name("routes-types.carriers.index");
+
 });
 
 Route::get('/send-row-notification', [TestController::class, 'sendRowNotification']);

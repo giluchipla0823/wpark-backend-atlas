@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
+use App\Helpers\Paginator\EloquentPaginator;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleDatatablesRequest;
+use App\Http\Resources\Vehicle\VehicleResource;
 use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleService;
 use Exception;
@@ -34,6 +36,34 @@ class VehicleController extends ApiController
      *      description="List of vehicles",
      *      security={{"sanctum": {}}},
      *      operationId="indexVehicles",
+     *      @OA\Parameter(
+     *         name="paginate",
+     *         in="query",
+     *         description="Para mostrar la lista paginado o simple",
+     *         example="1",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Ordenar por columna",
+     *         example="id",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="sort_direction",
+     *         in="query",
+     *         description="Tipo de orden de columna: ASC o DESC",
+     *         example="ASC",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Añadir modelo, color, código de destino, último estado, última etapa, último movimiento",
+     *         example="design,color,destinationCode,latestState,latestStage,lastMovement",
+     *         required=false
+     *      ),
      *      @OA\Response(response=200, description="Vehicle list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -44,6 +74,7 @@ class VehicleController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

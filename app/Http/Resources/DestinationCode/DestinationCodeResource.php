@@ -3,7 +3,6 @@
 namespace App\Http\Resources\DestinationCode;
 
 use App\Http\Resources\Country\CountryResource;
-use App\Http\Resources\Route\RouteResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DestinationCodeResource extends JsonResource

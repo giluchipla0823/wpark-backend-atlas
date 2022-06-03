@@ -64,7 +64,7 @@ class Load extends Model
 
     public function vehicles()
     {
-        return $this->hasMany(Load::class, 'load_id');
+        return $this->hasMany(Vehicle::class, 'load_id');
     }
 
 }

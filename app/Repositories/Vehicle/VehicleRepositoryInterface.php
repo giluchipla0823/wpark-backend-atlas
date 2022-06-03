@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface VehicleRepositoryInterface extends BaseRepositoryInterface
 {
+
     public function findAllByRow(Row $row): Collection;
 
     public function findAllByState(State $state): Collection;

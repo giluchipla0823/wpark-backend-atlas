@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\AppHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -62,6 +63,8 @@ class Parking extends Model
         'updated_at',
     ];
 
+    protected $appends = ["fill_percentage", "fill_type", "fill_calculate", "lp_name", "lp_code"];
+
     public function area()
     {
         return $this->belongsTo(Area::class, 'area_id');
@@ -90,5 +93,49 @@ class Parking extends Model
     public function destinationMovement()
     {
         return $this->morphMany(Movement::class, 'destinationPosition');
+    }
+
+    /**
+     * @return float
+     */
+    public function getFillCalculateAttribute(): float
+    {
+        return $this->rows->sum("fill");
+    }
+
+    /**
+     * @return float
+     */
+    public function getFillPercentageAttribute(): float
+    {
+        $capacity = $this->capacity ?: 0;
+        // $fill = $this->rows->sum("fill");
+
+        // return round(($fill / $capacity) * 100, 2);
+        return round(($this->fill_calculate / $capacity) * 100, 2);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFillTypeAttribute(): string
+    {
+        return AppHelper::getFillTypeToParkingOrRow($this->fill_percentage);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpNameAttribute(): ?string
+    {
+        return "{$this->area->compound->name}.{$this->name}.0.0";
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLpCodeAttribute(): ?string
+    {
+        return "{$this->area->compound->id}.{$this->id}.0.0";
     }
 }

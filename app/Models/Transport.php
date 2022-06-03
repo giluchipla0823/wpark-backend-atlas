@@ -28,6 +28,9 @@ class Transport extends Model
     use HasFactory, SoftDeletes;
 
     public const FACTORY = 1;
+    public const TRANSPORT_FACTORY_ID = 1;
+    public const TRANSPORT_TRAIN_ID = 2;
+    public const TRANSPORT_TRUCK_ID = 3;
 
     /**
      * The attributes that are mass assignable.

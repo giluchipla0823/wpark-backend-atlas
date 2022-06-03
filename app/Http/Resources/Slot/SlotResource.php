@@ -18,18 +18,20 @@ class SlotResource extends JsonResource
         $relationships = array_keys($this->resource->getRelations());
 
         $response = [
-            'id' => $this->id,
-            'slot_number' => $this->slot_number,
-            'row_name' => $this->row_name,
-            'capacity' => $this->capacity,
-            'fill' => $this->fill,
-            'capacitymm' => $this->capacitymm,
-            'fillmm' => $this->fillmm,
-            'comments' => $this->comments,
+            "id" => $this->id,
+            "slot_number" => $this->slot_number,
+            "lp_name" => $this->lp_name,
+            "lp_code" => $this->lp_code,
+            "row_name" => $this->row_name,
+            "capacity" => $this->capacity,
+            "fill" => $this->fill,
+            "capacitymm" => $this->capacitymm,
+            "fillmm" => $this->fillmm,
+            "comments" => $this->comments,
         ];
 
-        if (in_array('row', $relationships)) {
-            $response['row'] = new RowResource($this->row);
+        if (in_array("row", $relationships)) {
+            $response["row"] = new RowResource($this->row);
         }
 
         return $response;

@@ -20,26 +20,28 @@ class RowResource extends JsonResource
         $relationships = array_keys($this->resource->getRelations());
 
         $response = [
-            'id' => $this->id,
-            'row_number' => $this->row_number,
-            'row_name' => $this->row_name,
-            'parking' => new ParkingResource($this->parking),
-            'block' => new BlockResource($this->block),
-            'category' => $this->category,
-            'capacity' => $this->capacity,
-            'fill' => $this->fill,
-            'fill_percentage' => $this->fill_percentage,
-            'fill_type' => $this->fill_type,
-            'capacitymm' => $this->capacitymm,
-            'fillmm' => $this->fillmm,
-            'full' => $this->full,
-            'alt_qr' => $this->alt_qr,
-            'comments' => $this->comments,
-            'active' => $this->active
+            "id" => $this->id,
+            "row_number" => $this->row_number,
+            "row_name" => $this->row_name,
+            "lp_name" => $this->lp_name,
+            "lp_code" => $this->lp_code,
+            "parking" => new ParkingResource($this->parking),
+            "block" => new BlockResource($this->block),
+            "category" => $this->category,
+            "capacity" => $this->capacity,
+            "fill" => $this->fill,
+            "fill_percentage" => $this->fill_percentage,
+            "fill_type" => $this->fill_type,
+            "capacitymm" => $this->capacitymm,
+            "fillmm" => $this->fillmm,
+            "full" => $this->full,
+            "alt_qr" => $this->alt_qr,
+            "comments" => $this->comments,
+            "active" => $this->active
         ];
 
-        if (in_array('slots', $relationships)) {
-            $response['slots'] = SlotResource::collection($this->slots);
+        if (in_array("slots", $relationships)) {
+            $response["slots"] = SlotResource::collection($this->slots);
         }
 
         return $response;

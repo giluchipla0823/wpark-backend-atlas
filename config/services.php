@@ -43,6 +43,14 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'ford_services' => [
+        'st8' => [
+            'url' => 'http://vacdm.valencia.ford.com:8080',
+        ],
+        'recirculations' => [
+            'url' => '',
+        ],
+    ],
 
     "ford_services" => [
         "recirculations" => [

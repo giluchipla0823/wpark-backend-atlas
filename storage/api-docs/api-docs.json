@@ -3389,6 +3389,38 @@
                 ]
             }
         },
+        "/api/v1/loads/{load}/confirm-left": {
+            "get": {
+                "tags": [
+                    "Loads"
+                ],
+                "summary": "Confirm Left",
+                "description": "Confirm left of load",
+                "operationId": "confirmLeftLoad",
+                "responses": {
+                    "200": {
+                        "description": "Confirmed load output"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/loads/check-vehicles": {
             "post": {
                 "tags": [
@@ -3410,6 +3442,69 @@
                 "responses": {
                     "200": {
                         "description": "Check Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/loads": {
+            "get": {
+                "tags": [
+                    "Designs"
+                ],
+                "summary": "Loads List",
+                "description": "List of loads",
+                "operationId": "indexLoads",
+                "responses": {
+                    "200": {
+                        "description": "Design list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/loads/datatables": {
+            "post": {
+                "tags": [
+                    "Loads"
+                ],
+                "summary": "Loads List with datatables",
+                "description": "List of Loads with datatables",
+                "operationId": "datatablesLoads",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Load list with datatables Successfully"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -3452,6 +3547,69 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/loads/{id}/vehicles/datatables": {
+            "post": {
+                "tags": [
+                    "Loads",
+                    "Vehicles"
+                ],
+                "summary": "Vehicles List of Load with datatables",
+                "description": "Vehicles List of Load with datatables",
+                "operationId": "datatablesLoadsVehicles",
+                "responses": {
+                    "200": {
+                        "description": "Vehicles of load list with datatables Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/loads/{load}/vehicles/{vehicle}/unlink": {
+            "post": {
+                "tags": [
+                    "Loads",
+                    "Vehicles"
+                ],
+                "summary": "Delete Vehicle of Load",
+                "description": "Delete Vehicle of Load",
+                "operationId": "unlinkVehicleLoad",
+                "responses": {
+                    "200": {
+                        "description": "Delete vehicle of load Successfully"
                     },
                     "400": {
                         "$ref": "#/components/responses/BadRequest"
@@ -6646,6 +6804,36 @@
                 "summary": "Vehicles List",
                 "description": "List of vehicles",
                 "operationId": "indexVehicles",
+                "parameters": [
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Para mostrar la lista paginado o simple",
+                        "required": false,
+                        "example": "1"
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Ordenar por columna",
+                        "required": false,
+                        "example": "id"
+                    },
+                    {
+                        "name": "sort_direction",
+                        "in": "query",
+                        "description": "Tipo de orden de columna: ASC o DESC",
+                        "required": false,
+                        "example": "ASC"
+                    },
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir modelo, color, código de destino, último estado, última etapa, último movimiento",
+                        "required": false,
+                        "example": "design,color,destinationCode,latestState,latestStage,lastMovement"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Vehicle list Successfully"
