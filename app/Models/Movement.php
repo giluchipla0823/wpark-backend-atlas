@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -80,5 +82,12 @@ class Movement extends Model
     public function destinationPosition()
     {
         return $this->morphTo(__FUNCTION__, 'destination_position_type', 'destination_position_id');
+    }
+
+    public function resolvePositionResource(string $type): string
+    {
+        return $type === Parking::class
+            ? ParkingResource::class
+            : SlotResource::class;
     }
 }

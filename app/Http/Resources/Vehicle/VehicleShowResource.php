@@ -2,7 +2,11 @@
 
 namespace App\Http\Resources\Vehicle;
 
+use App\Helpers\JsonResourceHelper;
 use App\Http\Resources\Hold\HoldResource;
+use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\Slot\SlotResource;
+use App\Models\Movement;
 use App\Models\Slot;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\Brand\BrandResource;
@@ -56,7 +60,7 @@ class VehicleShowResource extends JsonResource
             "last_movement" => $this->lastMovement,
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),
-            "holds" =>  HoldResource::collection($this->holds),
+            "holds" => HoldResource::collection($this->holds),
             "svg" => [
                 "front" => route("designs-svg.default", ["filename" => "front.svg"]),
                 "side" => route("designs-svg.default", ["filename" => "side.svg"]),
@@ -68,24 +72,49 @@ class VehicleShowResource extends JsonResource
 
     /**
      * @param string $relation
-     * @return Model|null
+     * @return array|null
      */
-    private function includePositionType(string $relation): ?Model
+    private function includePositionType(string $relation): ?array
     {
+        /* @var Movement $lastMovement */
         $lastMovement = $this->lastMovement;
 
         if (!$lastMovement || !$lastMovement->{$relation}) {
             return null;
         }
 
-        $modelClass = get_class($lastMovement->{$relation});
+        /* @var Model $model */
+        $model = $lastMovement->{$relation};
+        $modelClass = get_class($model);
 
-        $lastMovement->{$relation}->type = $modelClass;
+        $resourceClass = $lastMovement->resolvePositionResource($modelClass);
 
-        if ($modelClass === Slot::class) {
-            $lastMovement->{$relation}->name = $lastMovement->{$relation}->row_name;
+        if (!JsonResourceHelper::isInstance($resourceClass)) {
+            return null;
         }
 
-        return $lastMovement->{$relation};
+        if ($modelClass === Slot::class) {
+            $model->load(['row']);
+        }
+
+        /* @var SlotResource|ParkingResource $resourceInstance */
+        $resourceInstance = (new $resourceClass($model));
+
+        $collection = collect($resourceInstance->jsonSerialize());
+
+        $collection->put("type", $modelClass);
+
+        if ($modelClass === Slot::class) {
+            $collection->put("name", $model->row_name);
+
+            if ($collection->has("row")) {
+                $rowData = $collection->get("row")->jsonSerialize();
+                $row = collect($rowData)->except(["parking", "block", "slots"]);
+
+                $collection->put("row", $row);
+            }
+        }
+
+        return $collection->toArray();
     }
 }
