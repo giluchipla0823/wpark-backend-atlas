@@ -148,7 +148,6 @@ class RowController extends ApiController
     }
 
     /**
-     *
      * @OA\GET(
      *     path="/api/v1/rows/show-by-qrcode/{qrcode}",
      *     tags={"Rows"},
