@@ -9,6 +9,7 @@ use App\Http\Requests\Block\BlockUpdateRequest;
 use App\Models\Block;
 use App\Services\Application\Block\BlockService;
 use App\Services\Application\Row\RowService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,20 @@ class BlockController extends ApiController
      *      description="List of blocks",
      *      security={{"sanctum": {}}},
      *      operationId="indexBlocks",
+     *      @OA\Parameter(
+     *         name="includes",
+     *         in="query",
+     *         description="Añadir en la respuesta reglas, filas",
+     *         example="rows,rules",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Filtro nombre del bloque",
+     *         example="BLOQUE",
+     *         required=false
+     *      ),
      *      @OA\Response(response=200, description="Block list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -53,6 +68,7 @@ class BlockController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

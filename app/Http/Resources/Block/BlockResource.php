@@ -34,7 +34,7 @@ class BlockResource extends JsonResource
         }
 
         if (in_array('rows', $relationships)) {
-            $response['rows'] = $this->rows;
+            $response['rows'] = RowResource::collection($this->rows);
         }
 
         return $response;

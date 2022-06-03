@@ -456,6 +456,22 @@
                 "summary": "Blocks List",
                 "description": "List of blocks",
                 "operationId": "indexBlocks",
+                "parameters": [
+                    {
+                        "name": "includes",
+                        "in": "query",
+                        "description": "Añadir en la respuesta reglas, filas",
+                        "required": false,
+                        "example": "rows,rules"
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtro nombre del bloque",
+                        "required": false,
+                        "example": "BLOQUE"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Block list Successfully"

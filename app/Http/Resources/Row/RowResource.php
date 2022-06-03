@@ -25,8 +25,6 @@ class RowResource extends JsonResource
             "row_name" => $this->row_name,
             "lp_name" => $this->lp_name,
             "lp_code" => $this->lp_code,
-            "parking" => new ParkingResource($this->parking),
-            "block" => new BlockResource($this->block),
             "category" => $this->category,
             "capacity" => $this->capacity,
             "fill" => $this->fill,
@@ -39,6 +37,14 @@ class RowResource extends JsonResource
             "comments" => $this->comments,
             "active" => $this->active
         ];
+
+        if (in_array("parking", $relationships)) {
+            $response["parking"] = new ParkingResource($this->parking);
+        }
+
+        if (in_array("block", $relationships)) {
+            $response["block"] = new BlockResource($this->block);
+        }
 
         if (in_array("slots", $relationships)) {
             $response["slots"] = SlotResource::collection($this->slots);
