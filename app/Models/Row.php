@@ -108,8 +108,11 @@ class Row extends Model
      */
     public function getFillPercentageAttribute(): float
     {
-        // $capacity = $this->capacity === null ? 0 : $this->capacity;
         $capacity = $this->capacity ?: 0;
+
+        if ($capacity === 0) {
+            return $capacity;
+        }
 
         return round(($this->fill / $capacity) * 100, 2);
     }

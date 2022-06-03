@@ -109,9 +109,11 @@ class Parking extends Model
     public function getFillPercentageAttribute(): float
     {
         $capacity = $this->capacity ?: 0;
-        // $fill = $this->rows->sum("fill");
 
-        // return round(($fill / $capacity) * 100, 2);
+        if ($capacity === 0) {
+            return $capacity;
+        }
+
         return round(($this->fill_calculate / $capacity) * 100, 2);
     }
 
