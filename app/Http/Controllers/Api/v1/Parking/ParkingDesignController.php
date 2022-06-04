@@ -49,9 +49,13 @@ class ParkingDesignController extends ApiController
      */
     public function parkingDesign(ParkingDesignStoreRequest $request): JsonResponse
     {
-        $parking = $this->parkingDesignService->parkingDesign($request->all());
+//        $parking = $this->parkingDesignService->parkingDesign($request->all());
+//
+//        return $this->successResponse($parking, 'Parking created successfully.', Response::HTTP_CREATED);
 
-        return $this->successResponse($parking, 'Parking created successfully.', Response::HTTP_CREATED);
+        $this->parkingDesignService->parkingDesign($request->all());
+
+        return $this->showMessage('Parking created successfully.', Response::HTTP_CREATED);
     }
 
 }

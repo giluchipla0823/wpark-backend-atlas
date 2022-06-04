@@ -23,6 +23,41 @@ class ParkingSeeder extends Seeder
                 'parking_type_id' => ParkingType::TYPE_UNLIMITED,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'BUFFER',
+                'area_id' => 1,
+                'parking_type_id' => ParkingType::TYPE_UNLIMITED,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'REPARACIÓN',
+                'area_id' => 1,
+                'parking_type_id' => ParkingType::TYPE_UNLIMITED,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'PINTURA',
+                'area_id' => 1,
+                'parking_type_id' => ParkingType::TYPE_UNLIMITED,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'LAVADO',
+                'area_id' => 1,
+                'parking_type_id' => ParkingType::TYPE_UNLIMITED,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
+            ],
+            [
+                'name' => 'REMODELACIÓN',
+                'area_id' => 1,
+                'parking_type_id' => ParkingType::TYPE_UNLIMITED,
+                'created_at'        => Carbon::now(),
+                'updated_at'        => Carbon::now(),
             ]
         ];
 

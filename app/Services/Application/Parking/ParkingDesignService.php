@@ -45,10 +45,10 @@ class ParkingDesignService
 
     /**
      * @param array $params
-     * @return Parking
+     * @return void
      * @throws Exception
      */
-    public function parkingDesign(array $params): Parking
+    public function parkingDesign(array $params): void
     {
 
         DB::beginTransaction();
@@ -80,6 +80,7 @@ class ParkingDesignService
             $params['fill'] = $params['parking_type_id'] != ParkingType::TYPE_UNLIMITED ? 0 : null;
 
             // Creación del parking
+            /* @var Parking $parking */
             $parking = $this->parkingRepository->create($params);
 
             if ($parking->parking_type_id != ParkingType::TYPE_UNLIMITED) {
@@ -164,6 +165,10 @@ class ParkingDesignService
             throw $exc;
         }
 
-        return $parking;
+        // dd($parking);
+
+        // $parking->withoutRelations();
+
+        // return $parking;
     }
 }
