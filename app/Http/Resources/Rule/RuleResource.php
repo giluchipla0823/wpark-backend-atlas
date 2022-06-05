@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Rule;
 
+use App\Http\Resources\Row\RowResource;
 use JsonSerializable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -47,6 +48,10 @@ class RuleResource extends JsonResource
 
         if (in_array('rules_groups', $relationships) && (bool) $this->is_group) {
             $response['rules'] = RuleResource::collection($this->rules_groups);
+        }
+
+        if (in_array('rows', $relationships)) {
+            $response['rows'] = RowResource::collection($this->rows);
         }
 
         return $response;

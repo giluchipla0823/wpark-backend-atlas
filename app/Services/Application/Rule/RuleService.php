@@ -2,12 +2,14 @@
 
 namespace App\Services\Application\Rule;
 
+use App\Helpers\Paginator\EloquentPaginator;
 use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Rule\RuleResource;
 use App\Models\Block;
 use App\Models\Rule;
 use App\Repositories\Rule\RuleRepositoryInterface;
 use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +33,10 @@ class RuleService
     public function all(Request $request): Collection
     {
         $results = $this->repository->all($request);
+
+        if ($results instanceof LengthAwarePaginator) {
+            return (new EloquentPaginator($results, RuleResource::class))->collection();
+        }
 
         return RuleResource::collection($results)->collection;
     }

@@ -11,6 +11,7 @@ use App\Models\Rule;
 use App\Models\Slot;
 use App\Models\Vehicle;
 use App\Repositories\Movement\MovementRepositoryInterface;
+use App\Repositories\Parking\ParkingRepositoryInterface;
 use App\Repositories\Row\RowRepositoryInterface;
 use App\Repositories\Slot\SlotRepositoryInterface;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
@@ -42,18 +43,29 @@ class MovementRecommendService
      */
     private $rowRepository;
 
+    /**
+     * @var ParkingRepositoryInterface
+     */
+    private $parkingRepository;
+
     public function __construct(
         MovementRepositoryInterface $movementRepository,
         VehicleRepositoryInterface $vehicleRepository,
         SlotRepositoryInterface $slotRepository,
-        RowRepositoryInterface $rowRepository
+        RowRepositoryInterface $rowRepository,
+        ParkingRepositoryInterface $parkingRepository
     ) {
         $this->movementRepository = $movementRepository;
         $this->vehicleRepository = $vehicleRepository;
         $this->slotRepository = $slotRepository;
         $this->rowRepository = $rowRepository;
+        $this->parkingRepository = $parkingRepository;
     }
 
+    /**
+     * @param array $params
+     * @return MovementRecommendResource
+     */
     public function movement(Array $params)
     {
         $vehicle = Vehicle::find($params['vehicle_id']);
@@ -152,7 +164,7 @@ class MovementRecommendService
             $blocks = $rule->blocks->where('is_presorting', 1)->pluck('id');
         }
 
-        $rowMatch = Row::whereIn('block_id', $blocks)->orderBy('parking_id', 'ASC')->orderBy('id')->get();
+        $rowMatch = Row::where('active', 1)->whereIn('block_id', $blocks)->orderBy('parking_id', 'ASC')->orderBy('id')->get();
 
         // Primero comprobamos si alguna de esas filas está empezada, no completada y comparte la misma regla
         $rowRecommend = $rowMatch->where('fill', '>', 0)->where('full', false)->where('rule_id', $rule->id)->first();
@@ -205,6 +217,11 @@ class MovementRecommendService
             'fill' => $rowType ? $rowRecommend->fill + 1 : 1,
             'fillmm' => $rowRecommend->fillmm + $vehicle->design->length
         ];
+
+        $parkingParams = [
+            'fill' => $rowRecommend->parking->fill + 1
+        ];
+        $this->parkingRepository->update($parkingParams, $rowRecommend->parking->id);
 
         $this->rowRepository->update($rowParams, $positionRecommend['position']->row_id);
 

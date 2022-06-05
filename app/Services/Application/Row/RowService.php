@@ -3,6 +3,7 @@
 namespace App\Services\Application\Row;
 
 use App\Helpers\QueryParamsHelper;
+use App\Http\Resources\Row\RowEspigaResource;
 use App\Http\Resources\Row\RowResource;
 use App\Http\Resources\Row\RowShowResource;
 use App\Models\Block;
@@ -134,6 +135,17 @@ class RowService
         $results = $this->repository->findAllByParking($parking);
 
         return RowResource::collection($results)->collection;
+    }
+
+    /**
+     * @param Parking $parking
+     * @return Collection
+     */
+    public function findAllBySpykesParking(Parking $parking): Collection
+    {
+        $results = $this->repository->findAllBySpykesParking($parking);
+
+        return RowEspigaResource::collection($results)->collection;
     }
 
     /**

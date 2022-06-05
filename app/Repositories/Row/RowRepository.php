@@ -5,10 +5,13 @@ namespace App\Repositories\Row;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Block;
 use App\Models\Parking;
+use App\Models\ParkingType;
 use App\Models\Row;
 use App\Repositories\BaseRepository;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class RowRepository extends BaseRepository implements RowRepositoryInterface
@@ -83,6 +86,26 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
         return $this->model->query()
             ->with(QueryParamsHelper::getIncludesParamFromRequest())
             ->where('parking_id', $parking->id)
+            ->get();
+    }
+
+    /**
+     * Obtener la lista de rows dado un parking.
+     *
+     * @param Parking $parking
+     * @return Collection
+     */
+    public function findAllBySpykesParking(Parking $parking): Collection
+    {
+        if($parking->parking_type_id !== ParkingType::TYPE_ESPIGA){
+            throw new Exception('El parking no es de tipo espiga', Response::HTTP_BAD_REQUEST );
+        }
+
+        return $this->model->query()
+            ->where('parking_id', $parking->id)
+            ->with(['slots.destinationMovement.vehicle' , 'slots.destinationMovement' => function($q){
+                $q->where('confirmed', 1);
+            }])
             ->get();
     }
 

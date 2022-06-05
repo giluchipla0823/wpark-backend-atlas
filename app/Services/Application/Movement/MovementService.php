@@ -12,6 +12,7 @@ use App\Models\Vehicle;
 use App\Repositories\Movement\MovementRepositoryInterface;
 use App\Repositories\Row\RowRepositoryInterface;
 use App\Repositories\Slot\SlotRepositoryInterface;
+use App\Repositories\Parking\ParkingRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
@@ -19,6 +20,7 @@ use App\Events\CompletedRowNotification;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
+use App\Services\Application\Movement\MovementRecommendService;
 
 class MovementService
 {
@@ -37,14 +39,28 @@ class MovementService
      */
     private $rowRepository;
 
+    /**
+     * @var MovementRecommendService
+     */
+    private $movementRecommendService;
+
+    /**
+     * @var ParkingRepositoryInterface
+     */
+    private $parkingRepository;
+
     public function __construct(
         MovementRepositoryInterface $movementRepository,
         SlotRepositoryInterface $slotRepository,
-        RowRepositoryInterface $rowRepository
+        RowRepositoryInterface $rowRepository,
+        MovementRecommendService $movementRecommendService,
+        ParkingRepositoryInterface $parkingRepository,
     ) {
         $this->movementRepository = $movementRepository;
         $this->slotRepository = $slotRepository;
         $this->rowRepository = $rowRepository;
+        $this->movementRecommendService = $movementRecommendService;
+        $this->parkingRepository = $parkingRepository;
     }
 
     public function all(Request $request): Collection
@@ -120,8 +136,7 @@ class MovementService
     }
 
     /**
-     * @param array $params
-     * @param int $id
+     * @param Movement $movement
      * @return void
      */
     public function confirmMovement(Movement $movement): void
@@ -184,6 +199,17 @@ class MovementService
                 }
             }
 
+            // Comprobar si el parking está completo
+            $parkingCapacity = $movement->destinationPosition->row->parking->capacity - $movement->destinationPosition->row->parking->fill;
+            if ($parkingCapacity === 0){
+                $parkingParams = [
+                    'full' => 1
+                ];
+                $this->parkingRepository->update($parkingParams, $movement->destinationPosition->row->parking->id);
+
+                // TODO: Crear evento de notificación para parking completo
+            }
+
             DB::commit();
         } catch (Exception $exc) {
             DB::rollback();
@@ -193,11 +219,11 @@ class MovementService
     }
 
     /**
+     * @param Movement $movement
      * @param array $params
-     * @param int $id
      * @return void
      */
-    public function cancelMovement(Movement $movement): void
+    public function cancelMovement(array $params, Movement $movement): void
     {
         // Comprobación de que el movimiento está en proceso
         if ($movement->canceled) {
@@ -214,6 +240,7 @@ class MovementService
             // Actualización del movimiento para indicar que el movimiento se ha cancelado
             $MovementParams = [
                 'canceled' => 1,
+                'comments' => isset($params['comments']) ? $params['comments'] : null
             ];
             $this->movementRepository->update($MovementParams, $movement->id);
 
@@ -231,10 +258,15 @@ class MovementService
                 $rowParams = [
                     'rule_id' => $movement->destinationPosition->row->fill === 1 ? null : $movement->destinationPosition->row->rule_id,
                     'fill' => $movement->destinationPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->destinationPosition->row->fill - 1 : 0,
-                    'fillmm' => $movement->destinationPosition->row->fillmm - $movement->vehicle->design->length
+                    'fillmm' => $movement->destinationPosition->row->fillmm - $movement->vehicle->design->length,
+                    'full' => $movement->destinationPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->destinationPosition->row->full : 0,
                 ];
-
                 $this->rowRepository->update($rowParams, $movement->destinationPosition->row_id);
+
+                $parkingParams = [
+                    'fill' => $movement->destinationPosition->row->parking->fill - 1
+                ];
+                $this->parkingRepository->update($parkingParams, $movement->destinationPosition->row->parking->id);
 
             }
 
@@ -244,5 +276,16 @@ class MovementService
 
             throw $exc;
         }
+    }
+
+    /**
+     * @param array $params
+     * @return Collection
+     */
+    public function reload(array $params){
+
+        $previousMovement = Movement::find($params['previous_movement_id']);
+        $this->cancelMovement($params, $previousMovement);
+        return $this->movementRecommendService->movement($params);
     }
 }

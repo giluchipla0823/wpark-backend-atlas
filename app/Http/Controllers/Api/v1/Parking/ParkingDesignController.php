@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1\Parking;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\ApiController;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\Parking\ParkingDesignStoreRequest;
 use App\Services\Application\Parking\ParkingDesignService;
-use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class ParkingDesignController extends ApiController
 {
@@ -46,13 +47,10 @@ class ParkingDesignController extends ApiController
      *
      * @param ParkingDesignStoreRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function parkingDesign(ParkingDesignStoreRequest $request): JsonResponse
     {
-//        $parking = $this->parkingDesignService->parkingDesign($request->all());
-//
-//        return $this->successResponse($parking, 'Parking created successfully.', Response::HTTP_CREATED);
-
         $this->parkingDesignService->parkingDesign($request->all());
 
         return $this->showMessage('Parking created successfully.', Response::HTTP_CREATED);

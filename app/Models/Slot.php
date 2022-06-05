@@ -91,7 +91,7 @@ class Slot extends Model
 
     public function destinationMovement()
     {
-        return $this->morphMany(Movement::class, "destinationPosition");
+        return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc');
     }
 
     /**

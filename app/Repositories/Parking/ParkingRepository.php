@@ -10,6 +10,8 @@ use App\Helpers\QueryParamsHelper;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class ParkingRepository extends BaseRepository implements ParkingRepositoryInterface
@@ -133,4 +135,5 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
 
         return true;
     }
+
 }

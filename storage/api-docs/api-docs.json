@@ -3674,46 +3674,6 @@
                         "sanctum": []
                     }
                 ]
-            },
-            "post": {
-                "tags": [
-                    "Movements"
-                ],
-                "summary": "Create New Movement",
-                "description": "Create New Movement",
-                "operationId": "storeMovement",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/MovementStoreRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Create New Movement"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntity"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/Forbidden"
-                    },
-                    "500": {
-                        "$ref": "#/components/responses/InternalServerError"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
             }
         },
         "/api/v1/movements/datatables": {
@@ -3862,6 +3822,16 @@
                         "$ref": "#/components/parameters/id"
                     }
                 ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementCancelRequest"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Cancel Movement"
@@ -3869,8 +3839,140 @@
                     "400": {
                         "$ref": "#/components/responses/BadRequest"
                     },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movement/reload": {
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Movement Reload",
+                "description": "Movement reload",
+                "operationId": "reloadMovement",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementReloadRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Movement Reload Successfully"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/manual/filtered-positions": {
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Movements Filtered Positions",
+                "description": "Movements Filtered Positions",
+                "operationId": "filteredPositionsMovements",
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementFilteredPositionsRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Movement FilteredPositions Successfully"
+                    },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/movements/manual": {
+            "post": {
+                "tags": [
+                    "Movements"
+                ],
+                "summary": "Create Manual Movement",
+                "description": "Create Manual Movement",
+                "operationId": "manualMovement",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MovementStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create Manual Movement"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntity"
@@ -4456,6 +4558,43 @@
                 "responses": {
                     "200": {
                         "description": "Row list of Parking Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/parkings/{id}/row-espigas": {
+            "get": {
+                "tags": [
+                    "Parkings"
+                ],
+                "summary": "Rows list of spykes Parkings",
+                "description": "Rows list of spykes Parkings",
+                "operationId": "listSpykesParkingsRows",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Row from spikes Parking list Successfully"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -5294,6 +5433,27 @@
                 "operationId": "indexRules",
                 "parameters": [
                     {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Para mostrar la lista paginado o simple",
+                        "required": false,
+                        "example": "1"
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Ordenar por columna",
+                        "required": false,
+                        "example": "id"
+                    },
+                    {
+                        "name": "sort_direction",
+                        "in": "query",
+                        "description": "Tipo de orden de columna: ASC o DESC",
+                        "required": false,
+                        "example": "ASC"
+                    },
+                    {
                         "name": "is_group",
                         "in": "query",
                         "description": "Filtro de reglas agrupadas o simples",
@@ -5301,11 +5461,18 @@
                         "example": "1"
                     },
                     {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtro por nombre de regla",
+                        "required": false,
+                        "example": "DESTINO_TARRAGONA"
+                    },
+                    {
                         "name": "includes",
                         "in": "query",
-                        "description": "Añadir bloques, condiciones",
+                        "description": "Añadir bloques, condiciones, filas",
                         "required": false,
-                        "example": "blocks,conditions"
+                        "example": "blocks,conditions,rows"
                     },
                     {
                         "name": "extra_includes",
@@ -6850,6 +7017,13 @@
                         "description": "Tipo de orden de columna: ASC o DESC",
                         "required": false,
                         "example": "ASC"
+                    },
+                    {
+                        "name": "vin",
+                        "in": "query",
+                        "description": "Filtro por vin",
+                        "required": false,
+                        "example": "NM0GE9E20N1514920"
                     },
                     {
                         "name": "includes",
@@ -11025,6 +11199,21 @@
                     "name": "ColorStoreRequest"
                 }
             },
+            "MovementCancelRequest": {
+                "title": "Movement Cancel Request",
+                "description": "Movement Cancel request body data",
+                "properties": {
+                    "comments": {
+                        "description": "Comentarios sobre el movimiento",
+                        "type": "string",
+                        "example": "Movimiento cancelado por bloqueo"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementCancelRequest"
+                }
+            },
             "MovementDatatablesRequest": {
                 "title": "Movement Datatables Request",
                 "description": "Movement request body data",
@@ -11075,6 +11264,32 @@
                     "name": "MovementDatatatblesRequest"
                 }
             },
+            "MovementFilteredPositionsRequest": {
+                "title": "Movement Filtered Positions Request",
+                "description": "Movement Filtered Positions request body data",
+                "required": [
+                    "vehicle_id",
+                    "parking_id"
+                ],
+                "properties": {
+                    "vehicle_id": {
+                        "description": "Indica el vehículo que se va a mover",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "parking_id": {
+                        "description": "Indica el parking de destino",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "2"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementFilteredPositionsRequest"
+                }
+            },
             "MovementRecommendRequest": {
                 "title": "Movement Recommend Request",
                 "description": "Movement Recommend request body data",
@@ -11101,12 +11316,49 @@
                     "name": "MovementRecommendRequest"
                 }
             },
+            "MovementReloadRequest": {
+                "title": "Movement Reload Request",
+                "description": "Movement Reload request body data",
+                "required": [
+                    "previous_movement_id",
+                    "vehicle_id",
+                    "action"
+                ],
+                "properties": {
+                    "previous_movement_id": {
+                        "description": "Indica el movimiento anterior del vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "vehicle_id": {
+                        "description": "Indica el vehículo sobre el que se va a hacer la recomendación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "action": {
+                        "description": "Indica el tipo de acción que se va a realizar en la recomendación",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "comments": {
+                        "description": "Comentarios sobre el movimiento",
+                        "type": "string",
+                        "example": "Movimiento cancelado por reload"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "MovementReloadRequest"
+                }
+            },
             "MovementStoreRequest": {
                 "title": "Movement Store Request",
                 "description": "Movement Store request body data",
                 "required": [
                     "vehicle_id",
-                    "user_id",
                     "origin_position_type",
                     "origin_position_id",
                     "destination_position_type",
@@ -11115,12 +11367,6 @@
                 "properties": {
                     "vehicle_id": {
                         "description": "Indica el vehículo que se mueve",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "user_id": {
-                        "description": "Indica el usuario que está moviendo el vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -11150,7 +11396,7 @@
                         "example": "2"
                     },
                     "comments": {
-                        "description": "Comentarios sobre la fila",
+                        "description": "Comentarios sobre el movimiento",
                         "type": "string",
                         "example": "Movimiento cancelado por bloqueo"
                     }

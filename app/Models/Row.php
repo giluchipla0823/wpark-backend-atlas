@@ -90,6 +90,11 @@ class Row extends Model
         return $this->hasMany(Slot::class, 'row_id');
     }
 
+    public function emptySlots()
+    {
+        return $this->hasMany(Slot::class, 'row_id')->where('fill', 0);
+    }
+
     public function rulesOverflowRows()
     {
         return $this->hasMany(Rule::class, 'overflow_id');

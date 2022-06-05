@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Movement;
  *      @OA\Xml(
  *         name="MovementStoreRequest"
  *      ),
- *      required={"vehicle_id", "user_id", "origin_position_type", "origin_position_id", "destination_position_type", "destination_position_id"}
+ *      required={"vehicle_id", "origin_position_type", "origin_position_id", "destination_position_type", "destination_position_id"}
  * )
  */
 class MovementStoreRequest
@@ -25,17 +25,6 @@ class MovementStoreRequest
      * )
      */
     public $vehicle_id;
-
-    /**
-     * @OA\Property(
-     *     property="user_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica el usuario que está moviendo el vehículo",
-     *     example="1"
-     * )
-     */
-    public $user_id; // Activar solo si es una regla simple
 
     /**
      * @OA\Property(
@@ -85,7 +74,7 @@ class MovementStoreRequest
      * @OA\Property(
      *     property="comments",
      *     type="string",
-     *     description="Comentarios sobre la fila",
+     *     description="Comentarios sobre el movimiento",
      *     example="Movimiento cancelado por bloqueo"
      * )
      */

@@ -6,6 +6,7 @@ use App\Models\Parking;
 use App\Models\ParkingType;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ParkingSeeder extends Seeder
 {
@@ -62,5 +63,9 @@ class ParkingSeeder extends Seeder
         ];
 
         Parking::insert($parkings);
+
+        $path = public_path('sql/parking_rows_slots.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

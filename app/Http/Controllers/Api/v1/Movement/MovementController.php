@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Api\v1\Movement;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Requests\Movement\MovementCancelRequest;
+use App\Http\Requests\Movement\MovementReloadRequest;
 use App\Http\Requests\Movement\MovementDatatablesRequest;
 use App\Http\Requests\Movement\MovementStoreRequest;
 use App\Models\Movement;
 use App\Services\Application\Movement\MovementService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class MovementController extends ApiController
 {
@@ -82,38 +83,36 @@ class MovementController extends ApiController
         return $this->datatablesResponse($results);
     }
 
-     /**
-     * @OA\POST(
-     *     path="/api/v1/movements",
-     *     tags={"Movements"},
-     *     summary="Create New Movement",
-     *     description="Create New Movement",
-     *     security={{"sanctum": {} }},
-     *     operationId="storeMovement",
-     *     @OA\RequestBody(
-     *          required=true,
-     *          @OA\JsonContent(ref="#/components/schemas/MovementStoreRequest")
-     *     ),
-     *     @OA\Response(response=201, description="Create New Movement" ),
-     *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
-     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-     * )
-     *
-     * Store a newly created resource in storage.
-     *
-     * @param MovementStoreRequest $request
-     * @return JsonResponse
-     */
-    public function store(MovementStoreRequest $request): JsonResponse
-    {
-        $request->request->add(['manual' => 1]);
-
-        $movement = $this->movementService->create($request->all());
-
-        return $this->successResponse($movement, 'Movement created successfully.', Response::HTTP_CREATED);
-    }
+    // /**
+    // * @OA\POST(
+    // *     path="/api/v1/movements",
+    // *     tags={"Movements"},
+    // *     summary="Create New Movement",
+    // *     description="Create New Movement",
+    // *     security={{"sanctum": {} }},
+    // *     operationId="storeMovement",
+    // *     @OA\RequestBody(
+    // *          required=true,
+    // *          @OA\JsonContent(ref="#/components/schemas/MovementStoreRequest")
+    // *     ),
+    // *     @OA\Response(response=201, description="Create New Movement" ),
+    // *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
+    // *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+    // *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+    // *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+    // * )
+    // *
+    // * Store a newly created resource in storage.
+    // *
+    // * @param MovementStoreRequest $request
+    // * @return JsonResponse
+    // */
+    //public function store(MovementStoreRequest $request): JsonResponse
+    //{
+    //    $movement = $this->movementService->create($request->all());
+    //
+    //    return $this->successResponse($movement, 'Movement created successfully.', Response::HTTP_CREATED);
+    //}
 
     /**
      * @OA\GET(
@@ -195,9 +194,12 @@ class MovementController extends ApiController
      *     security={{"sanctum": {}}},
      *     operationId="cancelMovement",
      *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(ref="#/components/schemas/MovementCancelRequest")
+     *      ),
      *     @OA\Response(response=200, description="Cancel Movement" ),
      *     @OA\Response(response=400, ref="#/components/responses/BadRequest"),
-     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
      *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
      *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -209,11 +211,40 @@ class MovementController extends ApiController
      * @param Movement $movement
      * @return JsonResponse
      */
-    public function cancelMovement(Movement $movement): JsonResponse
+    public function cancelMovement(MovementCancelRequest $request, Movement $movement): JsonResponse
     {
-        $this->movementService->cancelMovement($movement);
+        $this->movementService->cancelMovement($request->only('comments'), $movement);
 
         return $this->showMessage('Movement canceled.');
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/movement/reload",
+     *      tags={"Movements"},
+     *      summary="Movement Reload",
+     *      description="Movement reload",
+     *      security={{"sanctum": {}}},
+     *      operationId="reloadMovement",
+     *      @OA\RequestBody(
+     *          required=false,
+     *          @OA\JsonContent(ref="#/components/schemas/MovementReloadRequest")
+     *      ),
+     *      @OA\Response(response=200, description="Movement Reload Successfully"),
+     *      @OA\Response(response=400, ref="#/components/responses/BadRequest"),
+     *      @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
+     *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * @param MovementReloadRequest $request
+     * @return JsonResponse
+     */
+    public function reload(MovementReloadRequest $request): JsonResponse
+    {
+        $response = $this->movementService->reload($request->all());
+        return $this->successResponse($response);
     }
 
     ///**

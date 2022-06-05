@@ -130,7 +130,8 @@ class ParkingDesignService
 
                     // Nos interesa que el índice empiece en 1 en lugar de 0 para establecer los row_number
                     $index = $index + 1;
-//                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
+
+                    // Convertimos el row_numer para añadir ceros a la izquierda hasta los 3 dígitos
                     $format_row_number = str_pad($index, 3, '0', STR_PAD_LEFT);
                     $row_number = $index;
 
@@ -153,7 +154,8 @@ class ParkingDesignService
                             'capacity' => 1,
                             'capacitymm' => Slot::CAPACITY_MM
                         ];
-                        $slot = $this->slotRepository->create($slot);
+
+                        $this->slotRepository->create($slot);
                     }
                 }
             }
@@ -164,11 +166,5 @@ class ParkingDesignService
 
             throw $exc;
         }
-
-        // dd($parking);
-
-        // $parking->withoutRelations();
-
-        // return $parking;
     }
 }

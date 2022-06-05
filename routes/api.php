@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\v1\Load\LoadController;
 use App\Http\Controllers\Api\v1\Load\LoadGenerateController;
 use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
+use App\Http\Controllers\Api\v1\Parking\ParkingRowEspigaController;
 use App\Http\Controllers\Api\v1\Load\LoadVehicleController;
 use App\Http\Controllers\Api\v1\Row\RowBlockController;
 use App\Http\Controllers\Api\v1\Transport\TransportController;
@@ -46,6 +47,7 @@ use App\Http\Controllers\Api\v1\Notification\NotificationController;
 use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
 use App\Http\Controllers\Api\v1\Movement\MovementController;
 use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
+use App\Http\Controllers\Api\v1\Movement\MovementManualController;
 use App\Http\Controllers\Api\v1\Vehicle\VehicleMovementsController;
 use App\Http\Controllers\Api\v1\Load\LoadTransportST8Controller;
 use App\Http\Controllers\External\FORD\TransportST8Controller;
@@ -171,6 +173,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Parkings Rows
     Route::get('/parkings/{parking}/rows', [ParkingRowController::class, 'index'])->name('parkings-rows.index');
+    Route::get('/parkings/{parking}/row-espigas', [ParkingRowEspigaController::class, 'rowsSpikes'])->name('parking-rows.rows-spikes');
 
     // Blocks
     Route::patch('/blocks/{id}', [BlockController::class, 'restore'])->name('blocks.restore');
@@ -241,6 +244,9 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
 
     // Movements
+    Route::post('movements/reload', [MovementController::class, 'reload'])->name('movements.reload');
+    Route::post('movements/manual', [MovementManualController::class, 'manual'])->name('movements.manual');
+    Route::post('movements/manual/filtered-positions', [MovementManualController::class, 'filteredPositions'])->name('movements.filtered-positions');
     Route::put('movements/{movement}/confirm', [MovementController::class, 'confirmMovement'])->name('movements.confirm-movement');
     Route::put('movements/{movement}/cancel', [MovementController::class, 'cancelMovement'])->name('movements.cancel-movement');
     Route::post('/movements/recommend', [MovementRecommendController::class, 'index'])->name('movements.recommend');

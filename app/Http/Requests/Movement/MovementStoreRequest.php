@@ -29,20 +29,19 @@ class MovementStoreRequest extends FormRequest
 
         return [
             'vehicle_id' => 'required|exists:vehicles,id',
-            'user_id' => 'required|exists:users,id',
             'origin_position_type' => 'required|max:255',
             'origin_position_id' => [
                 'required',
                 'integer',
-                Rule::when($this->origin_position_type == Parking::class, ['exists:parkings,id']),
-                Rule::when($this->origin_position_type == Slot::class, ['exists:slots,id'])
+                Rule::when($this->origin_position_type === Parking::class, ['exists:parkings,id']),
+                Rule::when($this->origin_position_type === Slot::class, ['exists:slots,id'])
             ],
             'destination_position_type' => 'required|max:255',
             'destination_position_id' => [
                 'required',
                 'integer',
-                Rule::when($this->destination_position_type == Parking::class, ['exists:parkings,id']),
-                Rule::when($this->destination_position_type == Slot::class, ['exists:slots,id'])
+                Rule::when($this->destination_position_type === Parking::class, ['exists:parkings,id']),
+                Rule::when($this->destination_position_type === Slot::class, ['exists:slots,id'])
             ],
             'comments' => 'nullable'
         ];

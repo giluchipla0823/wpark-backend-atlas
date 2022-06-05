@@ -36,6 +36,27 @@ class RuleController extends ApiController
      *      security={{"sanctum": {}}},
      *      operationId="indexRules",
      *      @OA\Parameter(
+     *         name="paginate",
+     *         in="query",
+     *         description="Para mostrar la lista paginado o simple",
+     *         example="1",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Ordenar por columna",
+     *         example="id",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="sort_direction",
+     *         in="query",
+     *         description="Tipo de orden de columna: ASC o DESC",
+     *         example="ASC",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
      *         name="is_group",
      *         in="query",
      *         description="Filtro de reglas agrupadas o simples",
@@ -43,10 +64,17 @@ class RuleController extends ApiController
      *         required=false
      *      ),
      *      @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Filtro por nombre de regla",
+     *         example="DESTINO_TARRAGONA",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
      *         name="includes",
      *         in="query",
-     *         description="Añadir bloques, condiciones",
-     *         example="blocks,conditions",
+     *         description="Añadir bloques, condiciones, filas",
+     *         example="blocks,conditions,rows",
      *         required=false
      *      ),
      *      @OA\Parameter(
@@ -66,6 +94,7 @@ class RuleController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

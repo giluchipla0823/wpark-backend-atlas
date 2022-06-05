@@ -6,7 +6,10 @@ use App\Models\Color;
 use App\Models\Country;
 use App\Models\Design;
 use App\Models\DestinationCode;
+use App\Models\Movement;
+use App\Models\Parking;
 use App\Models\Transport;
+use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
@@ -281,5 +284,37 @@ class VehicleSeeder extends Seeder
                 'tracking_date' => Carbon::now()
             ]
         ]);
+
+        $parking = Parking::find(1);
+
+        // Asignar estados
+        $vehicles = Vehicle::all();
+
+        foreach ($vehicles as $vehicle) {
+            $vehicle->states()->sync([
+                1 => [
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now()
+                ]
+            ]);
+
+            Movement::create([
+               "vehicle_id" => $vehicle->id,
+               "user_id" => User::inRandomOrder()->first()->id,
+                "origin_position_type" => get_class($parking),
+                "origin_position_id" => 0,
+                "destination_position_type" => get_class($parking),
+                "destination_position_id" => $parking->id,
+                "category" => "",
+                "confirmed" => 1,
+                "canceled" => 0,
+                "manual" => 0,
+                "dt_start" => Carbon::now(),
+                "dt_end" => Carbon::now(),
+                "comments" => null,
+                "created_at" => Carbon::now(),
+                "updated_at" => Carbon::now()
+            ]);
+        }
     }
 }

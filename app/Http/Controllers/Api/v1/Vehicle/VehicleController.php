@@ -58,6 +58,13 @@ class VehicleController extends ApiController
      *         required=false
      *      ),
      *      @OA\Parameter(
+     *         name="vin",
+     *         in="query",
+     *         description="Filtro por vin",
+     *         example="NM0GE9E20N1514920",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
      *         name="includes",
      *         in="query",
      *         description="Añadir modelo, color, código de destino, último estado, última etapa, último movimiento",

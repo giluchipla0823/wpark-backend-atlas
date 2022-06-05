@@ -6,6 +6,7 @@ use Exception;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Rule;
 use App\Repositories\BaseRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\Facades\DataTables;
@@ -21,9 +22,9 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
 
     /**
      * @param Request $request
-     * @return Collection
+     * @return LengthAwarePaginator|Collection
      */
-    public function all(Request $request): Collection
+    public function all(Request $request)
     {
         $query = $this->model->query();
 
@@ -35,7 +36,18 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
             $query = $query->where("is_group", "=", $isGroup);
         }
 
-        return $query->get();
+        if ($name = $request->query->get('name')) {
+            $query = $query->where('name', "LIKE", "%{$name}%");
+        }
+
+        $query = $query->orderBy(
+            $request->query->get('sort_by', 'id'),
+            $request->query->get('sort_direction', 'asc')
+        );
+
+        return QueryParamsHelper::checkPaginateParam()
+            ? $query->paginate($request->query->getInt('per_page', 10))
+            : $query->get();
     }
 
     /**
