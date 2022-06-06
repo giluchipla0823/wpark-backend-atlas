@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Row;
 
+use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\Slot\SlotResource;
-use App\Models\Slot;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RowVehicleResource extends JsonResource
@@ -11,8 +11,8 @@ class RowVehicleResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param $request
+     * @return array
      */
     public function toArray($request)
     {
@@ -21,7 +21,18 @@ class RowVehicleResource extends JsonResource
             "vin" => $this->vin,
             "vin_short" => $this->vin_short,
             "eoc" => $this->eoc,
-            "slot" => $this->lastMovement ? $this->lastMovement->destination_slot : null
+            "design" => (new DesignResource($this->design))->toArray($request),
+            "slot" => $this->includeSlot()
         ];
+    }
+
+    /**
+     * @return SlotResource|null
+     */
+    private function includeSlot(): ?SlotResource
+    {
+        return $this->lastMovement
+                    ? new SlotResource($this->lastMovement->destinationPosition)
+                    : null;
     }
 }
