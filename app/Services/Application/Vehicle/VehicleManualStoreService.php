@@ -82,7 +82,7 @@ class VehicleManualStoreService
      */
     private function createMovement(Vehicle $vehicle, array $params): void
     {
-        $parking = $this->parkingRepository->find($params['position']['id']);
+        $parking = $this->parkingRepository->find($params['parking_id']);
 
         $this->movementRepository->create([
             "vehicle_id" => $vehicle->id,
