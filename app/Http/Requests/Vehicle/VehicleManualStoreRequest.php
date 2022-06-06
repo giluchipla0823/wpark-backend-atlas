@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Vehicle;
 
-use App\Models\Parking;
 use App\Models\Vehicle;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +24,6 @@ class VehicleManualStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $positionTypes = implode(",",[Parking::class]);
         $createdFrom = implode(",",[Vehicle::CREATED_FROM_MOBILE, Vehicle::CREATED_FROM_WEB]);
 
         return [
@@ -38,13 +36,7 @@ class VehicleManualStoreRequest extends FormRequest
             "destination_code_id" => "required|integer|exists:destination_codes,id",
             "entry_transport_id" => "required|integer|exists:transports,id",
             "info" => "nullable|max:100",
-            "position" => "required|array|required_array_keys:type,id",
-            "position.type" => "required|string|in:{$positionTypes}",
-            "position.id" => [
-                "required",
-                "integer",
-                "exists:parkings,id"
-            ],
+            "parking_id" => "required|integer|exists:parkings,id",
             "created_from" => "required|string|in:{$createdFrom}"
         ];
     }

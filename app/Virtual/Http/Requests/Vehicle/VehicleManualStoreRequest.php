@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Vehicle;
  *      @OA\Xml(
  *         name="VehicleManualStoreRequest"
  *      ),
- *      required={"vin", "lvin", "vin_short", "eoc", "design_id", "color_id", "destination_code_id", "entry_transport_id", "position", "created_from"}
+ *      required={"vin", "lvin", "vin_short", "eoc", "design_id", "color_id", "destination_code_id", "entry_transport_id", "parking_id", "created_from"}
  * )
  */
 class VehicleManualStoreRequest
@@ -114,26 +114,13 @@ class VehicleManualStoreRequest
 
     /**
      * @OA\Property(
-     *     property="position",
-     *     type="object",
-     *     description="Posición donde se va colocar el vehículo",
-     *     @OA\Property(
-     *        property="type",
-     *        type="string",
-     *        description="Tipo de posición del vehículo. En este caso el tipo de Posición es parking",
-     *     ),
-     *     @OA\Property(
-     *        property="id",
-     *        type="integer",
-     *        description="Id de posición del vehículo",
-     *     ),
-     *     example={
-     *       "type": "App\Models\Parking",
-     *       "id": "1"
-     *     }
+     *     property="parking_id",
+     *     type="integer",
+     *     description="Id de parking donde se coloca el vehículo.",
+     *     example="1"
      * )
      */
-    public $position;
+    public $parking_id;
 
     /**
      * @OA\Property(

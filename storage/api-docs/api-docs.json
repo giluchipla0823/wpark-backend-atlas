@@ -12297,7 +12297,7 @@
                     "color_id",
                     "destination_code_id",
                     "entry_transport_id",
-                    "position",
+                    "parking_id",
                     "created_from"
                 ],
                 "properties": {
@@ -12353,23 +12353,10 @@
                         "type": "string",
                         "example": ""
                     },
-                    "position": {
-                        "description": "Posición donde se va colocar el vehículo",
-                        "properties": {
-                            "type": {
-                                "description": "Tipo de posición del vehículo. En este caso el tipo de Posición es parking",
-                                "type": "string"
-                            },
-                            "id": {
-                                "description": "Id de posición del vehículo",
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object",
-                        "example": {
-                            "type": "App\\Models\\Parking",
-                            "id": "1"
-                        }
+                    "parking_id": {
+                        "description": "Id de parking donde se coloca el vehículo.",
+                        "type": "integer",
+                        "example": "1"
                     },
                     "created_from": {
                         "description": "Desde que aplicación fue creado del vehículo",
