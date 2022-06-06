@@ -22,7 +22,7 @@ class CreateMovements extends Migration
             $table->integer('origin_position_id')->unsigned()->comment('Indica la posición desde donde se hace el movimiento');
             $table->string('destination_position_type')->comment('Indica el tipo de posición slot o parking de destino');
             $table->integer('destination_position_id')->unsigned()->comment('Indica la posición haciá donde se hace el movimiento');
-            $table->string('category')->comment('Nombre de la categoría (last_rule_id) que se aplica en ese movimiento');
+            $table->string('category')->nullable()->comment('Nombre de la categoría (last_rule_id) que se aplica en ese movimiento');
             $table->boolean('confirmed')->default('0')->comment('Indica si el movimiento se ha confirmado (0: No está confirmado, 1: Está confirmado)');
             $table->boolean('canceled')->default('0')->comment('Indica si el movimiento se ha cancelado (0: No está cancelado, 1: Está cancelado)');
             $table->boolean('manual')->default('0')->comment('Indica si el movimiento es el recomendado o manual (0: Recomendado, 1: Manual)');

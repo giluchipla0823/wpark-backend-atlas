@@ -27,6 +27,10 @@ class DestinationCodeRepository extends BaseRepository implements DestinationCod
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
+        if ($countryId = $request->query->get("country_id")) {
+            $query = $query->where("country_id", "=", $countryId);
+        }
+
         return $query->get();
     }
 

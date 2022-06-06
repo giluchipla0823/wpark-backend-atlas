@@ -7,6 +7,7 @@ use App\Http\Requests\Parking\ParkingStoreRequest;
 use App\Http\Requests\Parking\ParkingUpdateRequest;
 use App\Models\Parking;
 use App\Services\Application\Parking\ParkingService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,20 @@ class ParkingController extends ApiController
      *      description="List of parkings",
      *      security={{"sanctum": {}}},
      *      operationId="indexParkings",
+     *      @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Filtro por nombre de parking",
+     *         example="PU1",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="parking_type_id",
+     *         in="query",
+     *         description="Filtro por id de tipo de parking",
+     *         example="1",
+     *         required=false
+     *      ),
      *      @OA\Response(response=200, description="Parking list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
      *      @OA\Response(response=403, ref="#/components/responses/Forbidden"),
@@ -44,6 +59,7 @@ class ParkingController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

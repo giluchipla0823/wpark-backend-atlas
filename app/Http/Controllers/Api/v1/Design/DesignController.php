@@ -7,6 +7,7 @@ use App\Http\Requests\Design\DesignStoreRequest;
 use App\Http\Requests\Design\DesignUpdateRequest;
 use App\Models\Design;
 use App\Services\Application\Design\DesignService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,6 +34,13 @@ class DesignController extends ApiController
      *      summary="Designs List",
      *      description="List of designs",
      *      security={{"sanctum": {}}},
+     *      @OA\Parameter(
+     *         name="brand_id",
+     *         in="query",
+     *         description="Filtro por id de marca",
+     *         example="1",
+     *         required=false
+     *      ),
      *      operationId="indexDesigns",
      *      @OA\Response(response=200, description="Design list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
@@ -44,6 +52,7 @@ class DesignController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

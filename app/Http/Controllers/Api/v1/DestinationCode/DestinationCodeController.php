@@ -33,6 +33,13 @@ class DestinationCodeController extends ApiController
      *      summary="DestinationCodes List",
      *      description="List of destinationCodes",
      *      security={{"sanctum": {}}},
+     *      @OA\Parameter(
+     *         name="country_id",
+     *         in="query",
+     *         description="Filtro por id de país",
+     *         example="1",
+     *         required=false
+     *      ),
      *      operationId="indexDestinationCodes",
      *      @OA\Response(response=200, description="DestinationCode list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),

@@ -27,6 +27,10 @@ class DesignRepository extends BaseRepository implements DesignRepositoryInterfa
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
+        if ($brandId = $request->query->get("brand_id")) {
+            $query = $query->where("brand_id", "=", $brandId);
+        }
+
         return $query->get();
     }
 

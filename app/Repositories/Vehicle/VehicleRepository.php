@@ -67,6 +67,11 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         );
     }
 
+    public function createManual(array $params): Vehicle
+    {
+        return $this->model->create($params);
+    }
+
     /**
      * Crear vehículo.
      *

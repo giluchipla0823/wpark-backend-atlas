@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
-use App\Helpers\Paginator\EloquentPaginator;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleDatatablesRequest;
-use App\Http\Resources\Vehicle\VehicleResource;
 use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleService;
 use Exception;
@@ -119,17 +117,6 @@ class VehicleController extends ApiController
 
         return $this->datatablesResponse($results);
     }
-
- //   /**
- //    * @param VehicleStageRequest $request
- //    * @return JsonResponse
- //    */
-    /* public function store(VehicleStageRequest $request): JsonResponse
-    {
-        $vehicle = $this->vehicleService->create($request->all());
-
-        return $this->successResponse($vehicle, 'Vehicle created successfully.', Response::HTTP_CREATED);
-    } */
 
     /**
      * @OA\GET(

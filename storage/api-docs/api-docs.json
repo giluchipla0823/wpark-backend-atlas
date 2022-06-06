@@ -2578,6 +2578,15 @@
                 "summary": "Designs List",
                 "description": "List of designs",
                 "operationId": "indexDesigns",
+                "parameters": [
+                    {
+                        "name": "brand_id",
+                        "in": "query",
+                        "description": "Filtro por id de marca",
+                        "required": false,
+                        "example": "1"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Design list Successfully"
@@ -2831,6 +2840,15 @@
                 "summary": "DestinationCodes List",
                 "description": "List of destinationCodes",
                 "operationId": "indexDestinationCodes",
+                "parameters": [
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filtro por id de país",
+                        "required": false,
+                        "example": "1"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "DestinationCode list Successfully"
@@ -4258,6 +4276,22 @@
                 "summary": "Parkings List",
                 "description": "List of parkings",
                 "operationId": "indexParkings",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtro por nombre de parking",
+                        "required": false,
+                        "example": "PU1"
+                    },
+                    {
+                        "name": "parking_type_id",
+                        "in": "query",
+                        "description": "Filtro por id de tipo de parking",
+                        "required": false,
+                        "example": "1"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Parking list Successfully"
@@ -7214,6 +7248,48 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vehicles/create-manual": {
+            "post": {
+                "tags": [
+                    "Vehicles"
+                ],
+                "summary": "Create New Vehicle",
+                "description": "Create New Vehicle",
+                "operationId": "storeColor",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleManualStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Vehicle"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
                     },
                     "401": {
                         "$ref": "#/components/responses/Unauthorized"
@@ -12207,6 +12283,103 @@
                 "type": "object",
                 "xml": {
                     "name": "VehicleDatatatblesRequest"
+                }
+            },
+            "VehicleManualStoreRequest": {
+                "title": "Vehicle Manual Store Request",
+                "description": "Vehicle Manual Store request body data",
+                "required": [
+                    "vin",
+                    "lvin",
+                    "vin_short",
+                    "eoc",
+                    "design_id",
+                    "color_id",
+                    "destination_code_id",
+                    "entry_transport_id",
+                    "position",
+                    "created_from"
+                ],
+                "properties": {
+                    "vin": {
+                        "description": "Vin del vehículo",
+                        "type": "string",
+                        "maxLength": 17,
+                        "minLength": 17,
+                        "example": "NM0GE9E20N1514931"
+                    },
+                    "lvin": {
+                        "description": "Vin del vehículo",
+                        "type": "string",
+                        "maxLength": 17,
+                        "minLength": 17,
+                        "example": "NM0GE9E20N1514931"
+                    },
+                    "vin_short": {
+                        "description": "Vin short del vehículo",
+                        "type": "string",
+                        "maxLength": 7,
+                        "minLength": 7,
+                        "example": "20N7777"
+                    },
+                    "eoc": {
+                        "description": "EOC del vehículo",
+                        "type": "string",
+                        "maxLength": 80,
+                        "example": "50CS K5W3384920 WPGUMK08949 5IG 73UD NVBE KE5R DB 5FEGJD EEEIAC 2P5 BP 2"
+                    },
+                    "design_id": {
+                        "description": "Id del modelo del vehículo",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "color_id": {
+                        "description": "Id del color del vehículo",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "destination_code_id": {
+                        "description": "Id del código de destino del vehículo",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "entry_transport_id": {
+                        "description": "Id del método de transporte de entrada del vehículo",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "info": {
+                        "description": "Información adicional del vehículo",
+                        "type": "string",
+                        "example": ""
+                    },
+                    "position": {
+                        "description": "Posición donde se va colocar el vehículo",
+                        "properties": {
+                            "type": {
+                                "description": "Tipo de posición del vehículo. En este caso el tipo de Posición es parking",
+                                "type": "string"
+                            },
+                            "id": {
+                                "description": "Id de posición del vehículo",
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object",
+                        "example": {
+                            "type": "App\\Models\\Parking",
+                            "id": "1"
+                        }
+                    },
+                    "created_from": {
+                        "description": "Desde que aplicación fue creado del vehículo",
+                        "type": "string",
+                        "example": "mobile"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "VehicleManualStoreRequest"
                 }
             },
             "VehicleStageRequest": {

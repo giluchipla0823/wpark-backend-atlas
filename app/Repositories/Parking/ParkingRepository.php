@@ -33,6 +33,10 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
             $query = $query->where('name', 'LIKE', "%" . $name . "%");
         }
 
+        if ($parkingTypeId = $request->query->get('parking_type_id')) {
+            $query = $query->where('parking_type_id', '=', $parkingTypeId);
+        }
+
         $sortBy = $request->query->get('sort_by', 'id');
         $sortDirection = $request->query->get('sort_direction', 'asc');
         $query = $query->orderBy($sortBy, $sortDirection);

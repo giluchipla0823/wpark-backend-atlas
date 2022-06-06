@@ -42,6 +42,9 @@ class Vehicle extends Model
 
     public const VIN_SHORT_MAX_LENGTH = 7;
 
+    public const CREATED_FROM_MOBILE = "mobile";
+    public const CREATED_FROM_WEB = "web";
+
     protected $fillable = [
         'vin',
         'lvin',

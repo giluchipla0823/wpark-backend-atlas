@@ -28,6 +28,7 @@ class Stage extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const STAGE_VEHICLE_CREATED_ID = 1;
     public const STAGE_GATE_RELEASE_ID = 5;
 
     public const STAGE_ST3_CODE = "03";

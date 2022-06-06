@@ -25,11 +25,13 @@ class VehicleService
     /**
      * @var VehicleRepositoryInterface
      */
-    private $repository;
+    private $vehicleRepository;
 
-    public function __construct(VehicleRepositoryInterface $repository)
+    public function __construct(
+        VehicleRepositoryInterface $vehicleRepository
+    )
     {
-        $this->repository = $repository;
+        $this->vehicleRepository = $vehicleRepository;
     }
 
     /**
@@ -38,7 +40,7 @@ class VehicleService
      */
     public function all(Request $request): Collection
     {
-        $results = $this->repository->all($request);
+        $results = $this->vehicleRepository->all($request);
 
         if ($results instanceof LengthAwarePaginator) {
             return (new EloquentPaginator($results, VehicleResource::class))->collection();
@@ -53,7 +55,7 @@ class VehicleService
      */
     public function datatables(Request $request): Collection
     {
-        $results = $this->repository->datatables($request);
+        $results = $this->vehicleRepository->datatables($request);
 
         $collection = VehicleDatatableResource::collection(
             $results->get('data')
@@ -75,21 +77,12 @@ class VehicleService
 
     /**
      * @param array $params
-     * @return Vehicle
-     */
-    public function create(array $params): Vehicle
-    {
-        return $this->repository->create($params);
-    }
-
-    /**
-     * @param array $params
      * @param int $id
      * @return void
      */
     public function update(array $params, int $id): void
     {
-        $this->repository->update($params, $id);
+        $this->vehicleRepository->update($params, $id);
     }
 
     /**
@@ -98,12 +91,12 @@ class VehicleService
      */
     public function delete(int $id): void
     {
-        $this->repository->delete($id);
+        $this->vehicleRepository->delete($id);
     }
 
     public function restore(int $id): void
     {
-        $this->repository->restore($id);
+        $this->vehicleRepository->restore($id);
     }
 
     /**
@@ -112,7 +105,7 @@ class VehicleService
      */
     public function findAllByRow(Row $row): Collection
     {
-        $results = $this->repository->findAllByRow($row);
+        $results = $this->vehicleRepository->findAllByRow($row);
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $data = collect($results->get('data'));
@@ -142,7 +135,7 @@ class VehicleService
      */
     public function findAllByState(State $state): Collection
     {
-        $results = $this->repository->findAllByState($state);
+        $results = $this->vehicleRepository->findAllByState($state);
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $data = collect($results->get('data'));
@@ -165,9 +158,9 @@ class VehicleService
     public function searchByVin(string $vin): VehicleShowResource
     {
         if (strlen($vin) > Vehicle::VIN_SHORT_MAX_LENGTH) {
-            $vehicle = $this->repository->findBy(['vin' => $vin]);
+            $vehicle = $this->vehicleRepository->findBy(['vin' => $vin]);
         } else {
-            $vehicle = $this->repository->findBy(['vin_short' => $vin]);
+            $vehicle = $this->vehicleRepository->findBy(['vin_short' => $vin]);
         }
 
         if (!$vehicle) {
