@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Row;
 
+use App\Http\Resources\Color\ColorResource;
 use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,6 +23,7 @@ class RowVehicleResource extends JsonResource
             "vin_short" => $this->vin_short,
             "eoc" => $this->eoc,
             "design" => (new DesignResource($this->design))->toArray($request),
+            "color" => (new ColorResource($this->color))->toArray($request),
             "slot" => $this->includeSlot()
         ];
     }
