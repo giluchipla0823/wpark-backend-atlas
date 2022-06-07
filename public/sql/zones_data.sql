@@ -3,4 +3,5 @@ INSERT INTO `zones` (`id`, `name`) VALUES
 	(2, 'PRESORTING'),
 	(3, 'CAMPA GENERAL'),
 	(4, 'EXTERNO'),
-	(5, 'OVERFLOW');
+	(5, 'OVERFLOW'),
+	(6, 'BUFFER');

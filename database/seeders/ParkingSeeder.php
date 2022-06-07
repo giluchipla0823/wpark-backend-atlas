@@ -27,7 +27,7 @@ class ParkingSeeder extends Seeder
             ],
             [
                 'name' => 'BUFFER',
-                'area_id' => 1,
+                'area_id' => 4,
                 'parking_type_id' => ParkingType::TYPE_UNLIMITED,
                 'created_at'        => Carbon::now(),
                 'updated_at'        => Carbon::now(),

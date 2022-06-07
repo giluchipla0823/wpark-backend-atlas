@@ -39,14 +39,28 @@ class ParkingController extends ApiController
      *         name="name",
      *         in="query",
      *         description="Filtro por nombre de parking",
-     *         example="PU1",
+     *         example="",
      *         required=false
      *      ),
      *      @OA\Parameter(
      *         name="parking_type_id",
      *         in="query",
      *         description="Filtro por id de tipo de parking",
-     *         example="1",
+     *         example="",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="area_id",
+     *         in="query",
+     *         description="Filtro por id de area del parking",
+     *         example="",
+     *         required=false
+     *      ),
+     *      @OA\Parameter(
+     *         name="zone_id",
+     *         in="query",
+     *         description="Filtro por id de zona del parking",
+     *         example="",
      *         required=false
      *      ),
      *      @OA\Response(response=200, description="Parking list Successfully"),

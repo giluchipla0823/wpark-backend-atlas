@@ -4282,14 +4282,28 @@
                         "in": "query",
                         "description": "Filtro por nombre de parking",
                         "required": false,
-                        "example": "PU1"
+                        "example": ""
                     },
                     {
                         "name": "parking_type_id",
                         "in": "query",
                         "description": "Filtro por id de tipo de parking",
                         "required": false,
-                        "example": "1"
+                        "example": ""
+                    },
+                    {
+                        "name": "area_id",
+                        "in": "query",
+                        "description": "Filtro por id de area del parking",
+                        "required": false,
+                        "example": ""
+                    },
+                    {
+                        "name": "zone_id",
+                        "in": "query",
+                        "description": "Filtro por id de zona del parking",
+                        "required": false,
+                        "example": ""
                     }
                 ],
                 "responses": {

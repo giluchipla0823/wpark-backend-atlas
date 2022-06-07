@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
 
 class ParkingRepository extends BaseRepository implements ParkingRepositoryInterface
 {
@@ -35,6 +36,16 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
 
         if ($parkingTypeId = $request->query->get('parking_type_id')) {
             $query = $query->where('parking_type_id', '=', $parkingTypeId);
+        }
+
+        if ($areaId = $request->query->get('area_id')) {
+            $query = $query->where('area_id', '=', $areaId);
+        }
+
+        if ($zoneId = $request->query->get('zone_id')) {
+            $query = $query->whereHas('area', function(Builder $q) use ($zoneId) {
+                $q->where("zone_id", $zoneId);
+            });
         }
 
         $sortBy = $request->query->get('sort_by', 'id');
