@@ -276,21 +276,15 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                         WHERE
                             lmov.vehicle_id = vehicles.id AND lmov.confirmed = 1
                         ORDER BY
-                            lmov.created_at DESC
+                            lmov.id DESC
                         LIMIT 1
                 )
             "))
-            ->whereHas('lastMovement', function (Builder $q) use ($row) {
-                $q->where('confirmed', 1)
-                  ->whereHasMorph('destinationPosition', [Parking::class, Slot::class], function (Builder $q, $type) use ($row) {
-                      if($type === Slot::class){
-                        $q->where([
-                            ['row_id', '=', $row->id],
-                            ['fill', '=', 1],
-                        ]);
-                      }
-                  });
-            })
+            ->join("slots", "movements.destination_position_id", "=", "slots.id")
+            ->where([
+                ["slots.row_id", "=",  $row->id],
+                ["slots.fill", "=",  1],
+            ])
             ->orderBy("movements.destination_position_id", "ASC");
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
