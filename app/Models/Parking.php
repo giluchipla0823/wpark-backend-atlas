@@ -140,4 +140,31 @@ class Parking extends Model
     {
         return "{$this->area->compound->id}.{$this->id}.0.0";
     }
+
+    /**
+     * Si el parking es de tipo "FILAS"
+     * @return bool
+     */
+    public function isRowType(): bool
+    {
+        return $this->parking_type_id === ParkingType::TYPE_ROW;
+    }
+
+    /**
+     * Si el parking es de tipo "ESPIGA"
+     * @return bool
+     */
+    public function isEspigaType(): bool
+    {
+        return $this->parking_type_id === ParkingType::TYPE_ESPIGA;
+    }
+
+    /**
+     * Si el parking es de tipo "UNLIMITED"
+     * @return bool
+     */
+    public function isUnlimitedType(): bool
+    {
+        return $this->parking_type_id === ParkingType::TYPE_UNLIMITED;
+    }
 }

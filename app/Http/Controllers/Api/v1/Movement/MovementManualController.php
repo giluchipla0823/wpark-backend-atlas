@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\Movement;
 
+use Exception;
+use App\Exceptions\owner\BadRequestException;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Movement\MovementFilteredPositionsRequest;
 use App\Services\Application\Movement\MovementManualService;
 use App\Http\Requests\Movement\MovementStoreRequest;
+use App\Services\Application\Movement\MovementService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,12 +18,18 @@ class MovementManualController extends ApiController
      * @var MovementManualService
      */
     private $movementManualService;
+    /**
+     * @var MovementService
+     */
+    private $movementService;
 
     public function __construct(
-        MovementManualService $movementManualService
+        MovementManualService $movementManualService,
+        MovementService $movementService
     ) {
         $this->middleware('role:Super-Admin|admin');
         $this->movementManualService = $movementManualService;
+        $this->movementService = $movementService;
     }
 
     /**
@@ -45,6 +54,7 @@ class MovementManualController extends ApiController
      *
      * @param MovementFilteredPositionsRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function filteredPositions(MovementFilteredPositionsRequest $request): JsonResponse
     {
@@ -76,12 +86,13 @@ class MovementManualController extends ApiController
      *
      * @param MovementStoreRequest $request
      * @return JsonResponse
+     * @throws BadRequestException
      */
     public function manual(MovementStoreRequest $request): JsonResponse
     {
-        $movement = $this->movementManualService->manual($request->all());
+        $this->movementService->manual($request->all());
 
-        return $this->successResponse($movement, 'Movement created successfully.', Response::HTTP_CREATED);
+        return $this->showMessage('Movement created successfully.', Response::HTTP_CREATED);
     }
 
 }
