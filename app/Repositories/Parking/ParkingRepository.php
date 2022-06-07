@@ -38,13 +38,15 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
             $query = $query->where('parking_type_id', '=', $parkingTypeId);
         }
 
-        if ($areaId = $request->query->get('area_id')) {
-            $query = $query->where('area_id', '=', $areaId);
+        if ($areas = $request->query->get('areas')) {
+            $areas = explode(",", $areas);
+            $query = $query->whereIn('area_id', $areas);
         }
 
-        if ($zoneId = $request->query->get('zone_id')) {
-            $query = $query->whereHas('area', function(Builder $q) use ($zoneId) {
-                $q->where("zone_id", $zoneId);
+        if ($zones = $request->query->get('zones')) {
+            $zones = explode(",", $zones);
+            $query = $query->whereHas('area', function(Builder $q) use ($zones) {
+                $q->whereIn("zone_id", $zones);
             });
         }
 

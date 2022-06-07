@@ -50,16 +50,16 @@ class ParkingController extends ApiController
      *         required=false
      *      ),
      *      @OA\Parameter(
-     *         name="area_id",
+     *         name="areas",
      *         in="query",
-     *         description="Filtro por id de area del parking",
+     *         description="Filtro por ids de areas del parking",
      *         example="",
      *         required=false
      *      ),
      *      @OA\Parameter(
-     *         name="zone_id",
+     *         name="zones",
      *         in="query",
-     *         description="Filtro por id de zona del parking",
+     *         description="Filtro por ids de zonas del parking",
      *         example="",
      *         required=false
      *      ),
