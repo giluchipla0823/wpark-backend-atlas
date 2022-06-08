@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Row;
 
+use App\Exceptions\owner\BadRequestException;
 use App\Http\Controllers\ApiController;
 use App\Models\Row;
 use App\Services\Application\Vehicle\VehicleService;
@@ -43,6 +44,7 @@ class RowVehicleController extends ApiController
      */
     public function index(Row $row): JsonResponse
     {
+        throw new BadRequestException("hola");
         $vehicles = $this->vehicleService->findAllByRow($row);
 
         return $this->showAll($vehicles);
