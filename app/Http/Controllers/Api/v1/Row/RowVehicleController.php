@@ -44,7 +44,7 @@ class RowVehicleController extends ApiController
      */
     public function index(Row $row): JsonResponse
     {
-        throw new BadRequestException("hola");
+        // throw new BadRequestException("hola");
         $vehicles = $this->vehicleService->findAllByRow($row);
 
         return $this->showAll($vehicles);
