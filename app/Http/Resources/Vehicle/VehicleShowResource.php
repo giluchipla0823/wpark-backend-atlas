@@ -69,7 +69,9 @@ class VehicleShowResource extends JsonResource
                 "back" => route("designs-svg.default", ["filename" => "back.svg"]),
                 "top" => route("designs-svg.default", ["filename" => "top.svg"]),
             ],
-            "match_rules" => $this->includeMatchRules(),
+            "last_rule_id" => $this->last_rule_id,
+            "shipping_rule_id" => $this->shipping_rule_id,
+            // "match_rules" => $this->includeMatchRules(),
             "load" => new LoadShowResource($this->loads)
         ];
     }
