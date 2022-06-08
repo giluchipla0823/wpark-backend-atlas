@@ -4,6 +4,7 @@ namespace App\Http\Resources\Vehicle;
 
 use App\Helpers\JsonResourceHelper;
 use App\Http\Resources\Hold\HoldResource;
+use App\Http\Resources\Load\LoadShowResource;
 use App\Http\Resources\Parking\ParkingResource;
 use App\Http\Resources\Slot\SlotResource;
 use App\Models\Movement;
@@ -68,7 +69,8 @@ class VehicleShowResource extends JsonResource
                 "back" => route("designs-svg.default", ["filename" => "back.svg"]),
                 "top" => route("designs-svg.default", ["filename" => "top.svg"]),
             ],
-            "match_rules" => $this->includeMatchRules()
+            "match_rules" => $this->includeMatchRules(),
+            "load" => new LoadShowResource($this->loads)
         ];
     }
 
@@ -120,11 +122,15 @@ class VehicleShowResource extends JsonResource
         return $collection->toArray();
     }
 
-    private function includeMatchRules(): array
+    private function includeMatchRules(): ?array
     {
-        /* @var VehicleMovementsService $service */
-        $service = app()->make(VehicleMovementsService::class);
+        if (!$this->load_id) {
+            /* @var VehicleMovementsService $service */
+            $service = app()->make(VehicleMovementsService::class);
 
-        return $service->vehicleMatchRules($this->resource);
+            return $service->vehicleMatchRules($this->resource);
+        }
+
+        return null;
     }
 }
