@@ -4,7 +4,9 @@ namespace App\Http\Resources\Row;
 
 use App\Http\Resources\Block\BlockResource;
 use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\Rule\RuleResource;
 use App\Http\Resources\Slot\SlotResource;
+use App\Models\Zone;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RowShowResource extends JsonResource
@@ -23,6 +25,7 @@ class RowShowResource extends JsonResource
             "row_name" => $this->row_name,
             "lp_name" => $this->lp_name,
             "lp_code" => $this->lp_code,
+            "rule" => new RuleResource($this->rule),
             "parking" => new ParkingResource($this->parking),
             "block" => new BlockResource($this->block),
             "category" => $this->category,
@@ -36,7 +39,13 @@ class RowShowResource extends JsonResource
             "alt_qr" => $this->alt_qr,
             "comments" => $this->comments,
             "active" => $this->active,
-            "slots" => SlotResource::collection($this->slots)
+            "slots" => SlotResource::collection($this->slots),
+            "is_presorting_zone" => $this->isPresortingZone()
         ];
+    }
+
+    private function isPresortingZone(): bool
+    {
+        return $this->parking->area->zone->id === Zone::PRESORTING;
     }
 }

@@ -34,7 +34,7 @@ class LoadService
     {
         if($load->processed === 1){
             throw new Exception(
-                "El load seleccionado ya confirmó su salida anteriormente.",
+                "Ya se confirmó anteriormente la salida de la carga seleccionada.",
                 Response::HTTP_BAD_REQUEST
             );
         }

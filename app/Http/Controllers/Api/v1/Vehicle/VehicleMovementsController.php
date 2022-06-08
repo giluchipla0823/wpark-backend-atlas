@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Vehicle;
 
 use App\Http\Controllers\ApiController;
 use App\Services\Application\Vehicle\VehicleMovementsService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,11 +41,12 @@ class VehicleMovementsController extends ApiController
      *
      * Display rules from vehicles.
      *
+     * @param string $vin
      * @return JsonResponse
+     * @throws Exception
      */
-    public function vehicleMatchRules(): JsonResponse
+    public function vehicleMatchRules(string $vin): JsonResponse
     {
-        $vin = request()->segment(count(request()->segments()));
         $vehicle = $this->vehicleMovementsService->vehicleIdentify($vin);
 
         $response = $this->vehicleMovementsService->vehicleMatchRules($vehicle);

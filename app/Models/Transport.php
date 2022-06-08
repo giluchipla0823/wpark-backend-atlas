@@ -45,6 +45,20 @@ class Transport extends Model
         'updated_at',
     ];
 
+    /**
+     * Mapea el nombre del transporte al identificador necesario para la API de FreightVerify
+     *
+     * @param string $transportName Nombre en BD del transporte
+     */
+    public static function getFreightVerifyType(string $transportName) {
+        return match(strtoupper($transportName)) {
+            'TRUCK' => '01',
+            'RAIL' => '02',
+            'SHIP' => '03',
+            'AIR' => '04'
+        };
+    }
+
     public function loads()
     {
         return $this->hasMany(Route::class, 'exit_transport_id');

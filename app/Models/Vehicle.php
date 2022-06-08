@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\JoinClause;
+use App\Models\Row;
+use App\Models\Slot;
+use App\Models\Parking;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\owner\BadRequestException;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  *
@@ -157,6 +160,21 @@ class Vehicle extends Model
     public function stages()
     {
         return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')->withPivot('manual', 'tracking_date')->withTimestamps();
+    }
+
+    public function getParking(): Parking {
+        // Parking || Slot || Row
+        $ubication = $this->lastMovement->destinationPosition;
+        $ubicationClass = get_class($ubication);
+        if ($ubicationClass === Parking::class) {
+            return $ubication;
+        } else if ($ubicationClass === Row::class) {
+            return $ubication->parking;
+        } else if ($ubicationClass === Slot::class) {
+            return $ubication->row->parking;
+        } else {
+            throw new BadRequestException("No se pudo encontrar la ubicación del vehículo");
+        }
     }
 
     public function latestStage()

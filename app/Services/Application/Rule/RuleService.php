@@ -112,7 +112,7 @@ class RuleService
         $presortingBlock = Block::where('presorting_default', 1)->first();
 
         if (! (bool) $params['is_group']) {
-            $rule->blocks()->sync([$presortingBlock->id, $params['block_id']]);
+            $rule->blocks()->sync(array_unique([$presortingBlock->id, (int) $params['block_id']]));
 
             if ($rule->conditions()->count() > 0) {
                 $currentConditionsIds = array_unique(

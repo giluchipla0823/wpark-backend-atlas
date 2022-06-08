@@ -44,12 +44,12 @@ class VehicleMovementsService
     }
 
     /**
-     * @param string $vin
+     * @param String $vin
      * @return Vehicle|null
+     * @throws Exception
      */
     public function vehicleIdentify(String $vin): ?Vehicle
     {
-
         if (strlen($vin) > Vehicle::VIN_SHORT_MAX_LENGTH) {
             $vehicle = $this->vehicleRepository->findBy(['vin' => $vin]);
         } else {

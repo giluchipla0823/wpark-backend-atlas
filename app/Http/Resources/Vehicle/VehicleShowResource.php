@@ -8,6 +8,7 @@ use App\Http\Resources\Parking\ParkingResource;
 use App\Http\Resources\Slot\SlotResource;
 use App\Models\Movement;
 use App\Models\Slot;
+use App\Services\Application\Vehicle\VehicleMovementsService;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\Brand\BrandResource;
 use App\Http\Resources\Color\ColorResource;
@@ -22,8 +23,8 @@ class VehicleShowResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param $request
+     * @return array
      */
     public function toArray($request)
     {
@@ -67,6 +68,7 @@ class VehicleShowResource extends JsonResource
                 "back" => route("designs-svg.default", ["filename" => "back.svg"]),
                 "top" => route("designs-svg.default", ["filename" => "top.svg"]),
             ],
+            "match_rules" => $this->includeMatchRules()
         ];
     }
 
@@ -116,5 +118,13 @@ class VehicleShowResource extends JsonResource
         }
 
         return $collection->toArray();
+    }
+
+    private function includeMatchRules(): array
+    {
+        /* @var VehicleMovementsService $service */
+        $service = app()->make(VehicleMovementsService::class);
+
+        return $service->vehicleMatchRules($this->resource);
     }
 }

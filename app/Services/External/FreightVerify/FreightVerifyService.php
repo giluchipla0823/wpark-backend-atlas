@@ -5,7 +5,6 @@ namespace App\Services\External\FreightVerify;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -55,11 +54,28 @@ class FreightVerifyService {
 
   }
 
-  public function updateVinMilestone(string $vin, FreightVerifyMilestone $milestone ,array $references=[]) {
+  /**
+   * Función genérica para envío de milestones a la API FreightVerify
+   *
+   * @param string $vin VIN del vehículo
+   * @param FreightVerifyMilestone $milestone Milestone a enviar por API
+   * @param array $references Array asociativo con los valores necesarios para la API
+   * @param int $retries Número de intentos en caso de error
+   * @return array Array asociativo con la respuesta de la API
+   * @throws \Exception
+   */
+  public function updateVinMilestone(string $vin, FreightVerifyMilestone $milestone ,array $references=[], $retries=3): array {
 
     // Insertamos el código del milestone y del receiver (comun a todas las requests)
     $references['vmacsCode'] = $milestone->getVmacsCode();
+    $references['scac'] = 'GNAHA';
     $references['receiverCode'] = 'FORDIT';
+    $references['vehicleReceiptLocation'] = 'POL';
+    $references['partnerType'] = 'IYO';
+    $references['senderName'] = 'TSI';
+    $references['compoundCode'] = 'VALENCIA';
+    $references['ms1LocationCode'] = 'VALENCIA';
+    $references['ms1CountryCode'] = 'ES';
 
     // Mapeamos al formato de la request de FreightVerify
     $bodyRefs = collect($references)->keys()->map(function($key) use ($references) {
@@ -67,7 +83,7 @@ class FreightVerifyService {
     });
 
     // Intentamos 3 hasta veces la request en caso de fallo
-    for ($i=0; $i < 3; $i++) {
+    for ($i=0; $i < $retries; $i++) {
 
       $body = [
         'json' => [
@@ -102,12 +118,60 @@ class FreightVerifyService {
 
   }
 
-  public function sendVehicleReceived(string $vin, array $references) {
-    $references['vehicleReceiptLocation'] = 'POL';
-    $references['partnerType'] = 'PP';
-
+  /**
+   * Envía el milestone de VEHICLE_RECEIVED a la API FreightVerify
+   *
+   * @param string $vin VIN del vehículo
+   * @param array $references Array asociativo con los valores necesarios para la API
+   * @param int $retries Número de intentos en caso de error
+   * @return array Array asociativo con la respuesta de la API
+   * @throws \Exception
+   */
+  public function sendVehicleReceived(string $vin, array $references, $retries=3): array {
     $milestone = FreightVerifyMilestone::VEHICLE_RECEIVED;
-    return $this->updateVinMilestone($vin, $milestone, $references);
+    return $this->updateVinMilestone($vin, $milestone, $references, $retries);
+  }
+
+  /**
+   * Envía el milestone de INSPECTION_COMPLETE a la API FreightVerify
+   *
+   * @param string $vin VIN del vehículo
+   * @param array $references Array asociativo con los valores necesarios para la API
+   * @param int $retries Número de intentos en caso de error
+   * @return array Array asociativo con la respuesta de la API
+   * @throws \Exception
+   */
+  public function sendInspectionCompleted(string $vin, array $references, $retries=3): array {
+    $milestone = FreightVerifyMilestone::INSPECTION_COMPLETE;
+    return $this->updateVinMilestone($vin, $milestone, $references, $retries);
+  }
+
+  /**
+   * Envía el milestone de RELEASED_TO_CARRIER a la API FreightVerify
+   *
+   * @param string $vin VIN del vehículo
+   * @param array $references Array asociativo con los valores necesarios para la API
+   * @param int $retries Número de intentos en caso de error
+   * @return array Array asociativo con la respuesta de la API
+   * @throws \Exception
+   */
+  public function sendReleasedToCarrier(string $vin, array $references, $retries=3): array {
+    $milestone = FreightVerifyMilestone::RELEASED_TO_CARRIER;
+    return $this->updateVinMilestone($vin, $milestone, $references, $retries);
+  }
+
+  /**
+   * Envía el milestone de COMPOUND_EXIT a la API FreightVerify
+   *
+   * @param string $vin VIN del vehículo
+   * @param array $references Array asociativo con los valores necesarios para la API
+   * @param int $retries Número de intentos en caso de error
+   * @return array Array asociativo con la respuesta de la API
+   * @throws \Exception
+   */
+  public function sendCompoundExit(string $vin, array $references, $retries=3): array {
+    $milestone = FreightVerifyMilestone::COMPOUND_EXIT;
+    return $this->updateVinMilestone($vin, $milestone, $references, $retries);
   }
 
   /**

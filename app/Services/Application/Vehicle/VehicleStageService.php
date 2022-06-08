@@ -2,14 +2,17 @@
 
 namespace App\Services\Application\Vehicle;
 
+use Exception;
+use App\Models\Stage;
 use App\Models\Transport;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Design\DesignRepositoryInterface;
-use App\Repositories\DestinationCode\DestinationCodeRepositoryInterface;
 use App\Repositories\Vehicle\StageRepositoryInterface;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
-use Exception;
-use Symfony\Component\HttpFoundation\Response;
+use App\Services\External\FreightVerify\FreightVerifyService;
+use App\Repositories\DestinationCode\DestinationCodeRepositoryInterface;
 
 class VehicleStageService
 {
@@ -38,18 +41,25 @@ class VehicleStageService
      */
     private $destinationCodeRepository;
 
+    /**
+     * @var FreightVerifyService
+     */
+    private $freightVerifyService;
+
     public function __construct(
         VehicleRepositoryInterface $vehicleRepository,
         StageRepositoryInterface $stageRepository,
         DesignRepositoryInterface $designRepository,
         ColorRepositoryInterface $colorRepository,
         DestinationCodeRepositoryInterface $destinationCodeRepository,
+        FreightVerifyService $freightVerifyService,
     ) {
         $this->vehicleRepository = $vehicleRepository;
         $this->stageRepository = $stageRepository;
         $this->designRepository = $designRepository;
         $this->colorRepository = $colorRepository;
         $this->destinationCodeRepository = $destinationCodeRepository;
+        $this->freightVerifyService = $freightVerifyService;
     }
 
     /**
@@ -134,6 +144,30 @@ class VehicleStageService
                 "No se ha podido crear o actualizar el vehículo.",
                 Response::HTTP_BAD_REQUEST
             );
+        }
+
+        $body = [];
+        $load = $vehicle->loads()->first();
+        if ($load) {
+            if (isset($load->carrier)) {
+                $body['assetId'] = $load->carrier->code;
+            }
+            if ($load->license_plate && !empty($load->license_plate)) {
+                $body['equipmentNumber'] = $load->license_plate;
+            }
+        }
+
+        if($params['station'] === Stage::STAGE_ST5_CODE) {
+            $this->freightVerifyService->sendVehicleReceived(
+                $params['vin'],
+                array_merge($body, [
+                    'transportationType' => Transport::getFreightVerifyType($vehicle->transport->name)
+                ]),
+                1
+            );
+            $this->freightVerifyService->sendInspectionCompleted($params['vin'], $body, 1);
+        } elseif ($params['station'] === Stage::STAGE_ST7_CODE) {
+            $this->freightVerifyService->sendReleasedToCarrier($params['vin'], $body, 1);
         }
     }
 }
