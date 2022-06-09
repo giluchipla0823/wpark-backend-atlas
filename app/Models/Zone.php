@@ -31,6 +31,7 @@ class Zone extends Model
     public const CAMPA_GENERAL = 3;
     public const EXTERNO = 4;
     public const OVERFLOW = 5;
+    public const BUFFER = 6;
 
     /**
      * The attributes that are mass assignable.

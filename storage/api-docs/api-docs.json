@@ -5437,6 +5437,56 @@
                 ]
             }
         },
+        "/api/v1/rows/{id}/rellocate": {
+            "put": {
+                "tags": [
+                    "Rows"
+                ],
+                "summary": "Row Rellocate",
+                "description": "Row Rellocate",
+                "operationId": "rowRellocate",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RowRellocateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Row Rellocate Successfully"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/v1/rows/{id}/vehicles": {
             "get": {
                 "tags": [
@@ -11778,6 +11828,107 @@
                 "type": "object",
                 "xml": {
                     "name": "RouteUpdateRequest"
+                }
+            },
+            "RowRellocateRequest": {
+                "title": "Row Rellocate Request",
+                "description": "Row Rellocate request body data",
+                "required": [
+                    "row_vehicles"
+                ],
+                "properties": {
+                    "row_vehicles": {
+                        "description": "Lista de vehículos a reubicar en la fila",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "vehicle_id": {
+                                    "description": "Id del vehículo a reubicar en fila.",
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "origin_position": {
+                                    "description": "Posición de origen del vehículo.",
+                                    "properties": {
+                                        "type": {
+                                            "description": "Tipo de posición de origen del vehículo.",
+                                            "type": "string",
+                                            "example": "App\\Models\\Slot"
+                                        },
+                                        "id": {
+                                            "description": "Id de posición de origen del vehículo.",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "type": "App\\Models\\Slot",
+                                        "id": 1
+                                    }
+                                },
+                                "destination_position": {
+                                    "description": "Posición de destino del vehículo.",
+                                    "properties": {
+                                        "type": {
+                                            "description": "Tipo de Posición de destino del vehículo.",
+                                            "type": "string",
+                                            "example": "App\\Models\\Slot"
+                                        },
+                                        "id": {
+                                            "description": "Id de Posición de destino del vehículo.",
+                                            "type": "integer",
+                                            "example": 11
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "type": "App\\Models\\Slot",
+                                        "id": 11
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "buffer_vehicles": {
+                        "description": "Lista de vehículos a reubicar en la fila",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "vehicle_id": {
+                                    "description": "Id del vehículo a reubicar en buffer.",
+                                    "type": "integer",
+                                    "example": "1"
+                                },
+                                "origin_position": {
+                                    "description": "Posición de origen del vehículo.",
+                                    "properties": {
+                                        "type": {
+                                            "description": "Tipo de posición de origen del vehículo.",
+                                            "type": "string",
+                                            "example": "App\\Models\\Slot"
+                                        },
+                                        "id": {
+                                            "description": "Id de posición de origen del vehículo.",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "type": "App\\Models\\Slot",
+                                        "id": 1
+                                    }
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "RowRellocateRequest"
                 }
             },
             "RowToggleActiveRequest": {

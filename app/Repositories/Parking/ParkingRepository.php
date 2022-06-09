@@ -153,4 +153,17 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
         return true;
     }
 
+    /**
+     * @param int $id
+     * @return Collection
+     */
+    public function findAllByZone(int $id): Collection
+    {
+        return $this->model->query()
+                    ->whereHas("area", function($q) use ($id) {
+                        $q->where("zone_id", $id);
+                    })
+                    ->get();
+    }
+
 }

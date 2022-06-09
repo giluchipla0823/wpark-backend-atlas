@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1\Movement;
 
+use Exception;
+use App\Models\Movement;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Movement\MovementCancelRequest;
 use App\Http\Requests\Movement\MovementReloadRequest;
-use App\Http\Requests\Movement\MovementDatatablesRequest;
-use App\Http\Requests\Movement\MovementStoreRequest;
-use App\Models\Movement;
 use App\Services\Application\Movement\MovementService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Http\Requests\Movement\MovementDatatablesRequest;
 
 class MovementController extends ApiController
 {
@@ -45,6 +45,7 @@ class MovementController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {
@@ -82,37 +83,6 @@ class MovementController extends ApiController
 
         return $this->datatablesResponse($results);
     }
-
-    // /**
-    // * @OA\POST(
-    // *     path="/api/v1/movements",
-    // *     tags={"Movements"},
-    // *     summary="Create New Movement",
-    // *     description="Create New Movement",
-    // *     security={{"sanctum": {} }},
-    // *     operationId="storeMovement",
-    // *     @OA\RequestBody(
-    // *          required=true,
-    // *          @OA\JsonContent(ref="#/components/schemas/MovementStoreRequest")
-    // *     ),
-    // *     @OA\Response(response=201, description="Create New Movement" ),
-    // *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
-    // *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    // *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    // *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    // * )
-    // *
-    // * Store a newly created resource in storage.
-    // *
-    // * @param MovementStoreRequest $request
-    // * @return JsonResponse
-    // */
-    //public function store(MovementStoreRequest $request): JsonResponse
-    //{
-    //    $movement = $this->movementService->create($request->all());
-    //
-    //    return $this->successResponse($movement, 'Movement created successfully.', Response::HTTP_CREATED);
-    //}
 
     /**
      * @OA\GET(
@@ -177,6 +147,7 @@ class MovementController extends ApiController
      *
      * @param Movement $movement
      * @return JsonResponse
+     * @throws Exception
      */
     public function confirmMovement(Movement $movement): JsonResponse
     {
@@ -208,8 +179,10 @@ class MovementController extends ApiController
      *
      * Cancel the specified movement.
      *
+     * @param MovementCancelRequest $request
      * @param Movement $movement
      * @return JsonResponse
+     * @throws Exception
      */
     public function cancelMovement(MovementCancelRequest $request, Movement $movement): JsonResponse
     {
@@ -240,102 +213,12 @@ class MovementController extends ApiController
      *
      * @param MovementReloadRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function reload(MovementReloadRequest $request): JsonResponse
     {
         $response = $this->movementService->reload($request->all());
         return $this->successResponse($response);
     }
-
-    ///**
-    // * @OA\PUT(
-    // *     path="/api/v1/movements/{id}",
-    // *     tags={"Movements"},
-    // *     summary="Update Movement",
-    // *     description="Update Movement",
-    // *     security={{"sanctum": {}}},
-    // *     operationId="updateMovement",
-    // *     @OA\Parameter(ref="#/components/parameters/id"),
-    // *     @OA\RequestBody(
-    // *          required=true,
-    // *          @OA\JsonContent(ref="#/components/schemas/MovementUpdateRequest")
-    // *     ),
-    // *     @OA\Response(response=200, description="Update Movement" ),
-    // *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-    // *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
-    // *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    // *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    // *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    // * )
-    // *
-    // * Update the specified resource in storage.
-    // *
-    // * @param Request $request
-    // * @param Movement $movement
-    // * @return JsonResponse
-    // */
-    /* public function update(Request $request, Movement $movement): JsonResponse
-    {
-        $this->movementService->update($request->all(), $movement->id);
-
-        return $this->showMessage('Movement updated successfully.');
-    } */
-
-    // /**
-    //  * @OA\Delete(
-    //  *     path="/api/v1/movements/{id}",
-    //  *     tags={"Movements"},
-    //  *     summary="Delete Movement",
-    //  *     description="Delete Movement",
-    //  *     security={{"sanctum": {}}},
-    //  *     operationId="destroyMovement",
-    //  *     @OA\Parameter(ref="#/components/parameters/id"),
-    //  *     @OA\Response(response=204, description="Delete Movement successfully"),
-    //  *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-    //  *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    //  *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    //  *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    //  * )
-    //  *
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param Movement $movement
-    //  * @return JsonResponse
-    //  */
-    /* public function destroy(Movement $movement): JsonResponse
-    {
-        $this->movementService->delete($movement->id);
-
-        return $this->showMessage('Movement removed successfully.', Response::HTTP_NO_CONTENT);
-    } */
-
-    // /**
-    //  * @OA\PATCH(
-    //  *     path="/api/v1/movements/{id}",
-    //  *     tags={"Movements"},
-    //  *     summary="Restore Movement",
-    //  *     description="Restore Movement",
-    //  *     security={{"sanctum": {}}},
-    //  *     operationId="restoreMovement",
-    //  *     @OA\Parameter(ref="#/components/parameters/id"),
-    //  *     @OA\Response(response=204, description="Movement restored successfully"),
-    //  *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-    //  *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    //  *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    //  *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    //  * )
-    //  *
-    //  * Restores the specified resource from storage.
-    //  *
-    //  * @param int $id
-    //  * @return JsonResponse
-    //  */
-    /* public function restore(int $id): JsonResponse
-    {
-        $this->movementService->restore($id);
-
-        return $this->showMessage('Movement restored successfully.', Response::HTTP_NO_CONTENT);
-    } */
-
 
 }

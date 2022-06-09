@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Movement;
 
+use App\Helpers\RowHelper;
 use Exception;
 use App\Exceptions\owner\BadRequestException;
 use App\Helpers\QueryParamsHelper;
@@ -143,13 +144,12 @@ class MovementService
     }
 
     /**
-     * Confirmar movimiento
-     *
      * @param Movement $movement
+     * @param bool $mustReleaseOrigin
      * @return void
      * @throws Exception
      */
-    public function confirmMovement(Movement $movement): void
+    public function confirmMovement(Movement $movement, bool $mustReleaseOrigin = true): void
     {
         // Comprobación de que el movimiento está en proceso
         if ($movement->confirmed) {
@@ -166,30 +166,19 @@ class MovementService
             // Actualización del movimiento para indicar que el vehículo ya está en esa posición
             $this->movementRepository->update(['confirmed' => 1, 'dt_end' => Carbon::now()], $movement->id);
 
-            // Comprobar que el origen es parking con filas
-            if ($movement->origin_position_type === Slot::class) {
-                // Actualización de la fila y el slot para desocupar la posición de origen
+            if ($mustReleaseOrigin) {
+                // Comprobar que el origen es parking con filas
+                if ($movement->origin_position_type === Slot::class) {
+                    // Actualización de la fila y el slot para desocupar la posición de origen
 
-                $this->slotRepository->update(['fill' => 0, 'fillmm' => 0], $movement->origin_position_id);
-
-                $row = $movement->originPosition->row;
-                $parking = $row->parking;
-
-                /*
-                $this->rowRepository->update([
-                    'rule_id' => $row->fill === 1 ? null : $row->rule_id,
-                    'fill' => $parking->parkingType->id === ParkingType::TYPE_ROW ? $row->fill - 1 : 0,
-                    'fillmm' => $row->fillmm - $movement->vehicle->design->length
-                ], $row->id);
-                */
-
-                $row->rule_id = $row->fill === 1 ? null : $row->rule_id;
-                $row->save();
-                $row->decrement("fill");
-                $row->decrement("fillmm", $movement->vehicle->design->length);
-                $parking->decrement("fill");
-            } else {
-                $movement->originPosition->decrement("fill");
+                    /* @var Slot $slot */
+                    $slot = $movement->originPosition;
+                    $slot->release($movement->vehicle->design->length);
+                } else {
+                    /* @var Parking $parking */
+                    $parking = $movement->originPosition;
+                    $parking->release();
+                }
             }
 
             // Comprobar que el destino es parking con filas
@@ -218,19 +207,6 @@ class MovementService
                     // TODO: Crear evento de notificación para parking completo
                 }
             }
-
-//            // Comprobar si el parking está completo. Solo para posiciones destino de tipo "Slot"
-//            if ($movement->destination_position_type === Slot::class) {
-//                $parkingCapacity = $movement->destinationPosition->row->parking->capacity - $movement->destinationPosition->row->parking->fill;
-//                if ($parkingCapacity === 0){
-//                    $parkingParams = [
-//                        'full' => 1
-//                    ];
-//                    $this->parkingRepository->update($parkingParams, $movement->destinationPosition->row->parking->id);
-//
-//                    // TODO: Crear evento de notificación para parking completo
-//                }
-//            }
 
             DB::commit();
         } catch (Exception $exc) {
@@ -312,7 +288,6 @@ class MovementService
      */
     public function reload(array $params): MovementRecommendResource
     {
-
         $previousMovement = Movement::find($params['previous_movement_id']);
         $this->cancelMovement($params, $previousMovement);
         return $this->movementRecommendService->movement($params);
@@ -323,37 +298,35 @@ class MovementService
      *
      * @param array $params
      * @return void
-     * @throws BadRequestException
      */
     public function manual(array $params): void
     {
-        /* @var Vehicle $vehicle */
-        $vehicle = Vehicle::where('id', $params['vehicle_id'])->first();
+        DB::transaction(function () use ($params) {
+            /* @var Vehicle $vehicle */
+            $vehicle = Vehicle::where('id', $params['vehicle_id'])->first();
 
-        $lastConfirmedMovement = $vehicle->lastMovement;
+            $this->checkValidateVehicleCurrentPosition($vehicle, [
+                "id" => $params['origin_position_id'],
+                "type" => $params['origin_position_type'],
+            ]);
 
-        if (!$lastConfirmedMovement) {
-            throw new BadRequestException("El vehículo no tiene movimientos anteriores confirmados.");
-        }
+            $params['manual'] = 1;
 
-        if (
-            $lastConfirmedMovement->destination_position_type !== $params['origin_position_type'] ||
-            $lastConfirmedMovement->destination_position_id !== $params['origin_position_id']
-        ) {
-            throw new BadRequestException(
-                "La posición actual del vehículo no coincide con la posición de origen especificada."
-            );
-        }
+            $movement = $this->doMovement($vehicle, $params);
 
-        if(
-            $params['origin_position_type'] === $params['destination_position_type'] &&
-            $params['origin_position_id'] === $params['destination_position_id']
-        ){
-            throw new BadRequestException("La posición de origen y destino no pueden ser iguales.");
-        }
+            $this->confirmMovement($movement);
+        });
+    }
 
+    /**
+     * @param Vehicle $vehicle
+     * @param array $params
+     * @return Movement
+     * @throws BadRequestException
+     */
+    public function doMovement(Vehicle $vehicle, array $params): Movement
+    {
         $params['user_id'] = Auth::user()->id;
-        $params['manual'] = 1;
         $params['dt_start'] = Carbon::now();
 
         $ruleVehicle = null;
@@ -371,31 +344,38 @@ class MovementService
                 throw new BadRequestException("El parking seleccionado no está activo.");
             }
         } else {
-            $params['category'] = $vehicle->shippingRule->name;
             $positionDestination = Slot::where('id', $params['destination_position_id'])->first();
+            $rowIsPresortingZone = RowHelper::isPresortinZone($positionDestination->row);
 
             // Validación de la regla del vehículo con el bloque de la fila
-            $ruleVehicle = $vehicle->shippingRule;
+            $ruleVehicle = $rowIsPresortingZone ? $vehicle->lastRule : $vehicle->shippingRule;
             $blocks = $ruleVehicle->blocks->pluck('id');
 
             $rowBlockValidate = Row::where('id', $positionDestination->row->id)
-                                    ->whereIn('block_id', $blocks)
-                                    ->orWhereNull('block_id')
-                                    ->exists();
+                ->whereIn('block_id', $blocks)
+                ->orWhereNull('block_id')
+                ->exists();
+
+            $params['category'] = $ruleVehicle->name;
 
             if (!$rowBlockValidate) {
-                throw new BadRequestException("La posición seleccionada no coincide con la regla de final de transporte del vehículo");
+                if ($rowIsPresortingZone) {
+                    throw new BadRequestException("La posición seleccionada no coincide con la regla de presorting del vehículo.");
+
+                } else {
+                    throw new BadRequestException("La posición seleccionada no coincide con la regla de final de transporte del vehículo.");
+                }
             }
 
             // Validación de fila que no esté llene y esté activa, además verifica la regla de transporte del vehículo con la regla de la fila
             $rowAvailableValidate = Row::where('id', $positionDestination->row->id)
-                                        ->where([
-                                            ['full', "=", 0],
-                                            ['active', "=", 1],
-                                        ])
-                                        ->where(function ($query) use ($ruleVehicle) {
-                                            $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
-                                        })->exists();
+                ->where([
+                    ['full', "=", 0],
+                    ['active', "=", 1],
+                ])
+                ->where(function ($query) use ($ruleVehicle) {
+                    $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
+                })->exists();
 
             // Añadimos la comprobación de que el slot siga vacio
             if (!$rowAvailableValidate || $positionDestination->fill === 1) {
@@ -403,31 +383,47 @@ class MovementService
             }
         }
 
-        DB::transaction(function() use ($params, $vehicle, $positionDestination, $ruleVehicle) {
-            $movement = $this->movementRepository->create($params);
-            $vehicleLength = $vehicle->design->length;
+        $movement = $this->movementRepository->create($params);
+        $vehicleLength = $vehicle->design->length;
 
-            if ($params['destination_position_type'] === Slot::class) {
-                // Se reserva la posición del vehículo ocupándola en la base de datos
-                $slot = $positionDestination;
-                $slot->increment("fill");
-                $slot->increment("fillmm", $vehicleLength);
+        if ($params['destination_position_type'] === Slot::class) {
+            // Se reserva la posición del vehículo ocupándola en la base de datos
 
-                $row = $slot->row;
-                $parking = $row->parking;
+            /* @var Slot $slot */
+            $slot = $positionDestination;
+            $slot->reserve($vehicleLength);
+            $row = $slot->row;
+            $parking = $row->parking;
+            $row->rule_id = $row->rule_id ?: $ruleVehicle->id;
+            $row->full = $parking->isRowType() ? $row->full : 1;
+            $row->save();
+        } else {
+            /* @var Parking $parking */
+            $parking = $positionDestination;
+            $parking->reserve();
+        }
 
-                $row->rule_id = $row->rule_id ?: $ruleVehicle->id;
-                $row->full = $parking->isRowType() ? $row->full : 1;
-                $row->save();
-                $row->increment("fill");
-                $row->increment("fillmm", $vehicleLength);
-            } else {
-                $parking = $positionDestination;
-            }
+        return $movement;
+    }
 
-            $parking->increment('fill');
+    /**
+     * @throws BadRequestException
+     */
+    public function checkValidateVehicleCurrentPosition(Vehicle $vehicle, array $originPosition): void
+    {
+        $lastConfirmedMovement = $vehicle->lastMovement;
 
-            $this->confirmMovement($movement);
-        });
+        if (!$lastConfirmedMovement) {
+            throw new BadRequestException("El vehículo no tiene movimientos anteriores confirmados.");
+        }
+
+        if (
+            $lastConfirmedMovement->destination_position_type !== $originPosition['type'] ||
+            $lastConfirmedMovement->destination_position_id !== $originPosition['id']
+        ) {
+            throw new BadRequestException(
+                "La posición actual del vehículo {$vehicle->vin} no coincide con la posición de origen especificada."
+            );
+        }
     }
 }

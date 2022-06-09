@@ -117,4 +117,43 @@ class Slot extends Model
         return "{$parking->area->compound->id}.{$parking->id}.{$row->id}.{$this->id}";
     }
 
+    /**
+     * Reservar slot.
+     *
+     * @param int $vehicleLength
+     * @return void
+     */
+    public function reserve(int $vehicleLength): void
+    {
+        $this->increment("fill");
+        $this->increment("fillmm", $vehicleLength);
+
+        $row = $this->row;
+        $row->increment("fill");
+        $row->increment("fillmm", $vehicleLength);
+        $row->parking->increment("fill");
+    }
+
+    /**
+     * @param int $vehicleLength
+     * @return void
+     */
+    public function release(int $vehicleLength): void
+    {
+        $this->fill = 0;
+        $this->fillmm = 0;
+        $this->save();
+
+        $row = $this->row;
+        $row->decrement("fill");
+        $row->decrement("fillmm", $vehicleLength);
+
+        if ($row->fill === 0) {
+            $row->rule_id = null;
+            $row->save();
+        }
+
+        $row->parking->decrement("fill");
+    }
+
 }

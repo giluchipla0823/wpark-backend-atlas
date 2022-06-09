@@ -167,4 +167,20 @@ class Parking extends Model
     {
         return $this->parking_type_id === ParkingType::TYPE_UNLIMITED;
     }
+
+    /**
+     * @return void
+     */
+    public function reserve(): void
+    {
+        $this->increment("fill");
+    }
+
+    /**
+     * @return void
+     */
+    public function release(): void
+    {
+        $this->decrement("fill");
+    }
 }
