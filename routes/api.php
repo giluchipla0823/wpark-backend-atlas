@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\v1\Dealer\DealerController;
 use App\Http\Controllers\Api\v1\Design\DesignController;
 use App\Http\Controllers\Api\v1\Design\DesignSvgController;
 use App\Http\Controllers\Api\v1\DestinationCode\DestinationCodeController;
+use App\Http\Controllers\Api\v1\Device\DeviceController;
+use App\Http\Controllers\Api\v1\DeviceType\DeviceTypeController;
 use App\Http\Controllers\Api\v1\FreightVerify\VehicleReceivedController;
 use App\Http\Controllers\Api\v1\Hold\HoldController;
 use App\Http\Controllers\Api\v1\Load\LoadConfirmLeftController;
@@ -86,6 +88,9 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'auth'], function() {
 });
 
 Route::group(['prefix' => 'v1'], function() {
+    Route::resource('devices-types', DeviceTypeController::class, ['only' => ['index']]);
+    Route::get('/devices/search-by-uuid/{uuid}', [DeviceController::class, 'searchByUuid'])->name('devices.search-by-uuid');
+    Route::resource('devices', DeviceController::class, ['only' => ['store']]);
     Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
 });
 

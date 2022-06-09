@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\Device\DeviceRepository;
+use App\Repositories\Device\DeviceRepositoryInterface;
+use App\Repositories\DeviceType\DeviceTypeRepository;
+use App\Repositories\DeviceType\DeviceTypeRepositoryInterface;
 use App\Repositories\Load\LoadRepository;
 use App\Repositories\Load\LoadRepositoryInterface;
 use App\Repositories\Transport\TransportRepository;
@@ -205,6 +209,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             LoadRepositoryInterface::class,
             LoadRepository::class
+        );
+
+        $this->app->bind(
+            DeviceTypeRepositoryInterface::class,
+            DeviceTypeRepository::class
+        );
+
+        $this->app->bind(
+            DeviceRepositoryInterface::class,
+            DeviceRepository::class
         );
     }
 }

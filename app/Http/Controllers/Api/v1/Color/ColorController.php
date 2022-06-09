@@ -7,6 +7,7 @@ use App\Http\Requests\Color\ColorStoreRequest;
 use App\Http\Requests\Color\ColorUpdateRequest;
 use App\Models\Color;
 use App\Services\Application\Color\ColorService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,7 @@ class ColorController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

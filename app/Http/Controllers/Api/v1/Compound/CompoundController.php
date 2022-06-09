@@ -7,6 +7,7 @@ use App\Http\Requests\Compound\CompoundStoreRequest;
 use App\Http\Requests\Compound\CompoundUpdateRequest;
 use App\Models\Compound;
 use App\Services\Application\Compound\CompoundService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,6 @@ class CompoundController extends ApiController
      *      tags={"Compounds"},
      *      summary="Compounds List",
      *      description="List of compounds",
-     *      security={{"sanctum": {}}},
      *      operationId="indexCompounds",
      *      @OA\Response(response=200, description="Compound list Successfully"),
      *      @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
@@ -44,6 +44,7 @@ class CompoundController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

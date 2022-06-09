@@ -1603,12 +1603,7 @@
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -3092,6 +3087,106 @@
                         "sanctum": []
                     }
                 ]
+            }
+        },
+        "/api/v1/devices-types": {
+            "get": {
+                "tags": [
+                    "DevicesTypes"
+                ],
+                "summary": "Devices Types List",
+                "description": "List of devices types",
+                "operationId": "indexDevicesTypes",
+                "responses": {
+                    "200": {
+                        "description": "Devices Types list Successfully"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/devices": {
+            "post": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Create New Device",
+                "description": "Create New Device",
+                "operationId": "storeDevice",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DeviceStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Create New Device"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
+            }
+        },
+        "/api/v1/devices/search-by-uuid/{uuid}": {
+            "get": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Show Device Details",
+                "description": "Show Device Details",
+                "operationId": "searchByUuidDevice",
+                "parameters": [
+                    {
+                        "parameter": "uuid",
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "uuid, eg; 0545878751",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Show Device Details"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/Forbidden"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerError"
+                    }
+                }
             }
         },
         "/api/v1/freight-verify/vehicle-received": {
@@ -11060,6 +11155,43 @@
                 "type": "object",
                 "xml": {
                     "name": "DestinationCodeUpdateRequest"
+                }
+            },
+            "DeviceStoreRequest": {
+                "title": "Device Store Request",
+                "description": "Device Store request body data",
+                "required": [
+                    "name",
+                    "uuid",
+                    "device_type_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del dispositivo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Iphone de Alguien"
+                    },
+                    "uuid": {
+                        "description": "UUID del dispositivo",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "0002222556666"
+                    },
+                    "device_type_id": {
+                        "description": "Tipo de dispositivo",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "version": {
+                        "description": "Versión del dispositivo",
+                        "type": "string",
+                        "example": null
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "DeviceStoreRequest"
                 }
             },
             "VehicleReceivedRequest": {
