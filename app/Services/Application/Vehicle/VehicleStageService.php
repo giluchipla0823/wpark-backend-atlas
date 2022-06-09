@@ -166,6 +166,8 @@ class VehicleStageService
                 1
             );
             $this->freightVerifyService->sendInspectionCompleted($params['vin'], $body, 1);
+        } else if($params['station'] === Stage::STAGE_ST8_CODE) {
+            $this->freightVerifyService->sendCompoundExit($params['vin'], $body, 1);
         } elseif ($params['station'] === Stage::STAGE_ST7_CODE) {
             $this->freightVerifyService->sendReleasedToCarrier($params['vin'], $body, 1);
         }

@@ -29,8 +29,7 @@ return [
         'pre' => '',
         'qa' => '',
         'test' => 'api.glcp-demos.es',
-        // 'local' => 'localhost',
-        'local' => '127.0.0.1:8000',
+        'local' => 'localhost',
     ],
 
     'freightVerify' => [
