@@ -24,6 +24,7 @@ class CreateVehicles extends Migration
             $table->foreignId('destination_code_id')->comment('Indica el código de destino del vehículo')->constrained('destination_codes');
             $table->foreignId('entry_transport_id')->comment('Indica el método de entrada del vehículo')->constrained('transports');
             $table->foreignId('load_id')->nullable()->comment('Indica la carga a la que pertenece el vehículo')->constrained('loads');
+            $table->foreignId('route_id')->nullable()->comment('Indicar la ruta por defecto o alternativa seleccionada en la carga')->constrained('routes');
             $table->foreignId('dealer_id')->nullable()->comment('Indica el distribuidor al que irá el vehículo')->constrained('dealers');
             $table->string('eoc')->unique()->comment('Identificador único de ford');
             $table->foreignId('last_rule_id')->nullable()->comment('Indica la última regla con mayor prioridad asociada al vehículo')->constrained('rules');

@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Load;
 
+use App\Exceptions\owner\BadRequestException;
+use App\Exceptions\owner\NotFoundException;
 use App\Http\Resources\Route\RouteResource;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Carrier;
@@ -9,6 +11,7 @@ use App\Models\Load;
 use App\Models\RouteType;
 use App\Models\Vehicle;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -33,50 +36,81 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
     {
         $carrier_id = $params['carrier_id'];
         $transport_exit_id = $params['transport_exit_id'];
-        $transport_identifier = $params['transport_identifier'];
-        $vins = $params['vins'];
+        $transport_identifier = Str::random("10");
         $license_plate = $params['license_plate'];
         $compound_id = $params['compound_id'];
         $carrier = Carrier::with('routes')->find($carrier_id);
+
+        $vins = array_column($params["vehicles"], "vin");
+
+        $checkVins = [];
+
+        // TODO: Revisar esto
         $vehicles = Vehicle::with(['holds' => function ($q) {
             $q->wherePivot('deleted_at', null);
         }])->whereIn('vin', $vins)->get();
 
-        //comprobamos que todos los vin existan
-        foreach ($vins as $vin) {
-            if ($vehicles->where('vin', $vin)->isEmpty()) {
-                throw new Exception(
-                    "El vin [$vin] especificado no existe",
-                    Response::HTTP_NOT_FOUND
-                );
+        $vehicles->map(function($vehicle) {
+            return $vehicle;
+        });
+
+        // Comprobamos que no existan vin duplicados y todos los vin existan
+        foreach ($vins as $key => $vin) {
+            $index = ($key + 1);
+
+            if (in_array($vin, $checkVins)) {
+                throw new BadRequestException(sprintf("El vehículo Nº%s con [%s] se encuentra duplicado.", $index, $vin));
             }
-        }
-        //cmprobamos que los vehiculos no tengan bloqueos
-        foreach ($vehicles as $vehicle) {
-            if ($vehicle->holds->isNotEmpty()) {
-                $holds = $vehicle->holds->implode('name', ',');
-                throw new Exception(
-                    "El vin [$vehicle->vin] tiene asignado las retenciones: [$holds]",
-                    Response::HTTP_BAD_REQUEST
-                );
+
+            if ($vehicles->where('vin', $vin)->isEmpty()) {
+                throw new NotFoundException(sprintf("El vehículo Nº%s con vin [%s] no existe.", $index, $vin));
             }
         }
 
-        //comprobamos que el destino del vehiculo y el del transportista coinciden
-        foreach ($vehicles as $vehicle) {
+        foreach ($vehicles as $key => $vehicle) {
+            $index = ($key + 1);
+
+            // Comprobamos que los vehiculos no tengan ya un load
+            if ($vehicle->loads) {
+                $load = $vehicle->loads;
+
+                throw new BadRequestException(sprintf(
+                    "El vehículo Nº%s con [%s] tiene asignado las retenciones: [%s].",
+                    $index,
+                    $vehicle->vin,
+                    $load->transport_identifier
+                ));
+            }
+
+            // Comprobamos que los vehiculos no tengan bloqueos
+            if ($vehicle->holds->isNotEmpty()) {
+                $holds = $vehicle->holds->implode('name', ',');
+
+                throw new BadRequestException(sprintf(
+                    "El vehículo Nº%s con [%s] tiene asignado las retenciones: [%s].",
+                    $index,
+                    $vehicle->vin,
+                    $holds
+                ));
+            }
+
+            // Comprobamos que el destino del vehiculo y el del transportista coinciden
             if ($carrier->routes->where('destination_code_id', $vehicle->destination_code_id)->isEmpty()) {
-                throw new Exception(
-                    "El vin [$vehicle->vin] no tiene el mismo código de destino del transportista [$carrier->name].",
-                    Response::HTTP_BAD_REQUEST
-                );
+                throw new BadRequestException(sprintf(
+                    "El vehículo Nº %s con vin %s no tiene el mismo código de destino del transportista [%s].",
+                    $index,
+                    $vehicle->vin,
+                    $carrier->name
+                ));
             }
         }
 
         DB::beginTransaction();
 
         try {
-            //creamos el load
-            $load = new Load([
+            // Creamos el load
+
+            $load = $this->model->create([
                 'transport_identifier' => $transport_identifier,
                 'license_plate' => $license_plate,
                 'trailer_license_plate' => null,
@@ -86,10 +120,13 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
                 'ready' => 1
             ]);
 
-            if ($load->save()) {
-                $ids_vehicles = $vehicles->pluck('id')->toArray();
-                Vehicle::whereIn('id', $ids_vehicles)->update(['load_id' => $load->id]);
+            foreach ($params["vehicles"] as $item) {
+                Vehicle::where('vin', $item['vin'])->update([
+                    'load_id' => $load->id,
+                    'route_id' => $item['route_id']
+                ]);
             }
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();

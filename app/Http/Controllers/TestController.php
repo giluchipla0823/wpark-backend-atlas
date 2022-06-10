@@ -42,7 +42,7 @@ class TestController extends ApiController
      */
     public function sendRowNotification(Request $request): JsonResponse
     {
-        $row = Row::find(2);
+        $row = Row::find(1);
         $sender = User::find(2);
 
         event(new CompletedRowNotification($sender, $row));

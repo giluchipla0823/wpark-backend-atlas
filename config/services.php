@@ -49,13 +49,8 @@ return [
         ],
         'recirculations' => [
             'url' => '',
-        ],
-    ],
-
-    "ford_services" => [
-        "recirculations" => [
             "wsdl" => env('WSDL_FORD_URL'),
-        ]
-    ],
+        ],
+    ]
 
 ];

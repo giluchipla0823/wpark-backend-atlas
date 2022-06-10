@@ -11383,9 +11383,8 @@
                 "description": "Color Store request body data",
                 "required": [
                     "transport_exit_id",
-                    "transport_identifier",
                     "carrier_id",
-                    "vins",
+                    "vehicles",
                     "license_plate",
                     "compound_id"
                 ],
@@ -11397,31 +11396,46 @@
                         "minLength": 20,
                         "example": "3 → TRUCT"
                     },
-                    "transport_identifier": {
-                        "description": "Identificador de la carga",
-                        "type": "string",
-                        "maxLength": 50,
-                        "minLength": 1,
-                        "example": "3 → TRUCT"
-                    },
                     "carrier_id": {
                         "description": "Id del transportista",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "6"
                     },
-                    "vins": {
-                        "description": "Array de vins de los vehiculos",
+                    "vehicles": {
+                        "description": "Lista de vehículos a reubicar en la fila",
+                        "properties": {
+                            "route_id": {
+                                "description": "Id de la ruta por defecto o alternativa del transportista.",
+                                "type": "integer",
+                                "example": 1
+                            }
+                        },
                         "type": "array",
                         "items": {
-                            "type": "string"
-                        },
-                        "example": "['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+                            "properties": {
+                                "vin": {
+                                    "description": "Vin del vehículo.",
+                                    "type": "string",
+                                    "maxLength": 17,
+                                    "minLength": 25,
+                                    "example": "NM0GE9E20N1514928"
+                                }
+                            },
+                            "type": "object"
+                        }
                     },
                     "license_plate": {
                         "description": "Matricula del camion",
                         "type": "string",
                         "maxLength": 50,
+                        "minLength": 1,
+                        "example": "5263KAZ"
+                    },
+                    "trailer_license_plate": {
+                        "description": "Matricula del remolque que acompaña al camión",
+                        "type": "string",
+                        "maxLength": 25,
                         "minLength": 1,
                         "example": "5263KAZ"
                     },

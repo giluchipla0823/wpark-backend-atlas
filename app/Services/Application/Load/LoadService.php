@@ -2,12 +2,17 @@
 
 namespace App\Services\Application\Load;
 
+use App\Exceptions\owner\BadRequestException;
+use App\Helpers\FordSt8ApiHelper;
+use App\Http\Controllers\Api\v1\Load\LoadTransportST8Controller;
+use App\Http\Requests\FORD\TransportST8Request;
 use App\Http\Resources\Load\LoadDatatablesResource;
 use App\Http\Resources\Load\LoadResource;
 use App\Http\Resources\Load\LoadVehiclesDatatablesResource;
 use App\Models\Load;
 use App\Models\Vehicle;
 use App\Repositories\Load\LoadRepositoryInterface;
+use App\Services\External\FORD\TransportST8Service;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
@@ -33,22 +38,17 @@ class LoadService
     public function confirmLeft(Load $load): void
     {
         if($load->processed === 1){
-            throw new Exception(
-                "Ya se confirmó anteriormente la salida de la carga seleccionada.",
-                Response::HTTP_BAD_REQUEST
-            );
+            throw new BadRequestException("Ya se confirmó anteriormente la salida de la carga seleccionada.");
         }
 
         $vehicles = $load->vehicles->load(['holds' => function($q){
             $q->wherePivot('deleted_at', null);
         }]);
+
         $routes = $load->carrier->routes;
 
-        if(count($vehicles) != 8){
-            throw new Exception(
-                "El load seleccionado debe tener 8 vehículos asignados.",
-                Response::HTTP_BAD_REQUEST
-            );
+        if(count($vehicles) !== 8){
+            throw new BadRequestException("El load seleccionado debe tener 8 vehículos asignados.");
         }
 
         $errors_vehicles = '';
@@ -73,9 +73,20 @@ class LoadService
             }
         }
 
+        try{
+            $loadtransport = new LoadTransportST8Controller();
+            $res = $loadtransport->__invoke($load);
+            $response = json_decode($res);
+            if ($res->getStatusCode() !== Response::HTTP_OK) {
+                $errors = $response->getBody()->getContents();
+                throw new Exception($errors, $res->getStatusCode());
+            }
+        }catch (Exception $e){
+            throw new Exception($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         $this->update(['processed' => true], $load->id);
 
-        // TODO: Realizar llamada api "Valencia ST8"
 
         // TODO: Realizar llamada api FreightVerify - CompoundExit
 

@@ -11,7 +11,7 @@ namespace App\Virtual\Http\Requests;
  *      @OA\Xml(
  *         name="ColorStoreRequest"
  *      ),
- *      required={"transport_exit_id", "transport_identifier", "carrier_id", "vins", "license_plate", "compound_id"}
+ *      required={"transport_exit_id", "carrier_id", "vehicles", "license_plate", "compound_id"}
  * )
  */
 class LoadGenerateRequest
@@ -30,18 +30,6 @@ class LoadGenerateRequest
 
     /**
      * @OA\Property(
-     *     property="transport_identifier",
-     *     type="string",
-     *     maxLength=50,
-     *     minLength=1,
-     *     description="Identificador de la carga",
-     *     example="3 → TRUCT"
-     * )
-     */
-    public $transport_identifier;
-
-    /**
-     * @OA\Property(
      *     property="carrier_id",
      *     type="integer",
      *     maxLength=20,
@@ -53,16 +41,29 @@ class LoadGenerateRequest
 
     /**
      * @OA\Property(
-     *     property="vins",
+     *     property="vehicles",
      *     type="array",
-     *      @OA\Items(
-     *          type="string",
+     *     @OA\Items(
+     *          @OA\Property(
+     *               property="vin",
+     *               type="string",
+     *               maxLength=17,
+     *               minLength=25,
+     *               example="NM0GE9E20N1514928",
+     *               description="Vin del vehículo."
+     *          ),
      *     ),
-     *     description="Array de vins de los vehiculos",
-     *     example="['NM0GE9E20N1514928', 'NM0GE9E20N1514931']"
+     *     @OA\Property(
+     *          property="route_id",
+     *          type="integer",
+     *          example=1,
+     *          description="Id de la ruta por defecto o alternativa del transportista."
+     *     ),
+     *     @OA\Items(type="array"),
+     *     description="Lista de vehículos a reubicar en la fila"
      * )
      */
-    public $vins;
+    public $vehicles;
 
     /**
      * @OA\Property(
@@ -75,6 +76,18 @@ class LoadGenerateRequest
      * )
      */
     public $license_plate;
+
+    /**
+     * @OA\Property(
+     *     property="trailer_license_plate",
+     *     type="string",
+     *     maxLength=25,
+     *     minLength=1,
+     *     description="Matricula del remolque que acompaña al camión",
+     *     example="5263KAZ"
+     * )
+     */
+    public $trailer_license_plate;
 
     /**
      * @OA\Property(

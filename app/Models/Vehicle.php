@@ -57,6 +57,7 @@ class Vehicle extends Model
         'destination_code_id',
         'entry_transport_id',
         'load_id',
+        'route_id',
         'dealer_id',
         'eoc',
         'last_rule_id',
@@ -96,6 +97,11 @@ class Vehicle extends Model
     public function loads()
     {
         return $this->belongsTo(Load::class, 'load_id');
+    }
+
+    public function route()
+    {
+        return $this->belongsTo(Route::class, 'route_id');
     }
 
     public function dealers()

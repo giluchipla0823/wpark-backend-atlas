@@ -3,7 +3,6 @@
 
 namespace App\Http\Controllers\Api\v1\Load;
 
-
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Load\LoadGenerateRequest;
 use App\Services\Application\Load\LoadService;
