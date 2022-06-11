@@ -184,7 +184,7 @@ class VehicleDatatablesQueryBuilder
 
             if ($vins['filter_type'] === "not_equal") {
                 $this->query = $this->query->whereNotIn('vehicles.vin', $vinValues)
-                    ->orWhereNotIn("vehicles.vin_short", $vinValues);
+                    ->whereNotIn("vehicles.vin_short", $vinValues);
             } else {
                 $this->query = $this->query->whereIn('vehicles.vin', $vinValues)
                     ->orWhereIn("vehicles.vin_short", $vinValues);
