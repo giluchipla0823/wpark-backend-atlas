@@ -66,57 +66,69 @@ class Handler extends ExceptionHandler
             dd($e);
         }
 
-        if ($e instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($e, $request);
-        }
 
-        if ($e instanceof AuthenticationException) {
-            return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($e instanceof AuthorizationException) {
-            return $this->errorResponse('Unauthorized.', Response::HTTP_UNAUTHORIZED);
-        }
-
-        if ($e instanceof ModelNotFoundException) {
-            $modelName = strtolower(class_basename($e->getModel()));
-
-            return $this->errorResponse(
-                sprintf("There is no instance of %s with the specified id.", $modelName),
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
-        if ($e instanceof MethodNotAllowedHttpException) {
-            return $this->errorResponse(
-                'The HTTP method specified in the request is invalid.',
-                Response::HTTP_METHOD_NOT_ALLOWED
-            );
-        }
-
-        if ($e instanceof NotFoundHttpException) {
-            return $this->errorResponse('The specified URL was not found.', Response::HTTP_NOT_FOUND);
-        }
-
-        if($e instanceof QueryException){
-            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        if ($e instanceof HttpException) {
-            return $this->errorResponse($e->getMessage(), $e->getStatusCode());
-        }
-
-        if ($e instanceof Exception) {
-            if($e->getCode()!=0){
-                return $this->errorResponse($e->getMessage(), $e->getCode());
+        try {
+            if ($e instanceof ValidationException) {
+                return $this->convertValidationExceptionToResponse($e, $request);
             }
-            return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
 
-        return $this->errorResponse(
-            method_exists($e, 'getMessage') ? $e->getMessage() : 'Unexpected failure. Try again later.',
-            Response::HTTP_INTERNAL_SERVER_ERROR
-        );
+            if ($e instanceof AuthenticationException) {
+                return $this->errorResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
+            }
+
+            if ($e instanceof AuthorizationException) {
+                return $this->errorResponse('Unauthorized.', Response::HTTP_UNAUTHORIZED);
+            }
+
+            if ($e instanceof ModelNotFoundException) {
+                $modelName = strtolower(class_basename($e->getModel()));
+
+                return $this->errorResponse(
+                    sprintf("There is no instance of %s with the specified id.", $modelName),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            if ($e instanceof MethodNotAllowedHttpException) {
+                return $this->errorResponse(
+                    'The HTTP method specified in the request is invalid.',
+                    Response::HTTP_METHOD_NOT_ALLOWED
+                );
+            }
+
+            if ($e instanceof NotFoundHttpException) {
+                return $this->errorResponse('The specified URL was not found.', Response::HTTP_NOT_FOUND);
+            }
+
+            if($e instanceof QueryException){
+                return $this->errorResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            if ($e instanceof HttpException) {
+                return $this->errorResponse($e->getMessage(), $e->getStatusCode());
+            }
+
+            if ($e instanceof Exception) {
+//                if($e->getCode()!=0){
+//                    return $this->errorResponse($e->getMessage(), $e->getCode());
+//                }
+                return $this->errorResponse(
+                    $e->getMessage(),
+                    $e->getCode(),
+                    method_exists($e, 'getExtras') ? $e->getExtras() : []
+                );
+            }
+
+            return $this->errorResponse(
+                method_exists($e, 'getMessage') ? $e->getMessage() : 'Unexpected failure. Try again later.',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        } catch (Exception $exc) {
+            return $this->errorResponse(
+                'Unexpected failure. Try again later.',
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**

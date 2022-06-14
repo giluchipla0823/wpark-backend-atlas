@@ -255,6 +255,24 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
             $errors = [];
 
             /**
+             * Verificamos si el vehículo ya se encuentra en un "Load". Si el vehículo está en un load
+             */
+            if ($vehicle->loads) {
+                $errors[] = [
+                    "condition" => "load",
+                    "items" => [
+                        [
+                            "id" => $vehicle->loads->id,
+                            "transport_identifier" => $vehicle->loads->transport_identifier,
+                        ]
+                    ]
+                ];
+                $array_check[$vehicle->vin]['enable_to_load'] = false;
+                $array_check[$vehicle->vin]['errors'] = $errors;
+                continue;
+            }
+
+            /**
              * Verificamos si el vehículo tiene Holds(Retenciones).
              */
             if ($vehicle->holds->isNotEmpty()) {

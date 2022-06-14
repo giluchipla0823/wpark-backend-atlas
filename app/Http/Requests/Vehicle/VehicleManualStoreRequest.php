@@ -28,11 +28,9 @@ class VehicleManualStoreRequest extends FormRequest
 
         return [
             "vin" => "required|string|size:17|unique:vehicles",
-            "lvin" => "required|string|size:17|unique:vehicles",
             "vin_short" => "required|string|size:7",
-            "eoc" => "required|string|max:80",
             "design_id" => "required|integer|exists:designs,id",
-            "color_id" => "required|integer|exists:colors,id",
+            "color_id" => "nullable|integer|exists:colors,id",
             "destination_code_id" => "required|integer|exists:destination_codes,id",
             "entry_transport_id" => "required|integer|exists:transports,id",
             "info" => "nullable|max:100",

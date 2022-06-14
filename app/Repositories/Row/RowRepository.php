@@ -97,10 +97,6 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
      */
     public function findAllBySpykesParking(Parking $parking): Collection
     {
-        if($parking->parking_type_id !== ParkingType::TYPE_ESPIGA){
-            throw new Exception('El parking no es de tipo espiga', Response::HTTP_BAD_REQUEST );
-        }
-
         return $this->model->query()
             ->where('parking_id', $parking->id)
             ->with(['slots.destinationMovement.vehicle' , 'slots.destinationMovement' => function($q){

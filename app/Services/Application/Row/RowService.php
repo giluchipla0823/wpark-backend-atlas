@@ -8,6 +8,7 @@ use App\Http\Resources\Row\RowResource;
 use App\Http\Resources\Row\RowShowResource;
 use App\Models\Block;
 use App\Models\Parking;
+use App\Models\ParkingType;
 use App\Models\Row;
 use App\Repositories\Row\RowRepositoryInterface;
 use Exception;
@@ -140,9 +141,14 @@ class RowService
     /**
      * @param Parking $parking
      * @return Collection
+     * @throws Exception
      */
     public function findAllBySpykesParking(Parking $parking): Collection
     {
+        if($parking->parking_type_id !== ParkingType::TYPE_ESPIGA){
+            throw new Exception('El parking no es de tipo espiga', Response::HTTP_BAD_REQUEST );
+        }
+
         $results = $this->repository->findAllBySpykesParking($parking);
 
         return RowEspigaResource::collection($results)->collection;

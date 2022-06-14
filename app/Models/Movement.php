@@ -7,15 +7,18 @@ use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  *
  * @OA\Schema(
- * required={"vehicle_id", "user_id", "origin_position_id", "destination_position_id", "rule_id", "dt_start", "dt_end"},
+ * required={"vehicle_id", "user_id", "compound_id", "origin_position_id", "destination_position_id", "rule_id", "dt_start", "dt_end"},
  * @OA\Xml(name="Movement"),
  * @OA\Property(property="id", type="integer", maxLength=20, readOnly="true", example="1"),
  * @OA\Property(property="vehicle_id", type="integer", maxLength=20, description="Indica el vehículo que se mueve", example="1"),
  * @OA\Property(property="user_id", type="integer", maxLength=20, description="Indica el usuario que está moviendo el vehículo", example="1"),
+ * @OA\Property(property="device_id", type="integer", maxLength=20, description="Indica el dispositivo que ha usado el usuario para realizar el movimiento del vehículo", example="1"),
+ * @OA\Property(property="compound_id", type="integer", maxLength=20, description="Indica la campa donde se está realizando el movimiento del vehículo", example="1"),
  * @OA\Property(property="origin_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de origen", example="App\Models\Parking"),
  * @OA\Property(property="origin_position_id", type="integer", maxLength=20, description="Indica la posición desde donde se hace el movimiento", example="1"),
  * @OA\Property(property="destination_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de destino", example="App\Models\Slot"),
@@ -48,6 +51,7 @@ class Movement extends Model
     protected $fillable = [
         'vehicle_id',
         'user_id',
+        'device_id',
         'origin_position_id',
         'origin_position_type',
         'destination_position_id',
@@ -64,9 +68,26 @@ class Movement extends Model
         'updated_at',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model)
+        {
+            $token = Auth::user()->currentAccessToken();
+
+            $model->device_id = $token->device ? $token->device->id : null;
+        });
+    }
+
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'vehicle_id');
+    }
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class, 'device_id');
     }
 
     public function user()

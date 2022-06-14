@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Vehicle;
 
+use App\Exceptions\owner\BadRequestException;
 use App\Models\Color;
 use App\Models\DestinationCode;
 use App\Models\Design;
@@ -66,15 +67,19 @@ class VehicleMovementsService
     /**
      * @param Vehicle $vehicle
      * @return array
+     * @throws BadRequestException
      */
     public function vehicleMatchRules(Vehicle $vehicle): array
     {
-        // Lógica para comparar el vehículo con las reglas
+        // Comprobamos que el vehículo tenga un "stage"
+        if ($vehicle->stages->count() === 0) {
+            throw new BadRequestException("El vehículo no tiene asignado ninguna etapa.");
+        }
 
         // Sacamos las características a comprobar del vehículo
         $vehicleProperties = [
             'vin' => $vehicle->id,
-            'stage' => $vehicle->latestStage[0]->id,
+            'stage' => $vehicle->latestStage->first()->id,
             'design' => $vehicle->design_id,
             'destination_code' => $vehicle->destination_code_id,
             'color' => $vehicle->color_id

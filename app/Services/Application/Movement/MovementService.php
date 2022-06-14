@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Movement;
 
+use App\Exceptions\owner\NotFoundException;
 use App\Helpers\RowHelper;
 use Exception;
 use App\Exceptions\owner\BadRequestException;
@@ -228,47 +229,37 @@ class MovementService
     {
         // Comprobación de que el movimiento está en proceso
         if ($movement->canceled) {
-            throw new Exception('This movement is already canceled', Response::HTTP_BAD_REQUEST);
+            return;
         }
 
         if ($movement->confirmed) {
-            throw new Exception('This movement is already confirmed', Response::HTTP_BAD_REQUEST);
+            throw new BadRequestException('This movement is already confirmed');
         }
 
         DB::beginTransaction();
 
         try {
             // Actualización del movimiento para indicar que el movimiento se ha cancelado
-            $MovementParams = [
+            $this->movementRepository->update([
                 'canceled' => 1,
-                'comments' => isset($params['comments']) ? $params['comments'] : null
-            ];
-            $this->movementRepository->update($MovementParams, $movement->id);
+                'comments' => $params['comments'] ?? null
+            ], $movement->id);
 
             // Comprobar que el destino es parking con filas
             if ($movement->destination_position_type === Slot::class) {
 
-                /* Se desocupa la posición guardada al crear el movimiento y si ocupaba la primera
-                posición también se vuelve a poner el rule_id de la fila en null */
-                $slotParams = [
-                    'fill' => 0,
-                    'fillmm' => 0
-                ];
-                $this->slotRepository->update($slotParams, $movement->destinationPosition->id);
+                /* @var Slot $slot */
+                $slot = $movement->destinationPosition;
 
-                $rowParams = [
-                    'rule_id' => $movement->destinationPosition->row->fill === 1 ? null : $movement->destinationPosition->row->rule_id,
-                    'fill' => $movement->destinationPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->destinationPosition->row->fill - 1 : 0,
-                    'fillmm' => $movement->destinationPosition->row->fillmm - $movement->vehicle->design->length,
-                    'full' => $movement->destinationPosition->row->parking->parkingType->id === ParkingType::TYPE_ROW ? $movement->destinationPosition->row->full : 0,
-                ];
-                $this->rowRepository->update($rowParams, $movement->destinationPosition->row_id);
+                $slot->release($movement->vehicle->design->length);
 
-                $parkingParams = [
-                    'fill' => $movement->destinationPosition->row->parking->fill - 1
-                ];
-                $this->parkingRepository->update($parkingParams, $movement->destinationPosition->row->parking->id);
+                /* @var Row $row */
+                $row = $slot->row;
 
+                if ($row->fill === 0) {
+                    $row->full = 0;
+                    $row->save();
+                }
             }
 
             DB::commit();
@@ -289,7 +280,9 @@ class MovementService
     public function reload(array $params): MovementRecommendResource
     {
         $previousMovement = Movement::find($params['previous_movement_id']);
-        $this->cancelMovement($params, $previousMovement);
+
+        $this->cancelMovement(array_merge($params, ["comments" => "Cancelado por reload"]), $previousMovement);
+
         return $this->movementRecommendService->movement($params);
     }
 
@@ -298,9 +291,24 @@ class MovementService
      *
      * @param array $params
      * @return void
+     * @throws NotFoundException
      */
     public function manual(array $params): void
     {
+        $previousMovementId = $params['cancel_previous_movement_id'] ?? null;
+
+        if ($previousMovementId) {
+            $previousMovement = Movement::find($previousMovementId);
+
+            if (!$previousMovement) {
+                throw new NotFoundException(sprintf(
+                    "No existe información del movimiento con el id %s especificado."
+                ), $previousMovementId);
+            }
+
+            $this->cancelMovement(['comments' => "Cancelado por movimiento manual"], $previousMovement);
+        }
+
         DB::transaction(function () use ($params) {
             /* @var Vehicle $vehicle */
             $vehicle = Vehicle::where('id', $params['vehicle_id'])->first();

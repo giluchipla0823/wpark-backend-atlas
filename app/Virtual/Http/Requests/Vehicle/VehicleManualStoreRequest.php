@@ -10,7 +10,7 @@ namespace App\Virtual\Http\Requests\Vehicle;
  *      @OA\Xml(
  *         name="VehicleManualStoreRequest"
  *      ),
- *      required={"vin", "lvin", "vin_short", "eoc", "design_id", "color_id", "destination_code_id", "entry_transport_id", "parking_id", "created_from"}
+ *      required={"vin", "vin_short", "design_id", "destination_code_id", "entry_transport_id", "parking_id", "created_from"}
  * )
  */
 class VehicleManualStoreRequest

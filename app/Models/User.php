@@ -6,7 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\NewAccessToken;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\MailResetPasswordNotification;
@@ -40,6 +42,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
 
+    public const ACCESS_FROM_MOBILE_APP = 'mobile_app';
+    public const ACCESS_FROM_WEB_APP = 'web_app';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -69,6 +74,28 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Create a new personal access token for the user.
+     *
+     * @param string $name
+     * @param int $compoundId
+     * @param int|null $deviceId
+     * @param array $abilities
+     * @return NewAccessToken
+     */
+    public function createToken(string $name, int $compoundId, ?int $deviceId = null, array $abilities = ['*']): NewAccessToken
+    {
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken = Str::random(40)),
+            'compound_id' => $compoundId,
+            'device_id' => $deviceId,
+            'abilities' => $abilities,
+        ]);
+
+        return new NewAccessToken($token, $token->getKey().'|'.$plainTextToken);
+    }
 
     public function compounds()
     {

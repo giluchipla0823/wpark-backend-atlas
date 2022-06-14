@@ -1,0 +1,42 @@
+# Generar documentación de swagger laravel
+php artisan l5-swagger:generate
+
+ATL-369-changes-services-vehicles-datatables
+
+# Obtener información actual del token
+$request->user()->currentAccessToken();
+
+# Relations Vehicle
+
+    public function latestState()
+    {
+
+
+        return $this->belongsToMany(
+            State::class,
+            'vehicles_states',
+            'vehicle_id',
+            'state_id'
+        )
+            ->withTimestamps()
+            ->orderByPivot('id', 'desc')
+            ->orderByPivot('created_at', 'desc')
+            ->take(1);
+
+    }
+
+
+    public function latestStage()
+    {
+        return $this->belongsToMany(
+            Stage::class,
+            'vehicles_stages',
+            'vehicle_id',
+            'stage_id'
+        )
+        ->withPivot('manual', 'tracking_date')
+        ->withTimestamps()
+        ->orderByPivot('id', 'desc')
+        ->orderByPivot('created_at', 'desc')
+        ->take(1);
+     }

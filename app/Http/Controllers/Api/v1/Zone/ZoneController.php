@@ -7,6 +7,7 @@ use App\Http\Requests\Zone\ZoneStoreRequest;
 use App\Http\Requests\Zone\ZoneUpdateRequest;
 use App\Models\Zone;
 use App\Services\Application\Zone\ZoneService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,10 +41,9 @@ class ZoneController extends ApiController
      *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
      * )
      *
-     * Display a listing of the resource.
-     *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

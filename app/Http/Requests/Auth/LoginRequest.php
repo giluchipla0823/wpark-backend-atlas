@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
@@ -23,9 +24,13 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
+        $typesAccess = implode(",", [User::ACCESS_FROM_MOBILE_APP, User::ACCESS_FROM_WEB_APP]);
+
         return [
-            'username' => 'required|max:255',
-            'password' => 'required|max:100'
+            "username" => "required|max:255",
+            "password" => "required|max:100",
+            "access_from" => "nullable|in:{$typesAccess}",
+            "uuid" => "required_if:access_from," . User::ACCESS_FROM_MOBILE_APP,
         ];
     }
 }

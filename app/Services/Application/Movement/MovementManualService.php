@@ -73,11 +73,16 @@ class MovementManualService
         */
         $ruleVehicle = $vehicle->shippingRule;
         $blocks = $ruleVehicle->blocks->pluck('id');
-        $rows = Row::where('parking_id', $parking->id)->where('full', 0)->where('active', 1)->where(function ($query) use ($blocks) {
-            $query->whereIn('block_id', $blocks)->orWhereNull('block_id');
-        })->where(function ($query) use ($ruleVehicle) {
-            $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
-        })->get();
+        $rows = Row::where('parking_id', $parking->id)
+            ->where('full', 0)
+            ->where('active', 1)
+            ->where(function ($query) use ($blocks) {
+                $query->whereIn('block_id', $blocks)->orWhereNull('block_id');
+            })
+            ->where(function ($query) use ($ruleVehicle) {
+                $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
+            })
+            ->get();
 
         // Si hay filas disponibles con esas condiciones se devuelven
         if ($rows->isEmpty()) {

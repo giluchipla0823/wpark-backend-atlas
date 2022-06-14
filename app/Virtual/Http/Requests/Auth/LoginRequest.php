@@ -36,4 +36,24 @@ class LoginRequest
      * )
      */
     public $password;
+
+    /**
+     * @OA\Property(
+     *     property="uuid",
+     *     type="string",
+     *     description="UUID del dispositivo con el que accede el usuario. Este campo es requerido cuando el campo access_from es mobile_app",
+     *     example="1abcde230"
+     * )
+     */
+    public $uuid;
+
+    /**
+     * @OA\Property(
+     *     property="access_from",
+     *     type="string",
+     *     description="Desde que aplicación accede el usuario: web_app o mobile_app",
+     *     example="web_app"
+     * )
+     */
+    public $access_from;
 }

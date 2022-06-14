@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\User\UserGenerateUsernameRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\PersonalAccessToken;
 use App\Models\User;
 use App\Services\Application\User\UserService;
 use Illuminate\Http\JsonResponse;
@@ -246,6 +247,7 @@ class UserController extends ApiController
     public function me(Request $request): JsonResponse
     {
         $user = $this->userService->me($request->user());
+
         return $this->successResponse($user);
     }
 

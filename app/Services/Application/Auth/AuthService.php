@@ -2,9 +2,9 @@
 
 namespace App\Services\Application\Auth;
 
+use Exception;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
-use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
@@ -30,21 +30,42 @@ class AuthService
     }
 
     /**
-     * @param array $credentials
+     * @param array $params
      * @return array
      * @throws AuthenticationException
      */
-    public function login(array $credentials): array
+    public function login(array $params): array
     {
+        $credentials = [
+            "username" => $params["username"],
+            "password" => $params["password"],
+        ];
+
         if (!Auth::attempt($credentials)) {
             throw new AuthenticationException("Credenciales de acceso incorrectas.");
         }
 
         $user = Auth::user();
 
+        $deviceId = null;
+
+        if (array_key_exists('access_from', $params) && $params['access_from'] === User::ACCESS_FROM_MOBILE_APP) {
+            $device = $user->devices()->where("uuid", $params["uuid"])->first();
+
+            if (!$device) {
+                throw new AuthenticationException(
+                    "El usuario no tiene asignado este dispositivo para iniciar sesión."
+                );
+            }
+
+            $deviceId = $device->id;
+        }
+
         $this->updateUserLogin($user);
 
-        return $this->handleUserWithTokenResponse($user);
+        $token = $user->createToken(self::TOKEN_KEY, 1, $deviceId)->plainTextToken;
+
+        return $this->handleUserWithTokenResponse($user, $token);
     }
 
     /**
@@ -152,14 +173,15 @@ class AuthService
 
     /**
      * @param User $user
+     * @param string $token
      * @return array
      */
-    private function handleUserWithTokenResponse(User $user): array
+    private function handleUserWithTokenResponse(User $user, string $token): array
     {
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'token' => $user->createToken(self::TOKEN_KEY)->plainTextToken,
+            'token' => $token,
         ];
     }
 

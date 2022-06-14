@@ -8895,6 +8895,7 @@
                 "required": [
                     "vehicle_id",
                     "user_id",
+                    "compound_id",
                     "origin_position_id",
                     "destination_position_id",
                     "rule_id",
@@ -8916,6 +8917,18 @@
                     },
                     "user_id": {
                         "description": "Indica el usuario que está moviendo el vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "device_id": {
+                        "description": "Indica el dispositivo que ha usado el usuario para realizar el movimiento del vehículo",
+                        "type": "integer",
+                        "maxLength": 20,
+                        "example": "1"
+                    },
+                    "compound_id": {
+                        "description": "Indica la campa donde se está realizando el movimiento del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"
@@ -10274,6 +10287,16 @@
                         "type": "string",
                         "maxLength": 100,
                         "example": "jgbTest6;"
+                    },
+                    "uuid": {
+                        "description": "UUID del dispositivo con el que accede el usuario. Este campo es requerido cuando el campo access_from es mobile_app",
+                        "type": "string",
+                        "example": "1abcde230"
+                    },
+                    "access_from": {
+                        "description": "Desde que aplicación accede el usuario: web_app o mobile_app",
+                        "type": "string",
+                        "example": "web_app"
                     }
                 },
                 "type": "object",
@@ -12601,11 +12624,8 @@
                 "description": "Vehicle Manual Store request body data",
                 "required": [
                     "vin",
-                    "lvin",
                     "vin_short",
-                    "eoc",
                     "design_id",
-                    "color_id",
                     "destination_code_id",
                     "entry_transport_id",
                     "parking_id",

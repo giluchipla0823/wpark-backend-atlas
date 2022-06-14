@@ -17,7 +17,7 @@ class CreateVehicles extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id()->comment('Identificador único del vehículo');
             $table->string('vin', 17)->unique()->comment('Número de bastidor del vehículo');
-            $table->string('lvin', 17)->unique()->comment('Número de bastidor lógico del vehículo');
+            $table->string('lvin', 17)->nullable()->unique()->comment('Número de bastidor lógico del vehículo');
             $table->string('vin_short', 7)->comment('Número de bastidor corto del vehículo');
             $table->foreignId('design_id')->comment('Indica el modelo del vehículo')->constrained('designs');
             $table->foreignId('color_id')->comment('Indica el color del vehículo')->constrained('colors');
@@ -26,7 +26,7 @@ class CreateVehicles extends Migration
             $table->foreignId('load_id')->nullable()->comment('Indica la carga a la que pertenece el vehículo')->constrained('loads');
             $table->foreignId('route_id')->nullable()->comment('Indicar la ruta por defecto o alternativa seleccionada en la carga')->constrained('routes');
             $table->foreignId('dealer_id')->nullable()->comment('Indica el distribuidor al que irá el vehículo')->constrained('dealers');
-            $table->string('eoc')->unique()->comment('Identificador único de ford');
+            $table->string('eoc')->nullable()->unique()->comment('Identificador único de ford');
             $table->foreignId('last_rule_id')->nullable()->comment('Indica la última regla con mayor prioridad asociada al vehículo')->constrained('rules');
             $table->foreignId('shipping_rule_id')->nullable()->comment('Indica la regla de código de destino asociada al vehículo')->constrained('rules');
             $table->string('info', 100)->nullable()->default('NULL')->comment('Información adicional del vehículo');

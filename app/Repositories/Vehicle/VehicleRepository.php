@@ -254,6 +254,10 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         $slotModel = QueryHelper::escapeNamespaceClass(Slot::class);
 
         $query = $this->model->query()
+            ->select([
+                "vehicles.*",
+                // "vehicles.id AS vehicle_id"
+            ])
             ->with(['lastMovement', 'lastMovement.destinationPosition'])
             ->join(DB::raw("
                     (
@@ -285,6 +289,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                 ["slots.row_id", "=",  $row->id],
                 ["slots.fill", "=",  1],
             ])
+            // ->exclude(['slots.id'])
             ->orderBy("movements.destination_position_id", "ASC");
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());

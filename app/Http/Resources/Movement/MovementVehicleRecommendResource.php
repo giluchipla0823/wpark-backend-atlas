@@ -2,6 +2,15 @@
 
 namespace App\Http\Resources\Movement;
 
+use App\Helpers\JsonResourceHelper;
+use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Country\CountryResource;
+use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\Slot\SlotResource;
+use App\Models\Movement;
+use App\Models\Parking;
+use App\Models\Slot;
+use Illuminate\Database\Eloquent\Model;
 use JsonSerializable;
 use Illuminate\Http\Request;
 use App\Http\Resources\Color\ColorResource;
@@ -24,29 +33,99 @@ class MovementVehicleRecommendResource extends JsonResource
      */
     public function toArray($request)
     {
+        // dd($this);
         return [
             'id' => $this->id,
             'vin' => $this->vin,
             'vin_short' => $this->vin_short,
             'eoc' => $this->eoc,
-            'position' => $this->lastMovement ? new MovementResource($this->lastMovement) : $this->getPosition(),
+            "design" => (new DesignResource($this->design))->toArray($request),
+            "brand" => new BrandResource($this->design->brand),
+            "color" => new ColorResource($this->color),
+            "country" => new CountryResource($this->destinationCode->country),
+            // 'position' => $this->includePosition(),
             'category' => $this->category,
             'info' => $this->info,
+            "origin_position" => $this->includePositionType('originPosition'),
+            "destination_position" => $this->includePositionType('destinationPosition'),
+            "svg" => [
+                "front" => route("designs-svg.default", ["filename" => "front.svg"]),
+                "side" => route("designs-svg.default", ["filename" => "side.svg"]),
+                "back" => route("designs-svg.default", ["filename" => "back.svg"]),
+                "top" => route("designs-svg.default", ["filename" => "top.svg"]),
+            ],
         ];
     }
 
     /**
-     * @return Array
+     * @param string $relation
+     * @return array|null
      */
-    public function getPosition(): Array
+    private function includePositionType(string $relation): ?array
     {
-        $position['prev_position'] = null;
-        $position['current_position'] = [
-            'position' => "CANOPY",
-            'slot' => null
-        ];
+        /* @var Movement $lastMovement */
+        $lastMovement = $this->lastMovement;
 
-        return $position;
+        if (!$lastMovement || !$lastMovement->{$relation}) {
+            return null;
+        }
+
+        /* @var Model $model */
+        $model = $lastMovement->{$relation};
+        $modelClass = get_class($model);
+
+        $resourceClass = $lastMovement->resolvePositionResource($modelClass);
+
+        if (!JsonResourceHelper::isInstance($resourceClass)) {
+            return null;
+        }
+
+        if ($modelClass === Slot::class) {
+            $model->load(['row']);
+        }
+
+        /* @var SlotResource|ParkingResource $resourceInstance */
+        $resourceInstance = (new $resourceClass($model));
+
+        $collection = collect($resourceInstance->jsonSerialize());
+
+        $collection->put("type", $modelClass);
+
+        if ($modelClass === Slot::class) {
+            $collection->put("name", $model->row_name);
+
+            if ($collection->has("row")) {
+                $rowData = $collection->get("row")->jsonSerialize();
+                $row = collect($rowData)->except(["parking", "block", "slots"]);
+
+                $collection->put("row", $row);
+            }
+        }
+
+        return $collection->toArray();
     }
+
+
+//    private function includePosition()
+//    {
+//        return $this->lastMovement ? new MovementResource($this->lastMovement) : $this->getPosition();
+//    }
+//
+//    /**
+//     * @return array
+//     */
+//    public function getPosition(): array
+//    {
+//        $parking = Parking::find(1);
+//
+//        $position['prev_position'] = null;
+//        $position['current_position'] = [
+//            'position' => $parking->name,
+//            'row' => null,
+//            'slot' => null
+//        ];
+//
+//        return $position;
+//    }
 
 }

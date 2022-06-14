@@ -4,6 +4,9 @@ namespace App\Http\Resources\Row;
 
 use App\Helpers\AppHelper;
 use App\Http\Resources\Block\BlockResource;
+use App\Http\Resources\Brand\BrandResource;
+use App\Http\Resources\Color\ColorResource;
+use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\Parking\ParkingResource;
 use App\Http\Resources\Slot\SlotResource;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,7 +27,7 @@ class RowEspigaResource extends JsonResource
             'row_number' => $this->row_number,
             'row_name' => $this->row_name,
             'parking' => $this->getParking(),
-            'block' => $this->getBlock(),
+            // 'block' => $this->getBlock(),
             'category' => $this->category,
             'capacity' => $this->capacity,
             'fill' => $this->fill,
@@ -34,7 +37,7 @@ class RowEspigaResource extends JsonResource
             'alt_qr' => $this->alt_qr,
             'comments' => $this->comments,
             'active' => $this->active,
-            'slots' => $this->getSlots()
+            'slot' => $this->getSlot()
 
         ];
     }
@@ -70,7 +73,7 @@ class RowEspigaResource extends JsonResource
         ];
     }
 
-    private function getSlots()
+    private function getSlot()
     {
        return $this->slots->map(function($item, $key){
             return [
@@ -81,9 +84,10 @@ class RowEspigaResource extends JsonResource
                 'capacitymm' => $item->capacitymm,
                 'fillmm' => $item->fillmm,
                 'comments' => $item->comments,
-                'movement' => $this->getDestinationMovement($item->destinationMovement)
+                'vehicle' => $item->destinationMovement ? $this->getVehicle($item->destinationMovement->vehicle) : null
+                // 'movement' => $this->getDestinationMovement($item->destinationMovement)
             ];
-        });
+        })->first();
     }
 
     private function getDestinationMovement($movement)
@@ -118,16 +122,17 @@ class RowEspigaResource extends JsonResource
                 'vin' => $vehicle->vin,
                 'lvin' => $vehicle->lvin,
                 'vin_short' => $vehicle->vin_short,
-                'design_id' => $vehicle->design_id,
-                'color_id' => $vehicle->color_id,
-                'destination_code_id' => $vehicle->destination_code_id,
-                'entry_transport_id' => $vehicle->entry_transport_id,
-                'load_id' => $vehicle->load_id,
-                'dealer_id' => $vehicle->dealer_id,
-                'eoc' => $vehicle->eoc,
-                'last_rule_id' => $vehicle->last_rule_id,
-                'shipping_rule_id' => $vehicle->shipping_rule_id,
-                'info' => $vehicle->info
+                "color" => new ColorResource($vehicle->color),
+//                'design_id' => $vehicle->design_id,
+//                'color_id' => $vehicle->color_id,
+//                'destination_code_id' => $vehicle->destination_code_id,
+//                'entry_transport_id' => $vehicle->entry_transport_id,
+//                'load_id' => $vehicle->load_id,
+//                'dealer_id' => $vehicle->dealer_id,
+//                'eoc' => $vehicle->eoc,
+//                'last_rule_id' => $vehicle->last_rule_id,
+//                'shipping_rule_id' => $vehicle->shipping_rule_id,
+//                'info' => $vehicle->info
             ];
         }
         return null;

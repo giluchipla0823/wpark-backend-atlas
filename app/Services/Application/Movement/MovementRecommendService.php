@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Movement;
 
+use App\Exceptions\owner\BadRequestException;
 use App\Http\Resources\Movement\MovementRecommendResource;
 use App\Models\Movement;
 use App\Models\Parking;
@@ -65,15 +66,16 @@ class MovementRecommendService
     /**
      * @param array $params
      * @return MovementRecommendResource
+     * @throws Exception
      */
-    public function movement(Array $params)
+    public function movement(Array $params): MovementRecommendResource
     {
         $vehicle = Vehicle::find($params['vehicle_id']);
         $action = $params['action'];
 
         switch ($action) {
             case Movement::MOVEMENT_ACTION_OK:
-                $response = $this->okMovement($vehicle);
+                $response = $this->okMovement($vehicle, $params);
                 break;
             case Movement::MOVEMENT_ACTION_NO_OK:
                 // Funcionalidad Fase 2
@@ -82,7 +84,7 @@ class MovementRecommendService
                 // Funcionalidad Fase 2
                 break;
             case Movement::MOVEMENT_ACTION_ESCAPE:
-                $response = $this->escapeMovement($vehicle);
+                $response = $this->escapeMovement($vehicle, $params);
                 break;
         }
         return $response;
@@ -90,9 +92,11 @@ class MovementRecommendService
 
     /**
      * @param Vehicle $vehicle
+     * @param array $params
      * @return MovementRecommendResource
+     * @throws BadRequestException
      */
-    private function okMovement(Vehicle $vehicle)
+    private function okMovement(Vehicle $vehicle, array $params): MovementRecommendResource
     {
         DB::beginTransaction();
 
@@ -101,7 +105,7 @@ class MovementRecommendService
             $ruleVehicle = $vehicle->lastRule;
 
             // Lógica de recomendación de movimientos
-            $positionRecommend = $this->recommend($vehicle, $ruleVehicle, false);
+            $positionRecommend = $this->recommend($vehicle, $ruleVehicle, $params, false);
 
             DB::commit();
         } catch (Exception $exc) {
@@ -125,9 +129,11 @@ class MovementRecommendService
 
     /**
      * @param Vehicle $vehicle
+     * @param array $params
      * @return MovementRecommendResource
+     * @throws BadRequestException
      */
-    private function escapeMovement(Vehicle $vehicle)
+    private function escapeMovement(Vehicle $vehicle, array $params): MovementRecommendResource
     {
         DB::beginTransaction();
 
@@ -136,7 +142,7 @@ class MovementRecommendService
             $ruleVehicle = $vehicle->shippingRule;
 
             // Lógica de recomendación de movimientos
-            $positionRecommend = $this->recommend($vehicle, $ruleVehicle, true);
+            $positionRecommend = $this->recommend($vehicle, $ruleVehicle, $params, true);
 
             DB::commit();
         } catch (Exception $exc) {
@@ -151,10 +157,12 @@ class MovementRecommendService
     /**
      * @param Vehicle $vehicle
      * @param Rule $rule
+     * @param array $params
      * @param bool $finalPosition
      * @return Collection
+     * @throws BadRequestException
      */
-    private function recommend(Vehicle $vehicle, Rule $rule, bool $finalPosition)
+    private function recommend(Vehicle $vehicle, Rule $rule, array $params, bool $finalPosition)
     {
 
         // Buscamos las filas que a través de los bloques tengan asociada esa regla
@@ -164,35 +172,67 @@ class MovementRecommendService
             $blocks = $rule->blocks->where('is_presorting', 1)->pluck('id');
         }
 
-        $rowMatch = Row::where('active', 1)->whereIn('block_id', $blocks)->orderBy('parking_id', 'ASC')->orderBy('id')->get();
+        $exceptRows = array_unique($params['except_rows'] ?? []);
+
+        $queryRowsMatch = Row::where('active', 1)->whereIn('block_id', $blocks);
+
+        if (count($exceptRows) > 0) {
+            $queryRowsMatch = $queryRowsMatch->whereNotIn('id', $exceptRows);
+        }
+
+        $rowsMatch = $queryRowsMatch->orderBy('parking_id', 'ASC')->orderBy('id')->get();
 
         // Primero comprobamos si alguna de esas filas está empezada, no completada y comparte la misma regla
-        $rowRecommend = $rowMatch->where('fill', '>', 0)->where('full', false)->where('rule_id', $rule->id)->first();
+        $rowRecommend = $rowsMatch->where('fill', '>', 0)->where('full', false)->where('rule_id', $rule->id)->first();
 
         // Si no hay filas empezadas, cogemos la primera fila que no esté llena y no esté empezada
         if (!$rowRecommend) {
-            $rowRecommend = $rowMatch->where('fill', 0)->first();
+            $rowRecommend = $rowsMatch->where('fill', 0)->first();
+        }
+
+
+        // $rowRecommend = null;
+
+        if (!$rowRecommend) {
+            throw new BadRequestException("No se encontró una posición para recomendar.", [
+                'do_manual_recommendation' => true
+            ]);
         }
 
         // Comprobamos si el parking es de tipo fila o espiga
         $rowType = $rowRecommend->parking->parking_type_id === ParkingType::TYPE_ROW ? true : false;
 
         // En caso de ser de tipo fila sacaremos la información del último vehículo colocado en esa fila
+
+        $lastVehicle = null;
+
         if ($rowType) {
 
             // De la fila vemos cuantos slots están ocupados y elegimos el siguiente
-            $positionRecommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
+            $recommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
 
             // Para obtener los datos del vehículo en la última posición de la fila
             $vehiclesInRow = $this->vehicleRepository->findAllByRow($rowRecommend);
-            $lastVehicleInRow = $vehiclesInRow->last();
-            $positionRecommend = collect(['position' => $positionRecommend])->merge(['vehicle' => $lastVehicleInRow]);
+
+            $lastVehicle = $vehiclesInRow->last();
         } else {
-            $positionRecommend = collect(['position' => Slot::where('row_id', $rowRecommend->id)->first()]);
+            $recommend = Slot::where('row_id', $rowRecommend->id)->first();
         }
 
+        // $recommend = null;
+
+        if (!$recommend) {
+            throw new BadRequestException("No se encontró una posición para recomendar.", [
+                'do_manual_recommendation' => true
+            ]);
+        }
+
+        $positionRecommend = collect(['position' => $recommend])->merge(['vehicle' => $lastVehicle]);
+
+        $comments = $params['comments'] ?? null;
+
         // Se crea el movimiento
-        $movementParams = [
+        $movement = $this->movementRepository->create([
             'vehicle_id' => $vehicle->id,
             'user_id' => Auth::user()->id,
             'origin_position_type' => !$vehicle->lastMovement ? Parking::class : $vehicle->lastMovement->destination_position_type,
@@ -200,10 +240,9 @@ class MovementRecommendService
             'destination_position_type' => Slot::class,
             'destination_position_id' => $positionRecommend['position']->id,
             'category' => $rule->name,
-            'dt_start' => Carbon::now()
-        ];
-
-        $this->movementRepository->create($movementParams);
+            'dt_start' => Carbon::now(),
+            'comments' => $comments
+        ]);
 
         // Se reserva la posición del vehículo ocupándola en la base de datos
         $slotParams = [
@@ -224,6 +263,11 @@ class MovementRecommendService
         $this->parkingRepository->update($parkingParams, $rowRecommend->parking->id);
 
         $this->rowRepository->update($rowParams, $positionRecommend['position']->row_id);
+
+        // $vehicle->lastMovement = $movement;
+
+        // $positionRecommend->put("vehicle", $vehicle);
+        $positionRecommend->put("movement", $movement);
 
         return $positionRecommend;
     }
