@@ -2,6 +2,7 @@
 
 namespace App\Services\Application\Auth;
 
+use App\Models\Device;
 use Exception;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
@@ -49,12 +50,14 @@ class AuthService
 
         $deviceId = null;
 
+        // TODO: Eliminar porque no es necesario esta comprobación.
         if (array_key_exists('access_from', $params) && $params['access_from'] === User::ACCESS_FROM_MOBILE_APP) {
-            $device = $user->devices()->where("uuid", $params["uuid"])->first();
+            // $device = $user->devices()->where("uuid", $params["uuid"])->first();
+            $device = Device::where("uuid", $params["uuid"])->first();
 
             if (!$device) {
                 throw new AuthenticationException(
-                    "El usuario no tiene asignado este dispositivo para iniciar sesión."
+                    "El dispositivo no se encuentra registrado. Por favor, comunicarse con el administrador del sistema."
                 );
             }
 

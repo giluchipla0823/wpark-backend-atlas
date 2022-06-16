@@ -123,6 +123,7 @@ class RowEspigaResource extends JsonResource
                 'lvin' => $vehicle->lvin,
                 'vin_short' => $vehicle->vin_short,
                 "color" => new ColorResource($vehicle->color),
+                "design" => new DesignResource($vehicle->design),
 //                'design_id' => $vehicle->design_id,
 //                'color_id' => $vehicle->color_id,
 //                'destination_code_id' => $vehicle->destination_code_id,

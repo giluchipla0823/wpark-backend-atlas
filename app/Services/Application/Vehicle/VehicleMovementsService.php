@@ -255,6 +255,14 @@ class VehicleMovementsService
             }
         }
 
+        if (!$last_rule_id) {
+            throw new BadRequestException("No se encontró una regla de presorting para el vehículo.");
+        }
+
+        if (!$shipping_rule_id) {
+            throw new BadRequestException("No se encontró una regla de posición final de transporte para el vehículo.");
+        }
+
         $result = [
             'last_rule_id' => $last_rule_id,
             'shipping_rule_id' => $shipping_rule_id

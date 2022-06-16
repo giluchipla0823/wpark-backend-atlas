@@ -385,11 +385,15 @@ class MovementService
                     $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
                 })->exists();
 
+            // dd($rowAvailableValidate, $positionDestination);
+
             // Añadimos la comprobación de que el slot siga vacio
             if (!$rowAvailableValidate || $positionDestination->fill === 1) {
                 throw new BadRequestException("La posición seleccionada no se encuentra disponible.");
             }
         }
+
+        // dd('por aqui pasa algo');
 
         $movement = $this->movementRepository->create($params);
         $vehicleLength = $vehicle->design->length;

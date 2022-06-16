@@ -100,7 +100,7 @@ class VehicleShowResource extends JsonResource
         }
 
         if ($modelClass === Slot::class) {
-            $model->load(['row']);
+            $model->load(['row', 'row']);
         }
 
         /* @var SlotResource|ParkingResource $resourceInstance */
@@ -115,7 +115,7 @@ class VehicleShowResource extends JsonResource
 
             if ($collection->has("row")) {
                 $rowData = $collection->get("row")->jsonSerialize();
-                $row = collect($rowData)->except(["parking", "block", "slots"]);
+                $row = collect($rowData)->except(["block", "slots"]);
 
                 $collection->put("row", $row);
             }

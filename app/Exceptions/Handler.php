@@ -66,7 +66,6 @@ class Handler extends ExceptionHandler
             dd($e);
         }
 
-
         try {
             if ($e instanceof ValidationException) {
                 return $this->convertValidationExceptionToResponse($e, $request);
@@ -109,9 +108,6 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof Exception) {
-//                if($e->getCode()!=0){
-//                    return $this->errorResponse($e->getMessage(), $e->getCode());
-//                }
                 return $this->errorResponse(
                     $e->getMessage(),
                     $e->getCode(),

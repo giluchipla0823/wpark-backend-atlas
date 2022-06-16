@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\v1\Movement\MovementController;
 use App\Http\Controllers\Api\v1\Movement\MovementManualController;
 use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
 use App\Http\Controllers\Api\v1\Notification\NotificationController;
+use App\Http\Controllers\Api\v1\Page\PageController;
 use App\Http\Controllers\Api\v1\Parking\ParkingController;
 use App\Http\Controllers\Api\v1\Parking\ParkingDesignController;
 use App\Http\Controllers\Api\v1\Parking\ParkingRowController;
@@ -96,6 +97,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::get('/devices/search-by-uuid/{uuid}', [DeviceController::class, 'searchByUuid'])->name('devices.search-by-uuid');
     Route::resource('devices', DeviceController::class, ['only' => ['store']]);
     Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
+    Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
 });
 
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {

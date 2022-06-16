@@ -52,7 +52,7 @@ class VehicleStageService
         DesignRepositoryInterface $designRepository,
         ColorRepositoryInterface $colorRepository,
         DestinationCodeRepositoryInterface $destinationCodeRepository,
-        FreightVerifyService $freightVerifyService,
+        FreightVerifyService $freightVerifyService
     ) {
         $this->vehicleRepository = $vehicleRepository;
         $this->stageRepository = $stageRepository;
