@@ -6,16 +6,17 @@ use App\Helpers\JsonResourceHelper;
 use App\Http\Resources\Hold\HoldResource;
 use App\Http\Resources\Load\LoadShowResource;
 use App\Http\Resources\Parking\ParkingResource;
+use App\Http\Resources\Recirculation\RecirculationResource;
 use App\Http\Resources\Slot\SlotResource;
 use App\Models\Movement;
 use App\Models\Slot;
-use App\Services\Application\Vehicle\VehicleMovementsService;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\Brand\BrandResource;
 use App\Http\Resources\Color\ColorResource;
 use App\Http\Resources\State\StateResource;
 use App\Http\Resources\Design\DesignResource;
 use App\Http\Resources\Country\CountryResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\DestinationCode\DestinationCodeResource;
 
@@ -71,8 +72,9 @@ class VehicleShowResource extends JsonResource
             ],
             "last_rule_id" => $this->last_rule_id,
             "shipping_rule_id" => $this->shipping_rule_id,
-            // "match_rules" => $this->includeMatchRules(),
-            "load" => new LoadShowResource($this->loads)
+            "load" => new LoadShowResource($this->loads),
+            "last_recirculation" => new RecirculationResource($this->lastRecirculation),
+            "recirculations" => $this->includeRecirculations()
         ];
     }
 
@@ -124,15 +126,16 @@ class VehicleShowResource extends JsonResource
         return $collection->toArray();
     }
 
-    private function includeMatchRules(): ?array
+    /**
+     * @return AnonymousResourceCollection
+     */
+    private function includeRecirculations(): AnonymousResourceCollection
     {
-        if (!$this->load_id) {
-            /* @var VehicleMovementsService $service */
-            $service = app()->make(VehicleMovementsService::class);
 
-            return $service->vehicleMatchRules($this->resource);
-        }
+        // $recirculations = $this->recirculations->sortByDesc('id')->unique("message")->sortBy('id')->values();
+        $recirculations = $this->recirculations->sortByDesc('id');
 
-        return null;
+        return RecirculationResource::collection($recirculations);
+
     }
 }

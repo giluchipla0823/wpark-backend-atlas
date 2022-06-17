@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class VehicleRepository extends BaseRepository implements VehicleRepositoryInterface
@@ -94,34 +95,11 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                 ]
             ], false);
 
-            activity()
-                ->withProperties([
-                    'lvin' => $params['lvin'],
-                    'pvin' => $params['pvin'],
-                    'station' => $params['station'],
-                    'eoc' => $params['eoc'],
-                    'design_id' => $params['design_id'],
-                    'color_id' => $params['color_id'],
-                    'destination_code_id' => $params['destination_code_id'],
-                    'entry_transport_id' => $params['entry_transport_id'],
-                    'relations' => [
-                        'vehicle_id' => $vehicle->id,
-                        'stage_id' => $stage->id,
-                        'manual' => $params['manual'],
-                        'tracking_date' => $params['tracking-date']
-                    ]
-                ])
-                ->event('Vehículo creado')
-                ->log('Tracking-point');
-
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
-            activity()
-                ->withProperties($params)
-                ->event('Error al crear vehículo')
-                ->log('Tracking-point');
-            throw $e;
+
+            throw new Exception('Error al crear vehículo', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $vehicle;
@@ -133,6 +111,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      * @param array $params
      * @param int $id
      * @return int|null
+     * @throws Exception
      */
     public function update(array $params, int $id): ?int
     {
@@ -155,34 +134,11 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                     ]
                 ], false);
 
-                activity()
-                    ->withProperties([
-                        'lvin' => $params['lvin'],
-                        'pvin' => $params['pvin'],
-                        'station' => $params['station'],
-                        'eoc' => $params['eoc'],
-                        'design_id' => $params['design_id'],
-                        'color_id' => $params['color_id'],
-                        'destination_code_id' => $params['destination_code_id'],
-                        'entry_transport_id' => $params['entry_transport_id'],
-                        'relations' => [
-                            'vehicle_id' => $vehicle->id,
-                            'stage_id' => $stage->id,
-                            'manual' => $params['manual'],
-                            'tracking_date' => $params['tracking-date']
-                        ]
-                    ])
-                    ->event('Vehículo actualizado')
-                    ->log('Tracking-point');
-
                 DB::commit();
             } catch (Exception $e) {
                 DB::rollback();
-                activity()
-                    ->withProperties($params)
-                    ->event('Error al actualizar vehículo')
-                    ->log('Tracking-point');
-                throw $e;
+
+                throw new Exception('Error al actualizar vehículo', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
 
@@ -193,7 +149,8 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      * Borrar Vehículo.
      *
      * @param int $id
-     * @return bool
+     * @return bool|null
+     * @throws Exception
      */
     public function delete(int $id): ?bool
     {
@@ -221,7 +178,8 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      * Restaurar Vehículo.
      *
      * @param int $id
-     * @return bool
+     * @return bool|null
+     * @throws Exception
      */
     public function restore(int $id): ?bool
     {
@@ -327,4 +285,8 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         return $query->get();
     }
 
+    public function findOneByVin(string $vin): ?Vehicle
+    {
+        return $this->model->query()->where("vin", $vin)->first();
+    }
 }

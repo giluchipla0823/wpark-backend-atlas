@@ -21,4 +21,6 @@ interface VehicleRepositoryInterface extends BaseRepositoryInterface
 
     public function createManual(array $params): Vehicle;
 
+    public function findOneByVin(string $vin): ?Vehicle;
+
 }

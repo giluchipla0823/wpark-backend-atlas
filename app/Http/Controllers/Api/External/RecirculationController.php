@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers\Api\External;
 
-use Illuminate\Http\Request;
+use App\Exceptions\owner\BadRequestException;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\ApiController;
-use Symfony\Component\HttpFoundation\Response;
 use App\Services\External\RecirculationService;
 
 class RecirculationController extends ApiController
 {
+    /**
+     * @var RecirculationService
+     */
+    private $recirculationService;
+
+    public function __construct(
+        RecirculationService $recirculationService
+    )
+    {
+        $this->recirculationService = $recirculationService;
+    }
+
     /**
      * @OA\GET(
      *      path="/api/v1/recirculations/{vin}",
@@ -27,12 +38,11 @@ class RecirculationController extends ApiController
      *
      * @param string $vin
      * @return JsonResponse
+     * @throws BadRequestException
      */
     public function get(string $vin): JsonResponse
     {
-        $service = new RecirculationService;
-
-        $response = $service->GetVehicleDestination($vin);
+        $response = $this->recirculationService->GetVehicleDestination($vin);
 
         return $this->successResponse($response);
     }

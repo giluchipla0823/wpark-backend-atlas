@@ -274,6 +274,8 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     Route::get('routes-types/{routeType}/carriers', [RouteTypeCarrierController::class, "index"])->name("routes-types.carriers.index");
 
+    // Recirculation owner
+    Route::patch('recirculations/{recirculation}/update-back', [\App\Http\Controllers\Api\v1\Recirculation\RecirculationController::class, "updateBack"])->name("recirculations.update-back");
 });
 
 Route::get('/send-row-notification', [TestController::class, 'sendRowNotification']);

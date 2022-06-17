@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
+use Exception;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleStageRequest;
-use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleStageService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,8 +44,9 @@ class VehicleStageController extends ApiController
      *
      * Display the specified resource.
      *
-     * @param Vehicle $vehicle
+     * @param VehicleStageRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function vehicleStage(VehicleStageRequest $request): JsonResponse
     {

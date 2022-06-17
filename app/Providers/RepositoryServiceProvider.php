@@ -8,6 +8,8 @@ use App\Repositories\DeviceType\DeviceTypeRepository;
 use App\Repositories\DeviceType\DeviceTypeRepositoryInterface;
 use App\Repositories\Load\LoadRepository;
 use App\Repositories\Load\LoadRepositoryInterface;
+use App\Repositories\Recirculation\RecirculationRepository;
+use App\Repositories\Recirculation\RecirculationRepositoryInterface;
 use App\Repositories\Transport\TransportRepository;
 use App\Repositories\Transport\TransportRepositoryInterface;
 use App\Repositories\Carrier\CarrierRepository;
@@ -219,6 +221,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             DeviceRepositoryInterface::class,
             DeviceRepository::class
+        );
+
+        $this->app->bind(
+            RecirculationRepositoryInterface::class,
+            RecirculationRepository::class
         );
     }
 }

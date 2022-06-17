@@ -217,4 +217,16 @@ class Vehicle extends Model
         return $this->belongsTo(Transport::class, 'transport_id');
     }
 
+    // LISTO para gate release WF05XXWPG5NJ49327
+
+    public function recirculations()
+    {
+        return $this->hasMany(Recirculation::class, 'vehicle_id');
+    }
+
+    public function lastRecirculation()
+    {
+        return $this->hasOne(Recirculation::class, 'vehicle_id')->orderBy('created_at', 'desc')->latest();
+    }
+
 }

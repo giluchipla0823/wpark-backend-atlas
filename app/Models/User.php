@@ -112,6 +112,11 @@ class User extends Authenticatable
         return $this->hasMany(Movement::class, 'user_id');
     }
 
+    public function recirculations()
+    {
+        return $this->hasMany(Recirculation::class, 'user_id');
+    }
+
     public function senderNotifications()
     {
         return $this->hasMany(Notification::class, 'sender_id');

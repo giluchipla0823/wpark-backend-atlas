@@ -2,43 +2,68 @@
 
 namespace App\Services\External;
 
+use App\Repositories\Recirculation\RecirculationRepositoryInterface;
+use Exception;
 use App\Models\Stage;
 use App\Models\Vehicle;
 use App\Helpers\XmlHelper;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
+use App\Repositories\Vehicle\VehicleRepositoryInterface;
 use App\Exceptions\owner\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RecirculationService
 {
 
+    private const REFERENCE_ERROR_CODE = 'recirculation-ws';
+
     protected $wsdl;
 
-    public function __construct(){
+    /**
+     * @var VehicleRepositoryInterface
+     */
+    private $vehicleRepository;
+
+    /**
+     * @var RecirculationRepositoryInterface
+     */
+    private $recirculationRepository;
+
+    public function __construct(
+        VehicleRepositoryInterface $vehicleRepository,
+        RecirculationRepositoryInterface $recirculationRepository
+    )
+    {
         $this->wsdl = config("services.ford_services.recirculations.wsdl");
+        $this->vehicleRepository = $vehicleRepository;
+        $this->recirculationRepository = $recirculationRepository;
     }
 
     /**
      * @param string $vin
-     * @return false|mixed
+     * @return array
      * @throws BadRequestException
      */
-    public function GetVehicleDestination(string $vin){
-
-        $vehicle = Vehicle::where('vin', $vin)->first();
+    public function GetVehicleDestination(string $vin): array
+    {
+        $vehicle = $this->vehicleRepository->findOneByVin($vin);
 
         // Se debe validar que VIN ingresado se encuentre registrado en nuestra base de datos. Si no existe, lanzar excepción 404 con el mensaje “El vehículo especificado no se encuentra registrado“.
-        if(!isset($vehicle)){
+        if(!$vehicle){
             throw new BadRequestException("Recirculaciones: El vehículo especificado no se encuentra registrado.");
         }
 
-        // Si el vehículo existe, se procede a comprobar en la tabla “vehicles_stages“ si tiene registrado la etapa de “Gate release“. Si el vehículo tiene el registro mencionado en la tabla “vehicles_stages“, se debe lanzar una excepción con código de estado 400 con el siguiente mensaje: “El vehículo ya tiene la aprobación de etapa GATE RELEASE“.
-        foreach($vehicle->stages as $stage){
-            if($stage->code === Stage::STAGE_ST7_CODE){
-                throw new BadRequestException("Recirculaciones: El vehículo ya tiene la aprobación de etapa GATE RELEASE.");
-            }
+//        // Si el vehículo existe, se procede a comprobar en la tabla “vehicles_stages“ si tiene registrado la etapa de “Gate release“. Si el vehículo tiene el registro mencionado en la tabla “vehicles_stages“, se debe lanzar una excepción con código de estado 400 con el siguiente mensaje: “El vehículo ya tiene la aprobación de etapa GATE RELEASE“.
+//        foreach($vehicle->stages as $stage){
+//            if($stage->code === Stage::STAGE_ST7_CODE){
+//                throw new BadRequestException("Recirculaciones: El vehículo ya tiene la aprobación de etapa GATE RELEASE.");
+//            }
+//        }
+
+        $originPosition = $vehicle->lastMovement && $vehicle->lastMovement->destinationPosition
+            ? $vehicle->lastMovement->destinationPosition
+            : null;
+
+        if (!$originPosition) {
+            throw new BadRequestException("Recirculaciones: El vehículo especificado no tiene movimientos confirmados.");
         }
 
         // Llamada CURL para ejecutar WSDL
@@ -61,83 +86,82 @@ class RecirculationService
 
             $array = XmlHelper::parseToArray($response);
 
-            if(isset($array[0])){
-                if(isset($array[0]->responseSt7BoardText1) && empty($array[0]->responseSt7BoardText1)){
+            $result = count($array) > 0 ? (array) current($array) : null;
 
-                    /**
-                     * Guardar log en tabla “activity_log“. La información de los campos de esta será:
-                     * log_name: Recirculaciones
-                     * log_description: No existe información de campo responseSt7BoardText1
-                     * subject_type: recirculation-ws
-                     * properties: Guardar en formato json tanto el XML de entrada como el de respuesta. Por ejemplo:
-                     */
-
-                    $activity = activity('Recirculaciones')
-                        ->withProperties([
-                            'parameters' => $xml_entry,
-                            'response' => $response_xml,
-                        ])
-                        ->log('No existe información de campo responseSt7BoardText1');
-                    $activity->description = 'No existe información de campo responseSt7BoardText1';
-                    $activity->subject_type = 'recirculation-ws';
-                    $activity->save();
-
-                    throw new BadRequestException("ERROR QLS GENERICO.");
-                }
-            }else{
-
-                /**
-                 * Error si el servicio no devuelve nada
-                 * Guardar log en tabla “activity_log“. La información de los campos de esta será:
-                 * log_name: Recirculaciones
-                 * log_description: Servicio no disponible
-                 * subject_type: recirculation-ws
-                 * properties: Guardar en formato json tanto el XML de entrada como el de respuesta.
-                 */
-                $activity = activity('Recirculaciones')
-                    ->withProperties([
-                        'parameters' => $xml_entry,
-                        'response' => null,
-                    ])
-                    ->log('Servicio no disponible');
-                $activity->description = 'Servicio no disponible';
-                $activity->subject_type = 'recirculation-ws';
-                $activity->save();
-
-                /**
-                 * Lanzar excepción con mensaje “El servicio no se encuentra disponible en este momento” y el código de estado es 400 (Bad Request)
-                 */
-                throw new BadRequestException("El servicio no ha devuelto respuesta.");
+            if (!$result) {
+                // El servicio no ha devuelto una respuesta o no se encuentra disponible
+                throw new BadRequestException("ERROR PDA", [
+                    'parameters' => $xml_entry,
+                    'response' => null,
+                ]);
             }
 
-            return current($array);
+            if(!array_key_exists("responseSt7BoardText1", $result) || $result['responseSt7BoardText1'] === 'Error' || empty($result['responseSt7BoardText1'])){
+
+                // No existe información de campo responseSt7BoardText1
+                throw new BadRequestException("ERROR PDA TEXTO", [
+                    'parameters' => $xml_entry,
+                    'response' => $response_xml,
+                ]);
+            }
+
+            // Registrar recirculación - éxito
+            $this->recirculationRepository->create([
+                "vehicle_id" => $vehicle->id,
+                "message" => $result["responseSt7BoardText1"],
+                "origin_position_type" => get_class($originPosition),
+                "origin_position_id" => $originPosition->id,
+                "success" => 1
+            ]);
+
+            return $result;
 
         } catch (Exception $e) {
 
             /**
-             * Otro de los casos de error que puede darse es “Connection timeout“, lo cual suele ocurrir entre los 6 y 10 seg. de demora. En este punto se debe realizar las siguientes acciones:
-             * Guardar log en tabla “activity_log“. La información de los campos de esta será:
-             * log_name: Recirculaciones
-             * log_description: Servicio no disponible
-             * subject_type: recirculation-ws
-             * properties: Guardar en formato json tanto el XML de entrada como el de respuesta.
+             * Otro de los casos de error que puede darse es “Connection timeout“, lo cual suele ocurrir entre los
+             * 6 y 10 seg. de demora
              */
-            $activity = activity('Recirculaciones')
-                    ->withProperties([
-                        'parameters' => $xml_entry,
-                        'response' => json_encode($e),
-                    ])
-                    ->log('Servicio no disponible');
-            $activity->description = 'Servicio no disponible';
-            $activity->subject_type = 'recirculation-ws';
-            $activity->save();
+            if ($e instanceof BadRequestException) {
+                $this->saveLog($vehicle, $e->getMessage(), $e->getExtras());
+            } else {
+                $this->saveLog($vehicle, "ERROR PDA", [
+                    'parameters' => $xml_entry,
+                    'response' => null,
+                    'message' => "Connection timeout",
+                ]);
+            }
 
-            /**
-             * Lanzar excepción con mensaje “El servicio no se encuentra disponible en este momento” y el código de estado es 400 (Bad Request)
-             */
-            throw new BadRequestException("Recirculaciones: El servicio no se encuentra disponible en este momento.", ['error_detail' => $e->getMessage()]);
+            // Registrar recirculación - error
+            $this->recirculationRepository->create([
+                "vehicle_id" => $vehicle->id,
+                "message" => "ERROR QLS GENERICO",
+                "origin_position_type" => get_class($originPosition),
+                "origin_position_id" => $originPosition->id,
+                "success" => 0
+            ]);
+
+            throw new BadRequestException("ERROR QLS GENERICO.", ['error_detail' => $e->getMessage()]);
         }
 
+    }
+
+
+    /**
+     * @param Vehicle $vehicle
+     * @param string $message
+     * @param array $properties
+     * @return void
+     */
+    private function saveLog(Vehicle $vehicle, string $message, array $properties): void
+    {
+        $activity = activity('Recirculaciones')
+            ->withProperties($properties)
+            ->log($message);
+        $activity->reference_code = self::REFERENCE_ERROR_CODE;
+        $activity->subject_type = get_class($vehicle);
+        $activity->subject_id = $vehicle->id;
+        $activity->save();
     }
 
 }
