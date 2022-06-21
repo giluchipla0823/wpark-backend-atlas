@@ -218,7 +218,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::get('/vehicles/vin/{vin}', [VehicleMovementsController::class, 'vehicleMatchRules']);
     Route::patch('/vehicles/massive-change-data', [VehicleController::class, 'massiveChangeData'])->name('vehicles.massive-change-data');
     Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
-    Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
+    // Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
     Route::patch('/vehicles/{vehicle}/change-position', [VehicleController::class, 'massiveChangeData'])->name('vehicles.change-position');
     Route::post('/vehicles/create-manual', VehicleManualStoreController::class)->name('vehicles.create-manual');
     Route::post('/vehicles/datatables', [VehicleController::class, 'datatables'])->name('vehicles.datatables');

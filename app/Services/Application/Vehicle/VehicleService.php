@@ -14,6 +14,7 @@ use App\Models\Row;
 use App\Models\State;
 use App\Models\Vehicle;
 use App\Repositories\Vehicle\VehicleRepositoryInterface;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
@@ -120,14 +121,14 @@ class VehicleService
         return RowVehicleResource::collection($results)->collection;
     }
 
-    /**
-     * @param Vehicle $vehicle
-     * @return InfoVehicleResource
-     */
-    public function detail(Vehicle $vehicle): InfoVehicleResource
-    {
-        return new InfoVehicleResource($vehicle);
-    }
+//    /**
+//     * @param Vehicle $vehicle
+//     * @return InfoVehicleResource
+//     */
+//    public function detail(Vehicle $vehicle): InfoVehicleResource
+//    {
+//        return new InfoVehicleResource($vehicle);
+//    }
 
     /**
      * @param State $state
@@ -165,6 +166,16 @@ class VehicleService
 
         if (!$vehicle) {
             throw new Exception("No se encontró información del vehículo", Response::HTTP_NOT_FOUND);
+        }
+
+        // El vehículo pasa a state "ON TERMINAL" cuando el operario interactua por primera vez con el vehículo.
+        if (!$vehicle->states->where('id', State::STATE_ON_TERMINAL_ID)->first()) {
+            $vehicle->states()->sync([
+                State::STATE_ON_TERMINAL_ID => [
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now()
+                ]
+            ], false);
         }
 
         return new VehicleShowResource($vehicle);

@@ -3,11 +3,9 @@
 namespace App\Http\Resources\Movement;
 
 use App\Helpers\ModelHelper;
-use JsonSerializable;
 use Illuminate\Http\Request;
 use App\Http\Resources\Vehicle\VehicleResource;
 use App\Http\Resources\User\UserResource;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MovementResource extends JsonResource
@@ -15,8 +13,8 @@ class MovementResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @param Request $request
+     * @return array
      */
     public function toArray($request)
     {

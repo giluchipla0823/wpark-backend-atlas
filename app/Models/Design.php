@@ -36,6 +36,8 @@ class Design extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const UNKNOWN_ID = 9999;
+
     /**
      * The attributes that are mass assignable.
      *

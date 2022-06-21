@@ -146,18 +146,6 @@ class VehicleController extends ApiController
         return $this->successResponse($vehicle);
     }
 
- //   /**
- //    * @param VehicleStageRequest $request
- //    * @param Vehicle $vehicle
- //    * @return JsonResponse
- //    */
-    /* public function update(VehicleStageRequest $request, Vehicle $vehicle): JsonResponse
-    {
-        $this->vehicleService->update($request->all(), $vehicle->id);
-
-        return $this->showMessage('Vehicle updated successfully.');
-    } */
-
     /**
      * @OA\Delete(
      *     path="/api/v1/vehicles/{id}",
@@ -214,30 +202,30 @@ class VehicleController extends ApiController
         return $this->showMessage('Vehicle restored successfully.', Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @OA\GET(
-     *     path="/api/v1/vehicles/{vehicle}/detail",
-     *     tags={"Vehicles"},
-     *     summary="Show Vehicle info Details",
-     *     description="Show Vehicle info Details",
-     *     security={{"sanctum": {}}},
-     *     operationId="infoVehicle",
-     *     @OA\Response(response=200, description="Show Vehicle info Details"),
-     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-     * )
-     * Display the specified resource.
-     *
-     * @param Vehicle $vehicle
-     * @return JsonResponse
-     */
-    public function detail(Vehicle $vehicle): JsonResponse
-    {
-        $vehicle = $this->vehicleService->detail($vehicle);
-        return $this->successResponse($vehicle);
-    }
+//    /**
+//     * @OA\GET(
+//     *     path="/api/v1/vehicles/{vehicle}/detail",
+//     *     tags={"Vehicles"},
+//     *     summary="Show Vehicle info Details",
+//     *     description="Show Vehicle info Details",
+//     *     security={{"sanctum": {}}},
+//     *     operationId="infoVehicle",
+//     *     @OA\Response(response=200, description="Show Vehicle info Details"),
+//     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+//     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+//     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+//     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+//     * )
+//     * Display the specified resource.
+//     *
+//     * @param Vehicle $vehicle
+//     * @return JsonResponse
+//     */
+//    public function detail(Vehicle $vehicle): JsonResponse
+//    {
+//        $vehicle = $this->vehicleService->detail($vehicle);
+//        return $this->successResponse($vehicle);
+//    }
 
     /**
      * @return JsonResponse

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Movement;
 
+use Exception;
 use App\Models\Movement;
 use App\Repositories\BaseRepository;
 use App\Repositories\Movement\Builders\MovementDatatablesQueryBuilder;
@@ -22,19 +23,18 @@ class MovementRepository extends BaseRepository implements MovementRepositoryInt
      */
     public function all(Request $request): Collection
     {
-        $query = $this->model->query();
-
-        return $query->get();
+        return $this->model->query()->get();
     }
 
     /**
      * @param Request $request
      * @return array
+     * @throws Exception
      */
     public function datatables(Request $request): array
     {
-        $builder = new MovementDatatablesQueryBuilder($this->model, $request);
+        $query = (new MovementDatatablesQueryBuilder($this->model, $request))->getQuery();
 
-        return Datatables::customizable($builder->getQuery())->response();
+        return collect(DataTables::eloquent($query)->make()->getData())->all();
     }
 }

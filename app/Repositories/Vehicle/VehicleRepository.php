@@ -3,6 +3,7 @@
 namespace App\Repositories\Vehicle;
 
 use App\Helpers\QueryHelper;
+use App\Models\Movement;
 use App\Models\Parking;
 use App\Models\Slot;
 use App\Helpers\QueryParamsHelper;
@@ -59,50 +60,14 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function datatables(Request $request): Collection
     {
-        $builder = new VehicleDatatablesQueryBuilder($this->model, $request);
+        $query = (new VehicleDatatablesQueryBuilder($this->model, $request))->getQuery();
 
-        return collect(
-            DataTables::query($builder->getQuery())
-                ->make(true)
-                ->getData()
-        );
+        return collect(DataTables::query($query)->make()->getData());
     }
 
     public function createManual(array $params): Vehicle
     {
         return $this->model->create($params);
-    }
-
-    /**
-     * Crear vehículo.
-     *
-     * @param array $params
-     * @return Model
-     * @throws Exception
-     */
-    public function create(array $params): Model
-    {
-        DB::beginTransaction();
-
-        try {
-            // Creación del vehículo y relación many to many con stages
-            $vehicle = $this->model->create($params);
-            $stage = Stage::where('code', $params['station'])->first();
-            $vehicle->stages()->sync([
-                $stage->id => [
-                    'manual' => $params['manual'],
-                    'tracking_date' => $params['tracking-date']
-                ]
-            ], false);
-
-            DB::commit();
-        } catch (Exception $e) {
-            DB::rollback();
-
-            throw new Exception('Error al crear vehículo', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        return $vehicle;
     }
 
     /**
@@ -115,32 +80,8 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function update(array $params, int $id): ?int
     {
-        if(!isset($params['station'])){
-            $vehicle = $this->model->find($id);
-            $vehicle->update($params);
-        }else{
-
-            DB::beginTransaction();
-
-            try {
-                // Actualización del vehículo y relación many to many con stages
-                $vehicle = $this->model->find($id);
-                $vehicle->update($params);
-                $stage = Stage::where('code', $params['station'])->first();
-                $vehicle->stages()->sync([
-                    $stage->id => [
-                        'manual' => $params['manual'],
-                        'tracking_date' => $params['tracking-date']
-                    ]
-                ], false);
-
-                DB::commit();
-            } catch (Exception $e) {
-                DB::rollback();
-
-                throw new Exception('Error al actualizar vehículo', Response::HTTP_INTERNAL_SERVER_ERROR);
-            }
-        }
+        $vehicle = $this->model->find($id);
+        $vehicle->update($params);
 
         return $vehicle->id;
     }
@@ -289,4 +230,49 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
     {
         return $this->model->query()->where("vin", $vin)->first();
     }
+
+//    /**
+//     * @param Vehicle $vehicle
+//     * @param Stage $stage
+//     * @param array $params
+//     * @return void
+//     */
+//    private function updateStageAndStateVehicle(Vehicle $vehicle, Stage $stage, array $params): void
+//    {
+//        /**
+//         * Vehículo recibe station "03" y no tiene ningún state le asignamos el state ANNOUNCED.
+//         */
+//        if ($vehicle->states->count() === 0) {
+//            $vehicle->states()->sync([
+//                State::STATE_ANNOUNCED_ID => [
+//                    "created_at" => Carbon::now(),
+//                    "updated_at" => Carbon::now()
+//                ]
+//            ], false);
+//        }
+//
+//        $hasOnTerminalState = !is_null($vehicle->states->where('id', State::STATE_ON_TERMINAL_ID)->first());
+//        $hasCurrentState = !is_null($vehicle->stages->where('id', $stage->id)->first());
+//
+//        if (
+//            !$hasOnTerminalState &&
+//            in_array($stage->code, [Stage::STAGE_ST4_CODE, Stage::STAGE_ST5_CODE, Stage::STAGE_ST6_CODE])
+//        ) {
+//            $vehicle->states()->sync([
+//                State::STATE_ON_TERMINAL_ID => [
+//                    "created_at" => Carbon::now(),
+//                    "updated_at" => Carbon::now()
+//                ]
+//            ], false);
+//        }
+//
+//        if (!$hasCurrentState) {
+//            $vehicle->stages()->sync([
+//                $stage->id => [
+//                    'manual' => $params['manual'],
+//                    'tracking_date' => $params['tracking-date']
+//                ]
+//            ], false);
+//        }
+//    }
 }

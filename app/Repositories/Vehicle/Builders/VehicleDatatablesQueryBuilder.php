@@ -47,6 +47,8 @@ class VehicleDatatablesQueryBuilder
      */
     public function getQuery(): Builder
     {
+        $parkingModel = QueryHelper::escapeNamespaceClass(Parking::class);
+
         $this->query = DB::table($this->model->getTable())
             ->select([
                 "vehicles.id",
@@ -85,24 +87,7 @@ class VehicleDatatablesQueryBuilder
                 "stages.id AS stage_id",
                 "stages.name AS stage_name",
                 "stages.description AS stage_description",
-                "position.origin_position_type",
-                "position.origin_position_id",
-                "position.origin_position_name",
-                "position.origin_position_parking_id",
-                "position.origin_position_parking_name",
-                "position.origin_position_row_id",
-                "position.origin_position_row_number",
-                "position.origin_position_slot_id",
-                "position.origin_position_slot_number",
-                "position.destination_position_type",
-                "position.destination_position_id",
-                "position.destination_position_name",
-                "position.destination_position_parking_id",
-                "position.destination_position_parking_name",
-                "position.destination_position_row_id",
-                "position.destination_position_row_number",
-                "position.destination_position_slot_id",
-                "position.destination_position_slot_number"
+                "position.*"
             ])
             ->join('colors', 'vehicles.color_id', '=', 'colors.id')
             ->join('designs', 'vehicles.design_id', '=', 'designs.id')
@@ -124,49 +109,25 @@ class VehicleDatatablesQueryBuilder
                     "), "vehicles.load_id", "=", "transports_exit.load_id")
             ->leftJoin('rules AS shipping_rules', 'vehicles.shipping_rule_id', '=', 'shipping_rules.id')
             ->leftJoin('carriers AS carriers_shipping_rules', 'shipping_rules.carrier_id', '=', 'carriers_shipping_rules.id')
-            ->leftJoin($this->getStatesDatesVehicleSubQuery(), "vehicles.id", "=", "states_dates_vehicle.vehicle_id")
-            ->leftJoin('vehicles_states AS last_state_vehicle', 'vehicles.id', '=', DB::raw('
-                        last_state_vehicle.vehicle_id AND last_state_vehicle.id = (
-                            SELECT
-                                lvs.id
-                            FROM
-                                vehicles_states AS lvs
-                            WHERE
-                                lvs.vehicle_id = vehicles.id
-                            ORDER BY
-                                lvs.created_at DESC
-                            LIMIT 1
-                        )
-                    '))
+            ->leftJoin(DB::raw("({$this->getStatesDatesVehicleSubQuery()}) AS states_dates_vehicle"), "vehicles.id", "=", "states_dates_vehicle.vehicle_id")
+            ->leftJoin(DB::raw("({$this->getLastStateVehicleSubQuery()}) AS last_state_vehicle"), 'vehicles.id', "=", "last_state_vehicle.vehicle_id")
             ->leftJoin('states', 'last_state_vehicle.state_id', '=', 'states.id')
-            ->leftJoin($this->getStagesDatesVehicleSubQuery(), "vehicles.id", "=", "stages_dates_vehicle.vehicle_id")
-            ->leftJoin('vehicles_stages AS last_stage_vehicle', 'vehicles.id', '=', DB::raw('
-                        last_stage_vehicle.vehicle_id AND last_stage_vehicle.id = (
-                            SELECT
-                                lvst.id
-                            FROM
-                                vehicles_stages AS lvst
-                            WHERE
-                                lvst.vehicle_id = vehicles.id
-                            ORDER BY
-                                lvst.created_at DESC
-                            LIMIT 1
-                        )
-                    '))
+            ->leftJoin(DB::raw("({$this->getStagesDatesVehicleSubQuery()}) AS stages_dates_vehicle"), "vehicles.id", "=", "stages_dates_vehicle.vehicle_id")
+            ->leftJoin(DB::raw("({$this->getLastStageVehicleSubQuery()}) AS last_stage_vehicle"), 'vehicles.id', "=", "last_stage_vehicle.vehicle_id")
             ->leftJoin('stages', 'last_stage_vehicle.stage_id', '=', 'stages.id')
             ->leftJoin('movements AS last_movement', 'vehicles.id', '=',  DB::raw('
-                        last_movement.vehicle_id AND last_movement.id = (
-                            SELECT
-                                lmov.id
-                            FROM
-                                movements AS lmov
-                            WHERE
-                                lmov.vehicle_id = vehicles.id AND lmov.confirmed = 1
-                            ORDER BY
-                                lmov.created_at DESC
-                            LIMIT 1
-                        )
-                    '))
+                last_movement.vehicle_id AND last_movement.id = (
+                    SELECT
+                        lmov.id
+                    FROM
+                        movements AS lmov
+                    WHERE
+                        lmov.vehicle_id = vehicles.id AND lmov.confirmed = 1
+                    ORDER BY
+                        lmov.created_at DESC
+                    LIMIT 1
+                )
+            '))
             ->leftJoin($this->getPositionSubQuery(), 'last_movement.id', '=', 'position.movement_id');
 
         $this->addFilters();
@@ -211,10 +172,10 @@ class VehicleDatatablesQueryBuilder
             $rows = explode(',', $rows);
 
             $this->query = $this->query
-                ->where("position.destination_position_type", "=", Slot::class)
                 ->whereIn('position.destination_position_row_id', $rows);
         }
     }
+
 
     /**
      * @return Expression
@@ -224,133 +185,173 @@ class VehicleDatatablesQueryBuilder
         $slotModel = QueryHelper::escapeNamespaceClass(Slot::class);
         $parkingModel = QueryHelper::escapeNamespaceClass(Parking::class);
 
-        return DB::raw("
-            (
-                SELECT
-                    lmov2.id AS movement_id,
-                    lmov2.origin_position_type,
-                    lmov2.destination_position_type,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.slot_id, parking_origin.id) AS origin_position_id,
-                    IF(lmov2.origin_position_type = '$slotModel', CONCAT(slot_origin.parking_name, '.', LPAD(slot_origin.`row_number`, 3, '0')), parking_origin.name) AS origin_position_name,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.parking_id, parking_origin.id) AS origin_position_parking_id,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.parking_name, parking_origin.name) AS origin_position_parking_name,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.row_id, null) AS origin_position_row_id,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.row_number, null) AS origin_position_row_number,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.slot_id, null) AS origin_position_slot_id,
-                    IF(lmov2.origin_position_type = '$slotModel', slot_origin.slot_number, null) AS origin_position_slot_number,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.slot_id, parking_destination.id) AS destination_position_id,
-                    IF(lmov2.destination_position_type = '$slotModel', CONCAT(slot_destination.parking_name, '.', LPAD(slot_destination.`row_number`, 3, '0')), parking_destination.name) AS destination_position_name,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.parking_id, parking_destination.id) AS destination_position_parking_id,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.parking_name, parking_destination.name) AS destination_position_parking_name,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.row_id, null) AS destination_position_row_id,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.row_number, null) AS destination_position_row_number,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.slot_id, null) AS destination_position_slot_id,
-                    IF(lmov2.destination_position_type = '$slotModel', slot_destination.slot_number, null) AS destination_position_slot_number
-                FROM
-                    movements AS lmov2
-                LEFT JOIN
-                 (
-                    SELECT
-                        park.id AS parking_id,
-                        park.name AS parking_name,
-                        r.id AS row_id,
-                        r.`row_number` AS `row_number`,
-                        slot.id AS slot_id,
-                        slot.slot_number AS slot_number
-                    FROM
-                        slots AS slot
-                        INNER JOIN `rows` AS r on slot.row_id = r.id
-                        INNER JOIN parkings AS park on r.parking_id = park.id
-                ) AS slot_origin ON lmov2.origin_position_id = slot_origin.slot_id AND lmov2.origin_position_type = '$slotModel'
-                LEFT JOIN
-                 (
-                    SELECT
-                        park.id AS parking_id,
-                        park.name AS parking_name,
-                        r.id AS row_id,
-                        r.`row_number` AS `row_number`,
-                        slot.id AS slot_id,
-                        slot.slot_number AS slot_number
-                    FROM
-                        slots AS slot
-                        INNER JOIN `rows` AS r on slot.row_id = r.id
-                        INNER JOIN parkings AS park on r.parking_id = park.id
-                ) AS slot_destination ON lmov2.destination_position_id = slot_destination.slot_id AND lmov2.destination_position_type = '$slotModel'
-                LEFT JOIN
-                    parkings AS parking_origin ON lmov2.origin_position_id = parking_origin.id AND lmov2.origin_position_type = '$parkingModel'
-                LEFT JOIN
-                    parkings AS parking_destination ON lmov2.destination_position_id = parking_destination.id AND lmov2.destination_position_type = '$parkingModel'
-                WHERE
-                    lmov2.confirmed = 1
-            ) AS position
-        ");
+        $parkingsSubQuery = DB::table("parkings", "p")
+            ->select([
+                "p.id AS parking_id",
+                "p.name AS parking_name",
+                "r.id AS row_id",
+                "r.row_number AS row_number",
+                "s.id AS slot_id",
+                "s.slot_number AS slot_number",
+            ])
+            ->leftJoin("rows AS r", "p.id", "=", "r.parking_id")
+            ->leftJoin("slots AS s", "r.id", "=", "s.row_id");
+
+        $query = "SELECT
+            lmov2.id AS movement_id,
+            lmov2.origin_position_type,
+            lmov2.destination_position_type,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_id, parking_origin.id) AS origin_position_id,
+            IF(lmov2.origin_position_type = ':slot_model', CONCAT(slot_origin.parking_name, '.', LPAD(slot_origin.row_number, 3, '0')), parking_origin.name) AS origin_position_name,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.parking_id, parking_origin.id) AS origin_position_parking_id,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.parking_name, parking_origin.name) AS origin_position_parking_name,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.row_id, null) AS origin_position_row_id,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.row_number, null) AS origin_position_row_number,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_id, null) AS origin_position_slot_id,
+            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_number, null) AS origin_position_slot_number,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_id, parking_destination.id) AS destination_position_id,
+            IF(lmov2.destination_position_type = ':slot_model', CONCAT(slot_destination.parking_name, '.', LPAD(slot_destination.row_number, 3, '0')), parking_destination.name) AS destination_position_name,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.parking_id, parking_destination.id) AS destination_position_parking_id,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.parking_name, parking_destination.name) AS destination_position_parking_name,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.row_id, null) AS destination_position_row_id,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.row_number, null) AS destination_position_row_number,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_id, null) AS destination_position_slot_id,
+            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_number, null) AS destination_position_slot_number
+        FROM
+            movements AS lmov2
+        LEFT JOIN
+         (
+            {$parkingsSubQuery->toSql()}
+        ) AS slot_origin ON lmov2.origin_position_id = slot_origin.slot_id AND lmov2.origin_position_type = ':slot_model'
+        LEFT JOIN
+         (
+            {$parkingsSubQuery->toSql()}
+        ) AS slot_destination ON lmov2.destination_position_id = slot_destination.slot_id AND lmov2.destination_position_type = ':slot_model'
+        LEFT JOIN
+            parkings AS parking_origin ON lmov2.origin_position_id = parking_origin.id AND lmov2.origin_position_type = ':parking_model'
+        LEFT JOIN
+            parkings AS parking_destination ON lmov2.destination_position_id = parking_destination.id AND lmov2.destination_position_type = ':parking_model'
+        WHERE
+            lmov2.confirmed = 1";
+
+
+//        $query = "SELECT
+//            lmov2.id AS movement_id,
+//            lmov2.origin_position_type,
+//            lmov2.destination_position_type,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_id, parking_origin.id) AS origin_position_id,
+//            IF(lmov2.origin_position_type = ':slot_model', CONCAT(slot_origin.parking_name, '.', LPAD(slot_origin.row_number, 3, '0')), parking_origin.name) AS origin_position_name,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.parking_id, parking_origin.id) AS origin_position_parking_id,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.parking_name, parking_origin.name) AS origin_position_parking_name,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.row_id, null) AS origin_position_row_id,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.row_number, null) AS origin_position_row_number,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_id, null) AS origin_position_slot_id,
+//            IF(lmov2.origin_position_type = ':slot_model', slot_origin.slot_number, null) AS origin_position_slot_number,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_id, parking_destination.id) AS destination_position_id,
+//            IF(lmov2.destination_position_type = ':slot_model', CONCAT(slot_destination.parking_name, '.', LPAD(slot_destination.row_number, 3, '0')), parking_destination.name) AS destination_position_name,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.parking_id, parking_destination.id) AS destination_position_parking_id,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.parking_name, parking_destination.name) AS destination_position_parking_name,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.row_id, null) AS destination_position_row_id,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.row_number, null) AS destination_position_row_number,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_id, null) AS destination_position_slot_id,
+//            IF(lmov2.destination_position_type = ':slot_model', slot_destination.slot_number, null) AS destination_position_slot_number
+//        FROM
+//            movements AS lmov2
+//        LEFT JOIN
+//         (
+//            SELECT
+//                park.id AS parking_id,
+//                park.name AS parking_name,
+//                r.id AS row_id,
+//                r.row_number AS row_number,
+//                slot.id AS slot_id,
+//                slot.slot_number AS slot_number
+//            FROM
+//                slots AS slot
+//                INNER JOIN `rows` AS r on slot.row_id = r.id
+//                INNER JOIN parkings AS park on r.parking_id = park.id
+//        ) AS slot_origin ON lmov2.origin_position_id = slot_origin.slot_id AND lmov2.origin_position_type = ':slot_model'
+//        LEFT JOIN
+//         (
+//            SELECT
+//                park.id AS parking_id,
+//                park.name AS parking_name,
+//                r.id AS row_id,
+//                r.row_number AS row_number,
+//                slot.id AS slot_id,
+//                slot.slot_number AS slot_number
+//            FROM
+//                slots AS slot
+//                INNER JOIN `rows` AS r on slot.row_id = r.id
+//                INNER JOIN parkings AS park on r.parking_id = park.id
+//        ) AS slot_destination ON lmov2.destination_position_id = slot_destination.slot_id AND lmov2.destination_position_type = ':slot_model'
+//        LEFT JOIN
+//            parkings AS parking_origin ON lmov2.origin_position_id = parking_origin.id AND lmov2.origin_position_type = ':parking_model'
+//        LEFT JOIN
+//            parkings AS parking_destination ON lmov2.destination_position_id = parking_destination.id AND lmov2.destination_position_type = ':parking_model'
+//        WHERE
+//            lmov2.confirmed = 1";
+
+        $query = str_replace([":slot_model", ":parking_model"], [$slotModel, $parkingModel], $query);
+
+
+        return DB::raw("($query) AS position");
     }
 
     /**
-     * @return Expression
+     * @return string
      */
-    private function getStatesDatesVehicleSubQuery(): Expression
+    private function getStatesDatesVehicleSubQuery(): string
     {
-        return DB::raw("
-            (
-                SELECT
-                    vs.vehicle_id,
-                    (
-                        SELECT
-                            vehicles_states.created_at
-                        FROM
-                            vehicles_states
-                        WHERE
-                            vehicles_states.vehicle_id = vs.vehicle_id AND
-                            vehicles_states.state_id = ". State::STATE_ANNOUNCED_ID ."
-                    ) AS dt_announced,
-                    (
-                        SELECT
-                            vehicles_states.created_at
-                        FROM
-                            vehicles_states
-                        WHERE
-                            vehicles_states.vehicle_id = vs.vehicle_id AND
-                            vehicles_states.state_id = ". State::STATE_ON_TERMINAL_ID ."
-                    ) AS dt_terminal,
-                    (
-                        SELECT
-                            vehicles_states.created_at
-                        FROM
-                            vehicles_states
-                        WHERE
-                            vehicles_states.vehicle_id = vs.vehicle_id AND
-                            vehicles_states.state_id = ". State::STATE_LEFT_ID ."
-                    ) AS dt_left
-                FROM
-                    vehicles_states AS vs
-                GROUP BY vs.vehicle_id
-            ) AS states_dates_vehicle
-        ");
+        return DB::table("vehicles_states")
+            ->select([
+                "vehicle_id",
+                DB::raw("MAX(CASE WHEN state_id = ". State::STATE_ANNOUNCED_ID ." THEN created_at END) AS dt_announced"),
+                DB::raw("MAX(CASE WHEN state_id = ". State::STATE_ON_TERMINAL_ID ." THEN created_at END) AS dt_terminal"),
+                DB::raw("MAX(CASE WHEN state_id = ". State::STATE_LEFT_ID ." THEN created_at END) AS dt_left")
+            ])
+            ->groupBy("vehicle_id")
+            ->toSql();
     }
 
     /**
-     * @return Expression
+     * @return string
      */
-    private function getStagesDatesVehicleSubQuery(): Expression
+    private function getLastStateVehicleSubQuery(): string
     {
-        return DB::raw("
-            (
-                SELECT
-                    vs.vehicle_id,
-                    (
-                        SELECT
-                            vehicles_stages.created_at
-                        FROM
-                            vehicles_stages
-                        WHERE
-                            vehicles_stages.vehicle_id = vs.vehicle_id AND
-                            vehicles_stages.stage_id = ". Stage::STAGE_GATE_RELEASE_ID ."
-                    ) AS dt_gate_release
-                FROM
-                    vehicles_stages AS vs
-                GROUP BY vs.vehicle_id
-            ) AS stages_dates_vehicle
-        ");
+        return DB::table("vehicles_states")
+                ->select([
+                    DB::raw("MAX(id) AS id"),
+                    "vehicle_id",
+                    DB::raw("MAX(state_id) AS state_id"),
+                    DB::raw("MAX(created_at) AS created_at"),
+                ])
+                ->groupBy("vehicle_id")
+                ->toSql();
+
+    }
+
+    private function getStagesDatesVehicleSubQuery(): string
+    {
+        return DB::table("vehicles_stages")
+                ->select([
+                    "vehicle_id",
+                    DB::raw("MAX(CASE WHEN stage_id = ". Stage::STAGE_GATE_RELEASE_ID ." THEN created_at END) AS dt_gate_release")
+                ])
+                ->groupBy("vehicle_id")
+                ->toSql();
+    }
+
+    private function getLastStageVehicleSubQuery(): string
+    {
+        return DB::table("vehicles_stages")
+            ->select([
+                DB::raw("MAX(id) AS id"),
+                "vehicle_id",
+                DB::raw("MAX(stage_id) AS stage_id"),
+                DB::raw("MAX(created_at) AS created_at"),
+            ])
+            ->groupBy("vehicle_id")
+            ->toSql();
     }
 }

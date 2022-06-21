@@ -29,7 +29,7 @@ class Color extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public const COLOR_UNKNOWN_ID = 9999;
+    public const UNKNOWN_ID = 9999;
 
     /**
      * The attributes that are mass assignable.

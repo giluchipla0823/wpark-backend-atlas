@@ -12,7 +12,6 @@ use App\Http\Resources\Movement\MovementResource;
 use App\Http\Resources\Movement\MovementDatatablesResource;
 use App\Models\Movement;
 use App\Models\Parking;
-use App\Models\ParkingType;
 use App\Models\Row;
 use App\Models\Slot;
 use App\Models\Vehicle;
@@ -79,6 +78,7 @@ class MovementService
     /**
      * @param Request $request
      * @return Collection
+     * @throws Exception
      */
     public function datatables(Request $request): Collection
     {
@@ -97,8 +97,6 @@ class MovementService
      */
     public function show(Movement $movement): MovementResource
     {
-        $movement->load(QueryParamsHelper::getIncludesParamFromRequest());
-
         return new MovementResource($movement);
     }
 
@@ -169,7 +167,7 @@ class MovementService
 
             if ($mustReleaseOrigin) {
                 // Comprobar que el origen es parking con filas
-                if ($movement->origin_position_type === Slot::class) {
+                if ($movement->originPositionIsSlot()) {
                     // Actualización de la fila y el slot para desocupar la posición de origen
 
                     /* @var Slot $slot */
@@ -183,7 +181,7 @@ class MovementService
             }
 
             // Comprobar que el destino es parking con filas
-            if ($movement->destination_position_type === Slot::class) {
+            if ($movement->destinationPositionIsSlot()) {
                 $row = $movement->destinationPosition->row;
                 $parking = $row->parking;
                 $sender = $movement->user;
@@ -245,8 +243,8 @@ class MovementService
                 'comments' => $params['comments'] ?? null
             ], $movement->id);
 
-            // Comprobar que el destino es parking con filas
-            if ($movement->destination_position_type === Slot::class) {
+            // Comprobar que el destino es slot.
+            if ($movement->destinationPositionIsSlot()) {
 
                 /* @var Slot $slot */
                 $slot = $movement->destinationPosition;
@@ -292,24 +290,25 @@ class MovementService
      * @param array $params
      * @return void
      * @throws NotFoundException
+     * @throws Exception
      */
     public function manual(array $params): void
     {
-        $previousMovementId = $params['cancel_previous_movement_id'] ?? null;
+        DB::transaction(function () use ($params) {
+            $previousMovementId = $params['cancel_previous_movement_id'] ?? null;
 
-        if ($previousMovementId) {
-            $previousMovement = Movement::find($previousMovementId);
+            if ($previousMovementId) {
+                $previousMovement = Movement::find($previousMovementId);
 
-            if (!$previousMovement) {
-                throw new NotFoundException(sprintf(
-                    "No existe información del movimiento con el id %s especificado."
-                ), $previousMovementId);
+                if (!$previousMovement) {
+                    throw new NotFoundException(sprintf(
+                        "No existe información del movimiento anterior con el id %s especificado."
+                    ), $previousMovementId);
+                }
+
+                $this->cancelMovement(['comments' => "Cancelado por movimiento manual"], $previousMovement);
             }
 
-            $this->cancelMovement(['comments' => "Cancelado por movimiento manual"], $previousMovement);
-        }
-
-        DB::transaction(function () use ($params) {
             /* @var Vehicle $vehicle */
             $vehicle = Vehicle::where('id', $params['vehicle_id'])->first();
 
@@ -331,6 +330,7 @@ class MovementService
      * @param array $params
      * @return Movement
      * @throws BadRequestException
+     * @throws NotFoundException
      */
     public function doMovement(Vehicle $vehicle, array $params): Movement
     {
@@ -353,57 +353,72 @@ class MovementService
             }
         } else {
             $positionDestination = Slot::where('id', $params['destination_position_id'])->first();
-            $rowIsPresortingZone = RowHelper::isPresortinZone($positionDestination->row);
+
+            // Añadimos la comprobación de que el slot siga vacio
+            if ($positionDestination->fill === 1) {
+                throw new BadRequestException("La posición seleccionada no se encuentra disponible.");
+            }
+
+            $row = $positionDestination->row;
+
+            $rowIsPresortingZone = RowHelper::isPresortinZone($row);
 
             // Validación de la regla del vehículo con el bloque de la fila
             $ruleVehicle = $rowIsPresortingZone ? $vehicle->lastRule : $vehicle->shippingRule;
+
+            if (!$row->active) {
+                throw new BadRequestException("La fila de la posición seleccionada no está activa.");
+            }
+
+            if ($row->full) {
+                throw new BadRequestException("La fila de la posición seleccionada está llena.");
+            }
+
+            if (!$ruleVehicle) {
+                if ($rowIsPresortingZone) {
+                    throw new BadRequestException(
+                        "El vehículo no tiene asignado una regla de presorting para la posición seleccionada."
+                    );
+                } else {
+                    throw new BadRequestException(
+                        "El vehículo no tiene asignado una regla de posición final de transporte para la posición seleccionada."
+                    );
+                }
+            }
+
+            if ($row->rule_id && $row->rule_id !== $ruleVehicle->id) {
+                throw new BadRequestException(sprintf(
+                    "El vehículo no cumple con la regla %s que tiene asignada la fila de la posición seleccionada.",
+                    $row->rule->name
+                ));
+            }
+
             $blocks = $ruleVehicle->blocks->pluck('id');
 
-            $rowBlockValidate = Row::where('id', $positionDestination->row->id)
+            $rowBlockValidate = Row::where('id', $row->id)
                 ->whereIn('block_id', $blocks)
                 ->orWhereNull('block_id')
                 ->exists();
 
-            $params['category'] = $ruleVehicle->name;
-
             if (!$rowBlockValidate) {
                 if ($rowIsPresortingZone) {
-                    throw new BadRequestException("La posición seleccionada no coincide con la regla de presorting del vehículo.");
-
+                    throw new BadRequestException("El vehículo no cumple con la regla(s) de presorting del bloque que tiene asignado la fila de la posición seleccionada.");
                 } else {
-                    throw new BadRequestException("La posición seleccionada no coincide con la regla de final de transporte del vehículo.");
+                    throw new BadRequestException("El vehículo no cumple con la regla(s) de posición final de transporte del bloque que tiene asignado la fila de la posición seleccionada.");
                 }
             }
 
-            // Validación de fila que no esté llene y esté activa, además verifica la regla de transporte del vehículo con la regla de la fila
-            $rowAvailableValidate = Row::where('id', $positionDestination->row->id)
-                ->where([
-                    ['full', "=", 0],
-                    ['active', "=", 1],
-                ])
-                ->where(function ($query) use ($ruleVehicle) {
-                    $query->where('rule_id', $ruleVehicle->id)->orWhereNull('rule_id');
-                })->exists();
-
-            // dd($rowAvailableValidate, $positionDestination);
-
-            // Añadimos la comprobación de que el slot siga vacio
-            if (!$rowAvailableValidate || $positionDestination->fill === 1) {
-                throw new BadRequestException("La posición seleccionada no se encuentra disponible.");
-            }
+            $params['category'] = $ruleVehicle->name;
         }
 
-        // dd('por aqui pasa algo');
-
         $movement = $this->movementRepository->create($params);
-        $vehicleLength = $vehicle->design->length;
 
         if ($params['destination_position_type'] === Slot::class) {
             // Se reserva la posición del vehículo ocupándola en la base de datos
 
             /* @var Slot $slot */
             $slot = $positionDestination;
-            $slot->reserve($vehicleLength);
+            $slot->reserve($vehicle->design->length);
             $row = $slot->row;
             $parking = $row->parking;
             $row->rule_id = $row->rule_id ?: $ruleVehicle->id;

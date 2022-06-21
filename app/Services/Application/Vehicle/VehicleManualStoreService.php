@@ -62,7 +62,7 @@ class VehicleManualStoreService
         }
 
         DB::transaction(function() use ($params, $parking) {
-            $params['color_id'] = $params['color_id'] ?? Color::COLOR_UNKNOWN_ID;
+            $params['color_id'] = $params['color_id'] ?? Color::UNKNOWN_ID;
 
             $vehicle = $this->vehicleRepository->createManual($params);
 

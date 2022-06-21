@@ -2,14 +2,6 @@
 
 namespace App\Http\Resources\Movement;
 
-use App\Helpers\ModelHelper;
-use JsonSerializable;
-use Illuminate\Http\Request;
-use App\Http\Resources\Vehicle\VehicleResource;
-use App\Http\Resources\User\UserResource;
-use App\Models\Parking;
-use App\Models\Slot;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MovementDatatablesResource extends JsonResource
@@ -17,67 +9,72 @@ class MovementDatatablesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @param $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
             'vehicle' => [
-                'id' => $this->vehicle->id,
-                'vin' => $this->vehicle->vin
+                'id' => $this->vehicle_id,
+                'vin' => $this->vehicle_vin
             ],
-            'origin_position' => $this->originResource(),
-            'destination_position' => $this->destinationResource(),
+            'origin_position' => $this->includeOriginPosition(),
+            'destination_position' => $this->includeDestinationPosition(),
             'user' => [
-                'id' => $this->user->id,
-                'username' => $this->user->username
+                'id' => $this->user_id,
+                'username' => $this->user_username
             ],
+            'created_at' => $this->created_at
         ];
     }
 
-    /**
-     * @return mixed
-     */
-    private function originResource(): mixed
-    {
-        if ($this->origin_position_type == Parking::class) {
-            $origin = Parking::find($this->origin_position_id);
-            if ($origin) {
-                $name = $origin->name;
-                $slot = null;
-            }
-        } else {
-            $origin = Slot::find($this->origin_position_id);
-            if ($origin) {
-                $name = $origin->row_name;
-                $slot = $origin->slot_number;
-            }
+    private function includeOriginPosition() {
+        if (!$this->origin_position_name) {
+            return null;
         }
 
-        return $origin ? ['id' => $origin->id, 'name' => $name, 'slot' => $slot] : null;
+        return [
+            "id" => $this->origin_position_id,
+            "name" => $this->origin_position_name,
+            "type" => $this->origin_position_type,
+            "parking" => [
+                "id" => $this->origin_parking_id,
+                "name" => $this->origin_parking_name,
+            ],
+            "row" => $this->origin_row_id ? [
+                "id" => $this->origin_row_id,
+                "row_number" => $this->origin_row_number,
+            ] : null,
+            "slot" => $this->origin_slot_id ? [
+                "id" => $this->origin_slot_id,
+                "slot_number" => $this->origin_slot_number,
+            ] : null
+        ];
     }
 
-    /**
-     * @return mixed
-     */
-    private function destinationResource(): mixed
-    {
-        if ($this->destination_position_type == Parking::class) {
-            $destination = Parking::find($this->destination_position_id);
-            if ($destination) {
-                $name = $destination->name;
-                $slot = null;
-            }
-        } else {
-            $destination = Slot::find($this->destination_position_id);
-            if ($destination) {
-                $name = $destination->row_name;
-                $slot = $destination->slot_number;
-            }
+    private function includeDestinationPosition() {
+        if (!$this->destination_position_name) {
+            return null;
         }
 
-        return $destination ? ['id' => $destination->id, 'name' => $name, 'slot' => $slot] : null;
+        return [
+            "id" => $this->destination_position_id,
+            "name" => $this->destination_position_name,
+            "type" => $this->destination_position_type,
+            "parking" => [
+                "id" => $this->destination_parking_id,
+                "name" => $this->destination_parking_name,
+            ],
+            "row" => $this->destination_row_id ? [
+                "id" => $this->destination_row_id,
+                "row_number" => $this->destination_row_number,
+            ] : null,
+            "slot" => $this->destination_slot_id ? [
+                "id" => $this->destination_slot_id,
+                "slot_number" => $this->destination_slot_number,
+            ] : null
+        ];
     }
 }

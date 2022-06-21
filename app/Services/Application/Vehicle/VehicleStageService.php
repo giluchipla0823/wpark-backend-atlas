@@ -4,10 +4,19 @@ namespace App\Services\Application\Vehicle;
 
 use App\Exceptions\owner\BadRequestException;
 use App\Helpers\StringHelper;
+use App\Models\Color;
+use App\Models\Design;
+use App\Models\DestinationCode;
+use App\Models\Parking;
+use App\Models\State;
 use App\Models\Vehicle;
+use App\Repositories\Movement\MovementRepositoryInterface;
+use App\Repositories\Parking\ParkingRepositoryInterface;
+use Carbon\Carbon;
 use Exception;
 use App\Models\Stage;
 use App\Models\Transport;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Color\ColorRepositoryInterface;
 use App\Repositories\Design\DesignRepositoryInterface;
@@ -47,6 +56,14 @@ class VehicleStageService
      * @var FreightVerifyService
      */
     private $freightVerifyService;
+    /**
+     * @var MovementRepositoryInterface
+     */
+    private $movementRepository;
+    /**
+     * @var ParkingRepositoryInterface
+     */
+    private $parkingRepository;
 
     public function __construct(
         VehicleRepositoryInterface $vehicleRepository,
@@ -54,7 +71,9 @@ class VehicleStageService
         DesignRepositoryInterface $designRepository,
         ColorRepositoryInterface $colorRepository,
         DestinationCodeRepositoryInterface $destinationCodeRepository,
-        FreightVerifyService $freightVerifyService
+        FreightVerifyService $freightVerifyService,
+        MovementRepositoryInterface $movementRepository,
+        ParkingRepositoryInterface $parkingRepository
     ) {
         $this->vehicleRepository = $vehicleRepository;
         $this->stageRepository = $stageRepository;
@@ -62,6 +81,8 @@ class VehicleStageService
         $this->colorRepository = $colorRepository;
         $this->destinationCodeRepository = $destinationCodeRepository;
         $this->freightVerifyService = $freightVerifyService;
+        $this->movementRepository = $movementRepository;
+        $this->parkingRepository = $parkingRepository;
     }
 
     /**
@@ -128,23 +149,30 @@ class VehicleStageService
 
             // TODO: Sacar errores en excel para importarlos (FASE 2)
             $this->saveLog(
-                'Faltan datos para poder crear o actualizar el vehículo con el EOC especificado',
-                array_merge($params, ['design_code' => $designCode, 'color_code' => $colorCode, 'missing_data' => $missingData]),
-                $vehicle
-            );
-
-            throw new Exception(
                 sprintf(
                     'No se ha encontrado información de %s con el EOC especificado.',
                     StringHelper::replaceLastOccurrence(",", " y", implode(", ", $missingData))
                 ),
-                Response::HTTP_BAD_REQUEST
+                array_merge(
+                    $params,
+                    [
+                        'design_code' => $designCode,
+                        'color_code' => $colorCode,
+                        'destination_code' => $params['destination'],
+                        'missing_data' => $missingData
+                    ]
+                ),
+                $vehicle
             );
-        }
 
-        $params['design_id'] = $design->id;
-        $params['color_id'] = $color->id;
-        $params['destination_code_id'] = $destinationCode->id;
+            $params['design_id'] = Design::UNKNOWN_ID;
+            $params['color_id'] = Color::UNKNOWN_ID;
+            $params['destination_code_id'] = DestinationCode::UNKNOWN_ID;
+        } else {
+            $params['design_id'] = $design->id;
+            $params['color_id'] = $color->id;
+            $params['destination_code_id'] = $destinationCode->id;
+        }
 
         $vehicle = $this->createOrUpdateVehicle($params, $vehicle);
 
@@ -183,26 +211,42 @@ class VehicleStageService
      */
     private function createOrUpdateVehicle(array $params, ?Vehicle $vehicle = null): Vehicle
     {
+        $stage = Stage::where('code', $params['station'])->first();
+
+        $isNewRecord = is_null($vehicle);
+
+        // Comprobar si el eoc ya existe cuando se hace un registro
+        if ($isNewRecord && $this->vehicleRepository->findBy(['eoc' => $params['eoc']])) {
+            $this->saveLog("El eoc especificado ya se encuentra registrado", $params, $vehicle);
+
+            throw new BadRequestException('El eoc especificado ya se encuentra registrado.');
+        }
+
+        DB::beginTransaction();
+
         try {
-            $message = !$vehicle ? "Vehículo creado" : "Vehículo actualizado";
-
-            if (!$vehicle) {
-
-                // Comprobar si el eoc ya existe
-                if ($this->vehicleRepository->findBy(['eoc' => $params['eoc']])) {
-                    throw new BadRequestException('El eoc especificado ya se encuentra registrado.');
-                }
+            if ($isNewRecord) {
 
                 $vehicle = $this->vehicleRepository->create($params);
+
+                $this->createInitialMovement($vehicle, $params);
             } else {
                 $this->vehicleRepository->update($params, $vehicle->id);
             }
 
-            $this->saveLog($message, $params, $vehicle);
-        } catch (Exception $exc) {
-            $this->saveLog($exc->getMessage(), $params, $vehicle);
+            $this->saveLog($isNewRecord ? "Vehículo creado" : "Vehículo actualizado", $params, $vehicle);
 
-            throw new Exception($exc->getMessage(), $exc->getCode());
+            $this->updateStageAndStateVehicle($vehicle, $stage, $params);
+
+            DB::commit();
+        }catch (Exception $exc) {
+            DB::rollback();
+
+            $errorMessage = $isNewRecord ? "Error al crear vehículo" : "Error al actualizar el vehículo";
+
+            $this->saveLog($errorMessage, $params, $vehicle);
+
+            throw new Exception($errorMessage, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $vehicle;
@@ -228,5 +272,78 @@ class VehicleStageService
         }
 
         $activity->save();
+    }
+
+    /**
+     * @param Vehicle $vehicle
+     * @param array $params
+     * @return void
+     */
+    private function createInitialMovement(Vehicle $vehicle, array $params): void
+    {
+        $canopy = $this->parkingRepository->find(1);
+
+        $this->movementRepository->create([
+            "vehicle_id" => $vehicle->id,
+            "user_id" => 1,
+            "origin_position_type" => Parking::class,
+            "origin_position_id" => 0,
+            "destination_position_type" => get_class($canopy),
+            "destination_position_id" => $canopy->id,
+            "category" => null,
+            "confirmed" => 1,
+            "canceled" => 0,
+            "manual" => $params['manual'],
+            "dt_start" => Carbon::now(),
+            "dt_end" => Carbon::now(),
+            "comments" => "Movimiento por defecto creado desde la Api ST7",
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+    }
+
+    /**
+     * @param Vehicle $vehicle
+     * @param Stage $stage
+     * @param array $params
+     * @return void
+     */
+    private function updateStageAndStateVehicle(Vehicle $vehicle, Stage $stage, array $params): void
+    {
+        /**
+         * Vehículo recibe station "03" y no tiene ningún state le asignamos el state ANNOUNCED.
+         */
+        if ($vehicle->states->count() === 0) {
+            $vehicle->states()->sync([
+                State::STATE_ANNOUNCED_ID => [
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now()
+                ]
+            ], false);
+        }
+
+        $hasOnTerminalState = !is_null($vehicle->states->where('id', State::STATE_ON_TERMINAL_ID)->first());
+        $hasCurrentState = !is_null($vehicle->stages->where('id', $stage->id)->first());
+
+        if (
+            !$hasOnTerminalState &&
+            in_array($stage->code, [Stage::STAGE_ST4_CODE, Stage::STAGE_ST5_CODE, Stage::STAGE_ST6_CODE])
+        ) {
+            $vehicle->states()->sync([
+                State::STATE_ON_TERMINAL_ID => [
+                    "created_at" => Carbon::now(),
+                    "updated_at" => Carbon::now()
+                ]
+            ], false);
+        }
+
+        if (!$hasCurrentState) {
+            $vehicle->stages()->sync([
+                $stage->id => [
+                    'manual' => $params['manual'],
+                    'tracking_date' => $params['tracking-date']
+                ]
+            ], false);
+        }
     }
 }

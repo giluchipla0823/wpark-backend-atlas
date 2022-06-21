@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Auth;
  * @OA\Property(property="vehicle_id", type="integer", maxLength=20, description="Indica el vehículo que se mueve", example="1"),
  * @OA\Property(property="user_id", type="integer", maxLength=20, description="Indica el usuario que está moviendo el vehículo", example="1"),
  * @OA\Property(property="device_id", type="integer", maxLength=20, description="Indica el dispositivo que ha usado el usuario para realizar el movimiento del vehículo", example="1"),
- * @OA\Property(property="compound_id", type="integer", maxLength=20, description="Indica la campa donde se está realizando el movimiento del vehículo", example="1"),
  * @OA\Property(property="origin_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de origen", example="App\Models\Parking"),
  * @OA\Property(property="origin_position_id", type="integer", maxLength=20, description="Indica la posición desde donde se hace el movimiento", example="1"),
  * @OA\Property(property="destination_position_type", type="string", maxLength=255, description="Indica el tipo de posición slot o parking de destino", example="App\Models\Slot"),
@@ -38,7 +37,6 @@ use Illuminate\Support\Facades\Auth;
  * Class Movement
  *
  */
-
 class Movement extends Model
 {
     use HasFactory, SoftDeletes;
@@ -74,9 +72,17 @@ class Movement extends Model
 
         static::creating(function($model)
         {
-            $token = Auth::user()->currentAccessToken();
+            $user = Auth::user();
 
-            $model->device_id = $token->device ? $token->device->id : null;
+            $token = $user ? $user->currentAccessToken() : null;
+
+            $deviceId = null;
+
+            if ($token) {
+                $deviceId = $token->device ? $token->device->id : null;
+            }
+
+            $model->device_id = $deviceId;
         });
     }
 
@@ -110,5 +116,25 @@ class Movement extends Model
         return $type === Parking::class
             ? ParkingResource::class
             : SlotResource::class;
+    }
+
+    public function originPositionIsSlot(): bool
+    {
+        return $this->origin_position_type === Slot::class;
+    }
+
+    public function originPositionIsParking(): bool
+    {
+        return $this->origin_position_type === Parking::class;
+    }
+
+    public function destinationPositionIsSlot(): bool
+    {
+        return $this->destination_position_type === Slot::class;
+    }
+
+    public function destinationPositionIsParking(): bool
+    {
+        return $this->destination_position_type === Parking::class;
     }
 }

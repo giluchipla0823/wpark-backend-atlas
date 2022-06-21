@@ -7,7 +7,8 @@ class QueryParamsHelper
     /**
      * @return array
      */
-    public static function getIncludesParamFromRequest(): array {
+    public static function getIncludesParamFromRequest(): array
+    {
         $includes = request()->query->get('includes');
 
         if(!$includes){
