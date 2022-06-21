@@ -192,7 +192,8 @@ class MovementService
                 $rowTotalCapacitymm = $row->capacitymm - $row->fillmm;
 
                 if ($rowTotalCapacitymm < Slot::CAPACITY_MM) {
-                    $this->rowRepository->update(['full' => 1], $row->id);
+                    $row->full = 1;
+                    $row->save();
 
                     // Lanzamos la notificación de fila completada
                     event(new CompletedRowNotification($sender, $row));
@@ -201,7 +202,8 @@ class MovementService
                 $parkingCapacity = $parking->capacity - $parking->fill;
 
                 if ($parkingCapacity === 0){
-                    $this->parkingRepository->update(['full' => 1], $parking->id);
+                    $parking->full = 1;
+                    $parking->save();
 
                     // TODO: Crear evento de notificación para parking completo
                 }

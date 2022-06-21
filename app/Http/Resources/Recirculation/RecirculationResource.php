@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Recirculation;
 
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RecirculationResource extends JsonResource
@@ -17,6 +18,7 @@ class RecirculationResource extends JsonResource
     {
         return [
             "id" => $this->id,
+            "username" => $this->user->username,
             "message" => $this->message,
             "success" => (bool) $this->success,
             "back" => (bool) $this->back,

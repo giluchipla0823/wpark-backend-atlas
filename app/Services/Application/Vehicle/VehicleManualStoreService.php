@@ -68,7 +68,7 @@ class VehicleManualStoreService
 
             $this->createStateAndStage($vehicle);
 
-            $this->createMovement($vehicle, $parking, $params['created_from']);
+            $this->createInitialMovement($vehicle, $parking, $params['created_from']);
 
             $parking->reserve();
         });
@@ -107,7 +107,7 @@ class VehicleManualStoreService
      * @param string $createdFrom
      * @return void
      */
-    private function createMovement(Vehicle $vehicle, Parking $parking, string $createdFrom): void
+    private function createInitialMovement(Vehicle $vehicle, Parking $parking, string $createdFrom): void
     {
         $this->movementRepository->create([
             "vehicle_id" => $vehicle->id,
