@@ -155,41 +155,29 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         $query = $this->model->query()
             ->select([
                 "vehicles.*",
-                // "vehicles.id AS vehicle_id"
             ])
             ->with(['lastMovement', 'lastMovement.destinationPosition'])
             ->join(DB::raw("
-                    (
-                        SELECT
-                            m.id AS movement_id,
-                            m.vehicle_id AS movement_vehicle_id,
-                            m.destination_position_id,
-                            m.destination_position_type
-                        FROM
-                            movements AS m
-                        WHERE
-                            m.destination_position_type = '". $slotModel ."'
-                    ) AS movements
-            "), "vehicles.id", "=", DB::raw("
-                movements.movement_vehicle_id AND movements.movement_id = (
+                (
                     SELECT
-                            lmov.id
-                        FROM
-                            movements AS lmov
-                        WHERE
-                            lmov.vehicle_id = vehicles.id AND lmov.confirmed = 1
-                        ORDER BY
-                            lmov.id DESC
-                        LIMIT 1
-                )
-            "))
+                        MAX(id) AS id,
+                        vehicle_id
+                    FROM
+                        movements
+                    WHERE
+			            destination_position_type = '{$slotModel}'
+                    GROUP BY vehicle_id
+                    ORDER BY 1 desc
+                ) as last_movement
+            "), "vehicles.id", "=", "last_movement.vehicle_id")
+            ->join("movements", "last_movement.id", "=", "movements.id")
             ->join("slots", "movements.destination_position_id", "=", "slots.id")
             ->where([
+                ["movements.confirmed", "=", 1],
                 ["slots.row_id", "=",  $row->id],
                 ["slots.fill", "=",  1],
             ])
-            // ->exclude(['slots.id'])
-            ->orderBy("movements.destination_position_id", "ASC");
+            ->orderBy("slots.slot_number", "ASC");
 
         $query->with(QueryParamsHelper::getIncludesParamFromRequest());
 
