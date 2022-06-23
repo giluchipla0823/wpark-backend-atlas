@@ -63,9 +63,5 @@ class ParkingSeeder extends Seeder
         ];
 
         Parking::insert($parkings);
-
-        $path = public_path('sql/parking_rows_slots.sql');
-        $sql = file_get_contents($path);
-        DB::unprepared($sql);
     }
 }

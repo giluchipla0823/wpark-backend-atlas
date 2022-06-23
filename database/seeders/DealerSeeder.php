@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Dealer;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DealerSeeder extends Seeder
 {
@@ -15,29 +15,13 @@ class DealerSeeder extends Seeder
      */
     public function run()
     {
-        $dealers = [
-            [
-                'name' => 'GARATGE CENTRAL, S.A.',
-                'code' => '10010',
-                'zip_code' => '17600',
-                'city' => 'Figueres',
-                'street' => 'SANT PAU DE LA CALÇADA,9',
-                'country' => 'España',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'name' => 'TARRACO CENTER, S.A.',
-                'code' => '10450',
-                'zip_code' => '43006',
-                'city' => 'Tarragona',
-                'street' => 'C/PLATA,2 (P.I. RIU CLAR)',
-                'country' => 'España',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
-        ];
+        $path = public_path('sql/dealers_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
 
-        Dealer::insert($dealers);
+        DB::table('dealers')->update([
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
     }
 }

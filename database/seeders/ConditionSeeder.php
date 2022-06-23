@@ -83,6 +83,24 @@ class ConditionSeeder extends Seeder
                 'required' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'DISPATCH_STOP',
+                'description' => 'Dispatch stop',
+                'model' => null,
+                'model_condition_id' => 1,
+                'required' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'NO_RELEASE',
+                'description' => 'No Release',
+                'model' => null,
+                'model_condition_id' => 1,
+                'required' => 0,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]
 
         ];

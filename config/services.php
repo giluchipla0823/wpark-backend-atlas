@@ -50,7 +50,7 @@ return [
         ],
         'recirculations' => [
             'url' => '',
-            "wsdl" => env('WSDL_FORD_URL'),
+            "wsdl" => 'http://vacdm.valencia.ford.com:8080/dcdm-service-simpleservice/vehicleservice/VehicleService.wsdl',
         ],
     ]
 

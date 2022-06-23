@@ -82,6 +82,14 @@ class RecirculationService
 
             $response = XmlHelper::execCurl($this->wsdl, $xml_entry);
 
+            if (!$response) {
+                // El servicio no ha devuelto una respuesta o no se encuentra disponible
+                throw new BadRequestException("ERROR PDA", [
+                    'parameters' => $xml_entry,
+                    'response' => null,
+                ]);
+            }
+
             $response_xml = $response;
 
             $array = XmlHelper::parseToArray($response);

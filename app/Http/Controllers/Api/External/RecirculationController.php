@@ -29,6 +29,13 @@ class RecirculationController extends ApiController
      *      description="SOAP FORD",
      *      security={{"sanctum": {}}},
      *      operationId="recirculationsGet",
+     *      @OA\Parameter(
+     *         name="vin",
+     *         in="path",
+     *         description="Vin de vehículo",
+     *         example="WF0FXXWPMFNJ49207",
+     *         required=true
+     *      ),
      *      @OA\Response(response=200, description="Data FORD"),
      *      @OA\Response(response=400, ref="#/components/responses/BadRequest"),
      *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")

@@ -17,31 +17,40 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
+        // Compound::inRandomOrder()->first()->id
+
         $areas = [
             [
                 'name' => 'FACTORY',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
+                'compound_id' => 1,
                 'zone_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'name' => 'PRESORTING',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
+                'compound_id' => 1,
                 'zone_id' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'name' => 'CAMPA GENERAL',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
+                'compound_id' => 1,
                 'zone_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'name' => 'BUFFER',
-                'compound_id' => Compound::inRandomOrder()->first()->id,
+                'compound_id' => 1,
+                'zone_id' => 6,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'OVERFLOW 01',
+                'compound_id' => 1,
                 'zone_id' => 6,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

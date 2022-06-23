@@ -17,7 +17,7 @@ class CreateRoutes extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->id()->comment('Identificador único de la ruta');
             $table->string('name', 100)->comment('Nombre de la ruta');
-            $table->string('cdm_code', 5)->unique()->comment('Código de la ruta');
+            $table->string('cdm_code', 5)->comment('Código de la ruta');
             $table->foreignId('route_type_id')->comment('Indica el tipo de ruta')->constrained('route_types');
             $table->foreignId('carrier_id')->comment('Indica la empresa de transporte que hace la ruta')->constrained('carriers');
             $table->foreignId('destination_code_id')->comment('Indica el código de destino de la ruta')->constrained('destination_codes');

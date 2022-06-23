@@ -225,6 +225,15 @@
                 "summary": "Recirculations Get",
                 "description": "SOAP FORD",
                 "operationId": "recirculationsGet",
+                "parameters": [
+                    {
+                        "name": "vin",
+                        "in": "path",
+                        "description": "Vin de vehículo",
+                        "required": true,
+                        "example": "WF0FXXWPMFNJ49207"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Data FORD"
@@ -7393,38 +7402,6 @@
                 ]
             }
         },
-        "/api/v1/vehicles/{vehicle}/detail": {
-            "get": {
-                "tags": [
-                    "Vehicles"
-                ],
-                "summary": "Show Vehicle info Details",
-                "description": "Show Vehicle info Details",
-                "operationId": "infoVehicle",
-                "responses": {
-                    "200": {
-                        "description": "Show Vehicle info Details"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/NotFound"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/Unauthorized"
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/Forbidden"
-                    },
-                    "500": {
-                        "$ref": "#/components/responses/InternalServerError"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/v1/vehicles/create-manual": {
             "post": {
                 "tags": [
@@ -8242,17 +8219,17 @@
                         "readOnly": "true",
                         "example": "1"
                     },
-                    "name": {
-                        "description": "Nombre del distribuidor",
-                        "type": "string",
-                        "maxLength": 255,
-                        "example": "MOTOREBRE  S.A."
-                    },
                     "code": {
                         "description": "Código del distribuidor",
                         "type": "string",
                         "maxLength": 255,
                         "example": "1045V"
+                    },
+                    "name": {
+                        "description": "Nombre del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "MOTOREBRE  S.A."
                     },
                     "zip_code": {
                         "description": "Código postal del distribuidor",
@@ -8277,6 +8254,36 @@
                         "type": "string",
                         "maxLength": 255,
                         "example": "España"
+                    },
+                    "contact_name": {
+                        "description": "Nombre de contacto del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Xavi"
+                    },
+                    "contact_email": {
+                        "description": "Email de contacto del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "gerencia@garatgecentral.com"
+                    },
+                    "contact_phone_number": {
+                        "description": "Número de teléfono de contacto del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "620812278"
+                    },
+                    "contact_description": {
+                        "description": "Información adicional de contacto del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Xavi. DE 9-12/16-19"
+                    },
+                    "district_code": {
+                        "description": "Código de distrito del distribuidor",
+                        "type": "string",
+                        "maxLength": 255,
+                        "example": "Lerida"
                     },
                     "deleted_at": {
                         "description": "Fecha y hora del borrado temporal",
@@ -8923,12 +8930,6 @@
                     },
                     "device_id": {
                         "description": "Indica el dispositivo que ha usado el usuario para realizar el movimiento del vehículo",
-                        "type": "integer",
-                        "maxLength": 20,
-                        "example": "1"
-                    },
-                    "compound_id": {
-                        "description": "Indica la campa donde se está realizando el movimiento del vehículo",
                         "type": "integer",
                         "maxLength": 20,
                         "example": "1"

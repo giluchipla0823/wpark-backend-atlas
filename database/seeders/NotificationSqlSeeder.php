@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CountrySeeder extends Seeder
+class NotificationSqlSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +15,8 @@ class CountrySeeder extends Seeder
      */
     public function run()
     {
-        $path = public_path('sql/countries_data.sql');
+        $path = public_path('sql/notifications_data.sql');
         $sql = file_get_contents($path);
         DB::unprepared($sql);
-
-        DB::table('countries')->update([
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
     }
 }

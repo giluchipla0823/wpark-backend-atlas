@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Recirculation;
 
-use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RecirculationResource extends JsonResource
