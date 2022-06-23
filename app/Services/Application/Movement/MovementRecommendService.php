@@ -215,7 +215,8 @@ class MovementRecommendService
         if ($rowType) {
 
             // De la fila vemos cuantos slots están ocupados y elegimos el siguiente
-            $recommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
+            // $recommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
+            $recommend = Slot::where('row_id', $rowRecommend->id)->where('fill', 0)->first();
 
             // Para obtener los datos del vehículo en la última posición de la fila
             $vehiclesInRow = $this->vehicleRepository->findAllByRow($rowRecommend);

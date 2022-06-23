@@ -2,15 +2,18 @@
 
 namespace App\Repositories\Row;
 
+use App\Helpers\QueryHelper;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Block;
 use App\Models\Parking;
 use App\Models\ParkingType;
 use App\Models\Row;
+use App\Models\Slot;
 use App\Repositories\BaseRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -97,12 +100,46 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
      */
     public function findAllBySpykesParking(Parking $parking): Collection
     {
+//        return $this->model->query()
+//            ->where('parking_id', $parking->id)
+//            ->with(
+//                [
+//                    'slots' => function($q) {
+//                        $q->where('fill', 1);
+//                    },
+//                    'slots.destinationMovement' => function($q) {
+//                        $q->where('confirmed', 1);
+//                    },
+//                    'slots.destinationMovement.vehicle'
+//                ]
+//            )
+//            ->get();
+
+
         return $this->model->query()
             ->where('parking_id', $parking->id)
-            ->with(['slots.destinationMovement.vehicle' , 'slots.destinationMovement' => function($q){
-                $q->where('confirmed', 1);
-            }])
+            ->with(
+                [
+                    'slots',
+                    'slots.destinationMovement',
+                    'slots.destinationMovement.vehicle'
+                ]
+            )
             ->get();
+
+//        $slotModel = QueryHelper::escapeNamespaceClass(Slot::class) . 'xxx';
+//
+//        return $this->model->query()
+//            ->select([
+//                "rows.*"
+//            ])
+//            ->where('parking_id', $parking->id)
+//            ->with(['parking', 'slots', 'slots.destinationMovement', 'slots.destinationMovement.vehicle'])
+//            ->join("slots", "rows.id", "=", "slots.row_id")
+//            ->leftJoin("movements", "slots.id", "=", DB::raw("
+//                (movements.destination_position_id AND movements.destination_position_type='{$slotModel}')
+//            "))
+//            ->get();
     }
 
     /**

@@ -2,32 +2,27 @@
 
 namespace App\Http\Resources\Row;
 
-use App\Helpers\AppHelper;
-use App\Http\Resources\Block\BlockResource;
-use App\Http\Resources\Brand\BrandResource;
 use App\Http\Resources\Color\ColorResource;
 use App\Http\Resources\Design\DesignResource;
-use App\Http\Resources\Parking\ParkingResource;
-use App\Http\Resources\Slot\SlotResource;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RowEspigaResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param Request $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-
         return [
             'id' => $this->id,
             'row_number' => $this->row_number,
             'row_name' => $this->row_name,
             'parking' => $this->getParking(),
-            // 'block' => $this->getBlock(),
             'category' => $this->category,
             'capacity' => $this->capacity,
             'fill' => $this->fill,
@@ -38,13 +33,16 @@ class RowEspigaResource extends JsonResource
             'comments' => $this->comments,
             'active' => $this->active,
             'slot' => $this->getSlot()
-
         ];
     }
 
-    private function getParking()
+    /**
+     * @return array
+     */
+    private function getParking(): array
     {
         $parking = $this->parking;
+
         return [
             'id' => $parking->id,
             'name' => $parking->name,
@@ -61,21 +59,19 @@ class RowEspigaResource extends JsonResource
         ];
     }
 
-    private function getBlock()
-    {
-        $block = $this->block;
-        return [
-            'id' => $block->id,
-            'name' => $block->name,
-            'is_presorting' => $block->is_presorting,
-            'presorting_default' => $block->presorting_default,
-            'active' => $block->active
-        ];
-    }
-
+    /**
+     * @return mixed
+     */
     private function getSlot()
     {
-       return $this->slots->map(function($item, $key){
+       return $this->slots->map(function($item) {
+
+            $vehicle = null;
+
+            if ($item->fill && $item->destinationMovement && $item->destinationMovement->confirmed === 1) {
+                $vehicle = $this->getVehicle($item->destinationMovement->vehicle);
+            }
+
             return [
                 'id' => $item->id,
                 'slot_number' => $item->slot_number,
@@ -84,37 +80,16 @@ class RowEspigaResource extends JsonResource
                 'capacitymm' => $item->capacitymm,
                 'fillmm' => $item->fillmm,
                 'comments' => $item->comments,
-                'vehicle' => $item->destinationMovement ? $this->getVehicle($item->destinationMovement->vehicle) : null
-                // 'movement' => $this->getDestinationMovement($item->destinationMovement)
+                'vehicle' => $vehicle
             ];
         })->first();
     }
 
-    private function getDestinationMovement($movement)
-    {
-        if($movement){
-            return [
-                'id' => $movement->id,
-                'vehicle_id' => $movement->vehicle_id,
-                'user_id' => $movement->user_id,
-                'origin_position_type' => $movement->origin_position_type,
-                'origin_position_id' => $movement->origin_position_id,
-                'destination_position_type' => $movement->destination_position_type,
-                'destination_position_id' => $movement->destination_position_id,
-                'category' => $movement->category,
-                'confirmed' => $movement->confirmed,
-                'canceled' => $movement->canceled,
-                'manual' => $movement->manual,
-                'dt_start' => $movement->dt_start,
-                'dt_end' => $movement->dt_end,
-                'comments' => $movement->comments,
-                'vehicle' => $this->getVehicle($movement->vehicle)
-            ];
-        }
-            return null;
-    }
-
-    private function getVehicle($vehicle)
+    /**
+     * @param $vehicle
+     * @return array|null
+     */
+    private function getVehicle($vehicle): ?array
     {
         if($vehicle){
             return [

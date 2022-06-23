@@ -173,10 +173,26 @@ class MovementService
                     /* @var Slot $slot */
                     $slot = $movement->originPosition;
                     $slot->release($movement->vehicle->design->length);
+
+                    $row = $slot->row;
+
+                    if (($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM) {
+                        $row->full = 0;
+                        $row->save();
+                    }
+
+                    $parking = $row->parking;
                 } else {
                     /* @var Parking $parking */
                     $parking = $movement->originPosition;
                     $parking->release();
+                }
+
+                $parkingCapacity = $parking->capacity - $parking->fill;
+
+                if ($parkingCapacity > 0){
+                    $parking->full = 0;
+                    $parking->save();
                 }
             }
 
