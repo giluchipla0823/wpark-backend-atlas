@@ -40,7 +40,7 @@ class SlotResource extends JsonResource
 
 
     private function includeLastMovement() {
-        if (!$this->lastDestinationMovement) {
+        if (!$this->lastDestinationMovement || $this->lastDestinationMovement->canceled) {
             return null;
         }
 
