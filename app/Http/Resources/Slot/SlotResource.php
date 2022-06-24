@@ -28,6 +28,7 @@ class SlotResource extends JsonResource
             "capacitymm" => $this->capacitymm,
             "fillmm" => $this->fillmm,
             "comments" => $this->comments,
+            'last_movement' => $this->includeLastMovement()
         ];
 
         if (in_array("row", $relationships)) {
@@ -35,5 +36,17 @@ class SlotResource extends JsonResource
         }
 
         return $response;
+    }
+
+
+    private function includeLastMovement() {
+        if (!$this->lastDestinationMovement) {
+            return null;
+        }
+
+        $this->lastDestinationMovement->makeHidden('updated_at');
+        $this->lastDestinationMovement->makeHidden('deleted_at');
+
+        return $this->lastDestinationMovement;
     }
 }

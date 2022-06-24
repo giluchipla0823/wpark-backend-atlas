@@ -324,6 +324,15 @@ class MovementService
                     ), $previousMovementId);
                 }
 
+//                $canCancelMovement = true;
+//
+//                if (
+//                    $previousMovement->destination_position_type ===  $params['destination_position_type'] &&
+//                    $previousMovement->destination_position_id === $params['destination_position_id']
+//                ) {
+//                    $canCancelMovement = false;
+//                }
+
                 $this->cancelMovement(['comments' => "Cancelado por movimiento manual"], $previousMovement);
             }
 

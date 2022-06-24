@@ -96,8 +96,10 @@ class Slot extends Model
 
     public function lastDestinationMovement()
     {
-        return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc')->first();
+        // return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc')->first();
         // return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc');
+
+        return $this->hasOne(Movement::class, 'destination_position_id')->where('destination_position_type', Slot::class)->orderBy('created_at', 'desc');
     }
 
     /**
