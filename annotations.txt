@@ -3,6 +3,8 @@ php artisan l5-swagger:generate
 
 ATL-369-changes-services-vehicles-datatables
 
+"php": "^7.3|^8.0",
+
 # Obtener información actual del token
 $request->user()->currentAccessToken();
 
