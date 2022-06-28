@@ -29,7 +29,8 @@ class MovementRecommendResource extends JsonResource
             "can_reload" => true,
             "parking" => $this->includeParking($type),
             "row" => $this->includeRow($type),
-            "slot" => $this->includeSlot($type)
+            "slot" => $this->includeSlot($type),
+            "real_slot" => $this->includeRealSlot($type),
         ];
     }
 
@@ -100,6 +101,26 @@ class MovementRecommendResource extends JsonResource
                 "id" => $this["position"]->id,
                 "slot_number" => $this["position"]->slot_number
             ];
+    }
+
+    /**
+     * @param string $type
+     * @return array|null
+     */
+    private function includeRealSlot(string $type): ?array
+    {
+        if ($type === Parking::class) {
+            return null;
+        }
+
+        $row = $this["position"]->row;
+
+        $slot = $row->slots->where('real_fill', 0)->first();
+
+        return $slot ? [
+                "id" => $slot->id,
+                "slot_number" => $slot->slot_number
+            ] : null;
     }
 
     /**

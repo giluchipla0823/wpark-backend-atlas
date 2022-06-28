@@ -429,15 +429,15 @@ class RowRellocateService
                 continue;
             }
 
-            /* @var Movement $lastConfirmedmovement */
-            $lastConfirmedmovement = Movement::where([
+            /* @var Movement $lastMovement */
+            $lastMovement = Movement::where([
                 ["destination_position_type", "=", Slot::class],
                 ["destination_position_id", "=", $slot->id],
-                ["confirmed", "=", 1]
+                ["canceled", "=", 0]
             ])->latest()->first();
 
-            if ($lastConfirmedmovement) {
-                $vehicle = $lastConfirmedmovement->vehicle;
+            if ($lastMovement && $lastMovement->confirmed === 1) {
+                $vehicle = $lastMovement->vehicle;
 
                 if (!in_array($vehicle->id, $vehiclesIds)) {
                     $checkVehiclesToBuffer[] = $vehicle->toArray();

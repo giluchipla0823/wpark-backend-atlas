@@ -2,32 +2,50 @@
 
 namespace App\Services\External\FreightVerify;
 
-enum FreightVerifyMilestone
+class FreightVerifyMilestone
 {
-    case VEHICLE_RECEIVED;
-    case INSPECTION_COMPLETE;
-    case RELEASED_TO_CARRIER;
-    case COMPOUND_EXIT;
+    public const VEHICLE_RECEIVED = 1;
+    public const INSPECTION_COMPLETE = 2;
+    public const RELEASED_TO_CARRIER = 3;
+    public const COMPOUND_EXIT = 4;
+
+    private $code;
+
+    public function __construct(int $code)
+    {
+        $this->code = $code;
+    }
+
+    public function getName(): string
+    {
+        return match($this->code)
+        {
+            self::VEHICLE_RECEIVED => 'Vehicle Received',
+            self::INSPECTION_COMPLETE => 'Inspection Complete',
+            self::RELEASED_TO_CARRIER => 'Release to carrier',
+            self::COMPOUND_EXIT => 'Compound Exit',
+        };
+    }
 
     public function getCode(): string
     {
-      return match($this)
+      return match($this->code)
       {
-          FreightVerifyMilestone::VEHICLE_RECEIVED => 'R1',
-          FreightVerifyMilestone::INSPECTION_COMPLETE => 'XB',
-          FreightVerifyMilestone::RELEASED_TO_CARRIER => 'J1',
-          FreightVerifyMilestone::COMPOUND_EXIT => 'OA',
+          self::VEHICLE_RECEIVED => 'R1',
+          self::INSPECTION_COMPLETE => 'XB',
+          self::RELEASED_TO_CARRIER => 'J1',
+          self::COMPOUND_EXIT => 'OA',
       };
     }
 
     public function getVmacsCode(): string
     {
-      return match($this)
+      return match($this->code)
       {
-          FreightVerifyMilestone::VEHICLE_RECEIVED => 711,
-          FreightVerifyMilestone::INSPECTION_COMPLETE => 810,
-          FreightVerifyMilestone::RELEASED_TO_CARRIER => 805,
-          FreightVerifyMilestone::COMPOUND_EXIT => 721,
+          self::VEHICLE_RECEIVED => 711,
+          self::INSPECTION_COMPLETE => 810,
+          self::RELEASED_TO_CARRIER => 805,
+          self::COMPOUND_EXIT => 721,
       };
     }
 }

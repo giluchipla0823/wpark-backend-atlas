@@ -29,7 +29,8 @@ class CreateVehicles extends Migration
             $table->string('eoc')->nullable()->unique()->comment('Identificador único de ford');
             $table->foreignId('last_rule_id')->nullable()->comment('Indica la última regla con mayor prioridad asociada al vehículo')->constrained('rules');
             $table->foreignId('shipping_rule_id')->nullable()->comment('Indica la regla de código de destino asociada al vehículo')->constrained('rules');
-            $table->string('info', 100)->nullable()->default('NULL')->comment('Información adicional del vehículo');
+            $table->string('info', 100)->nullable()->comment('Información adicional del vehículo');
+            $table->boolean('custom_documents')->default(0)->comment('Si el vehículo requiere revisión de documentos aduaneros.');
             $table->timestamps();
             $table->softDeletes();
         });

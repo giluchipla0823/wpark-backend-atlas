@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\v1\Load\LoadVehicleController;
 use App\Http\Controllers\Api\v1\Movement\MovementController;
 use App\Http\Controllers\Api\v1\Movement\MovementManualController;
 use App\Http\Controllers\Api\v1\Movement\MovementRecommendController;
+use App\Http\Controllers\Api\v1\Movement\MovementRectificationController;
 use App\Http\Controllers\Api\v1\Notification\NotificationController;
 use App\Http\Controllers\Api\v1\Page\PageController;
 use App\Http\Controllers\Api\v1\Parking\ParkingController;
@@ -76,6 +77,7 @@ Route::get('/environment', function () {
 /* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 }); */
+Route::get('/dom-pdf', [TestController::class, 'domPdf']);
 Route::get('/testing', [TestController::class, 'test']);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
@@ -251,6 +253,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
 
     // Loads
     Route::get('/loads', [LoadController::class, 'index'])->name('loads.index');
+    Route::get('/loads/{load}/download-albaran', [LoadController::class, 'downloadAlbaran'])->name('loads.download-albaran');
     Route::post('/loads/datatables', [LoadController::class, 'datatables'])->name('loads.datatables');
     Route::post('/loads/{load}/vehicles/datatables', [LoadVehicleController::class, 'datatables'])->name('loads.vehicles.datatables');
     Route::patch('/loads/{load}/vehicles/{vehicle}/unlink', [LoadVehicleController::class, 'unlinkVehicle'])->name('loads.vehicles.unlink');
@@ -259,6 +262,7 @@ Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
     Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
 
     // Movements
+    Route::post('movements/{movement}/rectification', [MovementRectificationController::class, 'update'])->name('movements.rectification');
     Route::post('movements/reload', [MovementController::class, 'reload'])->name('movements.reload');
     Route::post('movements/manual', [MovementManualController::class, 'manual'])->name('movements.manual');
     Route::post('movements/manual/filtered-positions', [MovementManualController::class, 'filteredPositions'])->name('movements.filtered-positions');

@@ -22,12 +22,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Transport
  *
  */
-
 class Transport extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public const FACTORY = 1;
     public const TRANSPORT_FACTORY_ID = 1;
     public const TRANSPORT_TRAIN_ID = 2;
     public const TRANSPORT_TRUCK_ID = 3;
@@ -52,6 +50,7 @@ class Transport extends Model
      */
     public static function getFreightVerifyType(string $transportName) {
         return match(strtoupper($transportName)) {
+            'FACTORY' => '01',
             'TRUCK' => '01',
             'RAIL' => '02',
             'SHIP' => '03',

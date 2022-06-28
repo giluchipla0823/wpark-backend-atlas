@@ -104,7 +104,7 @@ class Vehicle extends Model
         return $this->belongsTo(Route::class, 'route_id');
     }
 
-    public function dealers()
+    public function dealer()
     {
         return $this->belongsTo(Dealer::class, 'dealer_id');
     }
@@ -160,7 +160,46 @@ class Vehicle extends Model
 
     public function lastMovement()
     {
-        return $this->hasOne(Movement::class, 'vehicle_id')->where('confirmed', 1)->orderBy('created_at', 'desc')->latest();
+        return $this->hasOne(Movement::class, 'vehicle_id')
+                    ->orderBy('created_at', 'desc')
+                    ->latest();
+    }
+
+    public function lastConfirmedMovement()
+    {
+        return $this->hasOne(Movement::class, 'vehicle_id')
+                    ->where('confirmed', 1)
+                    ->orderBy('created_at', 'desc')
+                    ->latest();
+    }
+
+    public function lastPendingMovement()
+    {
+        return $this->hasOne(Movement::class, 'vehicle_id')
+            ->where([
+                ['canceled', "=", 0],
+                ['confirmed', "=", 0],
+            ])
+            ->orderBy('created_at', 'desc')
+            ->latest();
+    }
+
+    /**
+     * ¿Vehículo en movimiento?
+     *
+     * @return bool
+     */
+    public function inMovement(): bool
+    {
+        return $this->lastMovement->confirmed === 0 &&  $this->lastMovement->canceled === 0;
+    }
+
+    public function lastCanceledMovement()
+    {
+        return $this->hasOne(Movement::class, 'vehicle_id')
+            ->where('canceled', 1)
+            ->orderBy('created_at', 'desc')
+            ->latest();
     }
 
     public function stages()
@@ -170,7 +209,7 @@ class Vehicle extends Model
 
     public function getParking(): Parking {
         // Parking || Slot || Row
-        $ubication = $this->lastMovement->destinationPosition;
+        $ubication = $this->lastConfirmedMovement->destinationPosition;
         $ubicationClass = get_class($ubication);
         if ($ubicationClass === Parking::class) {
             return $ubication;
@@ -214,7 +253,8 @@ class Vehicle extends Model
 
     public function transport()
     {
-        return $this->belongsTo(Transport::class, 'transport_id');
+        // return $this->belongsTo(Transport::class, 'transport_id');
+        return $this->belongsTo(Transport::class, 'entry_transport_id');
     }
 
     // LISTO para gate release WF05XXWPG5NJ49327

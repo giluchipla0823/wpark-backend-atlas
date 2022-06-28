@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class VehicleService
@@ -121,15 +122,6 @@ class VehicleService
         return RowVehicleResource::collection($results)->collection;
     }
 
-//    /**
-//     * @param Vehicle $vehicle
-//     * @return InfoVehicleResource
-//     */
-//    public function detail(Vehicle $vehicle): InfoVehicleResource
-//    {
-//        return new InfoVehicleResource($vehicle);
-//    }
-
     /**
      * @param State $state
      * @return Collection
@@ -179,5 +171,41 @@ class VehicleService
         }
 
         return new VehicleShowResource($vehicle);
+    }
+
+
+    public function massiveChangeData(array $params)
+    {
+        $vins = $params['vins'];
+        $option = $params['option_change_data'];
+        $destinationCodeId = $params['destination_code'];
+        $info = $params['info'];
+
+        $vehicles = Vehicle::whereIn('vin', $vins)->get();
+
+        foreach ($vehicles as $vehicle) {
+
+            DB::beginTransaction();
+
+            try {
+                if ($option === 1) { // destination code
+                    /* @var VehicleMovementsService $vehicleMovementService */
+                    $vehicleMovementService = app()->make(VehicleMovementsService::class);
+
+                    $vehicle->destination_code_id = $destinationCodeId;
+                    $vehicle->save();
+
+                    $vehicleMovementService->vehicleMatchRules($vehicle);
+                } else { // info
+
+                    $vehicle->info = $info;
+                    $vehicle->save();
+                }
+
+                DB::commit();
+            } catch (Exception $exc) {
+                DB::rollBack();
+            }
+        }
     }
 }

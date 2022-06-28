@@ -11,8 +11,8 @@ class VehicleDatatableResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param $request
+     * @return array
      */
     public function toArray($request)
     {
@@ -20,6 +20,7 @@ class VehicleDatatableResource extends JsonResource
             "id" => $this->id,
             "vin" => $this->vin,
             "vin_short" => $this->vin_short,
+            "info" => $this->info,
             "color" => [
                 "id" => $this->color_id,
                 "name" => $this->color_name,

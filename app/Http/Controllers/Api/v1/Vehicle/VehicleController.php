@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\Vehicle;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleDatatablesRequest;
+use App\Http\Requests\Vehicle\VehicleMassiveChangeDataRequest;
 use App\Models\Vehicle;
 use App\Services\Application\Vehicle\VehicleService;
 use Exception;
@@ -66,7 +67,7 @@ class VehicleController extends ApiController
      *         name="includes",
      *         in="query",
      *         description="Añadir modelo, color, código de destino, último estado, última etapa, último movimiento",
-     *         example="design,color,destinationCode,latestState,latestStage,lastMovement",
+     *         example="design,color,destinationCode,latestState,latestStage,lastConfirmedMovement",
      *         required=false
      *      ),
      *      @OA\Response(response=200, description="Vehicle list Successfully"),
@@ -202,45 +203,14 @@ class VehicleController extends ApiController
         return $this->showMessage('Vehicle restored successfully.', Response::HTTP_NO_CONTENT);
     }
 
-//    /**
-//     * @OA\GET(
-//     *     path="/api/v1/vehicles/{vehicle}/detail",
-//     *     tags={"Vehicles"},
-//     *     summary="Show Vehicle info Details",
-//     *     description="Show Vehicle info Details",
-//     *     security={{"sanctum": {}}},
-//     *     operationId="infoVehicle",
-//     *     @OA\Response(response=200, description="Show Vehicle info Details"),
-//     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-//     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-//     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-//     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-//     * )
-//     * Display the specified resource.
-//     *
-//     * @param Vehicle $vehicle
-//     * @return JsonResponse
-//     */
-//    public function detail(Vehicle $vehicle): JsonResponse
-//    {
-//        $vehicle = $this->vehicleService->detail($vehicle);
-//        return $this->successResponse($vehicle);
-//    }
-
     /**
+     * @param VehicleMassiveChangeDataRequest $request
      * @return JsonResponse
      */
-    public function massiveChangeData(): JsonResponse
+    public function massiveChangeData(VehicleMassiveChangeDataRequest $request): JsonResponse
     {
-        return $this->showMessage("Cambios realizados.");
-    }
+        $this->vehicleService->massiveChangeData($request->all());
 
-    /**
-     * @param Vehicle $vehicle
-     * @return JsonResponse
-     */
-    public function changePosition(Vehicle $vehicle): JsonResponse
-    {
         return $this->showMessage("Cambios realizados.");
     }
 

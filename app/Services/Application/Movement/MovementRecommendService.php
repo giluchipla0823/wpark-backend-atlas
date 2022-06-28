@@ -216,6 +216,7 @@ class MovementRecommendService
 
             // De la fila vemos cuantos slots están ocupados y elegimos el siguiente
             // $recommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
+            // $recommend = Slot::where('row_id', $rowRecommend->id)->where('fill', 0)->first();
             $recommend = Slot::where('row_id', $rowRecommend->id)->where('fill', 0)->first();
 
             // Para obtener los datos del vehículo en la última posición de la fila
@@ -240,8 +241,8 @@ class MovementRecommendService
         $movement = $this->movementRepository->create([
             'vehicle_id' => $vehicle->id,
             'user_id' => Auth::user()->id,
-            'origin_position_type' => $vehicle->lastMovement->destination_position_type,
-            'origin_position_id' => $vehicle->lastMovement->destination_position_id,
+            'origin_position_type' => $vehicle->lastConfirmedMovement->destination_position_type,
+            'origin_position_id' => $vehicle->lastConfirmedMovement->destination_position_id,
             'destination_position_type' => Slot::class,
             'destination_position_id' => $positionRecommend['position']->id,
             'category' => $rule->name,

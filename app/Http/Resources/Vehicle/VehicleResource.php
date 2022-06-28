@@ -49,8 +49,8 @@ class VehicleResource extends JsonResource
             $response['last_stage'] = StageResource::collection($this->latestStage)->collection->first();
         }
 
-        if (in_array('lastMovement', $relationships)) {
-            $response['last_movement'] = $this->lastMovement;
+        if (in_array('lastConfirmedMovement', $relationships)) {
+            $response['last_confirmed_movement'] = $this->lastConfirmedMovement;
         }
 
         return $response;

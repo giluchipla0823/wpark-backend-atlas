@@ -29,6 +29,14 @@ class Condition extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public static $priorityRuleConditions = [
+        'vin' => 1,
+        'stage' => 2,
+        'design' => 3,
+        'destination_code' => 4,
+        'color' => 5,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

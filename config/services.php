@@ -32,24 +32,21 @@ return [
         // 'local' => 'localhost',
         'local' => '127.0.0.1:8000',
     ],
-
-    'freightVerify' => [
-        'url' => env('FREIGHT_VERIFY_URL', 'https://test.api.freightverify.com'),
-        'user' => env('FREIGHT_VERIFY_USER'),
-        'pass' => env('FREIGHT_VERIFY_PASS')
-    ],
-
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],
+    'freight_verify' => [
+        'url' => 'https://test.api.freightverify.com',
+        'user' => "gnaha@freightverify-api.com",
+        'password' => "C5=xLnJ%"
     ],
     'ford_services' => [
         'st8' => [
             'url' => 'http://vacdm.valencia.ford.com:8080',
         ],
         'recirculations' => [
-            'url' => '',
             "wsdl" => 'http://vacdm.valencia.ford.com:8080/dcdm-service-simpleservice/vehicleservice/VehicleService.wsdl',
         ],
     ]

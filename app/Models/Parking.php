@@ -96,11 +96,11 @@ class Parking extends Model
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getFillCalculateAttribute(): float
+    public function getFillCalculateAttribute(): int
     {
-        return $this->rows->sum("fill");
+        return $this->rows->sum("real_fill");
     }
 
     /**

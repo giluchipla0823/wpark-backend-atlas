@@ -156,7 +156,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             ->select([
                 "vehicles.*",
             ])
-            ->with(['lastMovement', 'lastMovement.destinationPosition'])
+            ->with(['lastConfirmedMovement', 'lastConfirmedMovement.destinationPosition'])
             ->join(DB::raw("
                 (
                     SELECT
@@ -165,7 +165,8 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
                     FROM
                         movements
                     WHERE
-			            destination_position_type = '{$slotModel}'
+			            destination_position_type = '{$slotModel}' and canceled = 0
+
                     GROUP BY vehicle_id
                     ORDER BY 1 desc
                 ) as last_movement

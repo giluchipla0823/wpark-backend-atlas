@@ -29,7 +29,7 @@ if(isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST']) ){
             break;
     };
 
-    $env = '.env.test';
+    // $env = '.env.test';
 
     if ($env) {
         $dotenv = Dotenv::createImmutable(base_path(), $env);

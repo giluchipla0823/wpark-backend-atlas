@@ -7232,7 +7232,7 @@
                         "in": "query",
                         "description": "Añadir modelo, color, código de destino, último estado, última etapa, último movimiento",
                         "required": false,
-                        "example": "design,color,destinationCode,latestState,latestStage,lastMovement"
+                        "example": "design,color,destinationCode,latestState,latestStage,lastConfirmedMovement"
                     }
                 ],
                 "responses": {

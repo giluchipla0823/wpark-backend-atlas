@@ -363,6 +363,7 @@ class MovementService
     {
         $params['user_id'] = Auth::user()->id;
         $params['dt_start'] = Carbon::now();
+        $forceMovement = $params['force_movement'] ?? false;
 
         $ruleVehicle = null;
 
@@ -382,7 +383,8 @@ class MovementService
             $positionDestination = Slot::where('id', $params['destination_position_id'])->first();
 
             // Añadimos la comprobación de que el slot siga vacio
-            if ($positionDestination->fill === 1) {
+            // if ($positionDestination->fill === 1) {
+            if ($positionDestination->real_fill === 1) {
                 throw new BadRequestException("La posición seleccionada no se encuentra disponible.");
             }
 
@@ -413,25 +415,27 @@ class MovementService
                 }
             }
 
-            if ($row->rule_id && $row->rule_id !== $ruleVehicle->id) {
-                throw new BadRequestException(sprintf(
-                    "El vehículo no cumple con la regla %s que tiene asignada la fila de la posición seleccionada.",
-                    $row->rule->name
-                ));
-            }
+            if (!$forceMovement) {
+                if ($row->rule_id && $row->rule_id !== $ruleVehicle->id) {
+                    throw new BadRequestException(sprintf(
+                        "El vehículo no cumple con la regla %s que tiene asignada la fila de la posición seleccionada.",
+                        $row->rule->name
+                    ));
+                }
 
-            $blocks = $ruleVehicle->blocks->pluck('id');
+                $blocks = $ruleVehicle->blocks->pluck('id');
 
-            $rowBlockValidate = Row::where('id', $row->id)
-                ->whereIn('block_id', $blocks)
-                ->orWhereNull('block_id')
-                ->exists();
+                $rowBlockValidate = Row::where('id', $row->id)
+                    ->whereIn('block_id', $blocks)
+                    ->orWhereNull('block_id')
+                    ->exists();
 
-            if (!$rowBlockValidate) {
-                if ($rowIsPresortingZone) {
-                    throw new BadRequestException("El vehículo no cumple con la regla(s) de presorting del bloque que tiene asignado la fila de la posición seleccionada.");
-                } else {
-                    throw new BadRequestException("El vehículo no cumple con la regla(s) de posición final de transporte del bloque que tiene asignado la fila de la posición seleccionada.");
+                if (!$rowBlockValidate) {
+                    if ($rowIsPresortingZone) {
+                        throw new BadRequestException("El vehículo no cumple con la regla(s) de presorting del bloque que tiene asignado la fila de la posición seleccionada.");
+                    } else {
+                        throw new BadRequestException("El vehículo no cumple con la regla(s) de posición final de transporte del bloque que tiene asignado la fila de la posición seleccionada.");
+                    }
                 }
             }
 
@@ -465,7 +469,7 @@ class MovementService
      */
     public function checkValidateVehicleCurrentPosition(Vehicle $vehicle, array $originPosition): void
     {
-        $lastConfirmedMovement = $vehicle->lastMovement;
+        $lastConfirmedMovement = $vehicle->lastConfirmedMovement;
 
         if (!$lastConfirmedMovement) {
             throw new BadRequestException("El vehículo no tiene movimientos anteriores confirmados.");

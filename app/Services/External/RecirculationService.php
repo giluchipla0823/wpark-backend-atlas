@@ -58,8 +58,8 @@ class RecirculationService
 //            }
 //        }
 
-        $originPosition = $vehicle->lastMovement && $vehicle->lastMovement->destinationPosition
-            ? $vehicle->lastMovement->destinationPosition
+        $originPosition = $vehicle->lastConfirmedMovement && $vehicle->lastConfirmedMovement->destinationPosition
+            ? $vehicle->lastConfirmedMovement->destinationPosition
             : null;
 
         if (!$originPosition) {

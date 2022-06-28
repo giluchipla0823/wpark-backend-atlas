@@ -33,6 +33,7 @@ class RowShowResource extends JsonResource
             "category" => $this->category,
             "capacity" => $this->capacity,
             "fill" => $this->fill,
+            "real_fill" => $this->real_fill,
             "fill_percentage" => $this->fill_percentage,
             "fill_type" => $this->fill_type,
             "capacitymm" => $this->capacitymm,
@@ -43,7 +44,8 @@ class RowShowResource extends JsonResource
             "active" => $this->active,
             "slots" => SlotResource::collection($this->slots),
             "is_presorting_zone" => $this->isPresortingZone(),
-            "front_vehicle" => $this->includeFrontVehicle()
+            "front_vehicle" => $this->includeFrontVehicle(),
+            "next_slot_available" => $this->includeNextSlotAvailable(),
         ];
     }
 
@@ -60,10 +62,19 @@ class RowShowResource extends JsonResource
      */
     private function includeFrontVehicle(): ?MovementVehicleRecommendResource
     {
-        $slot = $this->slots->where("fill", 1)->last();
+        $slot = $this->slots->where("real_fill", 1)->last();
 
-        return $slot && $slot->destinationMovement
-                    ? new MovementVehicleRecommendResource($slot->destinationMovement->vehicle)
+        return ($slot && $slot->lastDestinationMovement && $slot->lastDestinationMovement->confirmed === 1)
+                    ? new MovementVehicleRecommendResource($slot->lastDestinationMovement->vehicle)
                     : null;
+    }
+
+    private function includeNextSlotAvailable() {
+        $slot = $this->slots->where("real_fill", 0)->first();
+
+        return $slot ? [
+            "id" => $slot->id,
+            "slot_number" => $slot->slot_number,
+        ] : null;
     }
 }

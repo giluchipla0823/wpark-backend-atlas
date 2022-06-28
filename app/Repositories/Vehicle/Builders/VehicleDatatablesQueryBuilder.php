@@ -54,6 +54,7 @@ class VehicleDatatablesQueryBuilder
                 "vehicles.id",
                 "vehicles.vin",
                 "vehicles.vin_short",
+                "vehicles.info",
                 "colors.id AS color_id",
                 "colors.name AS color_name",
                 "designs.id AS design_id",

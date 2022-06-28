@@ -58,7 +58,7 @@ class Slot extends Model
         "updated_at",
     ];
 
-    protected $appends = ["row_name", "lp_name", "lp_code"];
+    protected $appends = ["row_name", "lp_name", "lp_code", "real_fill"];
 
     /**
      * @param $value
@@ -96,10 +96,34 @@ class Slot extends Model
 
     public function lastDestinationMovement()
     {
-        // return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc')->first();
-        // return $this->morphOne(Movement::class, Slot::class, 'destination_position_type', "destination_position_id")->orderBy('created_at', 'desc');
+        return $this->hasOne(Movement::class, 'destination_position_id')
+                    ->where('destination_position_type', Slot::class)
+                    ->orderBy('created_at', 'desc')->latest();
+    }
 
-        return $this->hasOne(Movement::class, 'destination_position_id')->where('destination_position_type', Slot::class)->orderBy('created_at', 'desc');
+    public function lastConfirmedDestinationMovement()
+    {
+        return $this->hasOne(Movement::class, 'destination_position_id')
+            ->where('destination_position_type', Slot::class)
+            ->where('confirmed', 1)
+            ->orderBy('created_at', 'desc')->latest();
+    }
+
+    public function next() {
+        return $this->query()
+                ->where('id', '>', $this->id)
+                ->where('row_id', '=', $this->row_id)
+                ->orderBy('id', 'asc')
+                ->first();
+    }
+
+    public function previous() {
+        // return User::where('id', '<', $this->id)->orderBy('id','desc')->first();
+        return $this->query()
+                    ->where('id', '<', $this->id)
+                    ->where('row_id', '=', $this->row_id)
+                    ->orderBy('id','desc')
+                    ->first();
     }
 
     /**
@@ -126,6 +150,14 @@ class Slot extends Model
     }
 
     /**
+     * @return int
+     */
+    public function getRealFillAttribute(): int
+    {
+        return (int) ($this->lastDestinationMovement && $this->lastDestinationMovement->confirmed === 1);
+    }
+
+    /**
      * Reservar slot.
      *
      * @param int $vehicleLength
@@ -148,9 +180,14 @@ class Slot extends Model
      */
     public function release(int $vehicleLength): void
     {
-        $this->fill = 0;
-        $this->fillmm = 0;
-        $this->save();
+        if ($this->fill > 1) {
+            $this->decrement("fill");
+            $this->decrement("fillmm", $vehicleLength);
+        } else {
+            $this->fill = 0;
+            $this->fillmm = 0;
+            $this->save();
+        }
 
         $row = $this->row;
         $row->decrement("fill");

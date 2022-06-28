@@ -5,6 +5,7 @@ namespace App\Http\Resources\Vehicle;
 use App\Helpers\JsonResourceHelper;
 use App\Http\Resources\Hold\HoldResource;
 use App\Http\Resources\Load\LoadShowResource;
+use App\Http\Resources\Movement\MovementShowResource;
 use App\Http\Resources\Parking\ParkingResource;
 use App\Http\Resources\Recirculation\RecirculationResource;
 use App\Http\Resources\Slot\SlotResource;
@@ -30,9 +31,9 @@ class VehicleShowResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->lastMovement) {
-            $this->lastMovement->makeHidden('originPosition');
-            $this->lastMovement->makeHidden('destinationPosition');
+        if ($this->lastConfirmedMovement) {
+            $this->lastConfirmedMovement->makeHidden('originPosition');
+            $this->lastConfirmedMovement->makeHidden('destinationPosition');
         }
 
         return [
@@ -60,7 +61,10 @@ class VehicleShowResource extends JsonResource
 
                 return [$name => $item['created_at']];
             }),
-            "last_movement" => $this->lastMovement,
+            "in_movement" => $this->inMovement(),
+            "last_movement" => new MovementShowResource($this->lastMovement),
+            // "last_confirmed_movement" => $this->lastConfirmedMovement,
+            "last_confirmed_movement" => new MovementShowResource($this->lastConfirmedMovement),
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),
             "holds" => HoldResource::collection($this->holds),
@@ -72,6 +76,14 @@ class VehicleShowResource extends JsonResource
             ],
             "last_rule_id" => $this->last_rule_id,
             "shipping_rule_id" => $this->shipping_rule_id,
+            "last_rule" => $this->lastRule ? [
+                "id" => $this->lastRule->id,
+                "name" => $this->lastRule->name,
+            ] : null,
+            "shipping_rule" => $this->shippingRule ? [
+                "id" => $this->shippingRule->id,
+                "name" => $this->shippingRule->name,
+            ] : null,
             "load" => new LoadShowResource($this->loads),
             "last_recirculation" => new RecirculationResource($this->lastRecirculation),
             "recirculations" => $this->includeRecirculations()
@@ -84,18 +96,18 @@ class VehicleShowResource extends JsonResource
      */
     private function includePositionType(string $relation): ?array
     {
-        /* @var Movement $lastMovement */
-        $lastMovement = $this->lastMovement;
+        /* @var Movement $lastConfirmedMovement */
+        $lastConfirmedMovement = $this->lastConfirmedMovement;
 
-        if (!$lastMovement || !$lastMovement->{$relation}) {
+        if (!$lastConfirmedMovement || !$lastConfirmedMovement->{$relation}) {
             return null;
         }
 
         /* @var Model $model */
-        $model = $lastMovement->{$relation};
+        $model = $lastConfirmedMovement->{$relation};
         $modelClass = get_class($model);
 
-        $resourceClass = $lastMovement->resolvePositionResource($modelClass);
+        $resourceClass = $lastConfirmedMovement->resolvePositionResource($modelClass);
 
         if (!JsonResourceHelper::isInstance($resourceClass)) {
             return null;
@@ -131,8 +143,6 @@ class VehicleShowResource extends JsonResource
      */
     private function includeRecirculations(): AnonymousResourceCollection
     {
-
-        // $recirculations = $this->recirculations->sortByDesc('id')->unique("message")->sortBy('id')->values();
         $recirculations = $this->recirculations->sortByDesc('id');
 
         return RecirculationResource::collection($recirculations);

@@ -68,7 +68,7 @@ class Row extends Model
         'updated_at'
     ];
 
-    protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code"];
+    protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
 
     public function parking()
     {
@@ -98,6 +98,14 @@ class Row extends Model
     public function rulesOverflowRows()
     {
         return $this->hasMany(Rule::class, 'overflow_id');
+    }
+
+    /**
+     * @return int
+     */
+    public function getRealFillAttribute(): int
+    {
+        return $this->slots->sum("real_fill");
     }
 
     /**

@@ -5,13 +5,16 @@ namespace App\Services\Application\Vehicle;
 use App\Exceptions\owner\BadRequestException;
 use App\Helpers\StringHelper;
 use App\Models\Color;
+use App\Models\Dealer;
 use App\Models\Design;
 use App\Models\DestinationCode;
 use App\Models\Parking;
 use App\Models\State;
 use App\Models\Vehicle;
+use App\Repositories\Dealer\DealerRepositoryInterface;
 use App\Repositories\Movement\MovementRepositoryInterface;
 use App\Repositories\Parking\ParkingRepositoryInterface;
+use App\Services\External\FreightVerify\Status;
 use Carbon\Carbon;
 use Exception;
 use App\Models\Stage;
@@ -64,6 +67,10 @@ class VehicleStageService
      * @var ParkingRepositoryInterface
      */
     private $parkingRepository;
+    /**
+     * @var DealerRepositoryInterface
+     */
+    private $dealerRepository;
 
     public function __construct(
         VehicleRepositoryInterface $vehicleRepository,
@@ -73,7 +80,8 @@ class VehicleStageService
         DestinationCodeRepositoryInterface $destinationCodeRepository,
         FreightVerifyService $freightVerifyService,
         MovementRepositoryInterface $movementRepository,
-        ParkingRepositoryInterface $parkingRepository
+        ParkingRepositoryInterface $parkingRepository,
+        DealerRepositoryInterface $dealerRepository
     ) {
         $this->vehicleRepository = $vehicleRepository;
         $this->stageRepository = $stageRepository;
@@ -83,6 +91,7 @@ class VehicleStageService
         $this->freightVerifyService = $freightVerifyService;
         $this->movementRepository = $movementRepository;
         $this->parkingRepository = $parkingRepository;
+        $this->dealerRepository = $dealerRepository;
     }
 
     /**
@@ -93,7 +102,7 @@ class VehicleStageService
     public function vehicleStage(array $params): void
     {
         // Log de petición del servicio
-        $this->saveLog("Datos recibidos", $params);
+        $this->saveActivityLog("Datos recibidos", $params);
 
         // Añadir vin del vehículo
         $params['vin'] = $params['pvin'];
@@ -114,8 +123,12 @@ class VehicleStageService
         // Se puede sacar el código de destino por el eoc pero lo pasan a parte porque puede no estar actualizado en el eoc
         $destinationCode = $this->destinationCodeRepository->findBy(['code' => trim($params['destination'])]);
 
+        // Dealer
+        $dealer = $this->dealerRepository->find(Dealer::UNKNOWN_ID);
+
         // Añadir método de entrada (Se añade por defecto 1 correspondiente a la factoria)
-        $params['entry_transport_id'] = Transport::FACTORY;
+        $params['entry_transport_id'] = Transport::TRANSPORT_FACTORY_ID;
+        $params['dealer_id'] = $dealer->id;
 
         // Comprobación si existe o no el stage
         $stage = $this->stageRepository->findBy(['code'=> $params['station']]);
@@ -148,7 +161,7 @@ class VehicleStageService
             }
 
             // TODO: Sacar errores en excel para importarlos (FASE 2)
-            $this->saveLog(
+            $this->saveActivityLog(
                 sprintf(
                     'No se ha encontrado información de %s con el EOC especificado.',
                     StringHelper::replaceLastOccurrence(",", " y", implode(", ", $missingData))
@@ -217,7 +230,7 @@ class VehicleStageService
 
         // Comprobar si el eoc ya existe cuando se hace un registro
         if ($isNewRecord && $this->vehicleRepository->findBy(['eoc' => $params['eoc']])) {
-            $this->saveLog("El eoc especificado ya se encuentra registrado", $params, $vehicle);
+            $this->saveActivityLog("El eoc especificado ya se encuentra registrado", $params, $vehicle);
 
             throw new BadRequestException('El eoc especificado ya se encuentra registrado.');
         }
@@ -234,7 +247,7 @@ class VehicleStageService
                 $this->vehicleRepository->update($params, $vehicle->id);
             }
 
-            $this->saveLog($isNewRecord ? "Vehículo creado" : "Vehículo actualizado", $params, $vehicle);
+            $this->saveActivityLog($isNewRecord ? "Vehículo creado" : "Vehículo actualizado", $params, $vehicle);
 
             $this->updateStageAndStateVehicle($vehicle, $stage, $params);
 
@@ -244,7 +257,7 @@ class VehicleStageService
 
             $errorMessage = $isNewRecord ? "Error al crear vehículo" : "Error al actualizar el vehículo";
 
-            $this->saveLog($errorMessage, $params, $vehicle);
+            $this->saveActivityLog($errorMessage, $params, $vehicle);
 
             throw new Exception($errorMessage, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -258,7 +271,7 @@ class VehicleStageService
      * @param Vehicle|null $vehicle
      * @return void
      */
-    private function saveLog(string $message, array $params, ?Vehicle $vehicle = null): void
+    private function saveActivityLog(string $message, array $params, ?Vehicle $vehicle = null): void
     {
         $activity = activity('Tracking-point')
             ->withProperties($params)

@@ -25,10 +25,12 @@ class SlotResource extends JsonResource
             "row_name" => $this->row_name,
             "capacity" => $this->capacity,
             "fill" => $this->fill,
+            "real_fill" => $this->real_fill,
             "capacitymm" => $this->capacitymm,
             "fillmm" => $this->fillmm,
             "comments" => $this->comments,
             'last_movement' => $this->includeLastMovement()
+            // 'last_movement' => $this->lastDestinationMovement
         ];
 
         if (in_array("row", $relationships)) {
@@ -40,12 +42,14 @@ class SlotResource extends JsonResource
 
 
     private function includeLastMovement() {
-        if (!$this->lastDestinationMovement || $this->lastDestinationMovement->canceled) {
+        // if (!$this->lastDestinationMovement || $this->lastDestinationMovement->canceled === 1) {
+        if (!$this->lastDestinationMovement) {
             return null;
         }
 
         $this->lastDestinationMovement->makeHidden('updated_at');
         $this->lastDestinationMovement->makeHidden('deleted_at');
+        $this->lastDestinationMovement->makeHidden('vehicle');
 
         return $this->lastDestinationMovement;
     }

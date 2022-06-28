@@ -26,7 +26,7 @@ class InfoVehicleResource extends JsonResource
             'id' => $this->id,
             'vin' => $this->vin,
             'vin_short' => $this->vin_short,
-            'position' => $this->lastMovement != null ? new MovementResource($this->lastMovement) : $this->getPosition(),
+            'position' => $this->lastConfirmedMovement ? new MovementResource($this->lastConfirmedMovement) : $this->getPosition(),
             'design' => new DesignResource($this->design),
             'color' => new ColorResource($this->color),
             'states' => StateResource::collection($this->states),

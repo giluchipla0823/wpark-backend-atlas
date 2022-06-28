@@ -10,6 +10,7 @@ use App\Http\Resources\Slot\SlotResource;
 use App\Models\Movement;
 use App\Models\Parking;
 use App\Models\Slot;
+use App\Models\Zone;
 use Illuminate\Database\Eloquent\Model;
 use JsonSerializable;
 use Illuminate\Http\Request;
@@ -43,11 +44,18 @@ class MovementVehicleRecommendResource extends JsonResource
             "brand" => new BrandResource($this->design->brand),
             "color" => new ColorResource($this->color),
             "country" => new CountryResource($this->destinationCode->country),
-            // 'position' => $this->includePosition(),
             'category' => $this->category,
             'info' => $this->info,
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),
+            "last_rule" => $this->lastRule ? [
+                "id" => $this->lastRule->id,
+                "name" => $this->lastRule->name,
+            ] : null,
+            "shipping_rule" => $this->shippingRule ? [
+                "id" => $this->shippingRule->id,
+                "name" => $this->shippingRule->name,
+            ] : null,
             "svg" => [
                 "front" => route("designs-svg.default", ["filename" => "front.svg"]),
                 "side" => route("designs-svg.default", ["filename" => "side.svg"]),
@@ -63,18 +71,18 @@ class MovementVehicleRecommendResource extends JsonResource
      */
     private function includePositionType(string $relation): ?array
     {
-        /* @var Movement $lastMovement */
-        $lastMovement = $this->lastMovement;
+        /* @var Movement $lastConfirmedMovement */
+        $lastConfirmedMovement = $this->lastConfirmedMovement;
 
-        if (!$lastMovement || !$lastMovement->{$relation}) {
+        if (!$lastConfirmedMovement || !$lastConfirmedMovement->{$relation}) {
             return null;
         }
 
         /* @var Model $model */
-        $model = $lastMovement->{$relation};
+        $model = $lastConfirmedMovement->{$relation};
         $modelClass = get_class($model);
 
-        $resourceClass = $lastMovement->resolvePositionResource($modelClass);
+        $resourceClass = $lastConfirmedMovement->resolvePositionResource($modelClass);
 
         if (!JsonResourceHelper::isInstance($resourceClass)) {
             return null;
@@ -95,8 +103,15 @@ class MovementVehicleRecommendResource extends JsonResource
             $collection->put("name", $model->row_name);
 
             if ($collection->has("row")) {
-                $rowData = $collection->get("row")->jsonSerialize();
-                $row = collect($rowData)->except(["parking", "block", "slots"]);
+                $rowData = collect($collection->get("row")->jsonSerialize());
+
+                $parking = $rowData['parking']->resource;
+
+                $isPresortingZone = $parking->area->zone->id === Zone::PRESORTING;
+
+                $row = $rowData->except(["parking", "block", "slots"]);
+
+                $row->put('is_presorting_zone', $isPresortingZone);
 
                 $collection->put("row", $row);
             }
@@ -104,28 +119,4 @@ class MovementVehicleRecommendResource extends JsonResource
 
         return $collection->toArray();
     }
-
-
-//    private function includePosition()
-//    {
-//        return $this->lastMovement ? new MovementResource($this->lastMovement) : $this->getPosition();
-//    }
-//
-//    /**
-//     * @return array
-//     */
-//    public function getPosition(): array
-//    {
-//        $parking = Parking::find(1);
-//
-//        $position['prev_position'] = null;
-//        $position['current_position'] = [
-//            'position' => $parking->name,
-//            'row' => null,
-//            'slot' => null
-//        ];
-//
-//        return $position;
-//    }
-
 }
