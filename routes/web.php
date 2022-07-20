@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\Load\LoadController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 
@@ -19,3 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test',[TestController::class,'test'])->name('test');
+
+Route::get('/test/script-sql',[TestController::class,'script'])->name('test.script-sql');
+
+// Route::get('/loads/{load}/download-albaran', [LoadController::class, 'downloadAlbaran'])->name('loads.download-albaran');

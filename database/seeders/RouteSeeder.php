@@ -10,6 +10,7 @@ use App\Models\RouteType;
 use App\Models\Transport;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RouteSeeder extends Seeder
 {
@@ -45,6 +46,10 @@ class RouteSeeder extends Seeder
             ]
         ];
 
-        Route::insert($routes);
+        // Route::insert($routes);
+
+        $path = public_path('sql/routes_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

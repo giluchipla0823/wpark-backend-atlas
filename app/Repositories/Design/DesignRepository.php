@@ -31,6 +31,10 @@ class DesignRepository extends BaseRepository implements DesignRepositoryInterfa
             $query = $query->where("brand_id", "=", $brandId);
         }
 
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Design::UNKNOWN_ID);
+        }
+
         return $query->get();
     }
 
@@ -40,9 +44,14 @@ class DesignRepository extends BaseRepository implements DesignRepositoryInterfa
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+                    ->select(["{$table}.*"])
+                    ->with(QueryParamsHelper::getIncludesParamFromRequest());
 
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Design::UNKNOWN_ID);
+        }
 
         return Datatables::customizable($query)->response();
     }

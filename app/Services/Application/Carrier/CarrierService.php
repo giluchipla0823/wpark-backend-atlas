@@ -2,7 +2,6 @@
 
 namespace App\Services\Application\Carrier;
 
-use App\Helpers\QueryParamsHelper;
 use App\Http\Resources\Carrier\CarrierMatchResource;
 use App\Http\Resources\Carrier\CarrierResource;
 use App\Models\Carrier;

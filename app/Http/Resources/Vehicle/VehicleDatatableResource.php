@@ -14,7 +14,7 @@ class VehicleDatatableResource extends JsonResource
      * @param $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             "id" => $this->id,
@@ -44,15 +44,14 @@ class VehicleDatatableResource extends JsonResource
                 "name" => $this->country_name,
             ],
             "last_state" => $this->includeLastState(),
-            "states_dates" => $this->includeStatesDates(),
             "last_stage" => $this->includeLastStage(),
-            "stages_dates" => $this->includeStagesDates(),
             "origin_position" => $this->includeOriginPosition(),
             "destination_position" => $this->includeDestinationPosition(),
             "shipping_rule" => $this->includeShippingRule(),
             "carrier" => $this->includeCarrier(),
             "transport_entry" => $this->includeTransportEntry(),
             "transport_exit" => $this->includeTransportExit(),
+            "is_load" => (bool) $this->is_load
         ];
     }
 
@@ -66,6 +65,11 @@ class VehicleDatatableResource extends JsonResource
             "name" => $this->state_name,
             "description" => $this->state_description,
             "created_at" => $this->state_created_at,
+            "states_dates" => [
+                "dt_announced" => $this->dt_announced,
+                "dt_terminal" => $this->dt_terminal,
+                "dt_left" => $this->dt_left,
+            ]
         ] : null;
     }
 
@@ -78,6 +82,9 @@ class VehicleDatatableResource extends JsonResource
             "id" => $this->stage_id,
             "name" => strtoupper($this->stage_name),
             "description" => $this->stage_description,
+            "stages_dates" => [
+                "dt_gate_release" => $this->dt_gate_release,
+            ]
         ] : null;
     }
 
@@ -137,7 +144,10 @@ class VehicleDatatableResource extends JsonResource
     {
         return $this->carrier_id ? [
             "id" => $this->carrier_id,
-            "name" => $this->carrier_name
+            "name" => $this->carrier_name,
+            "short_name" => $this->carrier_short_name,
+            "code" => $this->carrier_code,
+            "belongs_to" => $this->carrier_belongs_to,
         ] : null;
     }
 
@@ -153,10 +163,15 @@ class VehicleDatatableResource extends JsonResource
     {
         return $this->transport_exit_id ? [
             "id" => $this->transport_exit_id,
-            "name" => $this->transport_exit_name
+            "name" => $this->transport_exit_name,
+            "load" => [
+                "id" => $this->load_id,
+                "transport_identifier" => $this->load_transport_identifier,
+            ]
         ] : null;
     }
 
+    /*
     private function includeStatesDates(): ?array
     {
         if (
@@ -173,13 +188,16 @@ class VehicleDatatableResource extends JsonResource
             "dt_left" => $this->dt_left,
         ];
     }
+    */
 
+    /*
     private function includeStagesDates(): ?array
     {
         return $this->dt_gate_release ? [
             "dt_gate_release" => $this->dt_gate_release,
         ] : null;
     }
+    */
 
 
 }

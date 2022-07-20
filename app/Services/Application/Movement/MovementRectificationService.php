@@ -130,7 +130,7 @@ class MovementRectificationService
 
                 // De todos los movientos pendientes de vehículos en movimiento creamos el movimiento a buffer.
                 foreach ($pendingMovementsVehiclesInRoute as $pendingMovement) {
-                    $this->generateMovementToPendingMovement($pendingMovement);
+                    // $this->generateMovementToPendingMovement($pendingMovement);
                 }
 
 
@@ -143,6 +143,11 @@ class MovementRectificationService
 
                 // dd($slot);
 
+                // TODO: Tratar esta mierda
+                if (count($pendingMovementsVehiclesInRoute) > 0) {
+                    throw new BadRequestException('Ocurrió un problema inesperado al reubicar el vehículo en la fila seleccionada');
+                }
+
                 $row = Row::find($rectificationBy['id']);
 
                 // TODO: Comprobar que el primer slot de la fila está vacío
@@ -150,7 +155,7 @@ class MovementRectificationService
 
                 // dd($slot);
 
-                $this->doProcess($movement, $slot, false);
+                $this->doProcess($movement, $slot, $forceMovement);
 
                 break;
 

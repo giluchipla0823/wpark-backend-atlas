@@ -27,9 +27,7 @@ class RuleStoreRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'is_group' => 'required|boolean',
-            'priority' => 'required_if:is_group,0|integer|min:1',
             'predefined_zone_id' => 'nullable|exists:parkings,id',
-            'carrier_id' => 'required_if:is_group,0|exists:carriers,id',
             'block_id' => 'nullable|exists:blocks,id,is_presorting,0',
             'conditions' => 'required_if:is_group,0|array',
             'rules' => 'required_if:is_group,1|array',

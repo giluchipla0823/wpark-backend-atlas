@@ -56,6 +56,7 @@ use App\Http\Controllers\Api\v1\Vehicle\VehicleStageController;
 use App\Http\Controllers\Api\v1\Zone\ZoneController;
 use App\Http\Controllers\External\FORD\TransportST8Controller;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Api\v1\Recirculation\RecirculationController as RecirculationOwnerController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -74,212 +75,235 @@ Route::get('/environment', function () {
     return response()->json($_ENV);
 });
 
-/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-}); */
 Route::get('/dom-pdf', [TestController::class, 'domPdf']);
 Route::get('/testing', [TestController::class, 'test']);
 
-Route::post('/auth/login', [AuthController::class, 'login']);
+// Auth
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])->name('password.send');
 Route::post('/forgot-password-check', [AuthController::class, 'forgotPasswordCheckToken'])->name('password.check');
 Route::post('/forgot-password-reset', [AuthController::class, 'forgotPasswordReset'])->name('password.reset');
 
+// API ST7 - Tracking Points
 Route::post('/tracking-points', [VehicleStageController::class, 'vehicleStage'])->name('vehicleStage');
 
-Route::get('/v1/designs/svg-default/{filename}', [DesignSvgController::class, 'default'])->name('designs-svg.default');
+// Auth
+Route::group(['prefix' => 'auth'], function() {
+    Route::post('/login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'auth'], function() {
-    Route::get('/logout', [AuthController::class, 'logout']);
-    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+        Route::get('/logout', [AuthController::class, 'logout']);
+        Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+    });
 });
 
+// API V1
 Route::group(['prefix' => 'v1'], function() {
+
+    // Devices Types
     Route::resource('devices-types', DeviceTypeController::class, ['only' => ['index']]);
-    Route::get('/devices/search-by-uuid/{uuid}', [DeviceController::class, 'searchByUuid'])->name('devices.search-by-uuid');
-    Route::resource('devices', DeviceController::class, ['only' => ['store']]);
-    Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
-    Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
-});
-
-Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'v1'], function() {
-
-    // Users
-    Route::get('/me', [UserController::class, 'me']);
-    Route::post('/users/datatables', [UserController::class, 'datatables'])->name('users.datatables');
-    Route::patch('/users/{id}', [UserController::class, 'restore'])->name('users.restore');
-    Route::post('/users/generate-username', [UserController::class, 'generateUsername'])->name('users.generate-username');
-    Route::resource('users', UserController::class, ['except' =>['create', 'edit']]);
-
-    // Colors
-    Route::post('/colors/datatables', [ColorController::class, 'datatables'])->name('colors.datatables');
-    Route::patch('/colors/{id}', [ColorController::class, 'restore'])->name('colors.restore');
-    Route::resource('colors', ColorController::class, ['except' =>['create', 'edit']]);
 
     // Compounds
-    Route::post('/compounds/datatables', [CompoundController::class, 'datatables'])->name('compounds.datatables');
-    Route::patch('/compounds/{id}', [CompoundController::class, 'restore'])->name('compounds.restore');
-    Route::resource('compounds', CompoundController::class, ['except' => ['create', 'edit', 'index']]);
+    Route::get('/compounds', [CompoundController::class, 'index'])->name('compounds.index');
 
-    // Brands
-    Route::patch('/brands/{id}', [BrandController::class, 'restore'])->name('brands.restore');
-    Route::resource('brands', BrandController::class, ['except' =>['create', 'edit']]);
+    // Pages
+    Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
+
+    // Devices
+    Route::get('/devices/search-by-uuid/{uuid}', [DeviceController::class, 'searchByUuid'])->name('devices.search-by-uuid');
+    Route::resource('devices', DeviceController::class, ['only' => ['store']]);
 
     // Designs
-    Route::post('/designs/datatables', [DesignController::class, 'datatables'])->name('designs.datatables');
-    Route::patch('/designs/{id}', [DesignController::class, 'restore'])->name('designs.restore');
-    Route::resource('designs', DesignController::class, ['except' =>['create', 'edit']]);
+    Route::get('/designs/svg-default/{filename}', [DesignSvgController::class, 'default'])->name('designs-svg.default');
 
-    // Countries
-    Route::post('/countries/datatables', [CountryController::class, 'datatables'])->name('countries.datatables');
-    Route::patch('/countries/{id}', [CountryController::class, 'restore'])->name('countries.restore');
-    Route::resource('countries', CountryController::class, ['except' =>['create', 'edit']]);
+    Route::group(['middleware' => 'auth:sanctum'], function() {
 
-    // Routes
-    Route::patch('/routes/{id}', [RouteController::class, 'restore'])->name('routes.restore');
-    Route::resource('routes', RouteController::class, ['except' =>['create', 'edit']]);
+        // Users
+        Route::get('/me', [UserController::class, 'me']);
+        Route::post('/users/datatables', [UserController::class, 'datatables'])->name('users.datatables');
+        Route::patch('/users/{id}', [UserController::class, 'restore'])->name('users.restore');
+        Route::post('/users/generate-username', [UserController::class, 'generateUsername'])->name('users.generate-username');
+        Route::resource('users', UserController::class, ['except' =>['create', 'edit']]);
 
-    // Destination Codes
-    Route::post('/destination-codes/datatables', [DestinationCodeController::class, 'datatables'])->name('destination-codes.datatables');
-    Route::patch('/destination-codes/{id}', [DestinationCodeController::class, 'restore'])->name('destination-codes.restore');
-    Route::resource('destination-codes', DestinationCodeController::class, ['except' =>['create', 'edit']]);
+        // Colors
+        Route::post('/colors/datatables', [ColorController::class, 'datatables'])->name('colors.datatables');
+        Route::patch('/colors/{id}', [ColorController::class, 'restore'])->name('colors.restore');
+        Route::resource('colors', ColorController::class, ['except' =>['create', 'edit']]);
 
-    // Conditions
-    Route::patch('/conditions/{id}', [ConditionController::class, 'restore'])->name('conditions.restore');
-    Route::get('/conditions/{condition}/model-data', [ConditionModelDataController::class, 'index'])->name('conditions-model-data.index');
-    Route::resource('conditions', ConditionController::class, ['except' =>['create', 'edit']]);
+        // Compounds
+        Route::post('/compounds/datatables', [CompoundController::class, 'datatables'])->name('compounds.datatables');
+        Route::patch('/compounds/{id}', [CompoundController::class, 'restore'])->name('compounds.restore');
+        Route::resource('compounds', CompoundController::class, ['except' => ['create', 'edit', 'index']]);
 
-    // States
-    Route::patch('/states/{id}', [StateController::class, 'restore'])->name('states.restore');
-    Route::resource('states', StateController::class, ['except' =>['create', 'edit']]);
-    Route::get('/states/{state}/vehicles', [StateVehicleController::class, 'index'])->name('states-vehicles.index');
+        // Brands
+        Route::patch('/brands/{id}', [BrandController::class, 'restore'])->name('brands.restore');
+        Route::resource('brands', BrandController::class, ['except' =>['create', 'edit']]);
 
-    // Holds
-    Route::post('/holds/datatables', [HoldController::class, 'datatables'])->name('holds.datatables');
-    Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
-    Route::patch('/holds/{hold}/toggle-active', [HoldController::class, 'toggleActive'])->name('holds.toggle-active');
-    Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
+        // Designs
+        Route::post('/designs/datatables', [DesignController::class, 'datatables'])->name('designs.datatables');
+        Route::patch('/designs/{id}', [DesignController::class, 'restore'])->name('designs.restore');
+        Route::resource('designs', DesignController::class, ['except' =>['create', 'edit']]);
 
-    // Rules
-    Route::post('/rules/datatables', [RuleController::class, 'datatables'])->name('rules.datatables');
-    Route::patch('/rules/{id}', [RuleController::class, 'restore'])->name('rules.restore');
-    Route::patch('/rules/{rule}/toggle-active', [RuleController::class, 'toggleActive'])->name('rules.toggle-active');
-    Route::resource('rules', RuleController::class, ['except' =>['create', 'edit']]);
+        // Countries
+        Route::post('/countries/datatables', [CountryController::class, 'datatables'])->name('countries.datatables');
+        Route::patch('/countries/{id}', [CountryController::class, 'restore'])->name('countries.restore');
+        Route::resource('countries', CountryController::class, ['except' =>['create', 'edit']]);
 
-    // Zones
-    Route::patch('/zones/{id}', [ZoneController::class, 'restore'])->name('zones.restore');
-    Route::resource('zones', ZoneController::class, ['except' =>['create', 'edit']]);
+        // Routes
+        Route::patch('/routes/{id}', [RouteController::class, 'restore'])->name('routes.restore');
+        Route::resource('routes', RouteController::class, ['except' =>['create', 'edit']]);
 
-    // Areas
-    Route::post('/areas/datatables', [AreaController::class, 'datatables'])->name('areas.datatables');
-    Route::patch('/areas/{id}', [AreaController::class, 'restore'])->name('areas.restore');
-    Route::resource('areas', AreaController::class, ['except' =>['create', 'edit', 'update']]);
+        // Destination Codes
+        Route::post('/destination-codes/datatables', [DestinationCodeController::class, 'datatables'])->name('destination-codes.datatables');
+        Route::patch('/destination-codes/{id}', [DestinationCodeController::class, 'restore'])->name('destination-codes.restore');
+        Route::resource('destination-codes', DestinationCodeController::class, ['except' =>['create', 'edit']]);
 
-    // Parking Types
-    Route::patch('/parking-types/{id}', [ParkingTypeController::class, 'restore'])->name('parking-types.restore');
-    Route::resource('parking-types', ParkingTypeController::class, ['except' =>['create', 'edit']]);
+        // Conditions
+        Route::patch('/conditions/{id}', [ConditionController::class, 'restore'])->name('conditions.restore');
+        Route::get('/conditions/{condition}/model-data', [ConditionModelDataController::class, 'index'])->name('conditions-model-data.index');
+        Route::resource('conditions', ConditionController::class, ['except' =>['create', 'edit']]);
 
-    // Parkings
-    Route::post('/parkings/datatables', [ParkingController::class, 'datatables'])->name('parkings.datatables');
-    Route::patch('/parkings/{id}', [ParkingController::class, 'restore'])->name('parkings.restore');
-    Route::patch('/parkings/{parking}/toggle-active', [ParkingController::class, 'toggleActive'])->name('parkings.toggle-active');
-    Route::post('/parking-design', [ParkingDesignController::class, 'parkingDesign'])->name('parkingDesign');
-    Route::resource('parkings', ParkingController::class, ['except' =>['create', 'edit', 'store']]);
+        // States
+        Route::patch('/states/{id}', [StateController::class, 'restore'])->name('states.restore');
+        Route::get('/states/{state}/vehicles', [StateVehicleController::class, 'index'])->name('states-vehicles.index');
+        Route::resource('states', StateController::class, ['except' =>['create', 'edit']]);
 
-    // Parkings Rows
-    Route::get('/parkings/{parking}/rows', [ParkingRowController::class, 'index'])->name('parkings-rows.index');
-    Route::get('/parkings/{parking}/row-espigas', [ParkingRowEspigaController::class, 'rowsSpikes'])->name('parking-rows.rows-spikes');
+        // Holds
+        Route::post('/holds/datatables', [HoldController::class, 'datatables'])->name('holds.datatables');
+        Route::patch('/holds/{id}', [HoldController::class, 'restore'])->name('holds.restore');
+        Route::patch('/holds/{hold}/toggle-active', [HoldController::class, 'toggleActive'])->name('holds.toggle-active');
+        Route::resource('holds', HoldController::class, ['except' =>['create', 'edit']]);
 
-    // Blocks
-    Route::patch('/blocks/{id}', [BlockController::class, 'restore'])->name('blocks.restore');
-    Route::patch('/blocks/{block}/add-rows', [BlockController::class, 'addRows'])->name('blocks.add-rows');
-    Route::patch('/blocks/{block}/toggle-active', [BlockController::class, 'toggleActive'])->name('blocks.toggle-active');
-    Route::resource('blocks', BlockController::class, ['except' =>['create', 'edit']]);
+        // Rules
+        Route::post('/rules/datatables', [RuleController::class, 'datatables'])->name('rules.datatables');
+        Route::patch('/rules/{id}', [RuleController::class, 'restore'])->name('rules.restore');
+        Route::patch('/rules/{rule}/toggle-active', [RuleController::class, 'toggleActive'])->name('rules.toggle-active');
+        Route::resource('rules', RuleController::class, ['except' =>['create', 'edit']]);
 
-    // Block Rows
-    Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
+        // Zones
+        Route::patch('/zones/{id}', [ZoneController::class, 'restore'])->name('zones.restore');
+        Route::resource('zones', ZoneController::class, ['except' =>['create', 'edit']]);
 
-    // Rows
-    Route::put('/rows/{row}/rellocate', RowRellocateController::class)->name('rows.rellocate');
-    Route::get('/rows/show-by-qrcode/{qrcode}', [RowController::class, 'showByQrCode'])->name('rows.show-by-qrcode');
-    Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
-    Route::resource('rows', RowController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
-    Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');
-    Route::patch('/rows/{row}/blocks/unlink', [RowBlockController::class, 'unlink'])->name('rows-blocks.unlink');
-    Route::patch('/rows/{row}/blocks/{block}', [RowBlockController::class, 'update'])->name('rows-blocks.update');
+        // Areas
+        Route::post('/areas/datatables', [AreaController::class, 'datatables'])->name('areas.datatables');
+        Route::patch('/areas/{id}', [AreaController::class, 'restore'])->name('areas.restore');
+        Route::resource('areas', AreaController::class, ['except' =>['create', 'edit', 'update']]);
 
-    // Slots
-    Route::resource('slots', SlotController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
+        // Parking Types
+        Route::patch('/parking-types/{id}', [ParkingTypeController::class, 'restore'])->name('parking-types.restore');
+        Route::resource('parking-types', ParkingTypeController::class, ['except' =>['create', 'edit']]);
 
-    // Stages
-    Route::patch('/stages/{id}', [StageController::class, 'restore'])->name('stages.restore');
-    Route::resource('stages', StageController::class, ['except' =>['create', 'edit']]);
+        // Parkings
+        Route::post('/parkings/datatables', [ParkingController::class, 'datatables'])->name('parkings.datatables');
+        Route::patch('/parkings/{id}', [ParkingController::class, 'restore'])->name('parkings.restore');
+        Route::patch('/parkings/{parking}/toggle-active', [ParkingController::class, 'toggleActive'])->name('parkings.toggle-active');
+        Route::post('/parking-design', [ParkingDesignController::class, 'parkingDesign'])->name('parkingDesign');
+        Route::resource('parkings', ParkingController::class, ['except' =>['create', 'edit', 'store']]);
 
-    // Vehicles
-    Route::get('/vehicles/search-by-vin/{vin}', [VehicleController::class, 'searchByVin'])->name("vehicles.search-by-vin");
-    Route::get('/vehicles/vin/{vin}', [VehicleMovementsController::class, 'vehicleMatchRules']);
-    Route::patch('/vehicles/massive-change-data', [VehicleController::class, 'massiveChangeData'])->name('vehicles.massive-change-data');
-    Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
-    // Route::get('/vehicles/{vehicle}/detail', [VehicleController::class, 'detail'])->name('vehicles.detail');
-    Route::patch('/vehicles/{vehicle}/change-position', [VehicleController::class, 'massiveChangeData'])->name('vehicles.change-position');
-    Route::post('/vehicles/create-manual', VehicleManualStoreController::class)->name('vehicles.create-manual');
-    Route::post('/vehicles/datatables', [VehicleController::class, 'datatables'])->name('vehicles.datatables');
-    Route::resource('vehicles', VehicleController::class, ['except' =>['store', 'create', 'update', 'edit']]);
+        // Parkings Rows
+        Route::get('/parkings/{parking}/rows', [ParkingRowController::class, 'index'])->name('parkings-rows.index');
+        Route::get('/parkings/{parking}/row-espigas', [ParkingRowEspigaController::class, 'rowsSpikes'])->name('parking-rows.rows-spikes');
 
-    // Transports
-    Route::patch('/transports/{id}', [TransportController::class, 'restore'])->name('transports.restore');
-    Route::patch('/transports/{transport}/toggle-active', [TransportController::class, 'toggleActive'])->name('transports.toggle-active');
-    Route::resource('transports', TransportController::class, ['except' =>['create', 'edit']]);
+        // Blocks
+        Route::patch('/blocks/{id}', [BlockController::class, 'restore'])->name('blocks.restore');
+        Route::patch('/blocks/{block}/add-rows', [BlockController::class, 'addRows'])->name('blocks.add-rows');
+        Route::patch('/blocks/{block}/toggle-active', [BlockController::class, 'toggleActive'])->name('blocks.toggle-active');
+        Route::resource('blocks', BlockController::class, ['except' =>['create', 'edit']]);
 
-    // Carriers
-    Route::post('/carriers/datatables', [CarrierController::class, 'datatables'])->name('carriers.datatables');
-    Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
-    Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
-    Route::post('/carriers/match-vins', [CarrierController::class, 'matchVins'])->name('carriers.match-vins');
+        // Block Rows
+        Route::get('/blocks/{block}/rows', [BlockRowController::class, 'index'])->name('blocks-rows.index');
 
-    // Dealers
-    Route::patch('/dealers/{id}', [DealerController::class, 'restore'])->name('dealers.restore');
-    Route::resource('dealers', DealerController::class, ['except' =>['create', 'edit']]);
+        // Rows
+        Route::put('/rows/{row}/rellocate', RowRellocateController::class)->name('rows.rellocate');
+        Route::get('/rows/show-by-qrcode/{qrcode}', [RowController::class, 'showByQrCode'])->name('rows.show-by-qrcode');
+        Route::patch('/rows/{row}/toggle-active', [RowController::class, 'toggleActive'])->name('rows.toggle-active');
+        Route::get('/rows/{row}/vehicles', [RowVehicleController::class, 'index'])->name('rows-vehicles.index');
+        Route::patch('/rows/{row}/blocks/unlink', [RowBlockController::class, 'unlink'])->name('rows-blocks.unlink');
+        Route::patch('/rows/{row}/blocks/{block}', [RowBlockController::class, 'update'])->name('rows-blocks.update');
+        Route::resource('rows', RowController::class, ['except' => ['create', 'edit', 'store', 'delete']]);
 
-    // Notifications
-    Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
-    Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
-    Route::resource('notifications', NotificationController::class, ['except' =>['create', 'store', 'edit', 'update']]);
+        // Slots
+        Route::resource('slots', SlotController::class, ['except' =>['create', 'edit', 'store', 'delete']]);
 
-    // FreightVerify
-    Route::post('/freight-verify/vehicle-received', VehicleReceivedController::class);
-    // SOAP FORD
-    Route::get('/external/recirculations/{vin}', [RecirculationController::class, 'get'])->name('recirculations.get');
+        // Stages
+        Route::patch('/stages/{id}', [StageController::class, 'restore'])->name('stages.restore');
+        Route::resource('stages', StageController::class, ['except' =>['create', 'edit']]);
 
-    // Loads
-    Route::get('/loads', [LoadController::class, 'index'])->name('loads.index');
-    Route::get('/loads/{load}/download-albaran', [LoadController::class, 'downloadAlbaran'])->name('loads.download-albaran');
-    Route::post('/loads/datatables', [LoadController::class, 'datatables'])->name('loads.datatables');
-    Route::post('/loads/{load}/vehicles/datatables', [LoadVehicleController::class, 'datatables'])->name('loads.vehicles.datatables');
-    Route::patch('/loads/{load}/vehicles/{vehicle}/unlink', [LoadVehicleController::class, 'unlinkVehicle'])->name('loads.vehicles.unlink');
-    Route::post('/loads/generate', [LoadGenerateController::class, 'generate'])->name('loads.generate');
-    Route::patch('/loads/{load}/confirm-left', LoadConfirmLeftController::class)->name('loads.confirme-left');
-    Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
+        // Vehicles
+        Route::get('/vehicles/search-by-vin/{vin}', [VehicleController::class, 'searchByVin'])->name("vehicles.search-by-vin");
+        Route::get('/vehicles/vin/{vin}', [VehicleMovementsController::class, 'vehicleMatchRules']);
+        Route::patch('/vehicles/massive-change-data', [VehicleController::class, 'massiveChangeData'])->name('vehicles.massive-change-data');
+        Route::patch('/vehicles/{id}', [VehicleController::class, 'restore'])->name('vehicles.restore');
+        Route::patch('/vehicles/{vehicle}/change-position', [VehicleController::class, 'massiveChangeData'])->name('vehicles.change-position');
+        Route::post('/vehicles/create-manual', VehicleManualStoreController::class)->name('vehicles.create-manual');
+        Route::post('/vehicles/datatables', [VehicleController::class, 'datatables'])->name('vehicles.datatables');
+        Route::resource('vehicles', VehicleController::class, ['except' =>['store', 'create', 'update', 'edit']]);
 
-    // Movements
-    Route::post('movements/{movement}/rectification', [MovementRectificationController::class, 'update'])->name('movements.rectification');
-    Route::post('movements/reload', [MovementController::class, 'reload'])->name('movements.reload');
-    Route::post('movements/manual', [MovementManualController::class, 'manual'])->name('movements.manual');
-    Route::post('movements/manual/filtered-positions', [MovementManualController::class, 'filteredPositions'])->name('movements.filtered-positions');
-    Route::put('movements/{movement}/confirm', [MovementController::class, 'confirmMovement'])->name('movements.confirm-movement');
-    Route::put('movements/{movement}/cancel', [MovementController::class, 'cancelMovement'])->name('movements.cancel-movement');
-    Route::post('/movements/recommend', [MovementRecommendController::class, 'index'])->name('movements.recommend');
-    Route::post('/movements/datatables', [MovementController::class, 'datatables'])->name('movements.datatables');
-    Route::resource('movements', MovementController::class, ['except' =>['create', 'edit', 'update', 'delete']]);
+        // Transports
+        Route::patch('/transports/{id}', [TransportController::class, 'restore'])->name('transports.restore');
+        Route::patch('/transports/{transport}/toggle-active', [TransportController::class, 'toggleActive'])->name('transports.toggle-active');
+        Route::resource('transports', TransportController::class, ['except' =>['create', 'edit']]);
 
-    // Valencia TSI Webservice ST8
-    Route::get('/loads/{load}/transport-st8', LoadTransportST8Controller::class);
-    Route::post('transport-st8', TransportST8Controller::class);
+        // Carriers
+        Route::post('/carriers/datatables', [CarrierController::class, 'datatables'])->name('carriers.datatables');
+        Route::patch('/carriers/{id}', [CarrierController::class, 'restore'])->name('carriers.restore');
+        Route::resource('carriers', CarrierController::class, ['except' =>['create', 'edit']]);
+        Route::post('/carriers/match-vins', [CarrierController::class, 'matchVins'])->name('carriers.match-vins');
 
-    Route::get('routes-types/{routeType}/carriers', [RouteTypeCarrierController::class, "index"])->name("routes-types.carriers.index");
+        // Dealers
+        Route::patch('/dealers/{id}', [DealerController::class, 'restore'])->name('dealers.restore');
+        Route::resource('dealers', DealerController::class, ['except' =>['create', 'edit']]);
 
-    // Recirculation owner
-    Route::patch('recirculations/{recirculation}/update-back', [\App\Http\Controllers\Api\v1\Recirculation\RecirculationController::class, "updateBack"])->name("recirculations.update-back");
+        // Notifications
+        Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
+        Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
+        Route::resource('notifications', NotificationController::class, ['except' => ['create', 'store', 'edit', 'update']]);
+
+        // FreightVerify
+        Route::post('/freight-verify/vehicle-received', VehicleReceivedController::class);
+
+        // Loads
+        Route::get('/loads', [LoadController::class, 'index'])->name('loads.index');
+        Route::get('/loads/{load}/download-albaran', [LoadController::class, 'downloadAlbaran'])->name('loads.download-albaran');
+        Route::post('/loads/datatables', [LoadController::class, 'datatables'])->name('loads.datatables');
+        Route::post('/loads/{load}/vehicles/datatables', [LoadVehicleController::class, 'datatables'])->name('loads.vehicles.datatables');
+        Route::patch('/loads/{load}/vehicles/{vehicle}/unlink', [LoadVehicleController::class, 'unlinkVehicle'])->name('loads.vehicles.unlink');
+        Route::post('/loads/generate', [LoadGenerateController::class, 'generate'])->name('loads.generate');
+        Route::patch('/loads/{load}/confirm-left', LoadConfirmLeftController::class)->name('loads.confirme-left');
+        Route::post('/loads/check-vehicles', [LoadController::class, 'checkVehicles'])->name('loads.check-vehicles');
+
+        // Movements
+        Route::post('/movements/{movement}/rectification', [MovementRectificationController::class, 'update'])->name('movements.rectification');
+        Route::post('/movements/reload', [MovementController::class, 'reload'])->name('movements.reload');
+        Route::post('/movements/manual', [MovementManualController::class, 'manual'])->name('movements.manual');
+        Route::post('/movements/manual/filtered-positions', [MovementManualController::class, 'filteredPositions'])->name('movements.filtered-positions');
+        Route::put('/movements/{movement}/confirm', [MovementController::class, 'confirmMovement'])->name('movements.confirm-movement');
+        Route::put('/movements/{movement}/cancel', [MovementController::class, 'cancelMovement'])->name('movements.cancel-movement');
+        Route::post('/movements/recommend', [MovementRecommendController::class, 'index'])->name('movements.recommend');
+        Route::post('/movements/datatables', [MovementController::class, 'datatables'])->name('movements.datatables');
+        Route::resource('movements', MovementController::class, ['except' =>['create', 'edit', 'update', 'delete']]);
+
+        // Valencia TSI Webservice ST8
+        Route::get('/loads/{load}/transport-st8', LoadTransportST8Controller::class);
+
+        Route::get('/routes-types/{routeType}/carriers', [RouteTypeCarrierController::class, "index"])->name("routes-types.carriers.index");
+
+        // Recirculations
+        Route::patch('/recirculations/{recirculation}/update-back', [RecirculationOwnerController::class, "updateBack"])->name("recirculations.update-back");
+    });
+
+});
+
+// External
+Route::group(['prefix' => 'external'], function() {
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+
+        // Recirculations - SOAP FORD
+        Route::get('/recirculations/{vin}', [RecirculationController::class, 'get'])->name('recirculations.get');
+    });
+
+    // API ST8
+    Route::post('/transport-st8', TransportST8Controller::class);
+
 });
 
 Route::get('/send-row-notification', [TestController::class, 'sendRowNotification']);

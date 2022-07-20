@@ -2,8 +2,10 @@
 
 namespace App\Services\Application\Vehicle;
 
+use App\Exceptions\FORD\FordStandardErrorException;
 use App\Exceptions\owner\BadRequestException;
 use App\Helpers\StringHelper;
+use App\Models\ActivityLog;
 use App\Models\Color;
 use App\Models\Dealer;
 use App\Models\Design;
@@ -19,6 +21,7 @@ use Carbon\Carbon;
 use Exception;
 use App\Models\Stage;
 use App\Models\Transport;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Color\ColorRepositoryInterface;
@@ -97,7 +100,8 @@ class VehicleStageService
     /**
      * @param array $params
      * @return void
-     * @throws Exception
+     * @throws FordStandardErrorException
+     * @throws GuzzleException
      */
     public function vehicleStage(array $params): void
     {
@@ -136,10 +140,23 @@ class VehicleStageService
         if (!$stage) {
             $stages = Stage::all()->pluck("code")->toArray();
 
-            throw new BadRequestException(sprintf(
-                "La estación especificada no es válida. Las estaciones válidas son: %s",
-                implode(",", $stages)
-            ));
+            $this->saveActivityLog(
+                sprintf(
+                    "La estación especificada no es válida. Las estaciones válidas son: %s",
+                    implode(",", $stages)
+                ),
+                $params
+            );
+
+            throw new FordStandardErrorException(
+                [
+                    sprintf(
+                        "The specified station does not exist. Available stations are: %s",
+                        implode(",", $stages)
+                    )
+                ],
+                Response::HTTP_NOT_FOUND
+            );
         }
 
         // Comprobación si existe o no el vehículo para crear o actualizar
@@ -277,7 +294,7 @@ class VehicleStageService
             ->withProperties($params)
             ->log($message);
 
-        $activity->reference_code = 'ST7-api';
+        $activity->reference_code = ActivityLog::REFERENCE_CODE_ST7;
 
         if ($vehicle) {
             $activity->subject_type = get_class($vehicle);
@@ -310,8 +327,6 @@ class VehicleStageService
             "dt_start" => Carbon::now(),
             "dt_end" => Carbon::now(),
             "comments" => "Movimiento por defecto creado desde la Api ST7",
-            "created_at" => Carbon::now(),
-            "updated_at" => Carbon::now()
         ]);
     }
 

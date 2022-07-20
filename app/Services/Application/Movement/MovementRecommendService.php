@@ -186,10 +186,10 @@ class MovementRecommendService
         $rowsMatch = $queryRowsMatch->orderBy('parking_id', 'ASC')->orderBy('id')->get();
 
         // Primero comprobamos si alguna de esas filas está empezada, no completada y comparte la misma regla
-        // $row->capacitymm - $row->fillmm
         $rowRecommend = $rowsMatch->where('fill', '>', 0)
                             ->where('full', false)
-                            ->where('rule_id', $rule->id)
+                            // ->where('rule_id', $rule->id)
+                            ->where('category', $rule->name)
                             ->filter(function($row) {
                                 return ($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM;
                             })
@@ -207,19 +207,21 @@ class MovementRecommendService
         }
 
         // Comprobamos si el parking es de tipo fila o espiga
-        $rowType = $rowRecommend->parking->parking_type_id === ParkingType::TYPE_ROW;
+        // $rowType = $rowRecommend->parking->parking_type_id === ParkingType::TYPE_ROW;
 
-        // En caso de ser de tipo fila sacaremos la información del último vehículo colocado en esa fila
         $lastVehicle = null;
 
-        if ($rowType) {
+        if ($rowRecommend->parking->isRowType()) {
 
             // De la fila vemos cuantos slots están ocupados y elegimos el siguiente
             // $recommend = Slot::where('row_id', $rowRecommend->id)->where('slot_number', ($rowRecommend->fill + 1))->first();
             // $recommend = Slot::where('row_id', $rowRecommend->id)->where('fill', 0)->first();
             $recommend = Slot::where('row_id', $rowRecommend->id)->where('fill', 0)->first();
 
-            // Para obtener los datos del vehículo en la última posición de la fila
+            /**
+             * En caso de ser de tipo fila sacaremos la información del último vehículo colocado en esa fila.
+             * Para obtener los datos del vehículo en la última posición de la fila.
+             */
             $vehiclesInRow = $this->vehicleRepository->findAllByRow($rowRecommend);
 
             $lastVehicle = $vehiclesInRow->last();
@@ -260,6 +262,7 @@ class MovementRecommendService
 
         $row = $slot->row;
         $row->rule_id = $rowRecommend->rule_id ?: $rule->id;
+        $row->category = $rowRecommend->category ?: $rule->name;
         $row->save();
 
         $positionRecommend->put("movement", $movement);

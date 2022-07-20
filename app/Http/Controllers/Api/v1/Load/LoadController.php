@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\v1\Load;
 use App\Exceptions\owner\BadRequestException;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Load\LoadValidateRequest;
+use App\Models\Dealer;
 use App\Models\Load;
+use App\Models\Slot;
 use App\Services\Application\Load\LoadService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 class LoadController extends ApiController
 {
@@ -116,20 +119,7 @@ class LoadController extends ApiController
      */
     public function downloadAlbaran(Load $load): Response
     {
-        $vehicles = $load->vehicles;
-
-        if (count($vehicles) === 0) {
-            throw new BadRequestException("El load seleccionado no tiene asignado vehículos");
-        }
-
-        $totalWeight = array_sum($vehicles->pluck('design.weight')->toArray());
-
-        $data = [
-            'load' => $load,
-            'vehicles' => $vehicles,
-            'counter_vehicles' => count($vehicles),
-            'total_weight' => $totalWeight
-        ];
+        $data = $this->loadService->downloadAlbaran($load);
 
         $pdf = Pdf::loadView('pdf.loads.albaran-transport', $data);
 

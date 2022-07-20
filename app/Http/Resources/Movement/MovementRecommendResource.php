@@ -4,6 +4,8 @@ namespace App\Http\Resources\Movement;
 
 use App\Helpers\ModelHelper;
 use App\Http\Resources\Parking\ParkingTypeResource;
+use App\Http\Resources\Rule\RuleResource;
+use App\Models\Zone;
 use JsonSerializable;
 use Illuminate\Http\Request;
 use App\Models\Parking;
@@ -80,11 +82,14 @@ class MovementRecommendResource extends JsonResource
             "id" => $row->id,
             "row_number" => $row->row_number,
             "qr_code" => $row->alt_qr,
+            "alt_qr" => $row->alt_qr,
             "fill" => $row->fill,
             "lp_code" => $row->lp_code,
             "lp_name" => $row->lp_name,
             "category" => $row->category,
             "row_name" => $row->row_name,
+            "rule" => new RuleResource($row->rule),
+            "is_presorting_zone" => $row->parking->area->zone->id === Zone::PRESORTING,
             "front_vehicle" => $this->includeFrontVehicle()
         ];
     }

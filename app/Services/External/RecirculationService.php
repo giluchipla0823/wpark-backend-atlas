@@ -2,6 +2,7 @@
 
 namespace App\Services\External;
 
+use App\Models\ActivityLog;
 use App\Repositories\Recirculation\RecirculationRepositoryInterface;
 use Exception;
 use App\Models\Stage;
@@ -12,9 +13,6 @@ use App\Exceptions\owner\BadRequestException;
 
 class RecirculationService
 {
-
-    private const REFERENCE_ERROR_CODE = 'recirculation-ws';
-
     protected $wsdl;
 
     /**
@@ -51,12 +49,12 @@ class RecirculationService
             throw new BadRequestException("Recirculaciones: El vehículo especificado no se encuentra registrado.");
         }
 
-//        // Si el vehículo existe, se procede a comprobar en la tabla “vehicles_stages“ si tiene registrado la etapa de “Gate release“. Si el vehículo tiene el registro mencionado en la tabla “vehicles_stages“, se debe lanzar una excepción con código de estado 400 con el siguiente mensaje: “El vehículo ya tiene la aprobación de etapa GATE RELEASE“.
-//        foreach($vehicle->stages as $stage){
-//            if($stage->code === Stage::STAGE_ST7_CODE){
-//                throw new BadRequestException("Recirculaciones: El vehículo ya tiene la aprobación de etapa GATE RELEASE.");
-//            }
-//        }
+        // Si el vehículo existe, se procede a comprobar en la tabla “vehicles_stages“ si tiene registrado la etapa de “Gate release“. Si el vehículo tiene el registro mencionado en la tabla “vehicles_stages“, se debe lanzar una excepción con código de estado 400 con el siguiente mensaje: “El vehículo ya tiene la aprobación de etapa GATE RELEASE“.
+        foreach($vehicle->stages as $stage){
+            if($stage->code === Stage::STAGE_ST7_CODE){
+                throw new BadRequestException("Recirculaciones: El vehículo ya tiene la aprobación de etapa GATE RELEASE.");
+            }
+        }
 
         $originPosition = $vehicle->lastConfirmedMovement && $vehicle->lastConfirmedMovement->destinationPosition
             ? $vehicle->lastConfirmedMovement->destinationPosition
@@ -151,9 +149,7 @@ class RecirculationService
 
             throw new BadRequestException("ERROR QLS GENERICO.", ['error_detail' => $e->getMessage()]);
         }
-
     }
-
 
     /**
      * @param Vehicle $vehicle
@@ -166,9 +162,11 @@ class RecirculationService
         $activity = activity('Recirculaciones')
             ->withProperties($properties)
             ->log($message);
-        $activity->reference_code = self::REFERENCE_ERROR_CODE;
+
+        $activity->reference_code = ActivityLog::REFERENCE_CODE_RECIRCULATIONS;
         $activity->subject_type = get_class($vehicle);
         $activity->subject_id = $vehicle->id;
+
         $activity->save();
     }
 

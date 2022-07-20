@@ -24,7 +24,6 @@ class RuleSeeder extends Seeder
             [
                 'name' => 'VEHÍCULOS_ROJOS_Y_AZULES',
                 'countdown' => 0,
-                'priority' => 2,
                 'active' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -32,7 +31,6 @@ class RuleSeeder extends Seeder
             [
                 'name' => 'DESTINO_TARRAGONA',
                 'countdown' => 0,
-                'priority' => 1,
                 'active' => 0,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

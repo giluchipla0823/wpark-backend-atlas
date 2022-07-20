@@ -23,7 +23,13 @@ class ColorRepository extends BaseRepository implements ColorRepositoryInterface
      */
     public function all(Request $request): Collection
     {
-        return $this->model->all();
+        $query = $this->model->query();
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Color::UNKNOWN_ID);
+        }
+
+        return $query->get();
     }
 
     /**
@@ -32,7 +38,13 @@ class ColorRepository extends BaseRepository implements ColorRepositoryInterface
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->select(["{$table}.*"]);
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Color::UNKNOWN_ID);
+        }
 
         return Datatables::customizable($query)->response();
     }

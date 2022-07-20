@@ -124,9 +124,7 @@ class VehicleManualStoreService
             "dt_end" => Carbon::now(),
             "comments" => $createdFrom === Vehicle::CREATED_FROM_MOBILE
                 ? "Movimiento por defecto creado desde la aplicación móvil"
-                : null,
-            "created_at" => Carbon::now(),
-            "updated_at" => Carbon::now()
+                : null
         ]);
     }
 }

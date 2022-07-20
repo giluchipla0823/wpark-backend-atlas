@@ -33,6 +33,10 @@ class CompoundRepository extends BaseRepository implements CompoundRepositoryInt
     {
         $query = $this->model->query();
 
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Compound::UNKNOWN_ID);
+        }
+
         return Datatables::customizable($query)->response();
     }
 }

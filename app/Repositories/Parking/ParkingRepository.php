@@ -63,10 +63,13 @@ class ParkingRepository extends BaseRepository implements ParkingRepositoryInter
      */
     public function datatables(Request $request): array
     {
+        $table = $this->model->getTable();
         $query = $this->model->query()
-                      ->with(QueryParamsHelper::getIncludesParamFromRequest());
+                        ->select(["{$table}.*"])
+                        ->with(QueryParamsHelper::getIncludesParamFromRequest());
 
-        return Datatables::customizable($query)->response();
+        return Datatables::customizable($query)
+                ->response();
     }
 
     /**

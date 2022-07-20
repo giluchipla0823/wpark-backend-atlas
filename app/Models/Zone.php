@@ -49,4 +49,26 @@ class Zone extends Model
     {
         return $this->hasMany(Area::class, 'zone_id');
     }
+
+    /**
+     * @return bool
+     */
+    public function checkIsValidForLoad(): bool
+    {
+        return in_array($this->id, self::getValidZonesForLoads());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getValidZonesForLoads(): array
+    {
+        return [
+            Zone::PRESORTING,
+            Zone::CAMPA_GENERAL,
+            Zone::EXTERNO,
+            Zone::OVERFLOW,
+            Zone::BUFFER,
+        ];
+    }
 }

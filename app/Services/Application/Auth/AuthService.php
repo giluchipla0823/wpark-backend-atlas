@@ -2,7 +2,10 @@
 
 namespace App\Services\Application\Auth;
 
-use App\Models\Device;
+use App\Exceptions\owner\BadRequestException;
+use App\Models\Compound;
+use App\Models\PersonalAccessToken;
+use App\Repositories\Device\DeviceRepositoryInterface;
 use Exception;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
@@ -22,18 +25,24 @@ class AuthService
     /**
      * @var UserRepositoryInterface
      */
-    private $repository;
+    private $userRepository;
+    /**
+     * @var DeviceRepositoryInterface
+     */
+    private $deviceRepository;
 
     public function __construct(
-        UserRepositoryInterface $repository
+        UserRepositoryInterface $userRepository,
+        DeviceRepositoryInterface $deviceRepository
     ) {
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
+        $this->deviceRepository = $deviceRepository;
     }
 
     /**
      * @param array $params
      * @return array
-     * @throws AuthenticationException
+     * @throws BadRequestException
      */
     public function login(array $params): array
     {
@@ -43,32 +52,59 @@ class AuthService
         ];
 
         if (!Auth::attempt($credentials)) {
-            throw new AuthenticationException("Credenciales de acceso incorrectas.");
+            throw new BadRequestException("Credenciales de acceso incorrectas.");
         }
 
         $user = Auth::user();
 
         $deviceId = null;
 
-        // TODO: Eliminar porque no es necesario esta comprobación.
         if (array_key_exists('access_from', $params) && $params['access_from'] === User::ACCESS_FROM_MOBILE_APP) {
-            // $device = $user->devices()->where("uuid", $params["uuid"])->first();
-            $device = Device::where("uuid", $params["uuid"])->first();
+            $uuid = $params["uuid"];
+
+            $device = $this->deviceRepository->findOneByUuid($uuid);
 
             if (!$device) {
-                throw new AuthenticationException(
-                    "El dispositivo no se encuentra registrado. Por favor, comunicarse con el administrador del sistema."
+                throw new BadRequestException(
+                    "El dispositivo no se encuentra registrado. Por favor, comunicarse con el administrador del sistema.",
+                    [
+                        "error_details" => [
+                            "reference_code" => "NOT_FOUND_DEVICE",
+                            "data" => ["uuid" => $uuid]
+                        ]
+                    ]
                 );
             }
 
             $deviceId = $device->id;
+
+            $personalAccessToken = PersonalAccessToken::where([
+                ["tokenable_type", "=", User::class],
+                ["tokenable_id", "=", $user->id],
+                ["device_id", "=", $deviceId],
+            ])->first();
+
+            if ($personalAccessToken) {
+                throw new BadRequestException(
+                    "Ya existe una sesión iniciada con el dispositivo especificado.",
+                    [
+                        "error_details" => [
+                            "reference_code" => "DUPLICATE_DEVICE_AUTHENTICATION",
+                            "data" => [
+                                "uuid" => $uuid,
+                                "username" => $user->username
+                            ]
+                        ]
+                    ]
+                );
+            }
         }
 
         $this->updateUserLogin($user);
 
-        $token = $user->createToken(self::TOKEN_KEY, 1, $deviceId)->plainTextToken;
+        $token = $user->createToken(self::TOKEN_KEY, Compound::VALENCIA_ID, $deviceId);
 
-        return $this->handleUserWithTokenResponse($user, $token);
+        return $this->handleUserWithTokenResponse($user, $token->plainTextToken);
     }
 
     /**
@@ -79,7 +115,7 @@ class AuthService
     {
         $params['online'] = 0;
 
-        $this->repository->update($params, $user->id);
+        $this->userRepository->update($params, $user->id);
 
         $user->currentAccessToken()->delete();
     }
@@ -100,7 +136,7 @@ class AuthService
         $params['password'] = $data['newPassword'];
         $params['last_change_password'] = date("Y-m-d H:i:s", strtotime('now'));
 
-        $this->repository->update($params, $user->id);
+        $this->userRepository->update($params, $user->id);
     }
 
     /**
@@ -203,7 +239,7 @@ class AuthService
         $params['last_login'] = date("Y-m-d H:i:s", strtotime('now'));
         $params['online'] = 1;
 
-        $this->repository->update($params, $user->id);
+        $this->userRepository->update($params, $user->id);
     }
 
 }

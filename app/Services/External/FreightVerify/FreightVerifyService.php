@@ -2,6 +2,7 @@
 
 namespace App\Services\External\FreightVerify;
 
+use App\Models\ActivityLog;
 use App\Models\Vehicle;
 use Carbon\Carbon;
 use Exception;
@@ -215,7 +216,7 @@ class FreightVerifyService
             $activity->subject_id = $vehicle->id;
         }
 
-        $activity->reference_code = str_replace(' ', '-', strtolower("freightVerify-{$milestone->getName()}-ws"));
+        $activity->reference_code = ActivityLog::REFERENCE_CODE_FREIGHT_VERIFY;
 
         $activity->save();
     }

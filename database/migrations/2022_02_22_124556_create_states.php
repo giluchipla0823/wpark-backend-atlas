@@ -18,7 +18,7 @@ class CreateStates extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->id()->comment('Identificador único del estado');
             $table->string('name')->comment('Nombre del estado');
-            $table->string('description')->nullable()->default('NULL')->comment('Descripción del estado');
+            $table->string('description')->nullable()->default(NULL)->comment('Descripción del estado');
             $table->timestamps();
             $table->softDeletes();
         });

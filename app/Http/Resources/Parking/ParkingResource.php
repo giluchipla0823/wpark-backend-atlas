@@ -36,6 +36,8 @@ class ParkingResource extends JsonResource
             "order" => $this->order,
             "active" => $this->active,
             "comments" => $this->comments,
+            "can_delete" => !in_array($this->id, [1, 2]),
+            "can_toggle_active" => !in_array($this->id, [1, 2])
         ];
     }
 }

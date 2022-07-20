@@ -36,9 +36,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
-
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->with(QueryParamsHelper::getIncludesParamFromRequest())
+            ->select(["{$table}.*"]);
 
         return Datatables::customizable($query)->response();
     }

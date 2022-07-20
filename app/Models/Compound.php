@@ -21,10 +21,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Compound
  *
  */
-
 class Compound extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public const UNKNOWN_ID = 1;
+    public const VALENCIA_ID = 95;
 
     /**
      * The attributes that are mass assignable.

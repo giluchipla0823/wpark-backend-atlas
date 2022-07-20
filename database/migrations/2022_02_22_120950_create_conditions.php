@@ -17,7 +17,7 @@ class CreateConditions extends Migration
         Schema::create('conditions', function (Blueprint $table) {
             $table->id()->comment('Identificador único de la condición');
             $table->string('name')->comment('Nombre de la condición');
-            $table->string('description')->nullable()->default('NULL')->comment('Descripción de la condición');
+            $table->string('description')->nullable()->default(NULL)->comment('Descripción de la condición');
             $table->string('model')->nullable()->comment('Modelo de la condición');
             $table->foreignId('model_condition_id')->comment('Indica si la condición será para un hold o para una regla')->constrained('model_conditions');
             $table->boolean('required')->default('0')->comment('Indica si la condición es obligatoria (0: No es obligatoria, 1: Es obligatoria)');

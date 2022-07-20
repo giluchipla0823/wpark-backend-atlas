@@ -111,35 +111,29 @@ class UserService
     public function generateUsername(string $name, string $surname): string
     {
         $name = strtoupper($name);
-        $surname = explode(' ', strtoupper($surname));
+        $surname = strtoupper($surname);
         $searching = true;
         $letters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-        $exists = 0;
-
-        $username = $name[0];
-
-        foreach ($surname as $value) {
-            $username.= $value[0];
-        }
+        $username = null;
+        $usernameList = [
+            $name[0],
+            $surname[0]
+        ];
 
         while ($searching) {
             shuffle($letters);
 
-            if ($exists >= 50) {
-                $username = $letters[0] . $letters[1] . $letters[2] . $letters[3];
-            }else if ($exists >= 9) {
-                $username = $name[0] . $letters[0] . $letters[1] . $letters[2];
-            } else {
-                $username.= $letters[0];
+            $randLetters = array_rand($letters, 3);
 
-                if(count($surname) === 1) {
-                    $username.= $letters[0] . $letters[1];
-                }
+            foreach ($randLetters as $val) {
+                $usernameList[] = $letters[$val];
             }
 
-            if ($this->repository->findOneByUsername($username)) {
-                $exists++;
-            } else {
+            sort($usernameList);
+
+            $username = implode("", $usernameList);
+
+            if (!$this->repository->findOneByUsername($username)) {
                 $searching = false;
             }
         }

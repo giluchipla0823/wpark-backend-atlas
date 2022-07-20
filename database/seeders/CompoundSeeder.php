@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Compound;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CompoundSeeder extends Seeder
 {
@@ -15,19 +14,8 @@ class CompoundSeeder extends Seeder
      */
     public function run()
     {
-        $compounds = [
-            [
-                'name' => 'FORD VALENCIA',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'FORD ROMA',
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ]
-        ];
-
-        Compound::insert($compounds);
+        $path = public_path('sql/compounds_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

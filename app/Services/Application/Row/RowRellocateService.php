@@ -204,7 +204,8 @@ class RowRellocateService
             "destination_position_type" => get_class($destinationPosition),
             "destination_position_id" => $destinationPosition->id,
             "manual" => 1,
-            "comments" => "Movement by Row Rellocate"
+            "comments" => "Movement by Row Rellocate",
+            "force_movement" => true
         ]);
 
         $this->movementService->confirmMovement($movement, false);

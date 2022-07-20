@@ -176,10 +176,10 @@ class MovementService
 
                     $row = $slot->row;
 
-                    if (($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM) {
-                        $row->full = 0;
-                        $row->save();
-                    }
+//                    if (($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM) {
+//                        $row->full = 0;
+//                        $row->save();
+//                    }
 
                     $parking = $row->parking;
                 } else {
@@ -269,13 +269,13 @@ class MovementService
 
                 $slot->release($movement->vehicle->design->length);
 
-                /* @var Row $row */
-                $row = $slot->row;
+//                /* @var Row $row */
+//                $row = $slot->row;
 
-                if ($row->fill === 0) {
-                    $row->full = 0;
-                    $row->save();
-                }
+//                if ($row->fill === 0) {
+//                    $row->full = 0;
+//                    $row->save();
+//                }
             }
 
             DB::commit();

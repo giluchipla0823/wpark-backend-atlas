@@ -9,8 +9,11 @@ use App\Helpers\QueryParamsHelper;
 use App\Models\Carrier;
 use App\Models\Load;
 use App\Models\RouteType;
+use App\Models\Slot;
 use App\Models\Vehicle;
+use App\Models\Zone;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
@@ -38,14 +41,12 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
         $transport_exit_id = $params['transport_exit_id'];
         $transport_identifier = Str::random("10");
         $license_plate = $params['license_plate'];
-        $compound_id = $params['compound_id'];
         $carrier = Carrier::with('routes')->find($carrier_id);
 
         $vins = array_column($params["vehicles"], "vin");
 
         $checkVins = [];
 
-        // TODO: Revisar esto
         $vehicles = Vehicle::with(['holds' => function ($q) {
             $q->wherePivot('deleted_at', null);
         }])->whereIn('vin', $vins)->get();
@@ -53,6 +54,8 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
         $vehicles->map(function($vehicle) {
             return $vehicle;
         });
+
+        $zonesValidForLoads = Zone::whereIn('id', Zone::getValidZonesForLoads())->pluck('name')->toArray();
 
         // Comprobamos que no existan vin duplicados y todos los vin existan
         foreach ($vins as $key => $vin) {
@@ -70,12 +73,29 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
         foreach ($vehicles as $key => $vehicle) {
             $index = ($key + 1);
 
+            $position = $vehicle->lastConfirmedMovement->destinationPosition;
+
+            $parking = get_class($position) === Slot::class ? $position->row->parking : $position;
+
+            $zone = $parking->area->zone;
+
+            // Comprobar que el vehículo se encuentra posicionado en un parking que NO sea de zona PLANTA.
+            if (!$zone->checkIsValidForLoad()) {
+                throw new BadRequestException(sprintf(
+                    "El vehículo Nº%s con [%s] no puede ser asignado a una carga porque se encuentra posicionado en zona %s. Las zonas válidas para cargas son: %s",
+                    $index,
+                    $vehicle->vin,
+                    $zone,
+                    implode(", ", $zonesValidForLoads)
+                ));
+            }
+
             // Comprobamos que los vehiculos no tengan ya un load
             if ($vehicle->loads) {
                 $load = $vehicle->loads;
 
                 throw new BadRequestException(sprintf(
-                    "El vehículo Nº%s con [%s] tiene asignado las retenciones: [%s].",
+                    "El vehículo Nº%s con [%s] se encuentra asignado en la carga: [%s].",
                     $index,
                     $vehicle->vin,
                     $load->transport_identifier
@@ -105,19 +125,42 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
             }
         }
 
+        // Obtener la fila a la que pertenecen los vehículos
+        $positions = $vehicles
+                        ->pluck('lastConfirmedMovement.destinationPosition')
+                        ->map(function ($position) {
+                            $position->type = get_class($position);
+
+                            return $position;
+                        });
+
+        $positionsTypes = $positions->pluck('type')->unique();
+
+        if ($positionsTypes->count() === 1 && $positionsTypes->first() === Slot::class) {
+            $category = $positions->pluck('row.id')->unique()->count() === 1
+                            ? $positions->first()->row->category
+                            : Load::MULTIPLES_CATEGORY;
+        } else {
+            $category = Load::MULTIPLES_CATEGORY;
+        }
+
+        $user = Auth::user();
+        $compound = $user->currentAccessToken()->compound;
+
         DB::beginTransaction();
 
         try {
-            // Creamos el load
 
+            // Creamos el load
             $load = $this->model->create([
                 'transport_identifier' => $transport_identifier,
                 'license_plate' => $license_plate,
-                'trailer_license_plate' => null,
+                'trailer_license_plate' => $params['trailer_license_plate'] ?? null,
                 'carrier_id' => $carrier_id,
                 'exit_transport_id' => $transport_exit_id,
-                'compound_id' => $compound_id,
-                'ready' => 1
+                'compound_id' => $compound->id,
+                'ready' => 1,
+                'category' => $category
             ]);
 
             foreach ($params["vehicles"] as $item) {
@@ -133,6 +176,7 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
 
             throw $e;
         }
+
         return $load;
     }
 
@@ -160,9 +204,10 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
-
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->select(["{$table}.*"])
+            ->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         return Datatables::customizable($query)->response();
     }

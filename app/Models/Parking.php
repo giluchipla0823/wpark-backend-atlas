@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\AppHelper;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +34,6 @@ use App\Http\Resources\Parking\ParkingResource;
  * Class Parking
  *
  */
-
 class Parking extends Model
 {
     use HasFactory, SoftDeletes;
@@ -100,7 +100,7 @@ class Parking extends Model
      */
     public function getFillCalculateAttribute(): int
     {
-        return $this->rows->sum("real_fill");
+        return $this->rows instanceof Collection ? $this->rows->sum("real_fill") : 0;
     }
 
     /**

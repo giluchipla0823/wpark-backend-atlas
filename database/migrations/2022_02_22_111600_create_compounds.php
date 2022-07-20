@@ -17,6 +17,10 @@ class CreateCompounds extends Migration
         Schema::create('compounds', function (Blueprint $table) {
             $table->id()->comment('Identificador único de la campa');
             $table->string('name')->comment('Nombre de la campa');
+            $table->string('zip_code')->nullable()->comment('Código postal de la campa');
+            $table->string('city')->nullable()->comment('Ciudad de la campa');
+            $table->string('street')->nullable()->comment('Dirección de la campa');
+            $table->string('country')->nullable()->comment('País de la campa');
             $table->timestamps();
             $table->softDeletes();
         });

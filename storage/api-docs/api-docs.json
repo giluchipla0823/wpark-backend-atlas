@@ -12160,12 +12160,6 @@
                         "maxLength": 255,
                         "example": "FORD"
                     },
-                    "priority": {
-                        "description": "Indica el orden de prioridad de la regla",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "1"
-                    },
                     "is_group": {
                         "description": "Indica si es una regla simple o un grupo de reglas (0: Regla simple, 1: Grupo de reglas)",
                         "type": "boolean",
@@ -12176,12 +12170,6 @@
                         "description": "Indica el bloque que va asociado la regla",
                         "type": "integer",
                         "maxLength": 10,
-                        "example": "2"
-                    },
-                    "carrier_id": {
-                        "description": "Indica el transportista por defecto que va asociado la regla",
-                        "type": "integer",
-                        "maxLength": 20,
                         "example": "2"
                     },
                     "conditions": {
@@ -12226,12 +12214,6 @@
                         "maxLength": 255,
                         "example": "FORD"
                     },
-                    "priority": {
-                        "description": "Indica el orden de prioridad de la regla",
-                        "type": "integer",
-                        "maxLength": 10,
-                        "example": "1"
-                    },
                     "is_group": {
                         "description": "Indica si es una regla simple o un grupo de reglas (0: Regla simple, 1: Grupo de reglas)",
                         "type": "boolean",
@@ -12242,12 +12224,6 @@
                         "description": "Indica el bloque que va asociado la regla",
                         "type": "integer",
                         "maxLength": 10,
-                        "example": "2"
-                    },
-                    "carrier_id": {
-                        "description": "Indica el transportista por defecto que va asociado la regla",
-                        "type": "integer",
-                        "maxLength": 20,
                         "example": "2"
                     },
                     "conditions": {
@@ -12270,12 +12246,6 @@
                             },
                             "type": "object"
                         }
-                    },
-                    "active": {
-                        "description": "Indica si la regla está activa (0: No está activa, 1: Está activa)",
-                        "type": "boolean",
-                        "maxLength": 1,
-                        "example": "1"
                     }
                 },
                 "type": "object",

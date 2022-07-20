@@ -176,7 +176,7 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             ->where([
                 ["movements.confirmed", "=", 1],
                 ["slots.row_id", "=",  $row->id],
-                ["slots.fill", "=",  1],
+                ["slots.fill", ">",  0],
             ])
             ->orderBy("slots.slot_number", "ASC");
 

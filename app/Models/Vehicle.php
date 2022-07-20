@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Row;
-use App\Models\Slot;
-use App\Models\Parking;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\owner\BadRequestException;
@@ -38,7 +39,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * Class Vehicle
  *
  */
-
 class Vehicle extends Model
 {
     use HasFactory, SoftDeletes;
@@ -74,57 +74,72 @@ class Vehicle extends Model
      * @param $value
      * @return string|null
      */
-    public function getCategoryAttribute($value): string | null
+    public function getCategoryAttribute($value): ?string
     {
         return $this->shippingRule ? $this->shippingRule->name : null;
     }
 
-    public function design()
+    public function design(): BelongsTo
     {
         return $this->belongsTo(Design::class, 'design_id');
     }
 
-    public function color()
+    public function color(): BelongsTo
     {
         return $this->belongsTo(Color::class, 'color_id');
     }
 
-    public function destinationCode()
+    public function destinationCode(): BelongsTo
     {
         return $this->belongsTo(DestinationCode::class, 'destination_code_id');
     }
 
-    public function loads()
+    public function loads(): BelongsTo
     {
         return $this->belongsTo(Load::class, 'load_id');
     }
 
-    public function route()
+    public function route(): BelongsTo
     {
         return $this->belongsTo(Route::class, 'route_id');
     }
 
-    public function dealer()
+    /**
+     * Dealer que tiene asignado el vehículo.
+     *
+     * @return BelongsTo
+     */
+    public function dealer(): BelongsTo
     {
         return $this->belongsTo(Dealer::class, 'dealer_id');
     }
 
-    public function lastRule()
+    public function lastRule(): BelongsTo
     {
         return $this->belongsTo(Rule::class, 'last_rule_id');
     }
 
-    public function shippingRule()
+    public function shippingRule(): BelongsTo
     {
         return $this->belongsTo(Rule::class, 'shipping_rule_id');
     }
 
-    public function states()
+    /**
+     * States del vehículo.
+     *
+     * @return BelongsToMany
+     */
+    public function states(): BelongsToMany
     {
         return $this->belongsToMany(State::class, 'vehicles_states', 'vehicle_id', 'state_id')->withTimestamps();
     }
 
-    public function latestState()
+    /**
+     * Último State del vehículo.
+     *
+     * @return BelongsToMany
+     */
+    public function latestState(): BelongsToMany
     {
         return $this->belongsToMany(
             State::class,
@@ -148,24 +163,44 @@ class Vehicle extends Model
         "));
     }
 
-    public function holds()
+    /**
+     * Holds que tiene asignado el vehículo.
+     *
+     * @return BelongsToMany
+     */
+    public function holds(): BelongsToMany
     {
         return $this->belongsToMany(Hold::class, 'holds_vehicles', 'vehicle_id', 'hold_id')->withTimestamps();
     }
 
-    public function movements()
+    /**
+     * Movimientos del vehículo.
+     *
+     * @return HasMany
+     */
+    public function movements(): HasMany
     {
         return $this->hasMany(Movement::class, 'vehicle_id');
     }
 
-    public function lastMovement()
+    /**
+     * Último movimiento (confirmado, pendiente o cancelado) del vehículo.
+     *
+     * @return HasOne
+     */
+    public function lastMovement(): HasOne
     {
         return $this->hasOne(Movement::class, 'vehicle_id')
                     ->orderBy('created_at', 'desc')
                     ->latest();
     }
 
-    public function lastConfirmedMovement()
+    /**
+     * Último movimiento confirmado del vehículo.
+     *
+     * @return HasOne
+     */
+    public function lastConfirmedMovement(): HasOne
     {
         return $this->hasOne(Movement::class, 'vehicle_id')
                     ->where('confirmed', 1)
@@ -173,7 +208,12 @@ class Vehicle extends Model
                     ->latest();
     }
 
-    public function lastPendingMovement()
+    /**
+     * Último movimiento pendiente del vehículo.
+     *
+     * @return HasOne
+     */
+    public function lastPendingMovement(): HasOne
     {
         return $this->hasOne(Movement::class, 'vehicle_id')
             ->where([
@@ -194,7 +234,12 @@ class Vehicle extends Model
         return $this->lastMovement->confirmed === 0 &&  $this->lastMovement->canceled === 0;
     }
 
-    public function lastCanceledMovement()
+    /**
+     * Último movimiento cancelado del vehículo.
+     *
+     * @return HasOne
+     */
+    public function lastCanceledMovement(): HasOne
     {
         return $this->hasOne(Movement::class, 'vehicle_id')
             ->where('canceled', 1)
@@ -202,27 +247,42 @@ class Vehicle extends Model
             ->latest();
     }
 
-    public function stages()
+    public function stages(): BelongsToMany
     {
-        return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')->withPivot('manual', 'tracking_date')->withTimestamps();
+        return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')
+                    ->withPivot('manual', 'tracking_date')
+                    ->withTimestamps();
     }
 
+
+    /**
+     * @return Parking
+     * @throws BadRequestException
+     */
     public function getParking(): Parking {
-        // Parking || Slot || Row
-        $ubication = $this->lastConfirmedMovement->destinationPosition;
-        $ubicationClass = get_class($ubication);
-        if ($ubicationClass === Parking::class) {
-            return $ubication;
-        } else if ($ubicationClass === Row::class) {
-            return $ubication->parking;
-        } else if ($ubicationClass === Slot::class) {
-            return $ubication->row->parking;
-        } else {
-            throw new BadRequestException("No se pudo encontrar la ubicación del vehículo");
+        $destinationPosition = $this->lastConfirmedMovement->destinationPosition;
+
+        switch (get_class($destinationPosition)) {
+            case Parking::class:
+                $parking = $destinationPosition;
+                break;
+
+            case Row::class:
+                $parking = $destinationPosition->parking;
+                break;
+
+            case Slot::class:
+                $parking = $destinationPosition->row->parking;
+                break;
+
+            default:
+                throw new BadRequestException("No se pudo encontrar la ubicación del vehículo.");
         }
+
+        return $parking;
     }
 
-    public function latestStage()
+    public function latestStage(): BelongsToMany
     {
         return $this->belongsToMany(
             Stage::class,
@@ -246,27 +306,21 @@ class Vehicle extends Model
         "));
     }
 
-    /* public function getStage($stage)
+    public function transport(): BelongsTo
     {
-        return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id', 'manual', 'trackind_date')->withTimestamps()->where('stage_id', $stage);
-    } */
-
-    public function transport()
-    {
-        // return $this->belongsTo(Transport::class, 'transport_id');
         return $this->belongsTo(Transport::class, 'entry_transport_id');
     }
 
-    // LISTO para gate release WF05XXWPG5NJ49327
-
-    public function recirculations()
+    public function recirculations(): HasMany
     {
         return $this->hasMany(Recirculation::class, 'vehicle_id');
     }
 
-    public function lastRecirculation()
+    public function lastRecirculation(): HasOne
     {
-        return $this->hasOne(Recirculation::class, 'vehicle_id')->orderBy('created_at', 'desc')->latest();
+        return $this->hasOne(Recirculation::class, 'vehicle_id')
+                    ->orderBy('created_at', 'desc')
+                    ->latest();
     }
 
 }

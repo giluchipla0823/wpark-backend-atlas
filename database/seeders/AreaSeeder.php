@@ -49,9 +49,9 @@ class AreaSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'OVERFLOW 01',
+                'name' => 'OVERFLOW',
                 'compound_id' => 1,
-                'zone_id' => 6,
+                'zone_id' => 5,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

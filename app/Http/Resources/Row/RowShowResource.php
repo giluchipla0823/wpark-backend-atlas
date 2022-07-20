@@ -62,6 +62,20 @@ class RowShowResource extends JsonResource
      */
     private function includeFrontVehicle(): ?MovementVehicleRecommendResource
     {
+//        $slot = $this->slots->where("real_fill", 0)->first();
+//
+//        if (!$slot) {
+//            return null;
+//        }
+//
+//        $previousSlot = $slot
+//
+//        return ($slot && $slot->lastDestinationMovement && $slot->lastDestinationMovement->confirmed === 1)
+//            ? new MovementVehicleRecommendResource($slot->lastDestinationMovement->vehicle)
+//            : null;
+
+
+
         $slot = $this->slots->where("real_fill", 1)->last();
 
         return ($slot && $slot->lastDestinationMovement && $slot->lastDestinationMovement->confirmed === 1)

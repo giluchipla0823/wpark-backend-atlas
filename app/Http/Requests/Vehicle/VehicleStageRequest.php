@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests\Vehicle;
 
+use App\Exceptions\FORD\FordStandardErrorException;
+use App\Helpers\ValidationHelper;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Symfony\Component\HttpFoundation\Response;
 
 class VehicleStageRequest extends FormRequest
 {
@@ -14,6 +18,29 @@ class VehicleStageRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * @param Validator $validator
+     * @return void
+     * @throws FordStandardErrorException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = ValidationHelper::formatErrors($validator->errors()->toArray());
+
+        $errors = array_map(function ($error) {
+            return [
+                'name' => $error['field'],
+                'message' => $error['message'],
+            ];
+        }, $errors);
+
+        $messages = [
+            "Validation failed | Error count: " . count($errors)
+        ];
+
+        throw new FordStandardErrorException($messages, Response::HTTP_BAD_REQUEST, $errors);
     }
 
     /**

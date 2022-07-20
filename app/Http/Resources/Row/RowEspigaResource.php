@@ -68,7 +68,7 @@ class RowEspigaResource extends JsonResource
 
             $vehicle = null;
 
-            if ($item->fill && $item->destinationMovement && $item->destinationMovement->confirmed === 1) {
+            if ($item->fill > 0 && $item->destinationMovement && $item->destinationMovement->confirmed === 1) {
                 $vehicle = $this->getVehicle($item->destinationMovement->vehicle);
             }
 

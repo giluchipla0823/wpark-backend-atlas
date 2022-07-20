@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1\Vehicle;
 
-use Exception;
+use App\Exceptions\FORD\FordStandardErrorException;
 use App\Http\Controllers\ApiController;
 use App\Http\Requests\Vehicle\VehicleStageRequest;
 use App\Services\Application\Vehicle\VehicleStageService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,16 +43,18 @@ class VehicleStageController extends ApiController
      *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
      * )
      *
-     * Display the specified resource.
+     * ST7 Api.
      *
      * @param VehicleStageRequest $request
      * @return JsonResponse
-     * @throws Exception
+     * @throws FordStandardErrorException
+     * @throws GuzzleException
      */
     public function vehicleStage(VehicleStageRequest $request): JsonResponse
     {
         $this->vehicleStageService->vehicleStage($request->all());
 
-        return $this->showMessage('OK', Response::HTTP_CREATED);
+        // return $this->showMessage('OK', Response::HTTP_CREATED);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

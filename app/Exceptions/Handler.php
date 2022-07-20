@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\FORD\FordStandardErrorException;
+use App\Helpers\FordSt8ApiHelper;
 use Exception;
 use Throwable;
 use Illuminate\Auth\AuthenticationException;
@@ -67,6 +69,10 @@ class Handler extends ExceptionHandler
         }
 
         try {
+            if ($e instanceof FordStandardErrorException) {
+                return $this->convertFordStandardErrorExceptionToResponse($e);
+            }
+
             if ($e instanceof ValidationException) {
                 return $this->convertValidationExceptionToResponse($e, $request);
             }
@@ -149,6 +155,18 @@ class Handler extends ExceptionHandler
             Response::HTTP_UNPROCESSABLE_ENTITY,
             [ApiHelper::IDX_STR_JSON_ERRORS => $errors]
         );
+    }
+
+    /**
+     * @param FordStandardErrorException $exception
+     * @return JsonResponse
+     * @throws Exception
+     */
+    private function convertFordStandardErrorExceptionToResponse(FordStandardErrorException $exception): JsonResponse
+    {
+        $response = FordSt8ApiHelper::transformToArrayFromSelfException($exception);
+
+        return response()->json($response, $exception->getStatusCode());
     }
 
     /**

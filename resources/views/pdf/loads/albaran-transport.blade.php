@@ -129,15 +129,9 @@
 
         @foreach($vehicles as $key => $vehicle)
             @php
-                $lastConfirmedMovement = $vehicle->lastConfirmedMovement;
-
-                $rowName = null;
-                $slotNumber = null;
-
-                if ($lastConfirmedMovement->destinationPosition && $lastConfirmedMovement->destinationPosition->row) {
-                    $rowName = $lastConfirmedMovement->destinationPosition->row->row_name;
-                    $slotNumber = $lastConfirmedMovement->destinationPosition->slot_number;
-                }
+                $position = $vehicle->additional_data->position;
+                $slot = $position->slot;
+                $row = $position->row;
 
                 $iterator ++;
             @endphp
@@ -218,8 +212,8 @@
                                     <tr>
                                         <td style="text-align: center;">
                                             <strong>Position</strong>
-                                            <h3 style="margin: 0; font-size: 20px">{{ $rowName }}</h3>
-                                            <h3 style="margin: 0; font-size: 20px">{{ $slotNumber }}</h3>
+                                            <h3 style="margin: 0; font-size: 20px">{{ $row->row_name }}</h3>
+                                            <h3 style="margin: 0; font-size: 20px">{{ $slot->slot_number }}</h3>
                                         </td>
                                         <td style="text-align: right">
                                             <img src="{{ 'data:image/png;base64,' . DNS1D::getBarcodePNG($vehicle->vin, 'C128', 1.15, 45, [1,1,1], true)  }}" />
@@ -233,13 +227,7 @@
                                         </td>
                                         <td style="vertical-align: top;">
                                             <div style="margin-top: 50px; margin-left: 20px;">
-                                                @if($vehicle->dealer->id === 9999)
-                                                    {{ $vehicle->dealer->name  }}
-                                                @else
-                                                    {{ $vehicle->dealer->name }} <br />
-                                                    {{ $vehicle->dealer->street }} <br />
-                                                    {{ $vehicle->dealer->zip_code }} {{ $vehicle->dealer->city }}
-                                                @endif
+                                                {!! $vehicle->dealer->full_address !!}
                                             </div>
                                         </td>
                                     </tr>

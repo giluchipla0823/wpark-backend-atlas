@@ -19,7 +19,7 @@ class CreateDestinationCodes extends Migration
             $table->string('name', 100)->comment('Nombre del código de destino');
             $table->string('code', 5)->unique()->comment('Código del código de destino');
             $table->foreignId('country_id')->comment('Indica el país del código de destino')->constrained('countries');
-            $table->string('description')->nullable()->default('NULL')->comment('Descripción del código de destino');
+            $table->string('description')->nullable()->default(NULL)->comment('Descripción del código de destino');
             $table->boolean('active')->default('1')->comment('Indica si el código de destino está activo (0: No está activo, 1: Está activo)');
             $table->timestamps();
             $table->softDeletes();

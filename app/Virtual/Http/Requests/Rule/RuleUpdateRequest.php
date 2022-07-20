@@ -28,17 +28,6 @@ class RuleUpdateRequest
 
     /**
      * @OA\Property(
-     *     property="priority",
-     *     type="integer",
-     *     maxLength=10,
-     *     description="Indica el orden de prioridad de la regla",
-     *     example="1"
-     * )
-     */
-    public $priority; // Activar solo si es una regla simple
-
-    /**
-     * @OA\Property(
      *     property="is_group",
      *     type="boolean",
      *     maxLength=1,
@@ -58,28 +47,6 @@ class RuleUpdateRequest
      * )
      */
     public $block_id; // Activar solo si es regla simple y va a asociado a una fila
-
-    /**
-     * @OA\Property(
-     *     property="predefined_zone_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica el parking que va asociado la regla",
-     *     example="2"
-     * )
-     */
-    //public $predefined_zone_id; // Activar solo si es regla simple y va a asociado a un parking
-
-    /**
-     * @OA\Property(
-     *     property="carrier_id",
-     *     type="integer",
-     *     maxLength=20,
-     *     description="Indica el transportista por defecto que va asociado la regla",
-     *     example="2"
-     * )
-     */
-    public $carrier_id; // Activar solo si es regla simple
 
     /**
      * @OA\Property(
@@ -107,32 +74,4 @@ class RuleUpdateRequest
      * )
      */
     public $conditions; // Activar solo si es regla simple
-
-    /**
-     * @OA\Property(
-     *     property="rules",
-     *     type="array",
-     *     @OA\Items(
-     *          @OA\Property(
-     *               property="rule_id",
-     *               type="integer",
-     *               example="2"
-     *     ),
-     *     @OA\Items(type="array"),
-     *     description="Id´s de las reglas que irán asociadas al grupo de reglas"
-     * )
-     */
-    //public $rules; // Activar solo si es regla agrupada
-
-    /**
-     * @OA\Property(
-     *     property="active",
-     *     type="boolean",
-     *     maxLength=1,
-     *     description="Indica si la regla está activa (0: No está activa, 1: Está activa)",
-     *     example="1"
-     * )
-     */
-    public $active;
-
 }

@@ -86,7 +86,8 @@ class VehicleShowResource extends JsonResource
             ] : null,
             "load" => new LoadShowResource($this->loads),
             "last_recirculation" => new RecirculationResource($this->lastRecirculation),
-            "recirculations" => $this->includeRecirculations()
+            "recirculations" => $this->includeRecirculations(),
+            "info" => $this->info
         ];
     }
 

@@ -33,10 +33,13 @@ class Load extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const MULTIPLES_CATEGORY = 'MULTIPLES';
+
     protected $fillable = [
         'transport_identifier',
         'license_plate',
         'trailer_license_plate',
+        'category',
         'carrier_id',
         'exit_transport_id',
         'compound_id',

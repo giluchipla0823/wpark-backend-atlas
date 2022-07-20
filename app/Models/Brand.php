@@ -28,6 +28,8 @@ class Brand extends Model
 {
     use HasFactory, SoftDeletes;
 
+    public const UNKNOWN_ID = 1;
+
     /**
      * The attributes that are mass assignable.
      *

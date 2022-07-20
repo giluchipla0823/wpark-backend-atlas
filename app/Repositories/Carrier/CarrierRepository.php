@@ -25,7 +25,13 @@ class CarrierRepository extends BaseRepository implements CarrierRepositoryInter
      */
     public function all(Request $request): Collection
     {
-        return $this->model->all();
+        $query = $this->model->query();
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Carrier::UNKNOWN_ID);
+        }
+
+        return $query->get();
     }
 
     /**
@@ -34,7 +40,14 @@ class CarrierRepository extends BaseRepository implements CarrierRepositoryInter
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->select(["{$table}.*"])
+            ->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Carrier::UNKNOWN_ID);
+        }
 
         return DataTables::customizable($query)->response();
     }

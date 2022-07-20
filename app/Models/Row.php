@@ -56,6 +56,7 @@ class Row extends Model
         'parking_id',
         'block_id',
         'rule_id',
+        'category',
         'capacity',
         'fill',
         'capacitymm',
@@ -68,7 +69,8 @@ class Row extends Model
         'updated_at'
     ];
 
-    protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
+    // protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
+    protected $appends = ["row_name", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
 
     public function parking()
     {

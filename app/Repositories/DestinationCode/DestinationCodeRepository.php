@@ -31,6 +31,10 @@ class DestinationCodeRepository extends BaseRepository implements DestinationCod
             $query = $query->where("country_id", "=", $countryId);
         }
 
+        if ($request->query->getBoolean('can_exclude_unknown', false)) {
+            $query = $query->where("id", "!=", DestinationCode::UNKNOWN_ID);
+        }
+
         return $query->get();
     }
 
@@ -40,9 +44,14 @@ class DestinationCodeRepository extends BaseRepository implements DestinationCod
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->with(QueryParamsHelper::getIncludesParamFromRequest())
+            ->select(["{$table}.*"]);
 
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+        if ($request->query->getBoolean('can_exclude_unknown', false)) {
+            $query = $query->where("id", "!=", DestinationCode::UNKNOWN_ID);
+        }
 
         return Datatables::customizable($query)->response();
     }

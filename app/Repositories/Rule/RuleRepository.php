@@ -56,9 +56,10 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
-
-        $query->with(QueryParamsHelper::getIncludesParamFromRequest());
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->with(QueryParamsHelper::getIncludesParamFromRequest())
+            ->select(["{$table}.*"]);
 
         if ($request->query->has("is_group")) {
             $isGroup = $request->query->getInt("is_group");

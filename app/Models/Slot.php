@@ -154,7 +154,11 @@ class Slot extends Model
      */
     public function getRealFillAttribute(): int
     {
-        return (int) ($this->lastDestinationMovement && $this->lastDestinationMovement->confirmed === 1);
+        return (int) (
+            $this->fill > 0 &&
+            $this->lastDestinationMovement &&
+            $this->lastDestinationMovement->confirmed === 1
+        );
     }
 
     /**
@@ -193,8 +197,19 @@ class Slot extends Model
         $row->decrement("fill");
         $row->decrement("fillmm", $vehicleLength);
 
+        $mustSaveRow = false;
+
         if ($row->fill === 0) {
             $row->rule_id = null;
+            $mustSaveRow = true;
+        }
+
+        if (($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM) {
+            $row->full = 0;
+            $mustSaveRow = true;
+        }
+
+        if ($mustSaveRow) {
             $row->save();
         }
 

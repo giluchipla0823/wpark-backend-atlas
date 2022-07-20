@@ -1,53 +1,105 @@
-
-INSERT INTO `compounds` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
-	(1, 'FORD VALENCIA', '2022-06-23 07:41:51', '2022-06-23 07:41:51', NULL),
-	(2, 'FORD ROMA', '2022-06-23 07:41:51', '2022-06-23 07:41:51', NULL),
-	(3, 'Aguas de Moura', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(4, 'ALS COMP', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(5, 'BARCELONA', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(6, 'CHESTE COMPOUND', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(7, 'direct dealer delivery', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(8, 'Plant pick up', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(9, 'RENNES', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(10, 'SAARLOUIS', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(11, 'SAGUNTO', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(12, 'SANTANDER', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(13, 'TARNOS', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(14, 'TARRAGONA', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(15, 'tba', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(16, 'UN', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(17, 'Valencia plant pick up', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(18, 'ANTWERP 1333', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(19, 'Baltimore', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(20, 'Bayport', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(21, 'CAGLIARI', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(22, 'CIVITAVECCHIA', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(23, 'CONSTANTA', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(24, 'Cork', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(25, 'Dakar', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(26, 'Dakar/Freetown', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(27, 'Derince', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(28, 'Drammen', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(29, 'ESBJERG', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(30, 'FLUSHING', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(31, 'Halifax', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(32, 'Hueneme', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(33, 'Jacksonville', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(34, 'Koper', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(35, 'Lisbon', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(36, 'LIVORNO', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(37, 'Montevideo', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(38, 'Newark', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(39, 'Paldiski', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(40, 'PALERMO', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(41, 'POZNAN', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(42, 'SALERNO', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(43, 'SARMED', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(44, 'SAVONA', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(45, 'SOTON', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(46, 'Spanish Port of choice HOEGH', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(47, 'ST MALO', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(48, 'Tema', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(49, 'via ANTWERP to LIVERPOOL', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(50, 'WALLHAMN', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL),
-	(51, 'Yenikoy', '2022-06-23 09:43:15', '2022-06-23 09:43:16', NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('UNKNOWN',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ADELAIDE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AGUAS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AGUAS VHC',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AGUAS_DE_MOURA','2956-589','Aguas de Moura','Estrada Nacional no.10 km56','PORTUGAL', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AIRPORT',NULL,'VALENCIA AIRPORT','ALMACEN GROUNDFORCE ( GROUNDFORCE WAREHOUSE )','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ALS COMP','4624','HARKINGEN','LISCHMATT 17-19','SWITZERLAND', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AMBAZAC','87240','AMBAZAC','SNTC ZI DES GRANDES BP 10','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AMBERIEU','01502','AMBERIEU EN BUGEY','ORTRANS CARREFOUR DE L´AVIATION','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ANTWERP',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AUCKLAND',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('AUTOTRANS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BALEA FLE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BAR PORT','08039','BARCELONA','AUTOTERMINAL     MUELLE DARSENA SUR S/N','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BAR PORT_SETRAM','08039','BARCELONA','SETRAM    MUELLE DARSENA SUR S/N','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BARCELONA',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BATANGAS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BLG TRANS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BLUE_BIZZ','2910-485','PENINSULA DE SETUBAL','ESTRADA DO VALE DA ROSA','PORTUGAL', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BORDEAUX','33530','BASSENS','RUE DU PORT BP26','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BORN','6121','BORN','Verloven van Themsstweg 2','Netherlands', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BOUCHAIN','405443','BOUCHAIN','SEVEL NORD-BAT 32 71 No3','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BOULOU','66160','LE BOULOU','CHEMIN DE LA GAZETTE','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BOURGES','1800','BOURGES','UNIROUTE DE LA GARE D´ASNIERES','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BR-HAVEN',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BRISBANE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('BUDAOERS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('CADIZ PORT','11006','CADIZ','MUELLE MARQUES DE COMILLAS - AMPLIACION SN','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('CHEST FLE','46380','CHESTE','PARTIDA CABEZA REDONDO S/N A3,EXIT 334','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('CHEST VHC','46380','CHESTE','PARTIDA CABEZA REDONDO S/N A3,EXIT 334','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('CHESTE','46380','CHESTE','PARTIDA CABEZA REDONDO S/N A3,EXIT 334','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('CLERMONT','63118','CEBAZAT','SNTC ZI DE LADOUX-RUE BLEUE','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('COLOGNE','50735','COLOGNE','Am Olhafen','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DABROWA G',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DAGRAIL',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DAGTOPS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DBN DOCKS',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DELIVERED',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('DIJON','21806','CHEVIGNY-SAINT-SAUVEUR','BATRANS ZI SUD BP28','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ELAB-IDI',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('FORBACH','20188','FORBACH','PARC D´ACTIVITIES DE FORBACH','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('FORD KOLN',NULL,'COLOGNE','ENTWICKLUNGSZENTRUM MERKENICH - TOR 54','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('FREMANTLE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GEFCOCZECHREPUBLIK','280 02','Kolin','Prumyslova zona Ovcary 525','CZECH REPUBLIC', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GENK',NULL,'GENK','FORD GENK (gate 5) Henry Fordlaan','BELGIUM', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GRAZ','8042',NULL,'MAGGSTRASSE 30','AUSTRIA', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GRAZ_COMPOUND','8042','HARTBERG','MAGGSTRASSE 30','AUSTRIA', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GUINGAMP','22200','GUINGAMP','UNIROUTE ZI DE GRACES','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('GUSTAVSBURG','65462','Ginsheim-Gustavsburg','Landdammstraße 24 - 26','Deutschland', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('HALL','A-6060','HALL IN TIROL','LOFFLERWEG 35','AUSTRIA', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('HALL N',NULL,'COLOGNE','HENRY FORD STRASSE 1','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('HALLCOMPOUND','A-6060','HALL IN TIROL','LOFFLERWEG 35','AUSTRIA', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('HALLE-N',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ILLINGEN','75428','Illingen','Wilhelmstr. 115','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('KIEL','24143','KieL','Norwegenkai','Germany', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('KOCAELI',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('L CHABANG',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('LEHRTE','D-31275','Lehrte-Aligse','Reuschersweg 1','Germany', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('LOGATEC',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MALAG FLE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MELBOURNE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MIRAMAS','13142','MIRAMAS','QUARTE DU PARC DE L´ARTILLERIE BP69','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MOSCOW',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MOSTAVA',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('MOUGINS','06250','MOUGINS','CHEMIN DU COUDOURON','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('NAVICAR',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('NEUSS','41460','Neuss','Floßhafenstr. 30','Germany', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('NEW SOTON',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('PASAJES',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('PT KELANG',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('RENNES','35131','Chartres de Bretagne','Rue de Nantes','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('RENNES_ISLAND','35131','CHARTRES DE BRETAGNE','Route de Nantes','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('RIBERA','46440','ALMUSSAFES','PARQUE IND JUAN.C/TRAMUNTANA 15','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SAARLOUIS','D-66/30','SAARLOUIS','HENRY FORD STRASE','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SAGUNTO','46520','SAGUNTO','CARPORT SAGUNTO SL       MUELLE SUR','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SAGUNTO2','46520','SAGUNTO','NOATUM TERMINAL','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SALZBURG','5204','AUSTRIA','Feldstrasse 8',NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SANTANDER','39011','SANTANDER','PUERTO DE RAOS, PARCELA7, ESPIGON CENTRAL','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SARMED',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SCHKEUDITZ','D-04435','Schkeuditz','Hermann-Köhl- Strasse 1','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SETE COMPOUND',NULL,NULL,NULL,'FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ST MALO',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('STRASSWALCHEN_','5204','STRASSWALCHEN','Feldstrasse 8','AUSTRIA', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('SYDNEY',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TARNOS','40200','TARNOS','AVENUE DE 1er DE MAI','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TARRAGONA',NULL,NULL,'PUERTO DE TARRAGONA        Muelle de Andalucia s/n',NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TARRAGONA2','43004','Tarragona','PUERTO DE TARRAGONA, muelle de Cantabria s/n',NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TONGEREN','3700','TONGEREN','Prinsenweg 2','BELGIUM', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TORRENTE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TOULOUSE','31150','LESPINASSE','RUE DU CHAMP DU BOUSQUET','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('TOURS','37520','LA RICHE','UNIROUTE RUE DU PONT LIBERT','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('UEBERHERN','66802','UEBERHERN','LANGWIES 101','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('VAL PLANT',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('VAL PORT','46024','VALENCIA','TERMINAL EUROPA                     DIQUE ESTE S/N','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('VALENCIA',NULL,NULL,NULL,'ESP', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('VALENTON','94460','VALENTON','1, RUE DE ´ILLE DE FRANCE','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('VIGO','36201','VIGO','Puerto de Vigo','SPAIN', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('WALOM – TARNOS','40220','TARNOS','458 rue des Dunes','FRANCE', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('WIEN',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('WOERTH','76744','WOERTH','LANDESHAFEN','GERMANY', now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ZEEBR 502',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ZEEBR CTO',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ZEEBR NES',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ZEEBRUGGE',NULL,NULL,NULL,NULL, now(), now(), NULL);
+INSERT INTO `compounds` (`name`,`zip_code`,`city`,`street`,`country`, `created_at`, `updated_at`, `deleted_at`) VALUES ('ZULPICH','53909','Zülpich','Richard Lawson Str','Germany', now(), now(), NULL);

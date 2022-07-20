@@ -48,11 +48,9 @@ class Rule extends Model
     protected $fillable = [
         'name',
         'countdown',
-        'priority',
         'is_group',
         'final_position',
         'predefined_zone_id',
-        'carrier_id',
         'active',
         'deleted_at',
         'created_at',
@@ -73,11 +71,6 @@ class Rule extends Model
     public function predefinedParking()
     {
         return $this->belongsTo(Parking::class, 'predefined_zone_id');
-    }
-
-    public function carrier()
-    {
-        return $this->belongsTo(Carrier::class, 'carrier_id');
     }
 
     public function blocks()

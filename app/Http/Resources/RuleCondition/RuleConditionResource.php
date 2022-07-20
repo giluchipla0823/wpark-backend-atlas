@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\RuleCondition;
 
+use App\Models\Design;
+use App\Models\Stage;
 use JsonSerializable;
 use App\Models\Color;
 use App\Models\Vehicle;
@@ -16,10 +18,10 @@ class RuleConditionResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
-     * @return array|Arrayable|JsonSerializable
+     * @param $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $response = [
             'id' => $this->id,
@@ -64,6 +66,8 @@ class RuleConditionResource extends JsonResource
 
         switch ($this->model) {
             case Color::class:
+            case Design::class:
+            case Stage::class:
             case DestinationCode::class:
                 $field = 'name';
                 break;
@@ -73,13 +77,24 @@ class RuleConditionResource extends JsonResource
                 break;
         }
 
-        return $this->values->map(function($value) use ($modelData, $field) {
-            $model = $modelData->where('id', '=', $value->conditionable_id)->first();
+        // dd($this->values->toArray());
+        // dd($modelData->toArray());
 
+        return $modelData->map(function($value) use ($field) {
             return [
-                'id' => $value->conditionable_id,
-                'value' => $model->{$field},
+                "id" => $value->id,
+                "value" => $value->{$field},
             ];
         });
+
+//        return $this->values->map(function($value) use ($modelData, $field) {
+//            $model = $modelData->where('id', '=', $value->conditionable_id)
+//                        ->first();
+//
+//            return [
+//                'id' => $value->conditionable_id,
+//                'value' => $model->{$field},
+//            ];
+//        });
     }
 }

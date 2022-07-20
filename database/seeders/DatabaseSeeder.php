@@ -17,8 +17,7 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
         $this->call([
-            // CompoundSeeder::class,
-            CompoundSqlSeeder::class,
+            CompoundSeeder::class,
             BrandSeeder::class,
             ColorSeeder::class,
             DesignSeeder::class,

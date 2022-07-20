@@ -17,7 +17,7 @@ class CreateDesigns extends Migration
         Schema::create('designs', function (Blueprint $table) {
             $table->id()->comment('Identificador único del modelo');
             $table->string('name')->comment('Nombre del modelo');
-            $table->string('short_name')->nullable()->default('NULL')->comment('Nombre corto del modelo');
+            $table->string('short_name')->nullable()->default(NULL)->comment('Nombre corto del modelo');
             $table->string('code')->unique()->comment('Código del modelo');
             $table->foreignId('brand_id')->comment('Indica la marca a la que pertence el modelo')->constrained('brands');
             $table->integer('length')->unsigned()->comment('Longitud del modelo');

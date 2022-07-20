@@ -26,7 +26,8 @@ class MovementDatatablesResource extends JsonResource
                 'id' => $this->user_id,
                 'username' => $this->user_username
             ],
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'status' => $this->status,
         ];
     }
 

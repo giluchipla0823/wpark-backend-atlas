@@ -19,7 +19,7 @@ class CreateDevices extends Migration
             $table->string('name')->comment('Nombre del dispositivo');
             $table->string('uuid')->unique()->comment('Imei o IP del dispositivo');
             $table->foreignId('device_type_id')->comment('Tipo del dispositivo')->constrained('devices_types');
-            $table->string('version')->nullable()->default('NULL')->comment('Versión del dispositivo');
+            $table->string('version')->nullable()->default(NULL)->comment('Versión del dispositivo');
             $table->boolean('active')->default('1')->comment('Indica si el dispositivo está activo (0: No está activo, 1: Está activo)');
             $table->timestamps();
             $table->softDeletes();

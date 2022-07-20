@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Country;
 
-use App\Helpers\QueryParamsHelper;
 use App\Models\Country;
 use App\Repositories\BaseRepository;
 use Illuminate\Http\Request;
@@ -23,7 +22,13 @@ class CountryRepository extends BaseRepository implements CountryRepositoryInter
      */
     public function all(Request $request): Collection
     {
-        return $this->model->all();
+        $query = $this->model->query();
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Country::UNKNOWN_ID);
+        }
+
+        return $query->get();
     }
 
     /**
@@ -33,6 +38,10 @@ class CountryRepository extends BaseRepository implements CountryRepositoryInter
     public function datatables(Request $request): array
     {
         $query = $this->model->query();
+
+        if ($request->query->getBoolean('can_exclude_unknown')) {
+            $query = $query->where("id", "!=", Country::UNKNOWN_ID);
+        }
 
         return Datatables::customizable($query)->response();
     }

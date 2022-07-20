@@ -35,7 +35,6 @@ class RuleResource extends JsonResource
             'final_position' => $this->final_position,
             'active' => $this->active,
             'predefined_zone' => $this->parking ? new ParkingResource($this->parking) : null,
-            'carrier' => $this->carrier ? new CarrierResource($this->carrier) : null
         ];
 
         if (in_array('conditions', $relationships)) {

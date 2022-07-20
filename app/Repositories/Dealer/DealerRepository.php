@@ -22,9 +22,11 @@ class DealerRepository extends BaseRepository implements DealerRepositoryInterfa
      */
     public function all(Request $request): Collection
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()->with(QueryParamsHelper::getIncludesParamFromRequest());
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
+            $query = $query->select(["{$table}.*"]);
             $result = Datatables::customizable($query)->response();
 
             return collect($result);

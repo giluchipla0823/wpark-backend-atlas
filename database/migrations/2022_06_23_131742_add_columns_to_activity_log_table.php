@@ -14,7 +14,7 @@ class AddColumnsToActivityLogTable extends Migration
     public function up()
     {
         Schema::table('activity_log', function (Blueprint $table) {
-            $table->string("reference_code", 50)->after("description");
+            $table->string("reference_code", 50)->after("description")->nullable();
         });
     }
 

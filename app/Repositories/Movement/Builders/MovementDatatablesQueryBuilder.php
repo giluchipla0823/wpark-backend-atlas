@@ -46,6 +46,15 @@ class MovementDatatablesQueryBuilder
         $this->query = $this->model->query()
                         ->select([
                             "movements.*",
+                            DB::raw("
+                            (
+                                CASE
+                                    WHEN movements.confirmed = 1 THEN 'confirmed'
+                                    WHEN movements.canceled = 1 THEN 'canceled'
+                                    ELSE 'pending'
+                                END
+                            ) AS `status`
+                            "),
                             "vehicles.id AS vehicle_id",
                             "vehicles.vin AS vehicle_vin",
                             "devices.id AS device_id",

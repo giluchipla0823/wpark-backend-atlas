@@ -33,7 +33,10 @@ class AreaRepository extends BaseRepository implements AreaRepositoryInterface
      */
     public function datatables(Request $request): array
     {
-        $query = $this->model->query();
+        $table = $this->model->getTable();
+        $query = $this->model->query()
+            ->with(QueryParamsHelper::getIncludesParamFromRequest())
+            ->select(["{$table}.*"]);
 
         return Datatables::customizable($query)->response();
     }

@@ -14,7 +14,7 @@ class ParkingSqlSeeder extends Seeder
      */
     public function run()
     {
-        $path = public_path('sql/parking_rows_slots.sql');
+        $path = public_path('sql/parking_rows_slots_data.sql');
         $sql = file_get_contents($path);
         DB::unprepared($sql);
     }

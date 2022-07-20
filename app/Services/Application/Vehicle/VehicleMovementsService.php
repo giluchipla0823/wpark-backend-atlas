@@ -219,7 +219,7 @@ class VehicleMovementsService
             }
         }
 
-        dd($doMatches);
+        // dd($doMatches);
 
 
         $last_rule_id = null;
@@ -274,7 +274,7 @@ class VehicleMovementsService
             'shipping_rule_id' => $shipping_rule_id
         ];
 
-        dd($result);
+        // dd($result);
 
         // Actualización del vehículo para insertar las reglas encontradas
         $this->vehicleRepository->update($result, $vehicle->id);

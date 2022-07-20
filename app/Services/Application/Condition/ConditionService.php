@@ -2,14 +2,17 @@
 
 namespace App\Services\Application\Condition;
 
-use App\Helpers\QueryParamsHelper;
-use App\Http\Resources\Condition\ConditionResource;
-use App\Models\Condition;
-use App\Repositories\Condition\ConditionRepositoryInterface;
+use App\Exceptions\owner\BadRequestException;
 use Exception;
+use App\Models\Condition;
 use Illuminate\Http\Request;
+use App\Helpers\ClassHelper;
 use Illuminate\Support\Collection;
+use App\Helpers\QueryParamsHelper;
+use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\Condition\ConditionResource;
+use App\Repositories\Condition\ConditionRepositoryInterface;
 
 class ConditionService
 {
@@ -23,6 +26,10 @@ class ConditionService
         $this->repository = $repository;
     }
 
+    /**
+     * @param Request $request
+     * @return Collection
+     */
     public function all(Request $request): Collection
     {
         $results = $this->repository->all($request);
@@ -90,19 +97,22 @@ class ConditionService
     public function getModelDataByCondition(Condition $condition): Collection
     {
         if (!$condition->model) {
-            throw new Exception(
-                "La condición {$condition->name} no tiene un modelo especificado.",
-                Response::HTTP_BAD_REQUEST
-            );
+            throw new BadRequestException("La condición {$condition->name} no tiene un modelo especificado.");
         }
 
         if (!class_exists($condition->model)) {
-            throw new Exception(
-                "El modelo {$condition->model} no existe y por ende no tiene información al respecto para la condición {$condition->name}.",
-                Response::HTTP_BAD_REQUEST
-            );
+            throw new BadRequestException("El modelo {$condition->model} no existe y por ende no tiene información al respecto para la condición {$condition->name}.");
         }
 
-        return (new $condition->model)->query()->get();
+        /* @var Model $model */
+        $model = (new $condition->model);
+
+        $query = $model->query();
+
+        if (ClassHelper::hasConstant($condition->model, 'UNKNOWN_ID')) {
+            $query = $query->whereNotIn("id", [$condition->model::UNKNOWN_ID]);
+        }
+
+        return $query->get();
     }
 }
