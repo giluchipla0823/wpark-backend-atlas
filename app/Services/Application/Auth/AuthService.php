@@ -2,21 +2,21 @@
 
 namespace App\Services\Application\Auth;
 
-use App\Exceptions\owner\BadRequestException;
-use App\Models\Compound;
-use App\Models\PersonalAccessToken;
-use App\Repositories\Device\DeviceRepositoryInterface;
 use Exception;
 use App\Models\User;
-use App\Repositories\User\UserRepositoryInterface;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Events\PasswordReset;
+use App\Models\Compound;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\PersonalAccessToken;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\AuthenticationException;
+use App\Exceptions\owner\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Device\DeviceRepositoryInterface;
 
 class AuthService
 {
@@ -91,8 +91,13 @@ class AuthService
                         "error_details" => [
                             "reference_code" => "DUPLICATE_DEVICE_AUTHENTICATION",
                             "data" => [
-                                "uuid" => $uuid,
-                                "username" => $user->username
+                                "device" => [
+                                    "name" => $device->name,
+                                    "uuid" => $device->uuid,
+                                ],
+                                "user" => [
+                                    "username" => $user->username
+                                ]
                             ]
                         ]
                     ]

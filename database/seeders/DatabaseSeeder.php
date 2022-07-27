@@ -38,17 +38,17 @@ class DatabaseSeeder extends Seeder
             AreaSeeder::class,
             ParkingTypeSeeder::class,
             // ParkingSeeder::class,
-            ParkingSqlSeeder::class,
+            // ParkingSqlSeeder::class,
             UserSeeder::class,
             PermissionSeeder::class,
             HoldSeeder::class,
             StageSeeder::class,
             // RuleSeeder::class,
             RuleSqlSeeder::class,
-            VehicleSqlSeeder::class,
+            // VehicleSqlSeeder::class,
             // VehicleSeeder::class
-            MovementSqlSeeder::class,
-            NotificationSqlSeeder::class,
+            // MovementSqlSeeder::class,
+            // NotificationSqlSeeder::class,
             RecirculationSqlSeeder::class,
 
         ]);

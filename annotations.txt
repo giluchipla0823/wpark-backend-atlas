@@ -42,3 +42,59 @@ $request->user()->currentAccessToken();
         ->orderByPivot('created_at', 'desc')
         ->take(1);
      }
+
+
+******* VEHICLES MODEL ******
+//    /**
+//     * Último State del vehículo.
+//     *
+//     * @return BelongsToMany
+//     */
+//    public function latestState(): BelongsToMany
+//    {
+//        return $this->belongsToMany(
+//            State::class,
+//            'vehicles_states',
+//            'vehicle_id',
+//            'state_id'
+//        )
+//            ->join("vehicles", "vehicles_states.vehicle_id", "=", "vehicles.id")
+//            ->where("vehicles_states.id", "=", DB::raw("
+//            (
+//                SELECT
+//                    vs.id
+//                FROM
+//                    vehicles_states AS vs
+//                WHERE
+//                    vs.vehicle_id = vehicles.id
+//                ORDER BY
+//                    vs.id DESC
+//                LIMIT 1
+//            )
+//        "));
+//    }
+
+
+public function latestStage(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Stage::class,
+            'vehicles_stages',
+            'vehicle_id',
+            'stage_id'
+        )
+        ->join("vehicles", "vehicles_stages.vehicle_id", "=", "vehicles.id")
+        ->where("vehicles_stages.id", "=", DB::raw("
+            (
+                SELECT
+                    vs.id
+                FROM
+                    vehicles_stages AS vs
+                WHERE
+                    vs.vehicle_id = vehicles.id
+                ORDER BY
+                    vs.id DESC
+                LIMIT 1
+            )
+        "));
+    }

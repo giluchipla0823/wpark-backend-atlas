@@ -8,11 +8,16 @@ use App\Http\Resources\Route\RouteResource;
 use App\Helpers\QueryParamsHelper;
 use App\Models\Carrier;
 use App\Models\Load;
+use App\Models\Notification;
 use App\Models\RouteType;
+use App\Models\Row;
 use App\Models\Slot;
+use App\Models\Stage;
+use App\Models\State;
 use App\Models\Vehicle;
 use App\Models\Zone;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,12 +141,25 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
 
         $positionsTypes = $positions->pluck('type')->unique();
 
-        if ($positionsTypes->count() === 1 && $positionsTypes->first() === Slot::class) {
-            $category = $positions->pluck('row.id')->unique()->count() === 1
-                            ? $positions->first()->row->category
-                            : Load::MULTIPLES_CATEGORY;
-        } else {
-            $category = Load::MULTIPLES_CATEGORY;
+        $category = Load::MULTIPLES_CATEGORY;
+
+        if (
+            $positionsTypes->count() === 1 &&
+            $positionsTypes->first() === Slot::class &&
+            $positions->pluck('row.id')->unique()->count() === 1
+        ) {
+            $row = $positions->first()->row;
+            $category = $row->category;
+
+            $notification = Notification::where([
+                ['resourceable_type', '=' , Row::class],
+                ['resourceable_id', '=' , $row->id],
+            ])->first();
+
+            if ($notification) {
+                $notification->reat_at = Carbon::now();
+                $notification->save();
+            }
         }
 
         $user = Auth::user();
@@ -164,7 +182,9 @@ class LoadRepository extends BaseRepository implements LoadRepositoryInterface
             ]);
 
             foreach ($params["vehicles"] as $item) {
-                Vehicle::where('vin', $item['vin'])->update([
+                $vin = $item['vin'];
+
+                Vehicle::where('vin', $vin)->update([
                     'load_id' => $load->id,
                     'route_id' => $item['route_id']
                 ]);

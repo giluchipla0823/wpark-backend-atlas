@@ -46,6 +46,16 @@ class Hold extends Model
         'updated_at',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     public function conditions()
     {
         return $this->belongsToMany(Condition::class, 'holds_conditions', 'hold_id', 'condition_id')->withTimestamps();

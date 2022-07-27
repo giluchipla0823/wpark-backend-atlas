@@ -40,6 +40,10 @@ class RuleRepository extends BaseRepository implements RuleRepositoryInterface
             $query = $query->where('name', "LIKE", "%{$name}%");
         }
 
+        if ($request->query->getBoolean('has_rows')) {
+            $query = $query->whereRaw("(SELECT COUNT(*) FROM `rows` WHERE `rows`.category = rules.name) > 0");
+        }
+
         $query = $query->orderBy(
             $request->query->get('sort_by', 'id'),
             $request->query->get('sort_direction', 'asc')

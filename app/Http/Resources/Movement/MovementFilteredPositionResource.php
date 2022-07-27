@@ -27,7 +27,6 @@ class MovementFilteredPositionResource extends JsonResource
             'category' => $this->category,
             'slots' => SlotFilteredPositionResource::collection($this->emptySlots),
             'type' => Row::class,
-            'rule_id' => $this->rule ? $this->rule->id : null,
             'full' => $this->full,
             'active' => $this->active
         ];

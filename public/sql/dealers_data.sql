@@ -1,4 +1,3 @@
-
 INSERT INTO `dealers` (`id`, `code`, `name`, `zip_code`, `city`, `street`, `country`, `contact_name`, `contact_email`, `contact_phone_number`, `contact_description`, `district_code`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', 'UNKNOWN', '2022-06-23 07:57:07', '2022-06-23 07:57:07', NULL),
 	(2, '7C565', 'Record Go Barcelona', '08830', 'SANT BOI DE LLOBREGAT', 'Antigua carretera Valencia, km.4', 'España', '', '', '600 93 01 51', '9a15h', 'BARCELONA', '2022-07-05 13:29:16', '2022-07-05 13:29:16', NULL),

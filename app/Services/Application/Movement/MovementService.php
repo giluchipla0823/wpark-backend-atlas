@@ -176,11 +176,6 @@ class MovementService
 
                     $row = $slot->row;
 
-//                    if (($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM) {
-//                        $row->full = 0;
-//                        $row->save();
-//                    }
-
                     $parking = $row->parking;
                 } else {
                     /* @var Parking $parking */
@@ -416,10 +411,10 @@ class MovementService
             }
 
             if (!$forceMovement) {
-                if ($row->rule_id && $row->rule_id !== $ruleVehicle->id) {
+                if ($row->category && $row->category !== $ruleVehicle->name) {
                     throw new BadRequestException(sprintf(
                         "El vehículo no cumple con la regla %s que tiene asignada la fila de la posición seleccionada.",
-                        $row->rule->name
+                        $row->category
                     ));
                 }
 
@@ -452,7 +447,7 @@ class MovementService
             $slot->reserve($vehicle->design->length);
             $row = $slot->row;
             $parking = $row->parking;
-            $row->rule_id = $row->rule_id ?: $ruleVehicle->id;
+            $row->category = $row->category ?: $ruleVehicle->name;
             $row->full = $parking->isRowType() ? $row->full : 1;
             $row->save();
         } else {
@@ -465,6 +460,9 @@ class MovementService
     }
 
     /**
+     * Verifica si la posición de destino del último movimiento confirmado del vehículo
+     * coincide con la posición de origen especificada.
+     *
      * @throws BadRequestException
      */
     public function checkValidateVehicleCurrentPosition(Vehicle $vehicle, array $originPosition): void

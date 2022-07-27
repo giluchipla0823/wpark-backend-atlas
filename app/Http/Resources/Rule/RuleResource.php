@@ -49,9 +49,9 @@ class RuleResource extends JsonResource
             $response['rules'] = RuleResource::collection($this->rules_groups);
         }
 
-        if (in_array('rows', $relationships)) {
-            $response['rows'] = RowResource::collection($this->rows);
-        }
+//        if (in_array('rows', $relationships)) {
+//            $response['rows'] = RowResource::collection($this->rows);
+//        }
 
         return $response;
     }

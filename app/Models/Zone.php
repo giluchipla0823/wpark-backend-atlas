@@ -71,4 +71,26 @@ class Zone extends Model
             Zone::BUFFER,
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getParkingTypesAvailable(): array
+    {
+        switch ($this->id) {
+            case Zone::PRESORTING:
+                $parkingTypes = [ParkingType::TYPE_ROW];
+                break;
+
+            case Zone::CAMPA_GENERAL:
+                $parkingTypes = [ParkingType::TYPE_ROW, ParkingType::TYPE_ESPIGA];
+                break;
+
+            default:
+                $parkingTypes = [ParkingType::TYPE_UNLIMITED];
+                break;
+        }
+
+        return $parkingTypes;
+    }
 }

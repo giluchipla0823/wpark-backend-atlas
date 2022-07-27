@@ -35,6 +35,9 @@ class Load extends Model
 
     public const MULTIPLES_CATEGORY = 'MULTIPLES';
 
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_PENDING = 'pending';
+
     protected $fillable = [
         'transport_identifier',
         'license_plate',
@@ -49,6 +52,36 @@ class Load extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $appends = ["status"];
+
+    /**
+     * @return string
+     */
+    public function getStatusAttribute(): string
+    {
+        return $this->processed === 1 && $this->ready === 1 ? self::STATUS_CONFIRMED : self::STATUS_PENDING;
+    }
+
+    /**
+     * Si el load ha confirmado su salida.
+     *
+     * @return bool
+     */
+    public function isConfirmed(): bool
+    {
+        return $this->status === self::STATUS_CONFIRMED;
+    }
+
+    /**
+     * Si el load está pendiente de confirmar su salida.
+     *
+     * @return bool
+     */
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
 
     public function carrier()
     {

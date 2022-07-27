@@ -30,7 +30,12 @@ class RowRepository extends BaseRepository implements RowRepositoryInterface
      */
     public function all(Request $request): Collection
     {
-        $query = $this->model->query();
+        $query = $this->model->query()
+                      ->with(QueryParamsHelper::getIncludesParamFromRequest());
+
+        if ($category = $request->query->get('category')) {
+            $query = $query->where("category", "=", $category);
+        }
 
         if (QueryParamsHelper::checkIncludeParamDatatables()) {
             $result = Datatables::customizable($query)->response();

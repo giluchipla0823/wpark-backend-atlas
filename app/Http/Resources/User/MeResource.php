@@ -10,10 +10,10 @@ class MeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -31,7 +31,6 @@ class MeResource extends JsonResource
             'roles' => $this->getRoleNames(),
             'compounds' => CompoundResource::collection($this->compounds),
             'devices' => $this->devices()->get(),
-            'movements' => $this->movements()->get()
         ];
     }
 }

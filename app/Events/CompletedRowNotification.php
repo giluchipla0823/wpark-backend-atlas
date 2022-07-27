@@ -4,28 +4,42 @@ namespace App\Events;
 
 use App\Models\Row;
 use App\Models\User;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 
 class CompletedRowNotification
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var Row
+     */
     public $row;
+
+    /**
+     * @var User
+     */
     public $sendUser;
+
+    /**
+     * @var User|null
+     */
     public $recipientUser;
+
+    /**
+     * @var array
+     */
     public $params;
+
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param User $sendUser
+     * @param Row $row
+     * @param User|null $recipientUser
      */
-    public function __construct(User $sendUser, Row $row, User $recipientUser = null,)
+    public function __construct(User $sendUser, Row $row, User $recipientUser = null)
     {
         $params = [
             'title' => 'Fila completada',

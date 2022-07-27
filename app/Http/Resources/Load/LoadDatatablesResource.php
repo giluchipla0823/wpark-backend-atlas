@@ -18,22 +18,17 @@ class LoadDatatablesResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $carrier = new CarrierResource($this->carrier);
-        $transport = new TransportResource($this->transport);
-        $compound = new CompoundResource($this->compound);
-
         return [
             "id" => $this->id,
             "transport_identifier" => $this->transport_identifier,
             "license_plate" => $this->license_plate,
             "category" => $this->category,
-            "carrier_name" => $carrier->name,
-            "carrier_code" => $carrier->code,
-            "transport_exit_name" => $transport->name,
-            "compound_name" => $compound->name,
+            "carrier" => new CarrierResource($this->carrier),
+            "transport_exit" => new TransportResource($this->transport),
+            "compound" => new CompoundResource($this->compound),
             "ready" => $this->ready,
             "processed" => $this->processed,
-            "status" => $this->processed === 1 && $this->ready === 1 ? 'confirmed' : 'pending',
+            "status" => $this->status,
             "created_at" => Carbon::parse($this->created_at)->format("Y-m-d H:i:s"),
         ];
     }

@@ -53,9 +53,9 @@ class VehicleShowResource extends JsonResource
 
                 return [$name => $item['created_at']];
             }),
-            "last_state" => StateResource::collection($this->latestState)->collection->first(),
+            "last_state" => new StateResource($this->latestState->first()),
             "stages" => StageResource::collection($this->stages),
-            "last_stage" => StageResource::collection($this->latestStage)->collection->first(),
+            "last_stage" => new StageResource($this->latestStage->first()),
             "stages_dates" => $this->stages->mapWithKeys(function ($item) {
                 $name = str_replace(' ', '_', strtolower($item['name']));
 
@@ -63,7 +63,6 @@ class VehicleShowResource extends JsonResource
             }),
             "in_movement" => $this->inMovement(),
             "last_movement" => new MovementShowResource($this->lastMovement),
-            // "last_confirmed_movement" => $this->lastConfirmedMovement,
             "last_confirmed_movement" => new MovementShowResource($this->lastConfirmedMovement),
             "origin_position" => $this->includePositionType('originPosition'),
             "destination_position" => $this->includePositionType('destinationPosition'),

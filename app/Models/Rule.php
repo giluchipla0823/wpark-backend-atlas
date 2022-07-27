@@ -66,6 +66,11 @@ class Rule extends Model
                 $query->final_position = 0;
             }
         });
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
     }
 
     public function predefinedParking()
@@ -98,8 +103,10 @@ class Rule extends Model
         return $this->belongsToMany(Rule::class, 'rules_groups', 'parent_rule_id', 'child_rule_id')->withTimestamps();
     }
 
+    /*
     public function rows()
     {
         return $this->hasMany(Row::class, 'rule_id');
     }
+    */
 }

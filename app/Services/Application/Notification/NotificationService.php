@@ -7,6 +7,7 @@ use App\Http\Resources\Notification\NotificationResource;
 use App\Http\Resources\Notification\PreviewNotificationResource;
 use App\Models\Notification;
 use App\Repositories\Notification\NotificationRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -83,9 +84,24 @@ class NotificationService
         $this->repository->delete($id);
     }
 
+    /**
+     * @param int $id
+     * @return void
+     */
     public function restore(int $id): void
     {
         $this->repository->restore($id);
+    }
+
+    /**
+     * @param Notification $notification
+     * @return void
+     */
+    public function toggleSeen(Notification $notification): void
+    {
+        $value = $notification->reat_at ? null : Carbon::now();
+
+        $this->update(["reat_at" => $value], $notification->id);
     }
 
 }

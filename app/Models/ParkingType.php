@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class ParkingType
  *
  */
-
 class ParkingType extends Model
 {
     use HasFactory, SoftDeletes;

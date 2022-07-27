@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\RowHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,13 +29,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * Class Notification
  *
  */
-
 class Notification extends Model
 {
     use HasFactory, SoftDeletes;
 
-    // Atributos para notificaciones
-    // Eventos
     public const ROW_COMPLETED = "ROW_COMPLETED";
 
     protected $fillable = [
@@ -51,6 +49,17 @@ class Notification extends Model
         'updated_at',
     ];
 
+    protected $appends = ["seen"];
+
+    /**
+     * @return bool
+     */
+    public function getSeenAttribute(): bool
+    {
+        return !is_null($this->reat_at);
+    }
+
+
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id');
@@ -59,6 +68,11 @@ class Notification extends Model
     public function recipient()
     {
         return $this->belongsTo(User::class, 'recipient_id');
+    }
+
+    public function resourceable()
+    {
+        return $this->morphTo(__FUNCTION__, 'resourceable_type', 'resourceable_id');
     }
 
 }

@@ -43,6 +43,7 @@ class RowController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {

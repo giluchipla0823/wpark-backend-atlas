@@ -99,16 +99,6 @@ class RowEspigaResource extends JsonResource
                 'vin_short' => $vehicle->vin_short,
                 "color" => new ColorResource($vehicle->color),
                 "design" => new DesignResource($vehicle->design),
-//                'design_id' => $vehicle->design_id,
-//                'color_id' => $vehicle->color_id,
-//                'destination_code_id' => $vehicle->destination_code_id,
-//                'entry_transport_id' => $vehicle->entry_transport_id,
-//                'load_id' => $vehicle->load_id,
-//                'dealer_id' => $vehicle->dealer_id,
-//                'eoc' => $vehicle->eoc,
-//                'last_rule_id' => $vehicle->last_rule_id,
-//                'shipping_rule_id' => $vehicle->shipping_rule_id,
-//                'info' => $vehicle->info
             ];
         }
         return null;

@@ -27,7 +27,6 @@ class RowShowResource extends JsonResource
             "row_name" => $this->row_name,
             "lp_name" => $this->lp_name,
             "lp_code" => $this->lp_code,
-            "rule" => new RuleResource($this->rule),
             "parking" => new ParkingResource($this->parking),
             "block" => new BlockResource($this->block),
             "category" => $this->category,

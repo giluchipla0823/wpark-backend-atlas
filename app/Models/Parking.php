@@ -63,6 +63,16 @@ class Parking extends Model
         'updated_at',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     protected $appends = ["fill_percentage", "fill_type", "fill_calculate", "lp_name", "lp_code"];
 
     public function area()

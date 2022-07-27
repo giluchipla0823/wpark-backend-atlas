@@ -166,13 +166,10 @@ class MovementRecommendService
      */
     private function recommend(Vehicle $vehicle, Rule $rule, array $params, bool $finalPosition)
     {
-
         // Buscamos las filas que a través de los bloques tengan asociada esa regla
-        if($finalPosition){
-            $blocks = $rule->blocks->where('is_presorting', 0)->pluck('id');
-        }else{
-            $blocks = $rule->blocks->where('is_presorting', 1)->pluck('id');
-        }
+        $is_presorting = $finalPosition ? 0 : 1;
+
+        $blocks = $rule->blocks->where('is_presorting', $is_presorting)->where('active', 1)->pluck('id');
 
         $exceptRows = array_unique($params['except_rows'] ?? []);
 
@@ -182,13 +179,12 @@ class MovementRecommendService
             $queryRowsMatch = $queryRowsMatch->whereNotIn('id', $exceptRows);
         }
 
-        /* @var \Illuminate\Database\Eloquent\Collection $rowsMatch */
+        /* @var Collection $rowsMatch */
         $rowsMatch = $queryRowsMatch->orderBy('parking_id', 'ASC')->orderBy('id')->get();
 
         // Primero comprobamos si alguna de esas filas está empezada, no completada y comparte la misma regla
         $rowRecommend = $rowsMatch->where('fill', '>', 0)
                             ->where('full', false)
-                            // ->where('rule_id', $rule->id)
                             ->where('category', $rule->name)
                             ->filter(function($row) {
                                 return ($row->capacitymm - $row->fillmm) >= Slot::CAPACITY_MM;
@@ -207,8 +203,6 @@ class MovementRecommendService
         }
 
         // Comprobamos si el parking es de tipo fila o espiga
-        // $rowType = $rowRecommend->parking->parking_type_id === ParkingType::TYPE_ROW;
-
         $lastVehicle = null;
 
         if ($rowRecommend->parking->isRowType()) {
@@ -239,12 +233,28 @@ class MovementRecommendService
 
         $comments = $params['comments'] ?? null;
 
+        // $originPositionId = $vehicle->lastConfirmedMovement->destination_position_id;
+        // $originPositionType = $vehicle->lastConfirmedMovement->destination_position_type;
+
+        $originPosition = $vehicle->lastConfirmedMovement->destinationPosition;
+
+        /**
+         * Si hay nueva recomendación de movimiento, comprobamos si el vehículo viene de un slot de fila y
+         * se verifica que no se tenga una notificación
+         *
+         */
+        if (get_class($originPosition) === Slot::class) {
+
+        }
+
         // Se crea el movimiento
         $movement = $this->movementRepository->create([
             'vehicle_id' => $vehicle->id,
             'user_id' => Auth::user()->id,
-            'origin_position_type' => $vehicle->lastConfirmedMovement->destination_position_type,
-            'origin_position_id' => $vehicle->lastConfirmedMovement->destination_position_id,
+//            'origin_position_type' => $originPositionType,
+//            'origin_position_id' => $originPositionId,
+            'origin_position_type' => get_class($originPosition),
+            'origin_position_id' => $originPosition->id,
             'destination_position_type' => Slot::class,
             'destination_position_id' => $positionRecommend['position']->id,
             'category' => $rule->name,
@@ -261,7 +271,6 @@ class MovementRecommendService
         $slot->reserve($vehicleLength);
 
         $row = $slot->row;
-        $row->rule_id = $rowRecommend->rule_id ?: $rule->id;
         $row->category = $rowRecommend->category ?: $rule->name;
         $row->save();
 

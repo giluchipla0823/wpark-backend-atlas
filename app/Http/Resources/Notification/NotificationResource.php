@@ -3,22 +3,19 @@
 namespace App\Http\Resources\Notification;
 
 use App\Helpers\ModelHelper;
-use JsonSerializable;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 use App\Http\Resources\User\UserResource;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class NotificationResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @param $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -29,7 +26,8 @@ class NotificationResource extends JsonResource
             'reference_code' => $this->reference_code,
             'data' => $this->data,
             'reat_at' => $this->reat_at,
-            'created_at' => $this->created_at
+            'created_at' => $this->created_at,
+            'seen' => $this->seen
         ];
     }
 

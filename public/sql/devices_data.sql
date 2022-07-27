@@ -1,106 +1,107 @@
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('101', '357917080871357', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('102', '357917080866589', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('103', '357917080868221', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('104', '357917080865391', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('105', '357917080868742', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('106', '357917080856341', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('107', '357917080871944', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('108', '357917080866886', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('109', '357917080868924', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('110', '357917080868718', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('111', '357917080868981', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('112', '357917080865367', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('113', '357917080868643', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('114', '357917080871431', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('115', '357917080871399', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('116', '357917080843760', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('117', '357917080873114', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('118', '357917080868197', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('119', '357917080868791', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('120', '357917080853538', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('121', '357917080853926', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('122', '357917080871571', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('123', '357917080868650', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('124', '357917080873122', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('125', '357917080870250', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('126', '357917080865755', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('127', '357917080869088', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('128', '357917080871811', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('129', '357917080870011', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('130', '357917080864642', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('131', '357917080870821', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('132', '357917080867579', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('133', '357917080866191', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('134', '357917080854536', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('135', '357917080853363', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('136', '357917080843562', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('137', '357917080854593', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('138', '357917080853579', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('139', '357917080829256', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('140', '357917080852522', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('141', '357917080854361', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('142', '357917080855764', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('143', '357917080842499', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('144', '357917080854619', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('145', '357917080872694', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('146', '357917080871332', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('147', '357917080857208', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('148', '357917080845039', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('149', '357917080841103', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('150', '357917080873577', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('151', '357917080869567', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('152', '357917080867660', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('153', '357917080870458', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('154', '357917080866316', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('155', '357917080873213', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('156', '357917080857307', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('157', '357917080866688', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('158', '357917080854551', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('159', '357917080852555', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('160', '357917080855509', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('161', '357917080855905', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('162', '357917080855871', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('163', '357917080872322', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('164', '357917080872207', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('165', '357917080870722', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('166', '357917080866068', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('167', '357917080873593', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('168', '357917080865714', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('169', '357917080493145', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('170', '357917080441813', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('201', '355474093970455', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('202', '355474093961710', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('203', '355474093868550', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('204', '355474093874384', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('205', '355474090909431', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('206', '355474090918937', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('207', '355474090913771', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('208', '355474093966727', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('209', '355474093895678', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('210', '355474094088034', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('211', '355474093961397', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('212', '355474093963195', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('213', '355474094079447', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('213', '355475094579120', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('214', '355474094089347', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('215', '355474093868410', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('216', '355474093960704', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('217', '355474093990149', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('218', '355474094078977', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('219', '355474093966099', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('220', '355471090910041', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('221', '355474090910603', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('222', '355474093962486', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('223', '355474093876330', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('224', '355474093877031', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('225', '355474093969655', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('226', '355474093960340', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('227', '355474090922467', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('228', '355474090913953', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('229', '355474093967675', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('230', '355474090909423', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('231', '355474094086418', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('232', '355474094089768', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('233', '355474090897479', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('234', '355474090900752', '2', now());
-INSERT INTO `devices` (`name`, `uuid`, `device_type_id`, `created_at`) VALUES ('235', '355474094087317', '2', now());
+INSERT INTO `devices` (`id`, `name`, `uuid`, `device_type_id`, `version`, `active`, `created_at`, `updated_at`, `deleted_at`) VALUES
+	(1, '101', '357917080871357', 2, NULL, 1, '2022-07-12 13:52:07', NULL, NULL),
+	(2, '102', '357917080866589', 2, NULL, 1, '2022-07-12 13:52:07', NULL, NULL),
+	(3, '103', '357917080868221', 2, NULL, 1, '2022-07-12 13:52:08', NULL, NULL),
+	(4, '104', '357917080865391', 2, NULL, 1, '2022-07-12 13:52:08', NULL, NULL),
+	(5, '105', '357917080868742', 2, NULL, 1, '2022-07-12 13:52:08', NULL, NULL),
+	(6, '106', '357917080856341', 2, NULL, 1, '2022-07-12 13:52:08', NULL, NULL),
+	(7, '107', '357917080871944', 2, NULL, 1, '2022-07-12 13:52:08', NULL, NULL),
+	(8, '108', '357917080866886', 2, NULL, 1, '2022-07-12 13:52:09', NULL, NULL),
+	(9, '109', '357917080868924', 2, NULL, 1, '2022-07-12 13:52:09', NULL, NULL),
+	(10, '110', '357917080868718', 2, NULL, 1, '2022-07-12 13:52:09', NULL, NULL),
+	(11, '111', '357917080868981', 2, NULL, 1, '2022-07-12 13:52:09', NULL, NULL),
+	(12, '112', '357917080865367', 2, NULL, 1, '2022-07-12 13:52:09', NULL, NULL),
+	(13, '113', '357917080868643', 2, NULL, 1, '2022-07-12 13:52:10', NULL, NULL),
+	(14, '114', '357917080871431', 2, NULL, 1, '2022-07-12 13:52:10', NULL, NULL),
+	(15, '115', '357917080871399', 2, NULL, 1, '2022-07-12 13:52:10', NULL, NULL),
+	(16, '116', '357917080843760', 2, NULL, 1, '2022-07-12 13:52:10', NULL, NULL),
+	(17, '117', '357917080873114', 2, NULL, 1, '2022-07-12 13:52:10', NULL, NULL),
+	(18, '118', '357917080868197', 2, NULL, 1, '2022-07-12 13:52:11', NULL, NULL),
+	(19, '119', '357917080868791', 2, NULL, 1, '2022-07-12 13:52:11', NULL, NULL),
+	(20, '120', '357917080853538', 2, NULL, 1, '2022-07-12 13:52:11', NULL, NULL),
+	(21, '121', '357917080853926', 2, NULL, 1, '2022-07-12 13:52:11', NULL, NULL),
+	(22, '122', '357917080871571', 2, NULL, 1, '2022-07-12 13:52:11', NULL, NULL),
+	(23, '123', '357917080868650', 2, NULL, 1, '2022-07-12 13:52:12', NULL, NULL),
+	(24, '124', '357917080873122', 2, NULL, 1, '2022-07-12 13:52:12', NULL, NULL),
+	(25, '125', '357917080870250', 2, NULL, 1, '2022-07-12 13:52:12', NULL, NULL),
+	(26, '126', '357917080865755', 2, NULL, 1, '2022-07-12 13:52:12', NULL, NULL),
+	(27, '127', '357917080869088', 2, NULL, 1, '2022-07-12 13:52:13', NULL, NULL),
+	(28, '128', '357917080871811', 2, NULL, 1, '2022-07-12 13:52:13', NULL, NULL),
+	(29, '129', '357917080870011', 2, NULL, 1, '2022-07-12 13:52:13', NULL, NULL),
+	(30, '130', '357917080864642', 2, NULL, 1, '2022-07-12 13:52:13', NULL, NULL),
+	(31, '131', '357917080870821', 2, NULL, 1, '2022-07-12 13:52:13', NULL, NULL),
+	(32, '132', '357917080867579', 2, NULL, 1, '2022-07-12 13:52:14', NULL, NULL),
+	(33, '133', '357917080866191', 2, NULL, 1, '2022-07-12 13:52:14', NULL, NULL),
+	(34, '134', '357917080854536', 2, NULL, 1, '2022-07-12 13:52:14', NULL, NULL),
+	(35, '135', '357917080853363', 2, NULL, 1, '2022-07-12 13:52:14', NULL, NULL),
+	(36, '136', '357917080843562', 2, NULL, 1, '2022-07-12 13:52:14', NULL, NULL),
+	(37, '137', '357917080854593', 2, NULL, 1, '2022-07-12 13:52:15', NULL, NULL),
+	(38, '138', '357917080853579', 2, NULL, 1, '2022-07-12 13:52:15', NULL, NULL),
+	(39, '139', '357917080829256', 2, NULL, 1, '2022-07-12 13:52:15', NULL, NULL),
+	(40, '140', '357917080852522', 2, NULL, 1, '2022-07-12 13:52:15', NULL, NULL),
+	(41, '141', '357917080854361', 2, NULL, 1, '2022-07-12 13:52:15', NULL, NULL),
+	(42, '142', '357917080855764', 2, NULL, 1, '2022-07-12 13:52:16', NULL, NULL),
+	(43, '143', '357917080842499', 2, NULL, 1, '2022-07-12 13:52:16', NULL, NULL),
+	(44, '144', '357917080854619', 2, NULL, 1, '2022-07-12 13:52:16', NULL, NULL),
+	(45, '145', '357917080872694', 2, NULL, 1, '2022-07-12 13:52:16', NULL, NULL),
+	(46, '146', '357917080871332', 2, NULL, 1, '2022-07-12 13:52:16', NULL, NULL),
+	(47, '147', '357917080857208', 2, NULL, 1, '2022-07-12 13:52:17', NULL, NULL),
+	(48, '148', '357917080845039', 2, NULL, 1, '2022-07-12 13:52:17', NULL, NULL),
+	(49, '149', '357917080841103', 2, NULL, 1, '2022-07-12 13:52:17', NULL, NULL),
+	(50, '150', '357917080873577', 2, NULL, 1, '2022-07-12 13:52:17', NULL, NULL),
+	(51, '151', '357917080869567', 2, NULL, 1, '2022-07-12 13:52:17', NULL, NULL),
+	(52, '152', '357917080867660', 2, NULL, 1, '2022-07-12 13:52:18', NULL, NULL),
+	(53, '153', '357917080870458', 2, NULL, 1, '2022-07-12 13:52:18', NULL, NULL),
+	(54, '154', '357917080866316', 2, NULL, 1, '2022-07-12 13:52:18', NULL, NULL),
+	(55, '155', '357917080873213', 2, NULL, 1, '2022-07-12 13:52:18', NULL, NULL),
+	(56, '156', '357917080857307', 2, NULL, 1, '2022-07-12 13:52:18', NULL, NULL),
+	(57, '157', '357917080866688', 2, NULL, 1, '2022-07-12 13:52:19', NULL, NULL),
+	(58, '158', '357917080854551', 2, NULL, 1, '2022-07-12 13:52:19', NULL, NULL),
+	(59, '159', '357917080852555', 2, NULL, 1, '2022-07-12 13:52:19', NULL, NULL),
+	(60, '160', '357917080855509', 2, NULL, 1, '2022-07-12 13:52:19', NULL, NULL),
+	(61, '161', '357917080855905', 2, NULL, 1, '2022-07-12 13:52:20', NULL, NULL),
+	(62, '162', '357917080855871', 2, NULL, 1, '2022-07-12 13:52:20', NULL, NULL),
+	(63, '163', '357917080872322', 2, NULL, 1, '2022-07-12 13:52:20', NULL, NULL),
+	(64, '164', '357917080872207', 2, NULL, 1, '2022-07-12 13:52:20', NULL, NULL),
+	(65, '165', '357917080870722', 2, NULL, 1, '2022-07-12 13:52:20', NULL, NULL),
+	(66, '166', '357917080866068', 2, NULL, 1, '2022-07-12 13:52:21', NULL, NULL),
+	(67, '167', '357917080873593', 2, NULL, 1, '2022-07-12 13:52:21', NULL, NULL),
+	(68, '168', '357917080865714', 2, NULL, 1, '2022-07-12 13:52:21', NULL, NULL),
+	(69, '169', '357917080493145', 2, NULL, 1, '2022-07-12 13:52:21', NULL, NULL),
+	(70, '170', '357917080441813', 2, NULL, 1, '2022-07-12 13:52:21', NULL, NULL),
+	(71, '201', '355474093970455', 2, NULL, 1, '2022-07-12 13:52:22', NULL, NULL),
+	(72, '202', '355474093961710', 2, NULL, 1, '2022-07-12 13:52:22', NULL, NULL),
+	(73, '203', '355474093868550', 2, NULL, 1, '2022-07-12 13:52:22', NULL, NULL),
+	(74, '204', '355474093874384', 2, NULL, 1, '2022-07-12 13:52:22', NULL, NULL),
+	(75, '205', '355474090909431', 2, NULL, 1, '2022-07-12 13:52:22', NULL, NULL),
+	(76, '206', '355474090918937', 2, NULL, 1, '2022-07-12 13:52:23', NULL, NULL),
+	(77, '207', '355474090913771', 2, NULL, 1, '2022-07-12 13:52:23', NULL, NULL),
+	(78, '208', '355474093966727', 2, NULL, 1, '2022-07-12 13:52:23', NULL, NULL),
+	(79, '209', '355474093895678', 2, NULL, 1, '2022-07-12 13:52:23', NULL, NULL),
+	(80, '210', '355474094088034', 2, NULL, 1, '2022-07-12 13:52:23', NULL, NULL),
+	(81, '211', '355474093961397', 2, NULL, 1, '2022-07-12 13:52:24', NULL, NULL),
+	(82, '212', '355474093963195', 2, NULL, 1, '2022-07-12 13:52:24', NULL, NULL),
+	(83, '213', '355474094079447', 2, NULL, 1, '2022-07-12 13:52:24', NULL, NULL),
+	(84, '213', '355475094579120', 2, NULL, 1, '2022-07-12 13:52:24', NULL, NULL),
+	(85, '214', '355474094089347', 2, NULL, 1, '2022-07-12 13:52:24', NULL, NULL),
+	(86, '215', '355474093868410', 2, NULL, 1, '2022-07-12 13:52:25', NULL, NULL),
+	(87, '216', '355474093960704', 2, NULL, 1, '2022-07-12 13:52:25', NULL, NULL),
+	(88, '217', '355474093990149', 2, NULL, 1, '2022-07-12 13:52:25', NULL, NULL),
+	(89, '218', '355474094078977', 2, NULL, 1, '2022-07-12 13:52:26', NULL, NULL),
+	(90, '219', '355474093966099', 2, NULL, 1, '2022-07-12 13:52:26', NULL, NULL),
+	(91, '220', '355471090910041', 2, NULL, 1, '2022-07-12 13:52:26', NULL, NULL),
+	(92, '221', '355474090910603', 2, NULL, 1, '2022-07-12 13:52:26', NULL, NULL),
+	(93, '222', '355474093962486', 2, NULL, 1, '2022-07-12 13:52:26', NULL, NULL),
+	(94, '223', '355474093876330', 2, NULL, 1, '2022-07-12 13:52:27', NULL, NULL),
+	(95, '224', '355474093877031', 2, NULL, 1, '2022-07-12 13:52:27', NULL, NULL),
+	(96, '225', '355474093969655', 2, NULL, 1, '2022-07-12 13:52:27', NULL, NULL),
+	(97, '226', '355474093960340', 2, NULL, 1, '2022-07-12 13:52:27', NULL, NULL),
+	(98, '227', '355474090922467', 2, NULL, 1, '2022-07-12 13:52:28', NULL, NULL),
+	(99, '228', '355474090913953', 2, NULL, 1, '2022-07-12 13:52:28', NULL, NULL),
+	(100, '229', '355474093967675', 2, NULL, 1, '2022-07-12 13:52:28', NULL, NULL),
+	(101, '230', '355474090909423', 2, NULL, 1, '2022-07-12 13:52:28', NULL, NULL),
+	(102, '231', '355474094086418', 2, NULL, 1, '2022-07-12 13:52:28', NULL, NULL),
+	(103, '232', '355474094089768', 2, NULL, 1, '2022-07-12 13:52:29', NULL, NULL),
+	(104, '233', '355474090897479', 2, NULL, 1, '2022-07-12 13:52:29', NULL, NULL),
+	(105, '234', '355474090900752', 2, NULL, 1, '2022-07-12 13:52:29', NULL, NULL),
+	(106, '235', '355474094087317', 2, NULL, 1, '2022-07-12 13:52:29', NULL, NULL);

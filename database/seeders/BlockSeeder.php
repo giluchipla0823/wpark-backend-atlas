@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Block;
 use Illuminate\Database\Seeder;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BlockSeeder extends Seeder
 {
@@ -15,30 +14,8 @@ class BlockSeeder extends Seeder
      */
     public function run()
     {
-        $blocks = [
-            [
-                'name' => 'BLOQUE PRESORTING',
-                'is_presorting' => 1,
-                'presorting_default' => 1,
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'BLOQUE POSICIÓN FINAL',
-                'is_presorting' => 0,
-                'presorting_default' => null,
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ],
-            [
-                'name' => 'BLOQUE ESPIGA - POSICIÓN FINAL',
-                'is_presorting' => 0,
-                'presorting_default' => null,
-                'created_at'        => Carbon::now(),
-                'updated_at'        => Carbon::now(),
-            ]
-        ];
-
-        Block::insert($blocks);
+        $path = public_path('sql/blocks_data.sql');
+        $sql = file_get_contents($path);
+        DB::unprepared($sql);
     }
 }

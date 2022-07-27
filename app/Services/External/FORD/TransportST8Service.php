@@ -29,6 +29,12 @@ class TransportST8Service
 
     public function __construct()
     {
+        /**
+         * TODO: Revisar tema de URL en API ST8
+         * URL 01: http://vacdm.valencia.ford.com:8080/stations/station8/transports
+         * URL 02: http://vacdm.valencia.ford.com:8080/stations/station8/transports/4Tcg07YyEx/Truck
+         *
+         */
         $this->baseUrl = config("services.ford_services.st8.url");
         $this->stationName = "station8";
 

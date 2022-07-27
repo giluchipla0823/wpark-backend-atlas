@@ -200,7 +200,7 @@ class Slot extends Model
         $mustSaveRow = false;
 
         if ($row->fill === 0) {
-            $row->rule_id = null;
+            $row->category = null;
             $mustSaveRow = true;
         }
 

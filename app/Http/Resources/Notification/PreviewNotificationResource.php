@@ -20,6 +20,7 @@ class PreviewNotificationResource extends JsonResource
         return array_merge(
             [
                 'id' => $this->id,
+                'seen' => $this->seen
             ],
             json_decode($this->data, true)
         );

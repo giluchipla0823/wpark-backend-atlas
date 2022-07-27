@@ -43,6 +43,16 @@ class Transport extends Model
         'updated_at',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     /**
      * Mapea el nombre del transporte al identificador necesario para la API de FreightVerify
      *

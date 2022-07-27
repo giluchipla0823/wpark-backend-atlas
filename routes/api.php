@@ -255,7 +255,8 @@ Route::group(['prefix' => 'v1'], function() {
 
         // Notifications
         Route::post('/notifications/datatables', [NotificationController::class, 'datatables'])->name('notifications.datatables');
-        Route::patch('/notifications/{id}', [NotificationController::class, 'restore'])->name('notifications.restore');
+        Route::patch('/notifications/{notification}', [NotificationController::class, 'restore'])->name('notifications.restore');
+        Route::patch('/notifications/{notification}/toggle-seen', [NotificationController::class, 'toggleSeen'])->name('notifications.toggle-seen');
         Route::resource('notifications', NotificationController::class, ['except' => ['create', 'store', 'edit', 'update']]);
 
         // FreightVerify

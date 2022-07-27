@@ -94,11 +94,19 @@ class Vehicle extends Model
         return $this->belongsTo(DestinationCode::class, 'destination_code_id');
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function loads(): BelongsTo
     {
         return $this->belongsTo(Load::class, 'load_id');
     }
 
+    /**
+     * Routing code del vehículo asignado durante la carga.
+     *
+     * @return BelongsTo
+     */
     public function route(): BelongsTo
     {
         return $this->belongsTo(Route::class, 'route_id');
@@ -114,11 +122,21 @@ class Vehicle extends Model
         return $this->belongsTo(Dealer::class, 'dealer_id');
     }
 
+    /**
+     * Regla de presorting del vehículo.
+     *
+     * @return BelongsTo
+     */
     public function lastRule(): BelongsTo
     {
         return $this->belongsTo(Rule::class, 'last_rule_id');
     }
 
+    /**
+     * Regla de posición final de transporte del vehículo.
+     *
+     * @return BelongsTo
+     */
     public function shippingRule(): BelongsTo
     {
         return $this->belongsTo(Rule::class, 'shipping_rule_id');
@@ -141,26 +159,7 @@ class Vehicle extends Model
      */
     public function latestState(): BelongsToMany
     {
-        return $this->belongsToMany(
-            State::class,
-            'vehicles_states',
-            'vehicle_id',
-            'state_id'
-        )
-        ->join("vehicles", "vehicles_states.vehicle_id", "=", "vehicles.id")
-        ->where("vehicles_states.id", "=", DB::raw("
-            (
-                SELECT
-                    vs.id
-                FROM
-                    vehicles_states AS vs
-                WHERE
-                    vs.vehicle_id = vehicles.id
-                ORDER BY
-                    vs.id DESC
-                LIMIT 1
-            )
-        "));
+        return $this->states()->orderByDesc('id')->take(1);
     }
 
     /**
@@ -247,6 +246,11 @@ class Vehicle extends Model
             ->latest();
     }
 
+    /**
+     * Etapas del vehículo.
+     *
+     * @return BelongsToMany
+     */
     public function stages(): BelongsToMany
     {
         return $this->belongsToMany(Stage::class, 'vehicles_stages', 'vehicle_id', 'stage_id')
@@ -254,8 +258,19 @@ class Vehicle extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Última etapa del vehículo.
+     *
+     * @return BelongsToMany
+     */
+    public function latestStage(): BelongsToMany
+    {
+        return $this->stages()->orderByDesc('id')->take(1);
+    }
 
     /**
+     * Obtener el parking del vehículo.
+     *
      * @return Parking
      * @throws BadRequestException
      */
@@ -276,46 +291,37 @@ class Vehicle extends Model
                 break;
 
             default:
-                throw new BadRequestException("No se pudo encontrar la ubicación del vehículo.");
+                throw new BadRequestException("No se pudo encontrar el parking del vehículo.");
         }
 
         return $parking;
     }
 
-    public function latestStage(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Stage::class,
-            'vehicles_stages',
-            'vehicle_id',
-            'stage_id'
-        )
-        ->join("vehicles", "vehicles_stages.vehicle_id", "=", "vehicles.id")
-        ->where("vehicles_stages.id", "=", DB::raw("
-            (
-                SELECT
-                    vs.id
-                FROM
-                    vehicles_stages AS vs
-                WHERE
-                    vs.vehicle_id = vehicles.id
-                ORDER BY
-                    vs.id DESC
-                LIMIT 1
-            )
-        "));
-    }
-
+    /**
+     * Transporte de entrada del vehículo.
+     *
+     * @return BelongsTo
+     */
     public function transport(): BelongsTo
     {
         return $this->belongsTo(Transport::class, 'entry_transport_id');
     }
 
+    /**
+     * Recirculaciones del vehículo.
+     *
+     * @return HasMany
+     */
     public function recirculations(): HasMany
     {
         return $this->hasMany(Recirculation::class, 'vehicle_id');
     }
 
+    /**
+     * Última recirculación del vehículo.
+     *
+     * @return HasOne
+     */
     public function lastRecirculation(): HasOne
     {
         return $this->hasOne(Recirculation::class, 'vehicle_id')

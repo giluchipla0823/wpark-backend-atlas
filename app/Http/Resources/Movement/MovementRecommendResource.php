@@ -88,7 +88,6 @@ class MovementRecommendResource extends JsonResource
             "lp_name" => $row->lp_name,
             "category" => $row->category,
             "row_name" => $row->row_name,
-            "rule" => new RuleResource($row->rule),
             "is_presorting_zone" => $row->parking->area->zone->id === Zone::PRESORTING,
             "front_vehicle" => $this->includeFrontVehicle()
         ];

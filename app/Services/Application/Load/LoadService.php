@@ -15,10 +15,13 @@ use App\Models\Dealer;
 use App\Models\Load;
 use App\Models\Parking;
 use App\Models\Slot;
+use App\Models\Stage;
+use App\Models\State;
 use App\Models\Vehicle;
 use App\Repositories\Load\LoadRepositoryInterface;
 use App\Services\External\FORD\TransportST8Service;
 use App\Services\External\FreightVerify\FreightVerifyService;
+use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
@@ -97,6 +100,7 @@ class LoadService
             }
         }
 
+        // TODO: A la espera de confirmación por SALVADOR BELTRAN
         // $this->loadTransportST8Service->process($load);
 
         DB::transaction(function () use ($load, $vehicles) {
@@ -112,9 +116,22 @@ class LoadService
                 } else {
                     /* @var Parking $parking */
                     $parking = $position;
-
                     $parking->release();
                 }
+
+                $vehicle->stages()->sync([
+                    Stage::STAGE_VEHICLE_LEFT_ID => [
+                        "created_at" => Carbon::now(),
+                        "updated_at" => Carbon::now()
+                    ]
+                ]);
+
+                $vehicle->states()->sync([
+                    State::STATE_LEFT_ID => [
+                        "created_at" => Carbon::now(),
+                        "updated_at" => Carbon::now()
+                    ]
+                ]);
 
                 $this->freightVerifyService->sendCompoundExit($vehicle->vin, [
                     "assetId" => $load->carrier->code,

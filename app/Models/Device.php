@@ -41,6 +41,16 @@ class Device extends Model
         'updated_at',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     public function device_type()
     {
         return $this->belongsTo(DeviceType::class, 'device_type_id');

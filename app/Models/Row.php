@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @OA\Property(property="row_number", type="integer", maxLength=10, description="Número de fila del parking", example="1"),
  * @OA\Property(property="parking_id", type="integer", maxLength=20, description="Indica el parking al que pertenece la fila", example="1"),
  * @OA\Property(property="block_id", type="integer", maxLength=20, description="Indica el bloque al que pertenece la fila", example="1"),
- * @OA\Property(property="rule_id", type="integer", maxLength=20, description="Indica la regla de posición final de transporte heredada del primer vehículo que se posicionó en la fila", example="1"),
+ * @OA\Property(property="category", type="string", maxLength=255, description="Indica la regla de posición final de transporte heredada del primer vehículo que se posicionó en la fila", example="ANTWERP"),
  * @OA\Property(property="capacity", type="integer", maxLength=10, description="Número de slots que tiene la fila", example="8"),
  * @OA\Property(property="fill", type="integer", maxLength=10, description="Número de slots ocupados en la fila", example="0"),
  * @OA\Property(property="capacitymm", type="integer", maxLength=10, description="Capacidad en milímetros de la fila", example="40.000"),
@@ -55,7 +55,6 @@ class Row extends Model
         'row_number',
         'parking_id',
         'block_id',
-        'rule_id',
         'category',
         'capacity',
         'fill',
@@ -69,38 +68,19 @@ class Row extends Model
         'updated_at'
     ];
 
-    // protected $appends = ["row_name", "category", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     protected $appends = ["row_name", "fill_percentage", "fill_type", "lp_name", "lp_code", "real_fill"];
 
-    public function parking()
-    {
-        return $this->belongsTo(Parking::class, 'parking_id');
-    }
-
-    public function block()
-    {
-        return $this->belongsTo(Block::class, 'block_id');
-    }
-
-    public function rule()
-    {
-        return $this->belongsTo(Rule::class, 'rule_id');
-    }
-
-    public function slots()
-    {
-        return $this->hasMany(Slot::class, 'row_id');
-    }
-
-    public function emptySlots()
-    {
-        return $this->hasMany(Slot::class, 'row_id')->where('fill', 0);
-    }
-
-    public function rulesOverflowRows()
-    {
-        return $this->hasMany(Rule::class, 'overflow_id');
-    }
+    // Attributes
 
     /**
      * @return int
@@ -143,14 +123,6 @@ class Row extends Model
     /**
      * @return string|null
      */
-    public function getCategoryAttribute(): ?string
-    {
-        return $this->rule ? $this->rule->name : null;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getLpNameAttribute(): ?string
     {
         $parking = $this->parking;
@@ -179,5 +151,32 @@ class Row extends Model
                 return RowHelper::zeroFill($value);
             }
         );
+    }
+
+    // Relations
+
+    public function parking()
+    {
+        return $this->belongsTo(Parking::class, 'parking_id');
+    }
+
+    public function block()
+    {
+        return $this->belongsTo(Block::class, 'block_id');
+    }
+
+    public function slots()
+    {
+        return $this->hasMany(Slot::class, 'row_id');
+    }
+
+    public function emptySlots()
+    {
+        return $this->hasMany(Slot::class, 'row_id')->where('fill', 0);
+    }
+
+    public function rulesOverflowRows()
+    {
+        return $this->hasMany(Rule::class, 'overflow_id');
     }
 }

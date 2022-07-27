@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\Notification;
 use App\Http\Controllers\ApiController;
 use App\Models\Notification;
 use App\Services\Application\Notification\NotificationService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,6 +71,7 @@ class NotificationController extends ApiController
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function index(Request $request): JsonResponse
     {
@@ -93,10 +95,9 @@ class NotificationController extends ApiController
      *      @OA\Response(response=500, ref="#/components/responses/InternalServerError")
      * )
      *
-     * Display a listing of the resource.
-     *
      * @param Request $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function datatables(Request $request): JsonResponse
     {
@@ -106,37 +107,6 @@ class NotificationController extends ApiController
 
         return $this->showAll($results);
     }
-
-    // /**
-    // * @OA\POST(
-    // *     path="/api/v1/notifications",
-    // *     tags={"Notifications"},
-    // *     summary="Create New Notification",
-    // *     description="Create New Notification",
-    // *     security={{"sanctum": {} }},
-    // *     operationId="storeNotification",
-    // *     @OA\RequestBody(
-    // *          required=true,
-    // *          @OA\JsonContent(ref="#/components/schemas/NotificationStoreRequest")
-    // *     ),
-    // *     @OA\Response(response=201, description="Create New Notification" ),
-    // *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
-    // *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    // *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    // *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    // * )
-    // *
-    // * Store a newly created resource in storage.
-    // *
-    // * @param NotificationStoreRequest $request
-    // * @return JsonResponse
-    // */
-    /* public function store(Request $request): JsonResponse
-    {
-        $notification = $this->notificationService->create($request->all());
-
-        return $this->successResponse($notification, 'Notification created successfully.', Response::HTTP_CREATED);
-    } */
 
     /**
      * @OA\GET(
@@ -178,40 +148,6 @@ class NotificationController extends ApiController
         $notification = $this->notificationService->show($notification);
         return $this->successResponse($notification);
     }
-
-    ///**
-    // * @OA\PUT(
-    // *     path="/api/v1/notifications/{id}",
-    // *     tags={"Notifications"},
-    // *     summary="Update Notification",
-    // *     description="Update Notification",
-    // *     security={{"sanctum": {}}},
-    // *     operationId="updateNotification",
-    // *     @OA\Parameter(ref="#/components/parameters/id"),
-    // *     @OA\RequestBody(
-    // *          required=true,
-    // *          @OA\JsonContent(ref="#/components/schemas/NotificationUpdateRequest")
-    // *     ),
-    // *     @OA\Response(response=200, description="Update Notification" ),
-    // *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
-    // *     @OA\Response(response=422, ref="#/components/responses/UnprocessableEntity"),
-    // *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
-    // *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
-    // *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
-    // * )
-    // *
-    // * Update the specified resource in storage.
-    // *
-    // * @param Request $request
-    // * @param Notification $notification
-    // * @return JsonResponse
-    // */
-    /* public function update(Request $request, Notification $notification): JsonResponse
-    {
-        $this->notificationService->update($request->all(), $notification->id);
-
-        return $this->showMessage('Notification updated successfully.');
-    } */
 
     /**
      * @OA\Delete(
@@ -266,8 +202,36 @@ class NotificationController extends ApiController
     {
         $this->notificationService->restore($id);
 
-        return $this->showMessage('Notification restored successfully.', Response::HTTP_NO_CONTENT);
+        return $this->showMessage('Notification restored successfully.');
     }
 
+    /**
+     * @OA\PATCH(
+     *     path="/api/v1/notifications/{id}/toggle-seen",
+     *     tags={"Notifications"},
+     *     summary="Toggle Seen Notification",
+     *     description="Toggle Seen Notification",
+     *     security={{"sanctum": {}}},
+     *     operationId="toggleSeenNotification",
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(response=204, description="Toggle seen notification successfully"),
+     *     @OA\Response(response=404, ref="#/components/responses/NotFound"),
+     *     @OA\Response(response=401, ref="#/components/responses/Unauthorized"),
+     *     @OA\Response(response=403, ref="#/components/responses/Forbidden"),
+     *     @OA\Response(response=500, ref="#/components/responses/InternalServerError")
+     * )
+     *
+     * @param Notification $notification
+     * @return JsonResponse
+     */
+    public function toggleSeen(Notification $notification): JsonResponse
+    {
+        $seen = $notification->seen;
 
+        $this->notificationService->toggleSeen($notification);
+
+        $message = $seen ? "Notification mark as unread successfully." : "Notification mark as read successfully.";
+
+        return $this->showMessage($message);
+    }
 }

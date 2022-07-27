@@ -3,6 +3,7 @@
 namespace App\Services\Application\Vehicle;
 
 use App\Exceptions\owner\BadRequestException;
+use App\Exceptions\owner\NotFoundException;
 use App\Models\Color;
 use App\Models\Condition;
 use App\Models\DestinationCode;
@@ -49,7 +50,7 @@ class VehicleMovementsService
     /**
      * @param String $vin
      * @return Vehicle|null
-     * @throws Exception
+     * @throws NotFoundException
      */
     public function vehicleIdentify(String $vin): ?Vehicle
     {
@@ -60,7 +61,7 @@ class VehicleMovementsService
         }
 
         if (!$vehicle) {
-            throw new Exception('No se ha encontrado ningún vehículo con ese vin/vin_short.', Response::HTTP_NOT_FOUND);
+            throw new NotFoundException('No se ha encontrado ningún vehículo con ese vin/vin_short.');
         }
 
         return $vehicle;
@@ -87,9 +88,11 @@ class VehicleMovementsService
             'color' => $vehicle->color_id
         ];
 
+        // dd($vehicleProperties);
+
         // Traemos todas la reglas simples que existan para hacer la comparación
         // $rules = Rule::where('is_group', 0)->whereIn('id', [1, 2, 12, 13, 14, 15])->get();
-        $rules = Rule::where('is_group', 0)->get();
+        $rules = Rule::where('is_group', 0)->where('active', 1)->get();
 
         // Recorremos todas las condiciones de todas las reglas en busca de coincidencias con el vehículo
         $matches = [];
@@ -207,8 +210,6 @@ class VehicleMovementsService
         // Ordenamos el array con los matches para que muestre por orden de prioridad
         $matches = collect($matches)->sortBy('priority')->groupBy('count_conditions');
 
-
-
         $doMatches = [];
 
         foreach ($matches as $values) {
@@ -218,9 +219,6 @@ class VehicleMovementsService
                 $doMatches[] = $value;
             }
         }
-
-        // dd($doMatches);
-
 
         $last_rule_id = null;
         $shipping_rule_id = null;
@@ -252,7 +250,7 @@ class VehicleMovementsService
          * a una regla agrupada, de ser así cambiar el id de la regla simple por el id de la regla agrupada
          * a la que pertenece.
          */
-        $rulesGroup = Rule::where('is_group', 1)->get();
+        $rulesGroup = Rule::where('is_group', 1)->where('active', 1)->get();
 
         foreach ($rulesGroup as $rule) {
             $isInGroup = $rule->rules_groups->contains($last_rule_id);
@@ -266,7 +264,9 @@ class VehicleMovementsService
         }
 
         if (!$shipping_rule_id) {
-            throw new BadRequestException("No se encontró una regla de posición final de transporte para el vehículo.");
+            throw new BadRequestException(
+                "No se encontró una regla de posición final de transporte para el vehículo."
+            );
         }
 
         $result = [

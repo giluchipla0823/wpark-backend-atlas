@@ -19,7 +19,6 @@ class CreateRows extends Migration
             $table->string('row_number', 5)->comment('Número de fila del parking');
             $table->foreignId('parking_id')->comment('Indica el parking al que pertenece la fila')->constrained('parkings');
             $table->foreignId('block_id')->nullable()->comment('Indica el bloque de reglas que está asociado a la fila')->constrained('blocks');
-            $table->foreignId('rule_id')->nullable()->comment('Indica la regla del primer vehículo que se posicionó en la fila')->constrained('rules');
             $table->string('category')->nullable()->comment('Nombre de la categoría (regla) del primer vehículo que se posicionó en la fila.');
             $table->integer('capacity')->unsigned()->comment('Número de slots que tiene la fila');
             $table->integer('fill')->unsigned()->nullable()->default('0')->comment('Número de slots ocupados en la fila');

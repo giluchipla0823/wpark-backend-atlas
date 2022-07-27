@@ -54,7 +54,6 @@ class VehicleStageController extends ApiController
     {
         $this->vehicleStageService->vehicleStage($request->all());
 
-        // return $this->showMessage('OK', Response::HTTP_CREATED);
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

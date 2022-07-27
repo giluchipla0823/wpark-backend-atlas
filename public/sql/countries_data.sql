@@ -1,4 +1,3 @@
-
 INSERT INTO `countries` (`id`, `name`, `code`, `created_at`, `updated_at`, `deleted_at`) VALUES
 	(1, 'UNKNOWN', 'UNK', '2022-06-23 07:57:06', '2022-06-23 07:57:06', NULL),
 	(2, 'GERMANY', 'GK', '2022-06-23 07:57:06', '2022-06-23 07:57:06', NULL),

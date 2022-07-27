@@ -23,7 +23,7 @@ class RecirculationController extends ApiController
 
     /**
      * @OA\GET(
-     *      path="/api/v1/recirculations/{vin}",
+     *      path="/api/external/recirculations/{vin}",
      *      tags={"Recirculations"},
      *      summary="Recirculations Get",
      *      description="SOAP FORD",

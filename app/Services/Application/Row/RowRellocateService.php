@@ -3,6 +3,7 @@
 namespace App\Services\Application\Row;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Row;
 use App\Models\Slot;
 use App\Models\Zone;
@@ -11,6 +12,7 @@ use App\Models\Vehicle;
 use App\Models\Movement;
 use App\Models\ParkingType;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\owner\NotFoundException;
 use App\Exceptions\owner\BadRequestException;
@@ -41,24 +43,26 @@ class RowRellocateService
     {
         $this->movementRepository = $movementRepository;
         $this->parkingRepository = $parkingRepository;
-
         $this->movementService = app()->make(MovementService::class);
     }
 
     /**
+     * Proceso de reubicación de fila.
+     *
      * @param Row $row
      * @param array $params
      * @return void
      * @throws BadRequestException
      * @throws NotFoundException
+     * @throws Exception
      */
     public function process(Row $row, array $params): void
     {
-        if ($row->parking->parkingType->id !== ParkingType::TYPE_ROW) {
+        if (!$row->parking->isRowType()) {
             throw new BadRequestException("La fila {$row->row_name} debe pertenecer a un parking de tipo FILAS.");
         }
 
-        if (!$row->rule) {
+        if (!$row->category) {
             throw new BadRequestException("La fila {$row->row_name} no tiene ninguna regla empezada.");
         }
 
@@ -83,6 +87,7 @@ class RowRellocateService
 
         $vehiclesIds = array_unique($vehiclesIds);
         $rowDestinationIds = $vehiclesRow->pluck("destination_position.id")->toArray();
+
         $rowSlotsIds = $row->slots->pluck("id")->toArray();
 
         foreach ($rowDestinationIds as $key => $value) {
@@ -102,27 +107,24 @@ class RowRellocateService
          */
         $this->mappingVehiclesForSlotsAndCheckVehiclesToBuffer($vehiclesRow, $row, $checkVehiclesToBuffer);
 
+        $vehicles = Vehicle::whereIn('id', $vehiclesIds)->get();
+
+        $vehiclesRow = $this->mappingVehiclesDataWithEloquentModel($vehiclesRow, $vehicles);
+
+        $vehiclesBuffer = $this->mappingVehiclesDataWithEloquentModel($vehiclesBuffer, $vehicles, $buffer);
+
         // Validación de vehículos para buffer
         $this->validationVehiclesToBuffer($vehiclesBuffer, $row, $checkVehiclesToBuffer);
 
         unset($checkVehiclesToBuffer);
 
-        $vehicles = Vehicle::with(['design'])
-            ->whereIn('id', $vehiclesIds)
-            ->get();
-
-        $vehiclesRow = $this->mappingVehiclesDataWithEloquentModel($vehiclesRow, $vehicles);
-        $vehiclesBuffer = $this->mappingVehiclesDataWithEloquentModel($vehiclesBuffer, $vehicles, $buffer);
-        $rowRule = $row->rule;
-
-        DB::beginTransaction();
-
         $usedSlots = $row->slots->filter(function($slot) {
             return $slot->vehicle !== null;
         });
 
-        try {
+        DB::beginTransaction();
 
+        try {
             // Limpiamos toda los slots con vehículos de la fila seleccionada
             foreach ($usedSlots as $slot) {
                 $vehicle = $slot->vehicle;
@@ -133,47 +135,33 @@ class RowRellocateService
 
             // Asignamos los vehículos confirmados a la fila
             foreach ($vehiclesRow as $item) {
-                $vehicle = $item["vehicle"];
                 $originPosition = $item['origin_position'];
                 $destinationPosition = $item['destination_position'];
+                $item['category_row'] = $row->category;
+                $item['can_release_origin'] = true;
+                $item['can_create_movement'] = true;
 
                 if (get_class($originPosition) === Slot::class && get_class($destinationPosition) === Slot::class) {
+
                     /**
                      * Comprobamos que si las posiciones de origen y destino corresponden a la misma fila,
                      * se procede a reservar espacio.
                      */
                     if ($originPosition->row->id === $destinationPosition->row->id) {
-                        $destinationPosition->reserve($vehicle->design->length);
-
-                        $row = $destinationPosition->row;
-                        $row->rule_id = $rowRule->id;
-                        $row->save();
-
-                        continue;
-                    }
-
-                    /**
-                     * Comprobamos si las posiciones de origen y destino corresponden a filas diferentes.
-                     */
-                    if ($originPosition->row->id !== $destinationPosition->row->id) {
-                        $originPosition->release($originPosition->fillmm);
+                        $item['can_create_movement'] = false;
                     }
                 }
 
-                /**
-                 * Si la posición de origen es de tipo "Parking", se procede a eliminar el espacio ocupado
-                 * en el parking.
-                 */
-                if (get_class($originPosition) === Parking::class) {
-                    $originPosition->release();
-                }
-
-                $this->saveRellocateData($row, $item);
+                $this->saveRellocateData($item);
             }
 
             // Asignamos los vehículos confirmados a la zona buffer
             foreach ($vehiclesBuffer as $item) {
-                $this->saveRellocateData($row, $item);
+                $item['category_row'] = null;
+                $item['can_release_origin'] = false;
+                $item['can_create_movement'] = true;
+
+                $this->saveRellocateData($item);
             }
 
             DB::commit();
@@ -185,30 +173,61 @@ class RowRellocateService
     }
 
     /**
-     * @param Row $row
+     * Guardar en base de datos la reubicación de fila y buffer por cada registro.
+     *
      * @param array $item
      * @return void
-     * @throws BadRequestException
      * @throws Exception
      */
-    private function saveRellocateData(Row $row, array $item): void
+    private function saveRellocateData(array $item): void
     {
         $vehicle = $item["vehicle"];
+        $categoryRow = $item["category_row"];
         $originPosition = $item['origin_position'];
         $destinationPosition = $item['destination_position'];
+        $canReleaseOrigin = $item['can_release_origin'];
+        $canCreateMovement = $item['can_create_movement'];
 
-        $movement = $this->movementService->doMovement($vehicle, [
-            "vehicle_id" => $vehicle->id,
-            "origin_position_type" => get_class($originPosition),
-            "origin_position_id" => $originPosition->id,
-            "destination_position_type" => get_class($destinationPosition),
-            "destination_position_id" => $destinationPosition->id,
-            "manual" => 1,
-            "comments" => "Movement by Row Rellocate",
-            "force_movement" => true
-        ]);
+        if (get_class($destinationPosition) === Slot::class) {
+            // Se reserva la posición del vehículo ocupándola en la base de datos
 
-        $this->movementService->confirmMovement($movement, false);
+            $slot = $destinationPosition;
+            $slot->reserve($vehicle->design->length);
+            $row = $slot->row;
+            $parking = $row->parking;
+            $row->category = $row->category ?: $categoryRow;
+
+            $rowTotalCapacitymm = $row->capacitymm - $row->fillmm;
+
+            if ($rowTotalCapacitymm < Slot::CAPACITY_MM || $parking->isEspigaType()) {
+                $row->full = 1;
+            }
+
+            $row->save();
+        } else {
+            /* @var Parking $parking */
+            $parking = $destinationPosition;
+            $parking->reserve();
+        }
+
+        if ($canCreateMovement) {
+
+            // Registrar movimiento
+            $movement = $this->movementRepository->create([
+                "vehicle_id" => $vehicle->id,
+                "origin_position_type" => get_class($originPosition),
+                "origin_position_id" => $originPosition->id,
+                "destination_position_type" => get_class($destinationPosition),
+                "destination_position_id" => $destinationPosition->id,
+                "category" => $categoryRow,
+                "dt_start" => Carbon::now(),
+                "manual" => 1,
+                "user_id" => Auth::user()->id,
+                "comments" => "Movement by Row Rellocate",
+            ]);
+
+            $this->movementService->confirmMovement($movement, $canReleaseOrigin);
+        }
     }
 
     /**
@@ -216,6 +235,8 @@ class RowRellocateService
      * @param Collection $vehicles
      * @param Parking|null $buffer
      * @return Collection
+     * @throws BadRequestException
+     * @throws NotFoundException
      */
     private function mappingVehiclesDataWithEloquentModel(
         Collection $collection,
@@ -231,44 +252,61 @@ class RowRellocateService
         $validateDestinationPositions = [];
         $validateVehicles = [];
 
-        $collection = $collection->map(
-            function($value, $index) use ($vehicles, $buffer, &$validateOriginPositions, &$validateDestinationPositions, &$validateVehicles) {
-                $vehicle = $vehicles->filter(function($vehicle) use ($value) {
-                    return $vehicle->id === $value['vehicle_id'];
-                })->first();
+        $output = collect([]);
 
-                unset($value['vehicle_id']);
+        foreach ($collection as $index => $value) {
+            $vehicle = $vehicles->where('id', $value['vehicle_id'])->first();
 
-                $value["index"] = $index;
-                $value['vehicle'] = $vehicle;
+            $value["index"] = $index;
+            $value['vehicle'] = [
+                "id" => $vehicle->id,
+                "vin" => $vehicle->vin,
+            ];
 
-                $belongsToBuffer = !is_null($buffer);
+            $belongsToBuffer = is_null($buffer) === false;
 
-                $this->checkDuplicateVehicle($value, $belongsToBuffer, $validateVehicles);
+            $this->checkDuplicateVehicle($value, $belongsToBuffer, $validateVehicles);
 
-                $this->checkDuplicatePosition($value, $belongsToBuffer, "origin_position", $validateOriginPositions);
+            $this->checkDuplicatePosition($value, $belongsToBuffer, "origin_position", $validateOriginPositions);
 
-                if (!$belongsToBuffer) {
-                    $this->checkDuplicatePosition($value, false, "destination_position", $validateDestinationPositions);
-                }
-
-                $this->movementService->checkValidateVehicleCurrentPosition($vehicle, $value["origin_position"]);
-
-                return [
-                    'vehicle' => $vehicle,
-                    'origin_position' => $this->getPosition($value["origin_position"]),
-                    'destination_position' => $buffer ?: $this->getPosition($value["destination_position"]),
-                ];
+            if (!$buffer) {
+                $this->checkDuplicatePosition($value, false, "destination_position", $validateDestinationPositions);
             }
-        );
 
+            $originPosition = $value["origin_position"];
+
+            $lastConfirmedMovement = $vehicle->lastConfirmedMovement;
+
+            if (!$lastConfirmedMovement) {
+                throw new BadRequestException("El vehículo no tiene movimientos anteriores confirmados.");
+            }
+
+            if (
+                $lastConfirmedMovement->destination_position_type !== $originPosition['type'] ||
+                $lastConfirmedMovement->destination_position_id !== $originPosition['id']
+            ) {
+                throw new BadRequestException(
+                    "La posición actual del vehículo {$vehicle->vin} no coincide con la posición de origen especificada."
+                );
+            }
+
+            $output->push([
+                'vehicle' => $vehicle,
+                'origin_position' => $this->getPosition($value["origin_position"]),
+                'destination_position' => $buffer ?: $this->getPosition($value["destination_position"]),
+            ]);
+        }
+
+        unset($validateVehicles);
         unset($validateOriginPositions);
         unset($validateDestinationPositions);
 
-        return $collection;
+        return $output;
     }
 
     /**
+     * Obtener información de posición (Slot, Parking)
+     *
      * @param array $position
      * @return Parking|Slot|null
      * @throws NotFoundException
@@ -301,6 +339,8 @@ class RowRellocateService
     }
 
     /**
+     * Verificar si existe vehículos duplicados tanto para filas como buffer.
+     *
      * @param array $item
      * @param bool $belongsToBuffer
      * @param array $validateVehicles
@@ -312,19 +352,21 @@ class RowRellocateService
         $index = $item["index"] + 1;
         $vehicle = $item["vehicle"];
 
-        if (in_array($vehicle->id, $validateVehicles)) {
+        if (in_array($vehicle['id'], $validateVehicles)) {
             throw new BadRequestException(sprintf(
                 "El vehículo Nº %s con vin %s ya está asignado para reubicar en %s.",
                 $index,
-                $vehicle->vin,
+                $vehicle['vin'],
                 $belongsToBuffer ? "Buffer" : "Fila"
             ));
         }
 
-        $validateVehicles[] = $vehicle->id;
+        $validateVehicles[] = $vehicle['id'];
     }
 
     /**
+     * Vefificar si existe posiciones(origen y destino) duplicadas.
+     *
      * @param array $item
      * @param bool $belongsToBuffer
      * @param string $column
@@ -340,18 +382,17 @@ class RowRellocateService
     ): void {
         $index = $item["index"] + 1;
         $vehicle = $item["vehicle"];
-        $originId = $item[$column]["id"];
-        $originType = $item[$column]["type"];
+        $positionId = $item[$column]["id"];
 
-        $exists = count(array_filter($validatePositions, function($value) use ($originId, $originType) {
-                return $value["id"] === $originId && $value["type"] === $originType;
-            })) > 0;
+        $exists = count(array_values(array_filter($validatePositions, function($value) use ($positionId) {
+            return $value["id"] === $positionId && $value["type"] === Slot::class;
+        }))) > 0;
 
         if ($exists) {
             throw new BadRequestException(sprintf(
                 "El vehículo Nº %s con vin %s tiene asignado una %s que ya tiene asignado otro vehículo para reubicar en %s.",
                 $index,
-                $vehicle->vin,
+                $vehicle['vin'],
                 $column === "origin_position" ? "posición origen" : "posición destino",
                 $belongsToBuffer ? "Buffer" : "Fila"
             ));
@@ -386,7 +427,7 @@ class RowRellocateService
             }
 
             foreach ($vehicles as $index => $value) {
-                if (!in_array($value["vehicle_id"], $checkIdsToBuffer)) {
+                if (!in_array($value["vehicle"]->id, $checkIdsToBuffer)) {
                     throw new BadRequestException(sprintf(
                         "El vehículo Nº %s no coincide con los vehículos requeridos para buffer. Los vehículos requeridos son: %s",
                         ($index + 1),

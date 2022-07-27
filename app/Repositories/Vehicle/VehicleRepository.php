@@ -150,8 +150,6 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
      */
     public function findAllByRow(Row $row): Collection
     {
-        $slotModel = QueryHelper::escapeNamespaceClass(Slot::class);
-
         $query = $this->model->query()
             ->select([
                 "vehicles.*",
@@ -160,21 +158,20 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
             ->join(DB::raw("
                 (
                     SELECT
-                        MAX(id) AS id,
-                        vehicle_id
+                        MAX(movements.id) AS id,
+                        movements.vehicle_id
                     FROM
                         movements
                     WHERE
-			            destination_position_type = '{$slotModel}' and canceled = 0
-
-                    GROUP BY vehicle_id
-                    ORDER BY 1 desc
+                        movements.canceled = 0
+                    GROUP BY movements.vehicle_id
                 ) as last_movement
             "), "vehicles.id", "=", "last_movement.vehicle_id")
             ->join("movements", "last_movement.id", "=", "movements.id")
             ->join("slots", "movements.destination_position_id", "=", "slots.id")
             ->where([
                 ["movements.confirmed", "=", 1],
+                ["movements.destination_position_type", "=", Slot::class],
                 ["slots.row_id", "=",  $row->id],
                 ["slots.fill", ">",  0],
             ])
@@ -215,53 +212,14 @@ class VehicleRepository extends BaseRepository implements VehicleRepositoryInter
         return $query->get();
     }
 
+    /**
+     * Obtener vehículo por vin.
+     *
+     * @param string $vin
+     * @return Vehicle|null
+     */
     public function findOneByVin(string $vin): ?Vehicle
     {
         return $this->model->query()->where("vin", $vin)->first();
     }
-
-//    /**
-//     * @param Vehicle $vehicle
-//     * @param Stage $stage
-//     * @param array $params
-//     * @return void
-//     */
-//    private function updateStageAndStateVehicle(Vehicle $vehicle, Stage $stage, array $params): void
-//    {
-//        /**
-//         * Vehículo recibe station "03" y no tiene ningún state le asignamos el state ANNOUNCED.
-//         */
-//        if ($vehicle->states->count() === 0) {
-//            $vehicle->states()->sync([
-//                State::STATE_ANNOUNCED_ID => [
-//                    "created_at" => Carbon::now(),
-//                    "updated_at" => Carbon::now()
-//                ]
-//            ], false);
-//        }
-//
-//        $hasOnTerminalState = !is_null($vehicle->states->where('id', State::STATE_ON_TERMINAL_ID)->first());
-//        $hasCurrentState = !is_null($vehicle->stages->where('id', $stage->id)->first());
-//
-//        if (
-//            !$hasOnTerminalState &&
-//            in_array($stage->code, [Stage::STAGE_ST4_CODE, Stage::STAGE_ST5_CODE, Stage::STAGE_ST6_CODE])
-//        ) {
-//            $vehicle->states()->sync([
-//                State::STATE_ON_TERMINAL_ID => [
-//                    "created_at" => Carbon::now(),
-//                    "updated_at" => Carbon::now()
-//                ]
-//            ], false);
-//        }
-//
-//        if (!$hasCurrentState) {
-//            $vehicle->stages()->sync([
-//                $stage->id => [
-//                    'manual' => $params['manual'],
-//                    'tracking_date' => $params['tracking-date']
-//                ]
-//            ], false);
-//        }
-//    }
 }

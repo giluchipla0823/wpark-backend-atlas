@@ -44,6 +44,16 @@ class Block extends Model
         "deleted_at"
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function($model) {
+            $model->active = 0;
+            $model->save();
+        });
+    }
+
     public function rows()
     {
         return $this->hasMany(Row::class, 'block_id');

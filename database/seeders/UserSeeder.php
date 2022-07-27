@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 'name' => 'Luiggi',
-                'surname' => null,
+                'surname' => 'Chirinos',
                 'email' => 'lchirinos@acercapartners.com',
                 'username' => 'lchirinos',
                 'password' => bcrypt('test'),
@@ -26,45 +26,38 @@ class UserSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Jesús',
-                'surname' => null,
-                'email' => 'jmora@acercapartners.com',
-                'username' => 'jmora',
+                'name' => 'Manuel',
+                'surname' => 'Agapito',
+                'email' => 'manu.agapito@wpark.com',
+                'username' => 'maag',
                 'password' => bcrypt('test'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Javier',
-                'surname' => null,
-                'email' => 'jcrespo@acercapartners.com',
-                'username' => 'jcrespo',
+                'name' => 'Vicente',
+                'surname' => 'Catalá',
+                'email' => 'vicente.catala@wpark.com',
+                'username' => 'vica',
                 'password' => bcrypt('test'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]
         ];
 
-        // Creación de 4 usuarios fake y se agregan a los 2 usuarios principales
-        $fakeUsers = User::factory(4)->raw();
-
-        foreach ($fakeUsers as $fakeUser) {
-            $users[] = $fakeUser;
-        }
-
         User::insert($users);
 
         // Relaciones con los usuarios
         $user1 = User::find(1);
         $user1->compounds()->sync([1,2]);
-        $user1->devices()->sync([1]);
+        // $user1->devices()->sync([1]);
 
         $user2 = User::find(2);
         $user2->compounds()->sync([1]);
-        $user2->devices()->sync([2]);
+        // $user2->devices()->sync([2]);
 
         $user3 = User::find(3);
         $user3->compounds()->sync([1,2]);
-        $user3->devices()->sync([3]);
+        // $user3->devices()->sync([3]);
     }
 }
